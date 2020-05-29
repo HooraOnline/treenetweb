@@ -1,0 +1,25 @@
+
+import View from "./View";
+import {makeStyles} from "@material-ui/core/styles";
+
+<<<<<<< local
+export default function KeyboardAwareScrollView(props) {
+=======
+export default function KeyboardAvoidingView(props) {
+>>>>>>> other
+    let {style={},onPress,disabled} = props;
+    const styles = {
+        main: {
+
+        },
+    }
+    const useStyles = makeStyles(styles);
+    const classes = useStyles();
+    return (
+        <View {...props} style={style} className={classes.main}/>
+    );
+}
+
+
+
+
