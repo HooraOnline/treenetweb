@@ -193,7 +193,7 @@ export default class FloatingLabelTextInput extends PureComponent {
     }
 
     render() {
-        const {style,keyboardType='text', textInputStyle, placeholder, tintColor, highlightColor, underlineSize, underlineEnabled, floatingLabelAniDuration, floatingLabelEnable, type,maxLength,numberOfLines,onChangeText,adornment} = this.props;
+        const {style,autoFocus,keyboardType='text', textInputStyle, placeholder, tintColor, highlightColor, underlineSize, underlineEnabled, floatingLabelAniDuration, floatingLabelEnable, type,maxLength,numberOfLines,onChangeText,adornment} = this.props;
         let props=this.props;
         let keyboardType2=keyboardType;
         if(keyboardType=='number-pad') keyboardType2='numeric'
@@ -228,11 +228,12 @@ export default class FloatingLabelTextInput extends PureComponent {
                                     inputProps={{
                                         inputMode: keyboardType2,
                                         maxLength: maxLength,
-                                        style: textInputStyle
+                                        style: textInputStyle,
+                                        autoFocus:autoFocus,
                                     }}
                                     type={type}
                                     //value={value}
-                                    //autoFocus={autoFocus}
+
                                     rows={numberOfLines}
                                     //multiline={multiline}
                                     //label={label}

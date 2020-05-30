@@ -143,7 +143,8 @@ class Content extends PureComponent {
                             overflow: 'hidden',
                             elevation: 4,
                             position:'relative',
-                            width:'30%'
+                            width:'90%',
+                            maxWidth:600,
                         }]}>
 
                         <Image

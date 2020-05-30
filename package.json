@@ -36,6 +36,7 @@
     "@zeit/next-sass": "1.0.1",
     "accounting": "^0.4.1",
     "add": "^2.0.6",
+    "axios": "^0.19.2",
     "classnames": "2.2.6",
     "express": "^4.17.1",
     "i18next": "^19.0.2",
