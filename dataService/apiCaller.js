@@ -139,8 +139,8 @@ class Api {
             .catch(function (error) {
                 console.log(error);
                 if(error.response && error.response.data){
-                    console.log(error.response.data.error.message)
-                    alert( error.response.data.error.message)
+                    console.log(error.response.data)
+                    alert( error.response.data.error.pmessage)
                 }
 
                 throw error

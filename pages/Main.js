@@ -111,27 +111,31 @@ export default class Main extends Component {
             return;
         }
 
-        const data={
-            mobile:this.state.countryCode+this.state.mobile,
-        }
 
         if(!this.regentCode){
 
-            showMassage('برای ثبت نام شما باید از طریق لینک دعوت وارد سایت شوید','پیام','info')
+            showMassage('برای ثبت نام، باید از طریق لینک دعوت وارد سایت شوید','پیام','info');
         }
+        const data={
+            mobile:this.state.countryCode+this.state.mobile,
+            regentCode:this.regentCode
+        }
+
         postQuery('Members/registerMe',data)
           .then(res=>{
               console.log(res);
-              this.setState({invitationLink:'https://treenet.biz?rgid='+res.invitationCode});
+              this.setState({invitationLink:'https://treenet.biz?regentCode='+res.invitationCode});
           })
           .catch(err=>{
+              alert(12)
               console.log(err);
           })
     }
 
     componentDidMount() {
 
-        this.regentCode=getUrlParameter('rgid');
+        this.regentCode=getUrlParameter('regentCode');
+
 
     }
 
@@ -189,6 +193,10 @@ export default class Main extends Component {
                         placeholder="Enter your phone number"
                         value={this.state.mobile}
                         onChangeText={text => {
+                            if(text.length>1 && text.indexOf(0)==0){
+                                text=text.substring(1);
+                            }
+
                             this.checkValidation();
                             text = mapNumbersToEnglish(text);
                             this.setState({ mobile:text, mobileValidation: true,});
@@ -210,7 +218,7 @@ export default class Main extends Component {
                         underlineSize={0}
 
                         multiline={false}
-                        maxLength={11}
+                        maxLength={10}
                         //autoFocus={true}
                         keyboardType="number-pad"
                         returnKeyType="done"
