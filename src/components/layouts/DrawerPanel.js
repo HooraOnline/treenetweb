@@ -424,7 +424,7 @@ const MenuBar=observer(props=> {
         persistStore.token=null;
         let browserHistory = createBrowserHistory();
         browserHistory.replace({ firstPage: true });
-        Router.push('/login');
+        Router.prefetch('/login');
     }
     useEffect(() => {
 

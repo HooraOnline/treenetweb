@@ -111,7 +111,6 @@ export default class Main extends Component {
             return;
         }
 
-
         if(!this.regentCode){
 
             showMassage('برای ثبت نام، باید از طریق لینک دعوت وارد سایت شوید','پیام','info');
@@ -124,10 +123,13 @@ export default class Main extends Component {
         postQuery('Members/registerMe',data)
           .then(res=>{
               console.log(res);
-              this.setState({invitationLink:'https://treenet.biz?regentCode='+res.invitationCode});
+              navigation.navigate('smsconfirm', {
+                  user: {res},
+
+              });
+              //this.setState({invitationLink:'https://treenet.biz?regentCode='+res.invitationCode});
           })
           .catch(err=>{
-              alert(12)
               console.log(err);
           })
     }
@@ -175,107 +177,88 @@ export default class Main extends Component {
                         }}>
                         Treenet
                     </Text>
-                    <Text
-                        style={{
-                            marginTop:10,
-                            fontSize:16,
-                            fontWeight:800,
-                            fontFamily: 'IRANYekanFaNum-Bold',
-                            color:gr3
-                        }}>
-                        Grow like a tree by treemarketing
-                    </Text>
 
-                  {/*  <Text style={{marginTop:20,fontSize:14,color:bgWhite}}>Enter your phone number</Text>*/}
-                    <FloatingLabelTextInput
-                        dir={'ltr'}
-                        style={{marginTop:10,borderColor: gr5,borderWidth:2,paddingHorizontal:5,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
-                        placeholder="Enter your phone number"
-                        value={this.state.mobile}
-                        onChangeText={text => {
-                            if(text.length>1 && text.indexOf(0)==0){
-                                text=text.substring(1);
+                    <View id='form'  >
+                        <Text
+                            style={{
+                                alignItems:'center',
+                                marginTop:10,
+                                fontSize:16,
+                                fontWeight:800,
+                                fontFamily: 'IRANYekanFaNum-Bold',
+                                color:gr3,
+                            }}>
+                            Grow like a tree by treenet marketing
+                        </Text>
+
+                        {/*  <Text style={{marginTop:20,fontSize:14,color:bgWhite}}>Enter your phone number</Text>*/}
+                        <FloatingLabelTextInput
+                            dir={'ltr'}
+                            style={{marginTop:10,borderColor: gr5,borderWidth:2,paddingHorizontal:5,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
+                            placeholder="Enter your phone number"
+                            value={this.state.mobile}
+                            onChangeText={text => {
+                                if(text.length>1 && text.indexOf(0)==0){
+                                    text=text.substring(1);
+                                }
+
+                                this.checkValidation();
+                                text = mapNumbersToEnglish(text);
+                                this.setState({ mobile:text, mobileValidation: true,});
+                            }}
+                            numberOfLines={1}
+                            tintColor={
+                                this.state.currentPriceValidation ? placeholderTextColor : lightRed
                             }
+                            textInputStyle={{
+                                fontFamily: 'IRANYekanFaNum-Bold',
+                                fontSize: 20,
+                                fontWeight:800,
+                                color: textItemBlack,
+                                paddingStart: 4,
+                                paddingTop: 1,
+                                paddingBottom: 10,
+                                //textAlign: 'left',
+                            }}
+                            underlineSize={0}
 
-                            this.checkValidation();
-                            text = mapNumbersToEnglish(text);
-                            this.setState({ mobile:text, mobileValidation: true,});
-                        }}
-                        numberOfLines={1}
-                        tintColor={
-                            this.state.currentPriceValidation ? placeholderTextColor : lightRed
-                        }
-                        textInputStyle={{
-                            fontFamily: 'IRANYekanFaNum-Bold',
-                            fontSize: 20,
-                            fontWeight:800,
-                            color: textItemBlack,
-                            paddingStart: 4,
-                            paddingTop: 1,
-                            paddingBottom: 10,
-                            //textAlign: 'left',
-                        }}
-                        underlineSize={0}
-
-                        multiline={false}
-                        maxLength={10}
-                        //autoFocus={true}
-                        keyboardType="number-pad"
-                        returnKeyType="done"
-                        adornment={<Text dir={'ltr'} style={{
-                            fontFamily: 'arial, sans-serif',
-                            fontWeight:800,
-                            fontSize: 20,
-                            color: border,
-                            marginStart: 4,
-                            alignSelf: 'center',
-                            width:60,
-                        }}>{this.state.countryCode}</Text>}
+                            multiline={false}
+                            maxLength={10}
+                            //autoFocus={true}
+                            keyboardType="number-pad"
+                            returnKeyType="done"
+                            adornment={<Text dir={'ltr'} style={{
+                                fontFamily: 'arial, sans-serif',
+                                fontWeight:800,
+                                fontSize: 20,
+                                color: border,
+                                marginStart: 4,
+                                alignSelf: 'center',
+                                width:60,
+                            }}>{this.state.countryCode}</Text>}
 
 
-                    />
-                    <TouchableOpacity
-                        style={{
-                            marginTop:15,
-                            borderColor: gr5,
-                            borderWidth:1,
-                            padding:10,
-                            paddingTop:10,
-                            paddingHorizontal:30,
-                            borderRadius:6,
-                            alignItems:'center',
-                            justifyContent:'center',
+                        />
+                        <TouchableOpacity
+                            style={{
+                                marginTop:15,
+                                borderColor: gr5,
+                                borderWidth:1,
+                                padding:10,
+                                paddingTop:10,
+                                paddingHorizontal:30,
+                                borderRadius:6,
+                                alignItems:'center',
+                                justifyContent:'center',
 
-                        }}
-                        onPress={() =>this.registerPhone()}
-                    >
-                        <Text style={{fontSize:20,color:gr1,fontWeight:500}}>Build my Tree</Text>
-                    </TouchableOpacity>
+                            }}
+                            onPress={() =>this.registerPhone()}
+                        >
+                            <Text style={{fontSize:20,color:gr1,fontWeight:500}}>Build my Tree</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                    {this.state.invitationLink &&(
-                        <View>
-                            <Text
-                                style={{
-                                    marginTop:10,
-                                    fontSize:16,
-                                    fontWeight:800,
-                                    fontFamily: 'IRANYekanFaNum-Bold',
-                                    color:gr3
-                                }}>
-                                ثبت نام شما با موفقیت انجام شد. با کد دعوت زیر می توانید از دوستان خود دعوت کنید تا شاخه درخت شما شوند.
-                            </Text>
-                            <Text
-                                style={{
-                                    marginTop:10,
-                                    fontSize:16,
-                                    fontWeight:800,
-                                    fontFamily: 'IRANYekanFaNum-Bold',
-                                    color:gr3
-                                }}>
-                                {this.state.invitationLink}
-                            </Text>
-                        </View>
-                    )}
+
 
 
                 </View>

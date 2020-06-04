@@ -192,9 +192,9 @@ html * {
 }
 
 body {
-    direction:rtl !important;
+    /*direction:rtl !important;*/
     font-family: "IRANYekanRegular" !important;
-    text-align:right !important;
+   /* text-align:right !important;*/
     font-size: 1em;
 }
 

@@ -16,10 +16,11 @@ import MenuButton from "./MenuButton";
 import PanelHeaderLinks from "../../../components_creative/Header/PanelHeaderLinks";
 import { fetchStore } from '../../utils';
 import { userStore } from '../../stores';
-import SectionList from '../SectionList';
+
 import {faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Router from "next/router";
+import {SectionList} from "../../react-native";
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
     root: {

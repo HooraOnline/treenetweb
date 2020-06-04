@@ -69,9 +69,9 @@ const ResponsiveLayout = observer( props => {
     },  [ref.current]);
 
     return (
-        <div dir={"rtl"}  style={{ display: 'flex',flex:1,  justifyContent:'center',  height: '100%',backgroundImage: `url(${images.publicPg})`}}>
+        <div   style={{ display: 'flex',flex:1,  justifyContent:'center',  height: '100%',backgroundImage: `url(${images.publicPg})`}}>
 
-            <div  ref={ref} dir={"rtl"}  style={{
+            <div  ref={ref}   style={{
                 display:'flex',
                 flex:1,
                 maxWidth:maxWidth,

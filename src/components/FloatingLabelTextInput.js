@@ -199,7 +199,7 @@ export default class FloatingLabelTextInput extends PureComponent {
         if(keyboardType=='number-pad') keyboardType2='numeric'
         return (
             <View style={style}>
-                <View style={[{flexDirection:'row', justifyContent: 'flex-end',}]}>
+                <View style={[{flex:1, flexDirection:'row', justifyContent: 'flex-end',}]}>
                     {
                         this.props.label &&
                         <Text style={this.props.laberStyle}>{this.props.label}</Text>
@@ -215,11 +215,7 @@ export default class FloatingLabelTextInput extends PureComponent {
 
                                 <Input
                                     {...props}
-                                    endAdornment={
-                                        <InputAdornment position="end"  >
 
-                                        </InputAdornment>
-                                    }
 
                                     style={{textInputStyle}}
                                     // className={classes.main}
