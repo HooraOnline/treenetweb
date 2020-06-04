@@ -430,6 +430,7 @@ const MenuBar=observer(props=> {
 
         if (menuItems.length==0){
             initDrawerData();
+
         }
         setWidth(getWidth());
         setIsWide(deviceWide());
