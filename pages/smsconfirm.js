@@ -1,25 +1,18 @@
 import React, {Component} from 'react';
-import MainContent from "./home/MainContent";
+
 import {userStore,persistStore } from "../src/stores";
-import {permissionId} from '../src/constants/values';
+
 import Router from "next/router";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
-import {DropDownList,Toolbar,CardUnitInfo,PopupBase,ImageSelector} from "../src/components";
 
-import accountsStore from "../src/stores/Accounts";
 import {
     deviceWide,
-    getUrlParameter,
-    inputNumberValidation,
-    logger,
     mapNumbersToEnglish,
     navigation,
-    showMassage
+    showMassage,
+    doDelay
 } from "../src/utils";
 import images from "../public/static/assets/images";
-import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
-import {getUserBalance} from "../src/network/Queries";
-
 import {
     bgItemRed,
     bgScreen,
@@ -38,42 +31,30 @@ import {
     textGray,
     gr10, gr3, gr8, gr9, gr5, gr1, gr2
 } from "../src/constants/colors";
-import accounting from "accounting";
-import NavFooterButtons from "../src/components/layouts/footerButtons";
-import NavBar from "../src/components/layouts/NavBar";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
-import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
 import {postQuery, saveEntity} from "../dataService/dataService";
-//import Pagination from 'docs/src/modules/components/Pagination';
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+import translate from "../src/language/translate";
 
-const HOME_TYPE = 1
-export default class smsconfirm extends Component {
+export default class Smsconfirm extends Component {
     constructor() {
         super();
-        //globalState.changeStatusBarColor(primaryDark);
-        //StatusBar.setTranslucent(false);
+
 
         this.state = {
             focus:1,
             invitationLink:'',
         };
     }
-
-
-    checkUserNotRefreshPage = () => {
-        if (!userStore.RoleID) {
-            Router.push('/Main');
-        }
+    componentDidMount() {
+        doDelay(20)
+            .then(()=>{
+                this.user= navigation.getParam('user');
+                if(this.user){
+                    this.setState({haveUser:true})
+                }
+            })
     }
-
-    manageMenuVisible=()=>{
-        let isWide=deviceWide();
-        persistStore.showMenu=persistStore.showMenu==false?false:isWide;
-        this.setState({isWide:isWide,showMenu:isWide?persistStore.showMenu:false});
-     }
 
 
 
@@ -81,63 +62,51 @@ export default class smsconfirm extends Component {
         return mobileValidation;
     }
     checkValidation() {
-        if(!this.state.mobile){
-            this.setState({mobileValidation: false});
-            return 'شماره موبایل خود را وارد کنید.'
-        }
-        if(this.state.mobile.indexOf(0)=='0'){
-            return 'شماره موبایل را بدون صفر وارد کنید';
-        }
-        if (this.state.mobile.length < 10) {
-            this.setState({mobileValidation: false});
-            return 'تعداد ارقام شماره موبایل کم است';
+
+        if(!this.state.code1 && !this.state.code2 && !this.state.code3 && !this.state.code4 ){
+            this.setState({confirmCodeValidation: false});
+            return translate('enter_invitationcode');
         }
 
-        const mobileReg = /^9[0-9]{9}$/i
-        if (!mobileReg.test(this.state.mobile)){
-            //this.setState({mobileValidation: false});
-            return 'فرمت موبایل نادرست';
+        if(!this.state.code1 || !this.state.code2 || !this.state.code3 || !this.state.code4 ){
+            this.setState({confirmCodeValidation: false});
+            return translate('enter_full_invitationcode');
         }
-
     }
-    registerPhone(){
-
+    onfirmMobile(){
         const msg=this.checkValidation();
         if(msg){
-            showMassage(msg,'پیام','info')
+            showMassage(msg,'info')
             return;
         }
 
-        if(!this.regentCode){
-
-            showMassage('برای ثبت نام، باید از طریق لینک دعوت وارد سایت شوید','پیام','info');
-        }
+        const confirmCode=this.state.code1+this.state.code2+this.state.code3+this.state.code4;
         const data={
-            mobile:this.state.countryCode+this.state.mobile,
-            regentCode:this.regentCode
+            mobile:this.user.mobile,
+            regentCode:this.user.regentCode,
+            mobileConfirmCode:confirmCode
         }
-
-        postQuery('Members/registerMe',data)
+        postQuery('Members/me/confirmMobile',data)
           .then(res=>{
-              console.log(res);
-              this.setState({invitationLink:'https://treenet.biz?regentCode='+res.invitationCode});
+              navigation.navigate('registerUserProperty', {
+                  user: this.user,
+              });
           })
           .catch(err=>{
               console.log(err);
           })
     }
 
-    componentDidMount() {
-        navigation.getParam('user');
 
-    }
 
     render() {
         //const { height, width } = useWindowDimensions();
+        if(!this.state.haveUser){
+            return <View style={{alignItems:'center',padding:40}} ><Text>404 not fond page</Text></View>
+        }
+
         return (
-
             <ResponsiveLayout title={`Enter Confirm code`}  style={{margin:0}}>
-
                 <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:16,paddingTop:'5%',}} >
                     <Image
                         source={images.tree}
@@ -165,15 +134,15 @@ export default class smsconfirm extends Component {
                                 color:gr3,
                                 alignSelf:'center'
                             }}>
-                            Enter sms code
+                           { translate('enter_sms_confirm_code')}
                         </Text>
 
-                        <View id='sms code' style={{marginTop:10, flexDirection:'row',justifyContent:'center', marginHorizontal:10}}  >
+                        <View  dir={'ltr'} id='sms code' style={{marginTop:10, flexDirection:'row',justifyContent:'center', marginHorizontal:10}}  >
                             {/*  <Text style={{marginTop:20,fontSize:14,color:bgWhite}}>Enter your phone number</Text>*/}
-                            <View style={{width:50,marginHorizontal:2,}} >
+                            <View style={{ width:50,marginHorizontal:2,}} >
                                 <FloatingLabelTextInput
-                                    dir={'ltr'}
-                                    autoFocus={this.state.focus==1}
+                                    dir={'rtl'}
+                                    //autoFocus={this.state.focus==1}
                                     style={{ borderColor: gr5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
                                     //placeholder=""
                                     value={this.state.code1}
@@ -211,6 +180,11 @@ export default class smsconfirm extends Component {
                                 <FloatingLabelTextInput
                                     dir={'ltr'}
                                     autoFocus={this.state.focus==2}
+                                    refInput={input=>{
+                                        if(this.state.focus==2){
+                                            input.focus();
+                                        }
+                                    }}
                                     style={{ borderColor: gr5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
                                     //placeholder=""
                                     value={this.state.code2}
@@ -247,6 +221,11 @@ export default class smsconfirm extends Component {
                                 <FloatingLabelTextInput
                                     dir={'ltr'}
                                     autoFocus={this.state.focus==3}
+                                    refInput={input=>{
+                                        if(this.state.focus==3){
+                                            input.focus();
+                                        }
+                                    }}
                                     style={{ borderColor: gr5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
                                     //placeholder=""
                                     value={this.state.code3}
@@ -283,12 +262,17 @@ export default class smsconfirm extends Component {
                                 <FloatingLabelTextInput
                                     dir={'ltr'}
                                     autoFocus={this.state.focus==4}
+                                    refInput={input=>{
+                                        if(this.state.focus==4){
+                                            input.focus();
+                                        }
+                                    }}
                                     style={{ borderColor: gr5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
                                     //placeholder=""
                                     value={this.state.code4}
                                     onChangeText={text => {
                                         text = mapNumbersToEnglish(text);
-                                        this.setState({ code4:text, code3Validation: true,focus:5});
+                                        this.setState({ code4:text, code3Validation: true});
                                     }}
                                     numberOfLines={1}
                                     tintColor={
@@ -311,9 +295,7 @@ export default class smsconfirm extends Component {
                                     //autoFocus={true}
                                     keyboardType="number-pad"
                                     returnKeyType="done"
-
                                 />
-
                             </View>
 
                         </View>
@@ -325,43 +307,16 @@ export default class smsconfirm extends Component {
                                 padding:10,
                                 paddingTop:10,
                                 paddingHorizontal:30,
-                                borderRadius:6,
+                                borderRadius:12,
                                 alignItems:'center',
                                 justifyContent:'center',
 
                             }}
-                            onPress={() =>this.registerPhone()}
+                            onPress={() =>this.onfirmMobile()}
                         >
-                            <Text style={{fontSize:20,color:gr1,fontWeight:500}}>Confirm</Text>
+                            <Text style={{fontSize:20,color:gr1,fontWeight:500}}>{ translate('confirm')}</Text>
                         </TouchableOpacity>
                     </View>
-
-
-                    {this.state.invitationLink &&(
-                        <View>
-                            <Text
-                                style={{
-                                    marginTop:10,
-                                    fontSize:16,
-                                    fontWeight:800,
-                                    fontFamily: 'IRANYekanFaNum-Bold',
-                                    color:gr3
-                                }}>
-                                ثبت نام شما با موفقیت انجام شد. با کد دعوت زیر می توانید از دوستان خود دعوت کنید تا شاخه درخت شما شوند.
-                            </Text>
-                            <Text
-                                style={{
-                                    marginTop:10,
-                                    fontSize:16,
-                                    fontWeight:800,
-                                    fontFamily: 'IRANYekanFaNum-Bold',
-                                    color:gr3
-                                }}>
-                                {this.state.invitationLink}
-                            </Text>
-                        </View>
-                    )}
-
                 </View>
 
             </ResponsiveLayout>

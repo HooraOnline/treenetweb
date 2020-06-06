@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Animated, Platform, StyleSheet, Text, TouchableWithoutFeedback, View} from '../react-native';
 
-import {borderSeparate, textDisabled} from '../constants/colors';
+import {border, borderSeparate, textDisabled} from '../constants/colors';
 
 
 export default class SwitchTextMulti extends PureComponent {
@@ -44,7 +44,7 @@ export default class SwitchTextMulti extends PureComponent {
     };
 
     render() {
-        const {data, activeIndex, itemWidth, backgroundActive, backgroundInactive, activeTextStyle, inactiveTextStyle, onActivate} = this.props;
+        const {style,data, activeIndex, itemWidth, backgroundActive, backgroundInactive, activeTextStyle, inactiveTextStyle, onActivate} = this.props;
 
         // const moveBackground = backgroundMove.interpolate({
         //     inputRange: [0, data.length],
@@ -54,7 +54,7 @@ export default class SwitchTextMulti extends PureComponent {
         return (
 
             <View
-                style={{
+                style={[{
                     flex: 1,
                     flexDirection: 'row',
                     backgroundColor: backgroundInactive,
@@ -65,7 +65,7 @@ export default class SwitchTextMulti extends PureComponent {
                     borderColor: borderSeparate,
                     borderRadius: 100,
                     position:'relative'
-                }}
+                },style]}
             >
                 <Animated.View
                     style={
@@ -75,7 +75,8 @@ export default class SwitchTextMulti extends PureComponent {
                             //height: '100%',
                             height:50,
                             width: itemWidth,
-                            right: this.state.backgroundMove,
+                            right:global.isRtl? this.state.backgroundMove:undefined,
+                            left:global.isRtl?undefined :this.state.backgroundMove,
                             elevation: '50deg',
                             shadowColor: backgroundActive,
                             shadowOffset: {width: 0, height: 1},
@@ -100,7 +101,7 @@ export default class SwitchTextMulti extends PureComponent {
                                             Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)' :
                                             Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                         fontSize: index === activeIndex ? 16 : 14,
-                                        color: index === activeIndex ? 'white' : textDisabled,
+                                        color: index === activeIndex ? 'white' : border,
                                     }, index === activeIndex ? activeTextStyle : inactiveTextStyle]}>{item}</Text>
                             </View>
                         </TouchableWithoutFeedback>

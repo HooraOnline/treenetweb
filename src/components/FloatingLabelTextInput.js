@@ -140,6 +140,7 @@ export default class FloatingLabelTextInput extends PureComponent {
 
     componentDidMount() {
         this.fontSize = this.props.textInputStyle && this.props.textInputStyle.fontSize ? this.props.textInputStyle.fontSize : 14;
+
         this.props.refInput ? this.props.refInput(this.refs.txtInput) : {};
         //
         // this._handleFocus();
@@ -193,7 +194,7 @@ export default class FloatingLabelTextInput extends PureComponent {
     }
 
     render() {
-        const {style,autoFocus,keyboardType='text', textInputStyle, placeholder, tintColor, highlightColor, underlineSize, underlineEnabled, floatingLabelAniDuration, floatingLabelEnable, type,maxLength,numberOfLines,onChangeText,adornment} = this.props;
+        const {style,labelStyle,unitStyle,autoFocus,keyboardType='text', textInputStyle, placeholder, tintColor, highlightColor, underlineSize, underlineEnabled, floatingLabelAniDuration, floatingLabelEnable, type,maxLength,numberOfLines,onChangeText,adornment} = this.props;
         let props=this.props;
         let keyboardType2=keyboardType;
         if(keyboardType=='number-pad') keyboardType2='numeric'
@@ -207,20 +208,20 @@ export default class FloatingLabelTextInput extends PureComponent {
 
                     <View style={[{flex:1}]}>
 
-                        <FormControl   >
+                        <FormControl  dir={'rtl'} >
                             {floatingLabelEnable &&(
-                                <InputLabel style={{}} htmlFor="standard-adornment-password">{placeholder}</InputLabel>
-                            )}
-                            <View style={{flex:1,flexDirection:'row'}}>
+                                <div style={{height:5,}} >
+                                    <InputLabel style={labelStyle} >{placeholder}</InputLabel>
+                                </div>
 
+                            )}
+                            <View dir={global.isRtl?'rtl':'ltr'} style={{flex:1,flexDirection:'row'}}>
                                 <Input
                                     {...props}
-
 
                                     style={{textInputStyle}}
                                     // className={classes.main}
                                     fullWidth={true}
-
                                     inputProps={{
                                         inputMode: keyboardType2,
                                         maxLength: maxLength,
@@ -256,16 +257,15 @@ export default class FloatingLabelTextInput extends PureComponent {
                                     }}
                                    /* inputComponent={this.TextMaskCustom}*/
                                 />
-                                {adornment?adornment: <Text style={{
+                                {adornment?adornment: <Text style={[{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                     fontSize: 12,
                                     color: border,
                                     marginStart: 4,
+                                    paddingTop:15,
                                     alignSelf: 'center',
-                                }}>{this.props.unit}</Text>}
+                                },unitStyle]}>{this.props.unit}</Text>}
                             </View>
-
-
                         </FormControl>
 
                         <Underline
@@ -300,6 +300,11 @@ export default class FloatingLabelTextInput extends PureComponent {
                         transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
                         pointer-events: none
                     }
+                    
+                    .MuiInputLabel-formControl{
+                         left:undefined;
+                         right:0;
+                     }
                 `}</style>
             </View>
         );

@@ -445,9 +445,8 @@ export function getTabWidth(width, number, margin = 48) {
     return (width - margin) / number;
 }
 
-export function showMassage(msg, title, type) {
+export function showMassage(msg, type) {
     globalState.toastType = type;
-    globalState.toastTitle = title;
     globalState.setResponseMessage(msg);
     globalState.showToastCard();
 
@@ -580,10 +579,12 @@ export const navigation={
         })
     },
     getParam:(paramName,defaultValue)=>{
-       if(!Router.query.params)
+        doDelay();
+        if(!Router.query.params)
            return null;
         let encodeParam=decodeURIComponent(Router.query.params);
         let paramsToJson=JSON.parse(encodeParam);
+
         return paramsToJson[paramName] || defaultValue;
     },
 

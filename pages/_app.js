@@ -21,10 +21,10 @@ import App from "next/app";
 import Head from "next/head";
 import Router from "next/router";
 
-import { appWithTranslation } from '../i18n'
-import { fetchStore } from "../src/utils";
+//import { appWithTranslation } from '../i18n'
+import {fetchStore, getCookie} from "../src/utils";
 
-import PageChange from "components_creative/PageChange/PageChange.js";
+//import PageChange from "components_creative/PageChange/PageChange.js";
 
 import "assets/scss/nextjs-material-kit.scss?v=1.0.0";
 //import "assets/css/apamanGlobal.css";
@@ -34,13 +34,25 @@ import { loginQuery } from "../src/network/Queries";
 Router.events.on("routeChangeStart", url => {
   console.log(`Loading: ${url}`);
   document.body.classList.add("body-page-transition");
+  init();
   if (url == '/home') {
     ReactDOM.render(
-      <PageChange path={url} />, document.getElementById("page-transition")
+        null
+      /*<PageChange path={url} />, document.getElementById("page-transition")*/
     );
   }
 
 });
+const init=async ()=>{
+  if(!global.slanguage){
+    let lng =  getCookie('lng');
+    if (lng) {
+      global.slanguage = lng.key;
+      global.isRtl = lng.rtl;
+    }
+    await fetchStore();
+  }
+}
 Router.events.on("routeChangeComplete", () => {
   ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
   document.body.classList.remove("body-page-transition");
@@ -53,13 +65,12 @@ Router.events.on("routeChangeError", () => {
 class MyApp extends App {
 
   async componentDidMount() {
-    await fetchStore();
     let comment = document.createComment(``);
     document.insertBefore(comment, document.documentElement);
     this.loadUserData();
 
   }
-  async getInitialProps({ Component, router, ctx }) {
+/*  async getInitialProps({ Component, router, ctx }) {
     let pageProps = {};
     console.warn("@@@@@@@@@@ App nextJs INIT");
     if (Component.getInitialProps) {
@@ -67,27 +78,10 @@ class MyApp extends App {
     }
 
     return { pageProps };
-  }
+  }*/
 
   loadUserData = (status) => {
-    if (persistStore.token) {
-      console.log('**** Have Token ****');
-      try {
-        if (accountsStore.accounts.length > 1) {
-          if (persistStore.selected === 0) {
-            userStore.setUser(accountsStore.accounts[0]);
-          } else {
-            userStore.setUser(accountsStore.accounts.find(account => account.ID === persistStore.selected));
-          }
-        } else if (accountsStore.accounts.length === 1) {
-          userStore.setUser(accountsStore.accounts[0]);
-        }
-        loginQuery(persistStore.username, null);
 
-      } catch (error) {
-        console.log('catch Token : ', error);
-      }
-    }
   }
 
 
@@ -98,5 +92,5 @@ class MyApp extends App {
     return <Component {...pageProps} {...this.state} />
   }
 }
-
-export default appWithTranslation(MyApp)
+export default MyApp
+//export default appWithTranslation(MyApp)

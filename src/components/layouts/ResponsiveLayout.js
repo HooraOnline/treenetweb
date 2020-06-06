@@ -1,24 +1,12 @@
 
 import {bgScreen} from "../../constants/colors";
-import Head from "next/head";
-import persistStore from "../../stores/PersistStore";
-import userStore from "../../stores/User";
-import accountsStore from "../../stores/Accounts";
 import {observer} from 'mobx-react';
-import {permissionId} from "../../constants/values";
 import React, {useEffect, useState,useRef} from "react";
-import "./Layout.scss";
+import {fetchStore, getWidth, deviceWide, height, showMassage, getCookie} from "../../utils";
 import "./index.scss";
-import Router from "next/router";
-import {getUserBalance} from "../../network/Queries";
-import {fetchStore, getWidth, deviceWide, height, showMassage} from "../../utils";
-import NavFooterButtons from "./footerButtons";
-import DrawerPanel from "./DrawerPanel";
 import ToastCard from "../ToastCard";
 import {globalState} from "../../stores";
-import {TouchableOpacity} from "../../react-native";
 import {View} from "../../react-native";
-import Typography from "@material-ui/core/Typography";
 import images from "../../../public/static/assets/images";
 
 const  maxWidth=700;
@@ -60,8 +48,9 @@ const ResponsiveLayout = observer( props => {
         };
     }
 
+
     useEffect(() => {
-        console.log('global',global.innerWidth);
+
         init();
         document.title = props.title;
         manageResizeScreen();
@@ -69,7 +58,7 @@ const ResponsiveLayout = observer( props => {
     },  [ref.current]);
 
     return (
-        <div   style={{ display: 'flex',flex:1,  justifyContent:'center',  height: '100%',backgroundImage: `url(${images.publicPg})`}}>
+        <div  dir={global.isRtl?'rtl':'ltr'}  style={{  textAlign:global.isRtl?"right":"left", display: 'flex',flex:1,  justifyContent:'center',  height: '100%',backgroundImage: `url(${images.publicPg})`}}>
 
             <div  ref={ref}   style={{
                 display:'flex',

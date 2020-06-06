@@ -131,7 +131,7 @@ class Content extends PureComponent {
                 >
 
                     <View
-                        style={[styles.actionIcon, {
+                        style={ {
                             flexDirection: 'row',
                             alignItems: 'center',
                             borderWidth: 1,
@@ -145,53 +145,34 @@ class Content extends PureComponent {
                             position:'relative',
                             width:'90%',
                             maxWidth:600,
-                        }]}>
+                            justifyContent:'space-between',
+                            padding:15,
+                        }}>
 
-                        <Image
+                       {/* <Image
                             source={this.image}
                             style={{position: 'absolute', start: 0, top: 0, height: 59, width: 57}}
-                        />
-
-                        <TouchableWithoutFeedback
-                            onPress={() => this.animateSnake(false, onClose)}
-                        >
-                            <View
-                                style={{
-                                    position: 'absolute',
-                                    end: 10,
-                                    top:2,
-                                    paddingVertical: 15,
-
-                                }}
-                            >
-                                <Image
-                                    source={images.ic_close}
-                                    style={{
-                                        //tintColor: '#BFACAC',
-                                        height: 24,
-                                        width: 24,
-                                    }}
-                                />
-                            </View>
-
-                        </TouchableWithoutFeedback>
-
-                        <Text style={{
-                            color: this.titleColor,
-                            fontSize: 16,
-                            fontFamily: 'IRANYekan-ExtraBold' ,
-                            position: 'absolute',
-                            start: 45,
-                            top: 5,
-                        }}>{this.title}</Text>
-
+                        />*/}
                         <Text style={{
                             color: this.messageColor,
                             fontSize: 12,
-                            position: 'absolute',
-                            start: 45,
-                            top: 30,
+
                         }}>{this.message}</Text>
+                        <TouchableWithoutFeedback
+
+                            onPress={() => this.animateSnake(false, onClose)}
+                        >
+                            <Image
+                                source={images.ic_close}
+                                style={{
+                                    //tintColor: '#BFACAC',
+                                    height: 24,
+                                    width: 24,
+                                }}
+                            />
+                        </TouchableWithoutFeedback>
+
+
                     </View>
 
 

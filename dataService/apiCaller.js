@@ -5,6 +5,8 @@ import axios from 'axios';
 //for notification
 //import Toasted from 'vue-toasted'
 import { decipher,cipher } from './pdk/utils';
+import {showMassage} from "../src/utils";
+import translate from "../src/language/translate";
 
 // axios.defaults.headers.common['Authorization']="dauJBEpEUsrQNEn5t4ziyiIICJET9qvThhVutSF7EV5vf0QDCrNvrDCsCfyjrSD9";
 //axios.defaults.headers.common['Content-Type']= "application/x-www-form-urlencoded";
@@ -22,15 +24,10 @@ import { decipher,cipher } from './pdk/utils';
     // }
 });*/
 
-//export const apihost = 'http://localhost:3000/api/';
-//  export const apihost = 'http://mcs-admin.partiatech.com/admin/';
-//export const apihost = 'http://172.16.41.142/api/';
-// export const apihost = 'https://mcs.mci.ir/api/';
 
+export const apihost = 'http://localhost:3000/api/';
+//export const apihost = 'http://api3.treenetgram.com/api/';
 
-//export const apihost = 'http://mcstestdev.mci.ir/api/';
-export const apihost = 'http://192.168.1.161:3000/api/';
-//export const apihost = 'https://hamrah.mci.ir/api/';
 class Api {
     constructor() {
 
@@ -138,9 +135,12 @@ class Api {
             })
             .catch(function (error) {
                 console.log(error);
-                if(error.response && error.response.data){
+
+                if(error.response && error.response.data && error.response.data.error.key){
+                    showMassage(translate( error.response.data.error.key),'info')
+                }
+                if(error.response.data){
                     console.log(error.response.data)
-                    alert( error.response.data.error.pmessage)
                 }
 
                 throw error

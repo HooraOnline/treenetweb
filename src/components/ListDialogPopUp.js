@@ -17,6 +17,8 @@ import Slide from '@material-ui/core/Slide';
 import {
     bgScreen, bgWhite, border,
     borderSeparate,
+    gr5,
+    gr9,
     gray, lightGrey,
     overlayColor,
     primaryDark,
@@ -102,19 +104,20 @@ export default class ListDialogPopUp extends PureComponent {
 
         let listItems= this.state.searchItems || items ;
         return (
-            <View style={{flex:1,}}>
+            <View style={[{flex:1,},this.props.style]}>
                 <TouchableOpacity
                     style={[{
                         flex: 1,
+
                         width:'100%',
                         flexDirection: 'row',
                         borderWidth: 1,
                         // alignItems: 'center',
                         justifyContent: 'center',
-                        borderColor: validation ? subTextItem : primaryColor,
+                        borderColor: validation ? gr9 : primaryColor,
                         borderRadius: 10,
                         // marginVertical: 7
-                    },this.props.style]}
+                    }]}
                     onPress={this.handleOpen}
                     disabled={disabled}>
                     {selectedComponentCustom ? (
@@ -131,6 +134,7 @@ export default class ListDialogPopUp extends PureComponent {
                                 // paddingBottom: 3,
                                 paddingHorizontal: 4,
                                 borderRadius: 10,
+
                                 opacity: disabled ? 0.3 : 1,
                             },this.props.selectedItemStyle]}>
                             <View style={{flex: 1}}>
@@ -188,7 +192,7 @@ export default class ListDialogPopUp extends PureComponent {
                     onClose={this.handleClose}
                     dialogOpacity={dialogOpacity}
                     style={[style,{
-                        marginTop:this.state.open?(marginTop ||60):0,height:'90%',opacity:1
+                        marginTop:this.state.open?(marginTop ||0):0,opacity:1
                     }].reduce((acc, x)=>{
                         for (var key in x) acc[key] = x[key];
                         return acc;
@@ -222,6 +226,7 @@ export default class ListDialogPopUp extends PureComponent {
                                     borderBottomWidth: 1,
                                     borderColor: borderSeparate,
                                     alignItems: 'center',
+                                    paddingVertical:20,
 
                                 }}>
                                 <TouchableOpacity
@@ -230,21 +235,15 @@ export default class ListDialogPopUp extends PureComponent {
                                     <Image
                                         source={images.ic_close}
                                         style={{
-                                            tintColor: textItem,
+                                            //tintColor: textItem,
                                             width: 24,
                                             height: 24,
-                                            marginTop: 30,
-                                            marginBottom: 21,
                                         }}
                                     />
                                 </TouchableOpacity>
                                 <Text
                                     style={{
                                         fontSize: 16,
-                                        // paddingHorizontal: 24,
-                                        paddingTop: 24,
-                                        paddingBottom: 16,
-                                        alignSelf: 'flex-start',
                                     }}>
                                     {title}
                                 </Text>
@@ -265,12 +264,13 @@ export default class ListDialogPopUp extends PureComponent {
                                         backgroundColor:'#fff',
                                         paddingHorizontal:10,
                                         marginHorizontal:10,
+                                        marginTop:10,
 
                                     }}>
                                     <Image
                                         source={images.ic_search}
                                         style={{
-                                            tintColor: textItem,
+                                            //tintColor: textItem,
                                             width: 24,
                                             height: 24,
                                             marginHorizontal:10,
@@ -278,10 +278,13 @@ export default class ListDialogPopUp extends PureComponent {
                                     />
                                     <TextInput
                                         style={{
+                                            flex:1,
                                             textAlign:'right',
                                             fontFamily:'IRANYekanFaNum',
+                                            borderWidth:0,
+                                            height:40
                                         }}
-                                        placeholder={"جستجو کنید"}
+                                        placeholder={"Search"}
                                         onChangeText={text => this.onSearch(text)}
                                         value={this.state.keyWord}
                                     />
