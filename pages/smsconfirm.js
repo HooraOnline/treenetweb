@@ -98,7 +98,6 @@ export default class Smsconfirm extends Component {
     }
 
 
-
     render() {
         //const { height, width } = useWindowDimensions();
         if(!this.state.haveUser){

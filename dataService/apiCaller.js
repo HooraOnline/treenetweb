@@ -25,8 +25,8 @@ import translate from "../src/language/translate";
 });*/
 
 
-export const apihost = 'http://localhost:3000/api/';
-//export const apihost = 'http://api3.treenetgram.com/api/';
+//export const apihost = 'http://localhost:3000/api/';
+export const apihost = 'http://api3.treenetgram.com/api/';
 
 class Api {
     constructor() {
