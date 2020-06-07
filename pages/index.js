@@ -51,7 +51,7 @@ export default class Index extends Component {
             mobileValidation:false,
             countryCode:'+98',
             invitationLink:'',
-            languageIndex: LNGList[3].index,
+            languageIndex: LNGList[0].index,
         };
     }
 
