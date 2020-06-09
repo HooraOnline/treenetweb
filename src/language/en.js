@@ -1,6 +1,12 @@
 global.isRtl=false
 export const en={
-  "en_welcome_to_app": "Welcome to Treenet",
+  en_treenetDesl:"In the age of information and the Internet, networking is the equivalent of the power, wealth, fame, and foundation of a successful business. Treenetgram is a great tool for networking that can grow a tree, and it's actually a social network that grows your followers pyramid. ",
+  en_treenetDes2:"Treenetgram helps marketers, shopkeepers, companies, business owners and anyone who needs advertising or notification to create their own tree network for free and grow quickly.",
+  en_treenetDes3:"Also, people who do not have a personal business or do not need advertising, can form a relatively large network in addition to automatically earning automatic revenue from the Treenetgram advertising system, rent their network to businesses and brands and earn significant income. . Even international revenues.",
+  en_treenetDes4:"With this tool you can easily and only send them your friends to your network network by sending your own private invitation link. Anyone else your friend invites to Tritnet will also be a member of your Trinity network, so your Tritnet will grow rapidly.",
+  en_treenetDes5:"Treenetgram is multilingual and new languages are being added every day. So by sending an invitation link to outsiders or simpler ways like sharing an invitation link on foreign forums and social networks, you can globalize your network and form a huge international network with international revenue capability.",
+  en_treenetDes6:"Soon, the Treenetgram app will provide you with powerful features such as bulletin boards, automatic revenue from the ad system, Tri-Net marketing tools, magic wallets, sales team management, and more. Start networking now and before others and grow like a tree.",
+  ar_start_network:"Start Networking",
 
   "en_example": "Example 9663445566",
   "invitation_code_is_invalid":"invitation code is invalid",

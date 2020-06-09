@@ -39,6 +39,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import {postQuery, saveEntity} from "../dataService/dataService";
 import {ListDialogPopUp} from "../src/components";
+import Link from "next/link";
 //import Pagination from 'docs/src/modules/components/Pagination';
 //const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -69,62 +70,14 @@ export default class Index extends Component {
     }
 
 
-
-    isValid() {
-        return mobileValidation;
-    }
-    checkValidation() {
-
-        if (!this.invitationCode) {
-            this.setState({invitationCodeValidation: false});
-            return translate('required_invitationLink');
-        }
-        if(!this.state.mobile){
-            this.setState({mobileValidation: false});
-            return translate('enter_your_phone_number')
-        }
-        if (this.state.mobile.length < 10) {
-            this.setState({mobileValidation: false});
-            return translate('the_number_of_mobile_is_not_valid');
-        }
-
-        const mobileReg = /^9[0-9]{9}$/i
-        if (!mobileReg.test(this.state.mobile)){
-            //this.setState({mobileValidation: false});
-            return translate('invalid_mobile_number'); ;
-        }
-
-    }
-    registerPhone(){
-
-        const msg=this.checkValidation();
-        if(msg){
-            showMassage(msg,'info')
-            return;
-        }
-
-        const data={
-            mobile:this.state.countryCode+this.state.mobile,
-            regentCode:this.invitationCode,
-        }
-
-        postQuery('Members/me/register',data)
-            .then(res=>{
-                console.log(res);
-                navigation.navigate('smsconfirm', {
-                    user: {mobile:res.mobile,regentCode:this.invitationCode},
-
-                });
-
-            })
-            .catch(err=>{
-                console.log(err);
-            })
-    }
-
     componentDidMount() {
         this.applyRTLfromUserLanguage();
         this.invitationCode=getUrlParameter('invitationCode');
+    }
+    goToFastRegisterPage(){
+        navigation.navigate('fastRegister', {
+            user: {regentCode:this.invitationCode},
+        });
     }
     async applyRTLfromUserLanguage() {
         let lng = getCookie('lng');
@@ -143,6 +96,7 @@ export default class Index extends Component {
         saveCookie('lng', lng);
 
     }
+
     render() {
         //const { height, width } = useWindowDimensions();
 
@@ -159,7 +113,7 @@ export default class Index extends Component {
                         style={{
                             marginTop:5,
                             marginBottom:10,
-                            fontSize:40,
+                            fontSize:25,
                             fontWeight:800,
                             fontFamily: 'IRANYekanFaNum-Bold',
                             color:gr3
@@ -167,32 +121,11 @@ export default class Index extends Component {
                         Treenetgram
                     </Text>
 
-                    <View id='form' style={{width:'100%',maxWidth:400}}   >
-                        <Text
-                            style={{
-                                alignItems:'center',
-                                marginTop:40,
-                                fontSize:16,
-                                fontFamily: 'IRANYekanRegular',
-                                color:gr3,
-                                marginBottom:5
-                            }}>
-                            {translate("from_local_power_to_global_power")}
-                        </Text>
-                        <Text
-                            style={{
-                                alignItems:'center',
-                                marginTop:2,
-                                fontSize:18,
-                                fontWeight:800,
-                                fontFamily: 'IRANYekanFaNum-Bold',
-                                color:gr3,
-                                marginBottom:20
-                            }}>
-                            {translate("make_your_global_network")}
-                        </Text>
-
+                    <View id='form' style={{width:'100%',paddingHorizontal:5,marginTop:10, paddingBottom:20, alignItems:'center'}}   >
                         <ListDialogPopUp
+                            style={{
+                                minWidth:150
+                            }}
                             selectedItemStyle={{
                                 backgroundColor:gr5,
                             }}
@@ -211,6 +144,7 @@ export default class Index extends Component {
                                         alignItems: 'center',
                                         marginHorizontal: 8,
                                         marginVertical: 8,
+
 
                                     }}>
 
@@ -246,61 +180,110 @@ export default class Index extends Component {
                                 )
                             } }
                         />
+                        <Text
+                            style={{
+                                alignItems:'center',
+                                marginTop:25,
+                                fontSize:17,
+                                fontWeight:700,
+                                fontFamily: 'IRANYekanRegular',
+                                color:gr3,
+                                marginBottom:5
+                            }}>
+                            {translate("from_local_power_to_global_power")}
+                        </Text>
+                        <Text
+                            style={{
+                                alignItems:'center',
+                                marginTop:2,
+                                fontSize:18,
+                                fontWeight:800,
+                                fontFamily: 'IRANYekanFaNum-Bold',
+                                color:gr3,
 
-
-                         {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:14,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
-                        <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
-                            <Text style={{
-                                fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                fontSize: 16,
-                                color: border,
-
-                                padding:5,
-                                alignSelf: 'center',
-                            }}>{this.state.countryCode}</Text>
-                            <FloatingLabelTextInput
-                                dir={'ltr'}
-                                style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
-                                placeholder={translate("for_start_enter_your_phone_number")}
-                                value={this.state.mobile}
-                                onChangeText={text => {
-                                    if(text.length>1 && text.indexOf(0)==0){
-                                        text=text.substring(1);
-                                    }
-
-                                    this.checkValidation();
-                                    text = mapNumbersToEnglish(text);
-                                    this.setState({ mobile:text, mobileValidation: true,});
-                                }}
-                                numberOfLines={1}
-                                tintColor={
-                                    this.state.currentPriceValidation ? placeholderTextColor : lightRed
+                            }}>
+                            {translate("make_your_global_network")}
+                        </Text>
+                        <View style={{padding:'4%',marginTop:25,}}>
+                            <Text
+                                style={{
+                                    alignItems:'center',
+                                    fontSize:16,
+                                    fontFamily: 'IRANYekanRegular',
+                                    color:gr3,
+                                    textAlign:'justify',
+                                    marginBottom:5
+                                }}>
+                                {
+                                    translate('treenetDesl')
                                 }
-                                textInputStyle={{
-                                    fontFamily: 'IRANYekanFaNum-Bold',
-                                    fontSize: 16,
-                                    fontWeight:800,
-                                    color: textItemBlack,
-                                    paddingStart: 4,
-                                    paddingTop: 1,
-                                    paddingBottom: 10,
-                                    //textAlign: 'left',
-                                }}
-                                underlineSize={0}
+                            </Text>
+                            <Text
+                                style={{
+                                    alignItems:'center',
+                                    fontSize:16,
+                                    fontFamily: 'IRANYekanRegular',
+                                    color:gr3,
+                                    textAlign:'justify',
+                                    marginBottom:5
+                                }}>
+                                { translate('treenetDes2')}
 
-                                multiline={false}
-                                maxLength={10}
-                                //autoFocus={true}
-                                keyboardType="number-pad"
-                                returnKeyType="done"
+                            </Text>
+                            <Text
+                                style={{
+                                    alignItems:'center',
+                                    fontSize:16,
+                                    fontFamily: 'IRANYekanRegular',
+                                    color:gr3,
+                                    textAlign:'justify',
+                                    marginBottom:5
+                                }}>
+                                { translate('treenetDes3')}
 
-                            />
+                            </Text>
+                            <Text
+                                style={{
+                                    alignItems:'center',
+                                    fontSize:16,
+                                    fontFamily: 'IRANYekanRegular',
+                                    color:gr3,
+                                    textAlign:'justify',
+                                    marginBottom:5
+                                }}>
+                                { translate('treenetDes4')}
+                            </Text>
+
+                            <Text
+                                style={{
+                                    alignItems:'center',
+                                    fontSize:16,
+                                    fontFamily: 'IRANYekanRegular',
+                                    color:gr3,
+                                    textAlign:'justify',
+
+                                }}>
+                                { translate('treenetDes5')}
+
+                            </Text>
+
+                            <Text
+                                style={{
+                                    alignItems:'center',
+                                    marginTop:0,
+                                    fontSize:16,
+                                    fontFamily: 'IRANYekanRegular',
+                                    textAlign:'justify',
+                                    color:gr3,
+
+                                }}>
+                                { translate('treenetDes6')}
+                            </Text>
                         </View>
-
                         <TouchableOpacity
                             style={{
                                 flex:1,
-                                marginTop:15,
+                                marginTop:25,
                                 borderColor: gr5,
                                 borderWidth:1,
                                 padding:0,
@@ -309,9 +292,9 @@ export default class Index extends Component {
                                 alignItems:'center',
                                 justifyContent:'center',
                             }}
-                            onPress={() =>this.registerPhone()}
+                            onPress={() =>this.goToFastRegisterPage()}
                         >
-                            <Text style={{fontSize:16,color:gr1,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
+                            <Text style={{fontSize:16,color:gr1,fontWeight:500,paddingVertical:12, paddingHorizontal:20,}}>{translate('start_network')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
