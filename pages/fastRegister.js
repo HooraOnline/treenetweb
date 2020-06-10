@@ -6,7 +6,7 @@ import {MenuItem, Select} from '@material-ui/core';
 import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
 import {
-    deviceWide, getCookie,
+    deviceWide, doDelay, getCookie,
     getUrlParameter,
     mapNumbersToEnglish,
     navigation,
@@ -57,33 +57,15 @@ export default class FastRegister extends Component {
 
     componentDidMount() {
 
-        this.invitationCode=getUrlParameter('invitationCode');
+        doDelay(30)
+            .then(()=>{
+                this.user= navigation.getParam('user');
+            })
     }
-
-    goToReapetMobile(){
-        navigation.navigate('fastRegisterRepeatmobil', {
-            user: {regentCode:this.invitationCode,mobile:this.state.mobile},
-        });
-    }
-
-    checkUserNotRefreshPage = () => {
-        if (!userStore.RoleID) {
-            Router.push('/Main');
-        }
-    }
-
-
-
-
     isValid() {
         return mobileValidation;
     }
     checkValidation() {
-
-        if (!this.invitationCode) {
-            this.setState({invitationCodeValidation: false});
-            return translate('required_invitationLink');
-        }
         if(!this.state.mobile){
             this.setState({mobileValidation: false});
             return translate('enter_your_phone_number')
@@ -100,51 +82,17 @@ export default class FastRegister extends Component {
         }
 
     }
-    registerPhone(){
-
+    nextPage(){
         const msg=this.checkValidation();
         if(msg){
             showMassage(msg,'info')
             return;
         }
-
-        const data={
-            mobile:this.state.countryCode+this.state.mobile,
-            regentCode:this.invitationCode,
-        }
-
-        postQuery('Members/me/register',data)
-            .then(res=>{
-                console.log(res);
-                navigation.navigate('smsconfirm', {
-                    user: {mobile:res.mobile,regentCode:this.invitationCode},
-
-                });
-
-            })
-            .catch(err=>{
-                console.log(err);
-            })
+        navigation.navigate('repeatmobil', {
+            user: {regentCode:this.user.regentCode,mobile:this.state.countryCode+this.state.mobile},
+        });
     }
 
-
-    async applyRTLfromUserLanguage() {
-        let lng = getCookie('lng');
-        if (lng) {
-            global.slanguage = lng.key;
-            global.isRtl = lng.rtl;
-            this.setState({languageIndex: lng.index});
-
-        }
-    }
-
-    async applyLanguage(lng) {
-        global.slanguage = lng.key;
-        global.isRtl = lng.rtl;
-        this.setState({languageIndex: lng.index});
-        saveCookie('lng', lng);
-
-    }
     render() {
         //const { height, width } = useWindowDimensions();
 
@@ -230,7 +178,7 @@ export default class FastRegister extends Component {
                                 alignItems:'center',
                                 justifyContent:'center',
                             }}
-                            onPress={() =>this.goToReapetMobile()}
+                            onPress={() =>this.nextPage()}
                         >
                             <Text style={{fontSize:16,color:gr1,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
                         </TouchableOpacity>

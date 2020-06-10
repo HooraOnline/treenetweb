@@ -7,22 +7,27 @@ export const en={
   en_treenetDes5:"Treenetgram is multilingual and new languages are being added every day. So by sending an invitation link to outsiders or simpler ways like sharing an invitation link on foreign forums and social networks, you can globalize your network and form a huge international network with international revenue capability.",
   en_treenetDes6:"Soon, the Treenetgram app will provide you with powerful features such as bulletin boards, automatic revenue from the ad system, Tri-Net marketing tools, magic wallets, sales team management, and more. Start networking now and before others and grow like a tree.",
   ar_start_network:"Start Networking",
+  en_required_invitationLink:"To build your tree network, you must com to website by invitation link.",
+  en_invalid_invitation_link:"This invitation link is invalid.",
+  en_for_start_enter_your_phone_number: "Enter your mobile number",
+  en_enter_your_phone_number: "Enter Your mobile number.",
+  en_mobile_was_verified_before:'This number has already been registered in TreeNetgram.',
+
+
 
   "en_example": "Example 9663445566",
-  "invitation_code_is_invalid":"invitation code is invalid",
   "en_password": "Password",
   "en_login": "Login",
-  "en_for_start_enter_your_phone_number": "Enter your mobile number",
+
   "en_make_your_global_network":"And Build your local and global network.",
   "en_from_local_power_to_global_power":"Just send an invitation link",
   "en_Select_Your_Language":"Select Your Language",
-  "en_enter_your_phone_number": "Enter Your mobile number.",
+
   "en_the_number_of_mobile_is_not_valid":"The number of mobile is not valid.",
   "en_invalid_mobile_number":"invalid mobile number",
   "en_message":"Message",
   "en_build_my_tree":"Make my tree network",
-  "en_required_invitationLink":"You can register only by invite link.",
-  "en_invalid_invitation_link":"This invitation link is invalid.",
+
   "en_enter_sms_confirm_code":"Enter sms confirm code",
   "en_confirm":"Confirm",
   "en_your_register_down":"You registered by successfully. Invite your friends by sending flowing link for them. ",

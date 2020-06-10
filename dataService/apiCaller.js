@@ -25,7 +25,7 @@ import translate from "../src/language/translate";
 });*/
 
 
-export const apihost = 'http://localhost:3000/api/';
+export const apihost = 'http://192.168.1.161:3000/api/';
 //export const apihost = 'https://treenetserver.herokuapp.com/api/';
 class Api {
     constructor() {
@@ -141,8 +141,10 @@ class Api {
                 if(error.response.data){
                     console.log(error.response.data)
                 }
+                if(error.response && error.response.data){
+                    throw error.response.data.error;
+                }
 
-                throw error
             });
     }
     static remove(apiPath, list) {

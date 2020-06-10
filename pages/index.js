@@ -57,24 +57,23 @@ export default class Index extends Component {
     }
 
 
-    checkUserNotRefreshPage = () => {
-        if (!userStore.RoleID) {
-            Router.push('/Main');
-        }
-    }
-
-    manageMenuVisible=()=>{
-        let isWide=deviceWide();
-        persistStore.showMenu=persistStore.showMenu==false?false:isWide;
-        this.setState({isWide:isWide,showMenu:isWide?persistStore.showMenu:false});
-    }
-
 
     componentDidMount() {
         this.applyRTLfromUserLanguage();
         this.invitationCode=getUrlParameter('invitationCode');
     }
-    goToFastRegisterPage(){
+    checkValidation() {
+        if (!this.invitationCode) {
+            this.setState({invitationCodeValidation: false});
+            return translate('required_invitationLink');
+        }
+    }
+    nextPage(){
+        const msg=this.checkValidation();
+        if(msg){
+            showMassage(msg,'info')
+            return;
+        }
         navigation.navigate('fastRegister', {
             user: {regentCode:this.invitationCode},
         });
@@ -292,7 +291,7 @@ export default class Index extends Component {
                                 alignItems:'center',
                                 justifyContent:'center',
                             }}
-                            onPress={() =>this.goToFastRegisterPage()}
+                            onPress={() =>this.nextPage()}
                         >
                             <Text style={{fontSize:16,color:gr1,fontWeight:500,paddingVertical:12, paddingHorizontal:20,}}>{translate('start_network')}</Text>
                         </TouchableOpacity>

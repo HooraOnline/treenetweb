@@ -23,11 +23,7 @@ const ResponsiveLayout = observer( props => {
         setAccountSelectorVisible(status);
         getBalance();
     }
-
-
-
     const init=async()=> {
-
 
     }
     const manageResizeScreen=()=> {
@@ -50,7 +46,6 @@ const ResponsiveLayout = observer( props => {
 
 
     useEffect(() => {
-
         init();
         document.title = props.title;
         manageResizeScreen();
