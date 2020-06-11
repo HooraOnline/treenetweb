@@ -6,7 +6,7 @@ export const en={
   en_treenetDes4:"With this tool you can easily and only send them your friends to your network network by sending your own private invitation link. Anyone else your friend invites to Tritnet will also be a member of your Trinity network, so your Tritnet will grow rapidly.",
   en_treenetDes5:"Treenetgram is multilingual and new languages are being added every day. So by sending an invitation link to outsiders or simpler ways like sharing an invitation link on foreign forums and social networks, you can globalize your network and form a huge international network with international revenue capability.",
   en_treenetDes6:"Soon, the Treenetgram app will provide you with powerful features such as bulletin boards, automatic revenue from the ad system, Tri-Net marketing tools, magic wallets, sales team management, and more. Start networking now and before others and grow like a tree.",
-  ar_start_network:"Start Networking",
+  en_start_network:"Start Networking",
   en_required_invitationLink:"To build your tree network, you must com to website by invitation link.",
   en_invalid_invitation_link:"This invitation link is invalid.",
   en_for_start_enter_your_phone_number: "Enter your mobile number",

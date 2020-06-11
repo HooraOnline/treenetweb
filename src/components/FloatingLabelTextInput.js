@@ -218,7 +218,6 @@ export default class FloatingLabelTextInput extends PureComponent {
                             <View dir={global.isRtl?'rtl':'ltr'} style={{flex:1,flexDirection:'row'}}>
                                 <Input
                                     {...props}
-
                                     style={{textInputStyle}}
                                     // className={classes.main}
                                     fullWidth={true}

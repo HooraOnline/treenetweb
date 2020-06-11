@@ -39,6 +39,8 @@ import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import {postQuery, saveEntity} from "../dataService/dataService";
 import {ListDialogPopUp} from "../src/components";
+import LoadingPopUp from "../src/components/LoadingPopUp";
+import {fa} from "../src/language/fa";
 //import Pagination from 'docs/src/modules/components/Pagination';
 //const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -63,7 +65,7 @@ export default class Repeatmobil extends Component {
 
     }
     next(){
-        navigation.navigate('registerUserProperty', {
+        navigation.navigate('registerPassword', {
             user: this.user,
         });
     }
@@ -117,16 +119,19 @@ export default class Repeatmobil extends Component {
 
         const data=this.user;
 
+        this.setState({loading:true});
         postQuery('Members/me/register',data)
             .then(res=>{
                 console.log(res);
                 this.next();
             })
             .catch(err=>{
-                console.log('errrrrrrrrrrrrrr=',err);
-                if(err.code==142){
+                if(err.key=='mobile_was_verified_before'){
                     this.setState({registerBefore:true})
                 }
+            })
+            .finally(()=>{
+                this.setState({loading:false});
             })
     }
 
@@ -168,7 +173,8 @@ export default class Repeatmobil extends Component {
                             {translate("جهت اطمینان، شماره موبایل خود را مجددا وارد کنید. شماره موبایل سند مالکیت شبکه شماست. در صورتی که عمدا یا اشتباها شماره فرد دیگری را وارد کنید، به محض ورود آن شخص به تری نت و اثبات مالکیت از طریق تایید پیامکی، شما مالکیت شبکه خود را از دست داده و شبکه شما به شماره او منتقل میشود.")}
                         </Text>
 
-                         <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+
+                        <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
                             <Text style={{
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                 fontSize: 16,
@@ -254,6 +260,10 @@ export default class Repeatmobil extends Component {
 
                     </View>
                 </View>
+                <LoadingPopUp
+                    visible={this.state.loading}
+                    message={this.state.loadingMessage}
+                />
             </ResponsiveLayout>
         )
     }

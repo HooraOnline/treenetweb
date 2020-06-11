@@ -252,7 +252,7 @@ export default class RegisterUserProperty extends Component {
                                     style={{width:300}}
                                     activeIndex={this.state.gender}
                                     onActivate={val => {
-                                        this.setState({gender: val});
+                                        this.setState({gender: Number(val)});
                                         //this.checkValidation();
                                     }}
                                     data={[

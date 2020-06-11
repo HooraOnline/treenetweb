@@ -16,11 +16,6 @@ import {
 } from "../src/utils";
 import images from "../public/static/assets/images";
 import {
-    bgWhite,
-    border,
-    placeholderTextColor,
-    lightRed,
-    textItemBlack,
     gr1,
     gr2,
     gr3,
@@ -143,11 +138,7 @@ export default class Index extends Component {
                                         alignItems: 'center',
                                         marginHorizontal: 8,
                                         marginVertical: 8,
-
-
                                     }}>
-
-
                                     <Text
                                         style={{
                                             fontFamily:'IRANYekanFaNum-Bold',
@@ -183,8 +174,8 @@ export default class Index extends Component {
                             style={{
                                 alignItems:'center',
                                 marginTop:25,
-                                fontSize:17,
-                                fontWeight:700,
+                                fontSize:15,
+                                fontWeight:500,
                                 fontFamily: 'IRANYekanRegular',
                                 color:gr3,
                                 marginBottom:5

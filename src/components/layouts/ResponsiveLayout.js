@@ -53,7 +53,17 @@ const ResponsiveLayout = observer( props => {
     },  [ref.current]);
 
     return (
-        <div  dir={global.isRtl?'rtl':'ltr'}  style={{  textAlign:global.isRtl?"right":"left", display: 'flex',flex:1,  justifyContent:'center',  height: '100%',backgroundImage: `url(${images.publicPg})`}}>
+        <div  dir={global.isRtl?'rtl':'ltr'}  style={{
+            textAlign:global.isRtl?"right":"left",
+            display: 'flex',flex:1,
+            justifyContent:'center',
+            height: '125%',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: '100% auto',
+            backgroundPosition: 'center top',
+            backgroundAttachment: 'fixed',
+            backgroundImage: `url(${images.publicPg})`}}
+        >
 
             <div  ref={ref}   style={{
                 display:'flex',

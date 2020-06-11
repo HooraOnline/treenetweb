@@ -39,6 +39,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import {postQuery, saveEntity} from "../dataService/dataService";
 import {ListDialogPopUp} from "../src/components";
+import LoadingPopUp from "../src/components/LoadingPopUp";
 //import Pagination from 'docs/src/modules/components/Pagination';
 //const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -184,6 +185,10 @@ export default class FastRegister extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <LoadingPopUp
+                    visible={this.state.loading}
+                    message={this.state.loadingMessage || translate('...')}
+                />
             </ResponsiveLayout>
         )
     }
