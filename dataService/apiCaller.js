@@ -251,7 +251,7 @@ class Api {
             let file = files[i];
             let temp = file.name.split('.');
             let ext = '.' + temp[temp.length - 1];
-            let fileName =Math.floor(Date.now())+"_"+ Math.floor((Math.random() * 100000000000) + 1).toString() + ext;
+            let fileName =Math.floor(Date.now())+ ext;
             uploadedfiles.push(fileName);
             fd.append('name', fileName);
             fd.append('photos', {

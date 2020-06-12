@@ -7,6 +7,7 @@ import View from "./View";
 export default class FileInput extends PureComponent{
 
     onSelectFile=(event)=> {
+        console.log(event);
         const files = event.target.files
         const formData = new FormData()
         formData.append('userFile', files[0]);
@@ -14,7 +15,7 @@ export default class FileInput extends PureComponent{
         let self = this;
         console.log(event.target.files);
         reader.onload = function (e) {
-            self.props.onSelectFile && self.props.onSelectFile(formData,files[0],URL.createObjectURL(files[0]),e.target.result)
+            self.props.onSelectFile && self.props.onSelectFile(files,formData,files[0],URL.createObjectURL(files[0]),e.target.result)
         }
         reader.readAsDataURL(files[0]);
 

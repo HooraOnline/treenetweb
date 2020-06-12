@@ -96,12 +96,12 @@ export default class Index extends Component {
 
         return (
 
-            <ResponsiveLayout title={`صفحه اصلی`}  style={{margin:0}}>
+            <ResponsiveLayout title={`Treenet`}  style={{margin:0}}>
                 <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
 
                     <Image
                         source={images.tree}
-                        style={{maxWidth: '40%', maxHeight: '40%',}}
+                        style={{maxWidth: '25%', maxHeight: '25%',}}
                     />
                     <Text
                         style={{
@@ -110,7 +110,7 @@ export default class Index extends Component {
                             fontSize:25,
                             fontWeight:800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color:gr3
+                            color:gr4
                         }}>
                         Treenetgram
                     </Text>
@@ -284,7 +284,7 @@ export default class Index extends Component {
                             }}
                             onPress={() =>this.nextPage()}
                         >
-                            <Text style={{fontSize:16,color:gr1,fontWeight:500,paddingVertical:12, paddingHorizontal:20,}}>{translate('start_network')}</Text>
+                            <Text style={{fontSize:16,color:gr3,fontWeight:500,paddingVertical:12, paddingHorizontal:20,}}>{translate('start_network')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

@@ -23,6 +23,7 @@ import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-nativ
 import {FloatingLabelTextInput,SwitchTextMulti} from "../src/components";
 import {postQuery, saveEntity} from "../dataService/dataService";
 import translate from "../src/language/translate";
+import LoadingPopUp from "../src/components/LoadingPopUp";
 
 export default class RegisterUserProperty extends Component {
     constructor() {
@@ -70,27 +71,34 @@ export default class RegisterUserProperty extends Component {
             return;
         }
         const data={
+            id:this.user.id,
             mobile:this.user.mobile,
             firstName:this.state.firstName,
             lastName:this.state.lastName,
             age:this.state.age,
             gender:this.state.gender,
         }
+        this.setState({loading:true});
         postQuery('Members/me/initProfile',data)
           .then(res=>{
-              console.log('invitationData========',res);
-              this.setState({invitationLink:'https://treenet.biz?invitationCode='+res.invitationCode});
+              this.nextPage(res);
+              this.setState({loading:false});
           })
           .catch(err=>{
               console.log(err);
+              this.setState({loading:false});
           })
     }
-
+    nextPage(res){
+        navigation.navigate('finishRegister', {
+            user: res,
+        });
+    }
 
 
     render() {
         if(!this.state.haveUser){
-            return <View style={{alignItems:'center',padding:40}} ><Text>404 not fond page</Text></View>
+            return null;
         }
         return (
             <ResponsiveLayout title={`Enter Confirm code`}  style={{margin:0}}>
@@ -213,7 +221,7 @@ export default class RegisterUserProperty extends Component {
                                 labelStyle={{color:gr3}}
                                 editable={true}
                                 multiline={false}
-                                maxLength={3}
+                                maxLength={2}
                                 floatingLabelEnable={true}
                                 keyboardType="number-pad"
                                 returnKeyType="done"
@@ -231,11 +239,23 @@ export default class RegisterUserProperty extends Component {
                                 underlineSize={1}
                                 value={this.state.age}
                                 onChangeText={text =>{
-                                    text = mapNumbersToEnglish(text);
-                                    this.setState({
-                                        age: text,
-                                        ageValidation: true,
-                                    })
+                                    const reg=/^\d+$/;
+
+                                    if(reg.test(text)){
+                                        text = mapNumbersToEnglish(text);
+                                        this.setState({
+                                            age: text,
+                                            ageValidation: true,
+                                        })
+                                    }else{
+
+                                        this.setState({
+                                            age: this.state.age?this.state.age:'',
+                                        })
+                                    }
+
+
+
                                 }
 
                                 }
@@ -245,6 +265,7 @@ export default class RegisterUserProperty extends Component {
                                 highlightColor={primaryDark}
                                 unit={translate('year')}
                                 unitStyle={{color:gr4}}
+                                keyboardType="number-pad"
                             />
 
                             <View style={{flex:1,alignItems:'center',marginTop:30}}>
@@ -293,35 +314,11 @@ export default class RegisterUserProperty extends Component {
                             <Text style={{fontSize:20,color:gr1,fontWeight:500}}>{ translate('confirm')}</Text>
                         </TouchableOpacity>
                     </View>
-
-
-                    {this.state.invitationLink &&(
-                        <View>
-                            <Text
-                                style={{
-                                    marginTop:10,
-                                    fontSize:16,
-                                    fontWeight:800,
-                                    fontFamily: 'IRANYekanFaNum-Bold',
-                                    color:gr3
-                                }}>
-                                {'لینک دعوت شما'}
-                            </Text>
-                            <Text
-                                style={{
-                                    marginTop:10,
-                                    fontSize:16,
-                                    fontWeight:800,
-                                    fontFamily: 'IRANYekanFaNum-Bold',
-                                    color:gr3
-                                }}>
-                                {this.state.invitationLink}
-                            </Text>
-                        </View>
-                    )}
-
                 </View>
-
+                <LoadingPopUp
+                    visible={this.state.loading}
+                    message={this.state.loadingMessage}
+                />
             </ResponsiveLayout>
 
 

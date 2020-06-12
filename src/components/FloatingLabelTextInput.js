@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {bool, number, string} from 'prop-types';
-import {border, borderLight, primaryDark} from '../constants/colors';
+import {border, borderLight, grayVD7, grL5, primaryDark} from '../constants/colors';
 
 import {Text, View, Animated, StyleSheet, Image, TouchableOpacity} from "../react-native";
 import {Input ,FormControl } from '@material-ui/core';
@@ -14,7 +14,8 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import images from "../../public/static/assets/images";
 import Platform from "../react-native/Platform";
 import MaskedInput from 'react-text-mask';
-
+import { IoIosBulb } from "react-icons/io";
+import { FaTree } from "react-icons/fa";
 class Underline extends PureComponent {
     static propTypes = {
         underlineEnabled: bool,
@@ -79,7 +80,7 @@ class Underline extends PureComponent {
             <Animated.View
                 style={{
                     //position: 'absolute',
-                    backgroundColor: this.props.highlightColor ,
+                    backgroundColor: this.props.underlineColor ,
                     height: this.props.underlineSize,
                     left: 0,//this.animatedLeft,
                     width:'100%',// this.animatedLineLength,
@@ -124,7 +125,7 @@ export default class FloatingLabelTextInput extends PureComponent {
 
     static defaultProps = {
         underlineSize: 1,
-        tintColor: primaryDark,
+        tintColor:'translate',// primaryDark,
         labelColor: border,
     };
 
@@ -177,6 +178,7 @@ export default class FloatingLabelTextInput extends PureComponent {
             this.setState({isFieldActive: false});
             this._handleAnimate(false);
         }
+        this.props.onBlur &&  this.props.onBlur();
     };
 
     TextMaskCustom=(props)=> {
@@ -194,7 +196,12 @@ export default class FloatingLabelTextInput extends PureComponent {
     }
 
     render() {
-        const {style,labelStyle,unitStyle,autoFocus,keyboardType='text', textInputStyle, placeholder, tintColor, highlightColor, underlineSize, underlineEnabled, floatingLabelAniDuration, floatingLabelEnable, type,maxLength,numberOfLines,onChangeText,adornment} = this.props;
+        const {style,isAccept,reverse,
+            labelStyle,unitStyle,autoFocus,keyboardType='text',
+            textInputStyle, placeholder, tintColor, underlineColor,
+            underlineSize=4, underlineEnabled, floatingLabelAniDuration,
+            floatingLabelEnable, type,maxLength,numberOfLines,onChangeText,
+            adornment} = this.props;
         let props=this.props;
         let keyboardType2=keyboardType;
         if(keyboardType=='number-pad') keyboardType2='numeric'
@@ -210,12 +217,13 @@ export default class FloatingLabelTextInput extends PureComponent {
 
                         <FormControl  dir={'rtl'} >
                             {floatingLabelEnable &&(
-                                <div style={{height:5,}} >
+                                <div style={{height:5,width:'100%'}} >
                                     <InputLabel style={labelStyle} >{placeholder}</InputLabel>
                                 </div>
 
                             )}
-                            <View dir={global.isRtl?'rtl':'ltr'} style={{flex:1,flexDirection:'row'}}>
+                            <View dir={global.isRtl?'rtl':'ltr'} style={{flex:1,flexDirection: reverse?'row-reverse':'row', }}>
+
                                 <Input
                                     {...props}
                                     style={{textInputStyle}}
@@ -227,6 +235,7 @@ export default class FloatingLabelTextInput extends PureComponent {
                                         style: textInputStyle,
                                         autoFocus:autoFocus,
                                     }}
+
                                     type={type}
                                     //value={value}
 
@@ -236,7 +245,7 @@ export default class FloatingLabelTextInput extends PureComponent {
                                     disableUnderline={true}
                                     //returnKeyType={returnKeyType}
                                     floatingLabelEnable={floatingLabelEnable}
-                                    highlightColor={highlightColor}
+                                    underlineColor={underlineColor}
                                     underlineSize={underlineSize}
                                     onChange={event => {
                                         let text=event.target.value;
@@ -264,6 +273,16 @@ export default class FloatingLabelTextInput extends PureComponent {
                                     paddingTop:15,
                                     alignSelf: 'center',
                                 },unitStyle]}>{this.props.unit}</Text>}
+                                {isAccept!==undefined &&(
+                                    <FaTree size={30}  color={isAccept?grL5:grayVD7}
+                                            style={{
+                                                padding:2,
+                                                alignSelf: 'center',
+                                            }}
+                                    />
+                                )
+
+                                }
                             </View>
                         </FormControl>
 
@@ -272,7 +291,7 @@ export default class FloatingLabelTextInput extends PureComponent {
                             underlineEnabled={underlineEnabled}
                             underlineSize={underlineSize}
                             underlineAniDur={floatingLabelAniDuration}
-                            highlightColor={highlightColor}
+                            underlineColor={underlineColor}
                             tintColor={tintColor}
                         />
 
@@ -281,8 +300,7 @@ export default class FloatingLabelTextInput extends PureComponent {
               </View>
                 <style jsx global>{`
                          .MuiInput-underline:before{
-                        left: 0;
-                        right: 0;
+                       
                         bottom: 0;
                         border-bottom:1px solid ${borderLight};
                         position: absolute;
@@ -302,7 +320,7 @@ export default class FloatingLabelTextInput extends PureComponent {
                     
                     .MuiInputLabel-formControl{
                          left:undefined;
-                         right:0;
+                         right:${this.props.labelAlign=='left'?undefined: global.isRtl?0:undefined};
                      }
                 `}</style>
             </View>
@@ -350,7 +368,7 @@ export default function TextInput(props) {
         returnKeyType,
         textInputStyle,
         underlineSize,
-        highlightColor,
+        underlineColor,
         unit,
         unitStyle={fontSize:12,color:borderLight}
     } = props;
@@ -375,7 +393,7 @@ export default function TextInput(props) {
                        disableUnderline={true}
                        returnKeyType={returnKeyType}
                        floatingLabelEnable={floatingLabelEnable}
-                       highlightColor={highlightColor}
+                       underlineColor={underlineColor}
                        underlineSize={underlineSize}
                        onChange={event => {
                            let text=event.target.value;

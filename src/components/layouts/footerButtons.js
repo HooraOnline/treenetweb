@@ -21,7 +21,7 @@ const navButtons = [
     icon: <FontAwesomeIcon icon={faMapMarkerAlt} />
   },
   {
-    label: "صفحه اصلی",
+    label: "Treenet",
     path: "/Main",
     icon: <FontAwesomeIcon icon={faCompass} />
   },

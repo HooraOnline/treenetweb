@@ -31,7 +31,7 @@ import {
     gr8,
     gr9,
     gr10,
-    borderSeparate
+    borderSeparate, grL5
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
@@ -50,10 +50,13 @@ export default class Repeatmobil extends Component {
         this.state = {
             showMenu:false,
             isWide:false,
-            mobileValidation:false,
+            repeateMobileValidation:false,
+            repeateEmailValidation:false,
+            repeateMobileValidation2:true,
+            repeateEmailValidation2:true,
             countryCode:'+98',
             invitationLink:'',
-            repeateMobileValidation:true
+
 
         };
     }
@@ -61,10 +64,12 @@ export default class Repeatmobil extends Component {
         doDelay(30)
             .then(()=>{
                 this.user= navigation.getParam('user');
+                this.setState({run:1})
             })
 
     }
-    next(){
+    next(res){
+        this.user.id=res.id;
         navigation.navigate('registerPassword', {
             user: this.user,
         });
@@ -84,28 +89,17 @@ export default class Repeatmobil extends Component {
 
 
     isValid() {
-        return mobileValidation;
+        return repeateMobileValidation;
     }
     checkValidation() {
-        console.log(this.user);
-        if(!this.state.mobile){
-            this.setState({mobileValidation: false});
-            return translate('شماره موبایل خود را مجددا وارد کنید.')
-        }
-        if (this.state.mobile.length < 10) {
-            this.setState({mobileValidation: false});
-            return translate('the_number_of_mobile_is_not_valid');
-        }
 
-        const mobileReg = /^9[0-9]{9}$/i
-        if (!mobileReg.test(this.state.mobile)){
-            //this.setState({mobileValidation: false});
-            return translate('invalid_mobile_number'); ;
+        if(this.user.mobile && this.user.mobile!==this.state.countryCode+this.state.mobile){
+            this.setState({repeateMobileValidation: false,repeateMobileValidation2: false});
+            return translate('شماره موبایل وارد شده با شماره موبایل مرحله قبل مساوی نیست')
         }
-
-        if(this.user.mobile!==this.state.countryCode+this.state.mobile){
-            this.setState({mobileValidation: false,repeateMobileValidation:false});
-            return translate('شماره موبایل و تکرار آن یکی نیست')
+        if(this.user.email && this.user.email!==this.state.email){
+            this.setState({repeateEmailValidation: false,repeateEmailValidation2: false});
+            return translate('ایمیل وارد شده با ایمیل مرحله قبل مساوی نیست')
         }
 
     }
@@ -122,8 +116,8 @@ export default class Repeatmobil extends Component {
         this.setState({loading:true});
         postQuery('Members/me/register',data)
             .then(res=>{
-                console.log(res);
-                this.next();
+                console.log('res===========',res);
+                this.next(res);
             })
             .catch(err=>{
                 if(err.key=='mobile_was_verified_before'){
@@ -136,15 +130,16 @@ export default class Repeatmobil extends Component {
     }
 
     render() {
-        //const { height, width } = useWindowDimensions();
-
+        debugger
+       if(!this.user){
+           return null;
+       }
         return (
-
-            <ResponsiveLayout title={`صفحه اصلی`}  style={{margin:0}}>
+            <ResponsiveLayout title={`Treenet`} run={this.state.run}  style={{margin:0}}>
                 <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
                     <Image
                         source={images.tree}
-                        style={{maxWidth: '40%', maxHeight: '40%',}}
+                        style={{maxWidth: '25%', maxHeight: '24%',}}
                     />
                     <Text
                         style={{
@@ -153,12 +148,12 @@ export default class Repeatmobil extends Component {
                             fontSize:25,
                             fontWeight:800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color:gr3
+                            color:gr4
                         }}>
                         Treenetgram
                     </Text>
 
-                    <View id='form' style={{width:'100%',maxWidth:300,marginTop:30}}   >
+                    <View id='form' style={{width:'100%',maxWidth:500,marginTop:30}}   >
                          {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:14,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
                         <Text
                             style={{
@@ -170,56 +165,91 @@ export default class Repeatmobil extends Component {
                                 color:gr3,
 
                             }}>
-                            {translate("جهت اطمینان، شماره موبایل خود را مجددا وارد کنید. شماره موبایل سند مالکیت شبکه شماست. در صورتی که عمدا یا اشتباها شماره فرد دیگری را وارد کنید، به محض ورود آن شخص به تری نت و اثبات مالکیت از طریق تایید پیامکی، شما مالکیت شبکه خود را از دست داده و شبکه شما به شماره او منتقل میشود.")}
+                            {translate("جهت اطمینان از صحت ورود اطلاعات در مرحله قبل، اطلاعات تماس خود را مجددا وارد کنید. ")}
                         </Text>
 
 
-                        <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
-                            <Text style={{
-                                fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                fontSize: 16,
-                                color: border,
-
-                                padding:5,
-                                alignSelf: 'center',
-                            }}>{this.state.countryCode}</Text>
-                            <FloatingLabelTextInput
-                                dir={'ltr'}
-                                style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
-                                placeholder={translate("شماره موبایل خود را مجددا وارد کنید.")}
-                                value={this.state.mobile}
-                                onChangeText={text => {
-                                    if(text.length>1 && text.indexOf(0)==0){
-                                        text=text.substring(1);
-                                    }
-                                    text = mapNumbersToEnglish(text);
-                                    this.setState({ mobile:text, mobileValidation: true,});
-                                }}
-                                onFocus={()=>this.setState({repeateMobileValidation:true})}
-                                numberOfLines={1}
-                                tintColor={
-                                    this.state.currentPriceValidation ? placeholderTextColor : lightRed
-                                }
-                                textInputStyle={{
-                                    fontFamily: 'IRANYekanFaNum-Bold',
+                        {this.user.mobile &&(
+                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                                <Text style={{
+                                    fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                     fontSize: 16,
-                                    fontWeight:800,
-                                    color: textItemBlack,
-                                    paddingStart: 4,
-                                    paddingTop: 1,
-                                    paddingBottom: 10,
-                                    //textAlign: 'left',
-                                }}
-                                underlineSize={0}
+                                    color: border,
 
-                                multiline={false}
-                                maxLength={10}
-                                //autoFocus={true}
-                                keyboardType="number-pad"
-                                returnKeyType="done"
+                                    padding:5,
+                                    alignSelf: 'center',
+                                }}>{this.state.countryCode}</Text>
+                                <FloatingLabelTextInput
+                                    dir={'ltr'}
+                                    style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
+                                    placeholder={translate("شماره موبایل خود را مجددا وارد کنید.")}
+                                    value={this.state.mobile}
+                                    onChangeText={text => {
+                                        if(text.length>1 && text.indexOf(0)==0){
+                                            text=text.substring(1);
+                                        }
+                                        const mobileReg = /^9[0-9]{9}$/i;
+                                        text = mapNumbersToEnglish(text);
+                                        this.setState({ mobile:text, repeateMobileValidation: this.user.mobile==this.state.countryCode+text ,});
+                                    }}
+                                    numberOfLines={1}
+                                    isAccept={this.state.repeateMobileValidation}
+                                    textInputStyle={{
+                                        fontFamily: 'IRANYekanFaNum-Bold',
+                                        fontSize: 16,
+                                        fontWeight:800,
+                                        color: textItemBlack,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 10,
+                                        //textAlign: 'left',
+                                    }}
+                                    underlineSize={0}
 
-                            />
-                        </View>
+                                    multiline={false}
+                                    maxLength={10}
+                                    //autoFocus={true}
+                                    keyboardType="number-pad"
+                                    returnKeyType="done"
+
+                                />
+                            </View>
+                        )}
+
+                        {this.user.email &&(
+                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                                <FloatingLabelTextInput
+                                    dir={'ltr'}
+                                    style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
+                                    placeholder={translate("ایمیل خود را مجددا وارد کنید.")}
+                                    value={this.state.email}
+                                    onChangeText={text => {
+                                        this.setState({ email:text, repeateEmailValidation: this.user.email==text ,});
+                                    }}
+                                    onFocus={()=>this.setState({repeateEmailValidation:true})}
+                                    numberOfLines={1}
+                                    isAccept={this.state.repeateEmailValidation}
+                                    textInputStyle={{
+                                        fontFamily: 'IRANYekanFaNum-Bold',
+                                        fontSize: 16,
+                                        fontWeight:800,
+                                        color: textItemBlack,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 10,
+                                        //textAlign: 'left',
+                                    }}
+                                    underlineSize={0}
+
+                                    multiline={false}
+                                    maxLength={100}
+                                    //autoFocus={true}
+                                    returnKeyType="done"
+
+                                />
+                            </View>
+                        )}
+
 
                         <TouchableOpacity
                             style={{
@@ -235,9 +265,9 @@ export default class Repeatmobil extends Component {
                             }}
                             onPress={() =>this.registerPhone()}
                         >
-                            <Text style={{fontSize:16,color:gr1,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
+                            <Text style={{fontSize:16,color:gr3,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
                         </TouchableOpacity>
-                        {(!this.state.repeateMobileValidation ||this.state.registerBefore) &&(
+                        {(!this.state.repeateMobileValidation2 || !this.state.repeateEmailValidation2 || this.state.registerBefore) &&(
                             <TouchableOpacity
                                 style={{
                                     flex:1,
@@ -252,10 +282,12 @@ export default class Repeatmobil extends Component {
                                 }}
                                 onPress={() =>this.perevius()}
                             >
-                                <Text style={{fontSize:16,color:gr1,fontWeight:500,paddingVertical:12}}>{translate('اصلاح شماره مرحله قبل')}</Text>
+                                <Text style={{fontSize:16,color:gr3,fontWeight:500,paddingVertical:12}}>{translate('اصلاح اطلاعات مرحله قبل')}</Text>
                             </TouchableOpacity>
                         )
                         }
+
+
 
 
                     </View>

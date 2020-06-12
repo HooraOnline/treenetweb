@@ -91,16 +91,20 @@ export const borderRed = '#EA4A29';
 export const yellowmin = '#FFC107';
 export const greenDark = '#00A28C';
 export const textGray = '#CCD1D1';
-export const gr1 = '#E8F6F3';
-export const gr2 = '#D0ECE7';
-export const gr3 = '#A2D9CE';
-export const gr4 = '#73C6B6';
-export const gr5 = '#45B39D';
-export const gr6 = '#1ABC9C';
-export const gr7 = '#17A589';
-export const gr8 = '#117A65';
-export const gr9 = '#117864';
-export const gr10 = '#0B5345';
+export const gr10 = '#E8F6F3';
+export const gr9 = '#D0ECE7';
+export const gr8 = '#A2D9CE';
+export const gr7 = '#73C6B6';
+export const gr6 = '#45B39D';
+export const gr5 = '#1ABC9C';
+export const gr4 = '#17A589';
+export const gr3 = '#117A65';
+export const gr2 = '#117864';
+export const gr1 = '#0B5345';
+
+
+export const grL5  = '#28B463';
+export const grayVD7 = '#85929E';
 
 
 

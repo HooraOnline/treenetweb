@@ -2,7 +2,7 @@
 import {bgScreen} from "../../constants/colors";
 import {observer} from 'mobx-react';
 import React, {useEffect, useState,useRef} from "react";
-import {fetchStore, getWidth, deviceWide, height, showMassage, getCookie} from "../../utils";
+import {fetchStore, getWidth, deviceWide, height, showMassage, getCookie, saveCookie} from "../../utils";
 import "./index.scss";
 import ToastCard from "../ToastCard";
 import {globalState} from "../../stores";
@@ -57,9 +57,9 @@ const ResponsiveLayout = observer( props => {
             textAlign:global.isRtl?"right":"left",
             display: 'flex',flex:1,
             justifyContent:'center',
-            height: '125%',
+            minHeight: '100%',
             backgroundRepeat: 'no-repeat',
-            backgroundSize: '100% auto',
+            backgroundSize: '125% auto',
             backgroundPosition: 'center top',
             backgroundAttachment: 'fixed',
             backgroundImage: `url(${images.publicPg})`}}
