@@ -180,7 +180,7 @@ export default class RegisterPassword extends Component {
                                 color:gr1,
 
                             }}>
-                            {translate("fa_registerPassword_decription2")}
+                            {translate("registerPassword_decription2")}
                         </Text>
                         <View
                             style={{

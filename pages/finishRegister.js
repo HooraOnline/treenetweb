@@ -42,7 +42,7 @@ export default class FinishRegister extends Component {
                 this.user= navigation.getParam('user');
                 console.log('finishRedister_this.user===========',this.user);
                 if(this.user){
-                    this.setState({userImage:this.user.profileImage, invitationLink:`https://treenetgram.com/?invitationCode=${this.user.invitationCode}`})
+                    this.setState({userImage:this.user.profileImage, invitationLink:`https://Treenetgram.com/?invitationCode=${this.user.invitationCode}`})
                 }
             });
     }
@@ -209,7 +209,7 @@ export default class FinishRegister extends Component {
                                         paddingHorizontal:5,
                                         textAlign:'justify',
                                     }}>
-                                    { translate('fa_finishRegister__decription3')}
+                                    { translate('finishRegister__decription3')}
                                 </Text>
                                 <Text
                                     style={{
@@ -221,7 +221,7 @@ export default class FinishRegister extends Component {
                                         paddingHorizontal:5,
                                         alignSelf:'center'
                                     }}>
-                                    { translate('fa_finishRegister__decription4')}
+                                    { translate('finishRegister__decription4')}
                                 </Text>
 
                             </View>

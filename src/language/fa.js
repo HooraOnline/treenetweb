@@ -10,6 +10,7 @@ export const fa= {
   fa_make_your_global_network:"شبکه محلی و بین المللی خودت رو بساز.",
   fa_Select_Your_Language:"زبان خود را انتخاب کنید",
   fa_start_network:"ایجاد شبکه درختی",
+
   fa_required_invitationLink:"برای شبکه سازی، باید از طریق لینک دعوت وارد سایت شوید.",
   fa_invalid_invitation_link:"لینک دعوت شما معتبر نیست.",
   fa_for_start_enter_your_phone_number: "شماره موبایل خود را وارد کنید",
@@ -91,4 +92,18 @@ export const fa= {
   fa_finishRegister__your_envation_ink2:"لینک دعوت شما",
   fa_finishRegister__login_to_panel:"ورود به پنل",
 
+
+
+
+  //********************************server**********************************
+  fa_server_member_enter_your_phone_number_or_email:"شماره موبایل یا ایمیل وارد نشده است.",
+  fa_server_member_user_was_verified_before:"این موبایل قبلا ثبت شده است.",
+  fa_server_member_required_invitationLink:"برای شبکه سازی، باید از طریق لینک دعوت وارد سایت شوید.",
+  fa_server_member_invalid_invitation_link:"این لینک دعوت معتبر نیست",
+  fa_server_member_error_tryAgain:"خطایی رخ داد. دوباره تلاش کنید",
+  fa_server_member_this_username_already_exist_chose_another:"این نام کاربری وجود دارد. نام کاربری دیگری انتخاب کنید",
+  fa_server_member_error_updateUsernameAndPassword:"کد تایید موبایل اشتباه است",
+  fa_server_member_error_update_profileImage:"خطا در ذخیره تصویر پروفایل",
+  fa_server_member_error_on_send_ivitation_code:"خطا در ارسال کد دعوت",
+  fa_server_member_invalid_mobile_confirmation_code:"کد تایید موبایل اشتباه است",
 }
