@@ -35,15 +35,14 @@ import {
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
-import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
-import {postQuery, saveEntity} from "../dataService/dataService";
-import {ListDialogPopUp} from "../src/components";
+
+import {postQuery,} from "../dataService/dataService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
+//import SwipeableViews from 'react-swipeable-views';
+//import { autoPlay } from 'react-swipeable-views-utils';
 //import Pagination from 'docs/src/modules/components/Pagination';
 //const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-import { IoIosBulb } from "react-icons/io";
-import {fa} from "../src/language/fa";
+
 export default class FastRegister extends Component {
     constructor() {
         super();
@@ -54,7 +53,6 @@ export default class FastRegister extends Component {
             invitationLink:'',
             mobile:'',
             email:''
-
         };
     }
 

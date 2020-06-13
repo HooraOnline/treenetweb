@@ -224,7 +224,7 @@ export default class RegisterPassword extends Component {
 
                                 value={this.state.userName}
                                 onChangeText={ async (text) =>{
-                                    const usernameReg =/^[a-zA-Z0-9_]+$/;
+                                    const usernameReg =/^[a-zA-Z0-9_.]+$/;
                                     if(text && !usernameReg.test(text)){
                                         showMassage(translate('registerPassword_userName_rule'),'info');
                                         this.setState({

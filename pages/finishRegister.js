@@ -82,7 +82,7 @@ export default class FinishRegister extends Component {
                         image={this.state.userImage}
                         noImage={images.default_ProPic}
                         hideDeleteBtn={true}
-                        onrender={(imageSelector)=>imageSelector.setState({image:this.state.userImage})}
+                        //onrender={(imageSelector)=>imageSelector.setState({image:this.state.userImage})}
                         onUplodedFile={(fileName)=>{
                             this.setState({image: fileName});
                             this.setProfileImage(fileName);
