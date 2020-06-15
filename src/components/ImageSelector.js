@@ -17,7 +17,7 @@ import {getFileDownloadURL, uploadFileByFormData} from '../utils';
 import {fab, bgScreen, subTextItem, textItem, grayVD7} from "../constants/colors";
 import {AlertMessage, OverlayModal,} from "./index";
 import FileInput from "../react-native/FileInput";
-import {upload} from "../../dataService/dataService";
+import {upload} from "../../dataService/apiService";
 //import Permissions from "react-native-permissions";
 
 export default class ImageSelector extends PureComponent {

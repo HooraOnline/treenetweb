@@ -21,7 +21,7 @@ import {
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import {FloatingLabelTextInput,SwitchTextMulti} from "../src/components";
-import {postQuery, saveEntity} from "../dataService/dataService";
+import {postQuery, saveEntity} from "../dataService/apiService";
 import translate from "../src/language/translate";
 import copy from "copy-to-clipboard";
 import ImageSelector from "../src/components/ImageSelector";
@@ -91,8 +91,8 @@ export default class FinishRegister extends Component {
                             this.setState({image: null});
                         }}
 
-                    >
-                    </ImageSelector>
+                    />
+
                     <View id='form' >
                         <Text
                             style={{

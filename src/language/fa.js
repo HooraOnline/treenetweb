@@ -9,7 +9,7 @@ export const fa= {
   fa_from_local_power_to_global_power:"فقط با اشتراک گذاری لینک دعوت اختصاصی",
   fa_make_your_global_network:"شبکه محلی و بین المللی خودت رو بساز.",
   fa_Select_Your_Language:"زبان خود را انتخاب کنید",
-  fa_start_network:"ایجاد شبکه درختی",
+
 
   fa_required_invitationLink:"برای شبکه سازی، باید از طریق لینک دعوت وارد سایت شوید.",
   fa_invalid_invitation_link:"لینک دعوت شما معتبر نیست.",
@@ -43,7 +43,7 @@ export const fa= {
   fa_registerPassword_decription1:"یک نام کاربری منحصر بفرد و یک کلمه عبور قوی برای شبکه خود انتخاب کنید. لازم است رمز عبور شما حداقل  ۶ حرف داشته و توصیه می شود برای یک پسورد قوی از ترکیب حروف کوچک و بزرگ،اعداد و کاراکترهای خاص استفاده کنید.",
   fa_registerPassword_decription2:"نام کاربری و پسورد شما کلید ورود و سند مالکیت شبکه شما می باشد.بنابراین لازم است آنرا به خاطر داشته و از آن محافظت کنید.",
   fa_registerPassword_userName_example:"نام کاربری-مثال ahmad_azizi",
-  fa_registerPassword_userName_rule:"فقط از حروف و اعداد انگلیسی و کاراکتر زیر خط ـ استفاده شود",
+  fa_registerPassword_userName_rule:"فقط از حروف و اعداد انگلیسی و کاراکتر نقطه و زیر خط ـ . استفاده شود",
   fa_registerPassword_userName_rule2:"حرف اول نام کاربری نمی تواند عدد باشد.",
   fa_registerPassword_userName_is_reserved:"این نام کاربری قبلا توسط فرد دیگری رزرو شده است.",
   fa_registerPassword_password_example:"رمز عبور شبکه-مثال Ali65*4#5",
@@ -93,6 +93,25 @@ export const fa= {
   fa_finishRegister__login_to_panel:"ورود به پنل",
 
 
+  fa_create_network:"ایجاد شبکه",
+  fa_login_my_tree:"ورود به شبکه",
+  fa_login_top:'ورود به تری نتگرام',
+  fa_login_enter_your_user_name:'نام کاربری خود را وارد کنید',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   //********************************server**********************************
@@ -106,4 +125,8 @@ export const fa= {
   fa_server_member_error_update_profileImage:"خطا در ذخیره تصویر پروفایل",
   fa_server_member_error_on_send_ivitation_code:"خطا در ارسال کد دعوت",
   fa_server_member_invalid_mobile_confirmation_code:"کد تایید موبایل اشتباه است",
+
+  fa_server_login_unsuccess:"ورود ناموفق، نام کاربری یا پسورد اشتباه است.",
+  fa_server_login_multi_login:'موقتا قفل شد. ۳ دقیقه بعد تلاش کنید.',
+
 }

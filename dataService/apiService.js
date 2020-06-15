@@ -1,8 +1,8 @@
 
 //created by by saeed yousefi
 import Api from './apiCaller'
-//import VueCookies from "vue-cookies";
 import { cipher } from './pdk/utils';
+import {persistStore, userStore} from "../src/stores";
 
 export let currentUser = {};
 //urlparams={userName:1232}
@@ -14,21 +14,23 @@ export const callGetApi = function (apiPath, urlparams) {
   return Api.get(apiPath, urlparams)
 };
 //for One
-export const getEntity = function (apiPath, id, filds, include) {
+export const getById = function (apiPath, id, filds, include) {
   let params = {};
   params.filter = {};
   params.id = id;
   params.filter.fields = filds;
   params.filter.include = include;
-  return Api.fetchById(apiPath, params)
+  return Api.get(apiPath, params)
 
 };
+
+
 
 export const postQuery = function (apiPath, entity) {
   entity.udate = new Date();
   if (!entity.id)
     entity.cdate = new Date();
-  return Api.saveEntity(apiPath, entity);
+  return Api.post(apiPath, entity);
 };
 
 
@@ -88,32 +90,10 @@ apiPath='members'
     fields=> {id: true, title: true, image: true}
 
   */
-export const getList = function (apiPath, condition, fields, include, sort, page, pageSize, options) {
-  let params = {};
-  let filter = {};
-  let pageIndex = page ? page - 1 : 0
-  filter.where = condition || {};
-  filter.fields = fields;
-  filter.include = include;
-  filter.order = sort || "id desc";
-  filter.limit = pageSize || 1000;
-  filter.skip = filter.limit * pageIndex || 0;
-  // params.filter=filter;
-  // params.options=options;
-  //let params = '?filter=' +window.btoa(JSON.stringify(filter))// encodeURIComponent(JSON.stringify(param));
-  return Api.fetch(apiPath, filter);
-};
-export const getCount = function (apiPath, condition) {
-  let filter = condition || {};
-  return Api.getCount(apiPath, filter);
-};
-
-//OLD***************************************************************************************** */
-//******************************************************************************************** */
-export const getList_Old = function (apiPath, filter, fields, include, sort, page, pageSize) {
+export const getList = function (apiPath, condition, fields, include, sort, page, pageSize) {
   let param = {};
   let pageIndex = page ? page - 1 : 0;
-  param.where = filter || {};
+  param.where = condition || {};
   param.fields = fields;
   param.include = include;
   param.order = sort || "id desc";
@@ -121,21 +101,21 @@ export const getList_Old = function (apiPath, filter, fields, include, sort, pag
   param.skip = param.limit * pageIndex || 0;
   let params = '?filter=' + encodeURIComponent(JSON.stringify(param));
   apiPath = apiPath + params;
-  return Api.get(apiPath, filter);
+  return Api.get(apiPath, param);
 };
 export const saveEntity = function (apiPath, entity) {
   entity.udate = new Date();
   if (!entity.id)
     entity.cdate = new Date();
-  return Api.saveEntity(apiPath, entity);
+  return Api.post(apiPath, entity);
 };
 export const addList = function (apiPath, entityList) {
 
   entityList.map((entity) => { entity.udate = new Date();; entity.cdate = new Date(); })
-  return Api.saveEntity(apiPath, entityList);
+  return Api.post(apiPath, entityList);
 };
 export const updateList = function (apiPath, entityList) {
-  return Api.saveEntity(apiPath, entityList);
+  return Api.post(apiPath, entityList);
 };
 //condition={isSeen:false} newValue={isSeen:true}
 export const updateByCondition = function (apiPath, newValue) {
@@ -210,10 +190,9 @@ export const saveInCoolkie = function (key, object, secend) {
   //VueCookies.set(key, obj, secend);
 };
 
-
 //user service
 
-export const login = function (username, password) {
+export const loginApi_OLD = function (username, password) {
   username = cipher(password)(username);
   password = cipher(username)(password);
 
@@ -235,7 +214,7 @@ export const login = function (username, password) {
       saveInCoolkie("userPT209873366", { username: username, password: password }, 60 * 60 * 1 * 1);// s m h d
 
       Api.setToken(member.token, member.username);
-      //مقابله با حمله هکر با تغییر رسپانس
+      //مقابله با هک با تغییر رسپانس
       return isSafeUser(member)
         .then(() => {
           return member;
@@ -253,7 +232,7 @@ export const login = function (username, password) {
 };
 export const isSafeUser = function (user) {
 
-  return getEntity("members", user.id, null, 'roles')
+  return getById("members", user.id, null, 'roles')
     .then(member => {
       const adminRoles = member.roles.filter(role => role.name == 'admin');
       if (adminRoles.length != 0 && user.username == member.username && user.email == member.email && user.mobile == member.mobile) {
@@ -271,18 +250,15 @@ export const setCurrentUser = function (user) {
   return currentUser = user;
 };
 
-export const setToken = function (token, username) {
-  return Api.setToken(token, username);
-};
-export const sendEmail = function (email, subject, text) {
+export const sendEmailApi = function (email, subject, text) {
   return saveEntity("Messages/sendMessage", {
-    from: "اپلیکشن سازمانی همراه اول.",
+    from: "Treenet.",
     to: email,
     subject: subject,
     text: text
   })
 };
-export const cangePassword = function (member) {
+export const changePasswordApi = function (member) {
   let newPass = Math.floor(Math.random() * 1000000).toString();
   member.password = newPass;
   member.tempPassword = newPass;
@@ -292,7 +268,7 @@ export const cangePassword = function (member) {
       return res;
     });
 };
-export const resetPassword = function (email) {
+export const resetPasswordApi = function (email) {
   return callGetApi('Members/resetUserPassword', { email: email })
     .then((res) => {
       res.msg = "عملیات با موفقیت انجام شد.";
@@ -303,6 +279,30 @@ export const resetPassword = function (email) {
       err.msg = "خطا در انجام عملیات .";
     })
 };
+
+
+//**************************************user******************************************
+//for get current user
+export const getUserProfileApi = function (fields, include) {
+  let params = {};
+  params.filter = {};
+  //params.userId = userId;
+  params.filter.fields = fields;
+  params.filter.include = include;
+  return Api.get('members/me/getProfile', params)
+      .then(user=>{
+        persistStore.token=user.token;
+        userStore.setUser(user);
+      });
+};
+
+export const loginApi=function (username,password) {
+  return  postQuery('Members/me/login',{username,password})
+      .then(user=>{
+        persistStore.token=user.token;
+        userStore.setUser(user);
+      })
+}
 
 
 

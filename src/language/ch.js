@@ -9,7 +9,7 @@ export const ch= {
   ch_from_local_power_to_global_power:"只需發送邀請鏈接",
   ch_make_your_global_network:"建立自己的本地和國際網絡",
   ch_Select_Your_Language:"選擇你的語言",
-  ch_start_network:"開始聯網",
+  ch_create_network:"開始聯網",
 
 
   ch_required_invitationLink:"要联网,必须通过邀请链接登录",

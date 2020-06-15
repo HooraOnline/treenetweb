@@ -6,7 +6,8 @@ export const en={
   en_treenetDes4:"With this tool you can easily and only send them your friends to your network network by sending your own private invitation link. Anyone else your friend invites to treenet will also be a member of your Trinity network, so your treenet will grow rapidly.",
   en_treenetDes5:"Treenetgram is multilingual and new languages are being added every day. So by sending an invitation link to outsiders or simpler ways like sharing an invitation link on foreign forums and social networks, you can globalize your network and form a huge international network with international revenue capability.",
   en_treenetDes6:"Soon, the Treenetgram app will provide you with powerful features such as bulletin boards, automatic revenue from the ad system, Treenet marketing tools, magic wallets, sales team management, and more. Start networking now and before others and grow like a tree.",
-  en_start_network:"Create my tree Network",
+  en_create_network:"Create network",
+  en_login_my_tree:"Login",
   en_required_invitationLink:"To build your tree network, you must com to website by invitation link.",
   en_invalid_invitation_link:"This invitation link is invalid.",
   en_for_start_enter_your_phone_number: "Enter your mobile number",
@@ -28,8 +29,10 @@ export const en={
   "en_login": "Login",
 
   "en_make_your_global_network":"And Build your local and global network",
-  "en_from_local_power_to_global_power":"Just send an invitation link",
-  "en_Select_Your_Language":"Select Your Language",
+  en_from_local_power_to_global_power:"Just send an invitation link",
+  en_Select_Your_Language:"Select Your Language",
+
+
 
   "en_the_number_of_mobile_is_not_valid":"The number of mobile is not valid.",
   "en_invalid_mobile_number":"invalid mobile number",
@@ -47,7 +50,7 @@ export const en={
   en_registerPassword_decription1:"Choose a unique username and a strong password for your network. Your password must be at least 6 letters long, and it is recommended that you use a combination of uppercase and lowercase letters, numbers, and special characters for a strong password.",
   en_registerPassword_decription2:"Your username and password are the key to your network login and login. Therefore, you need to remember and protect it.",
   en_registerPassword_userName_example:"Username-Example",
-  en_registerPassword_userName_rule:"Use only English letters and numbers and underline characters",
+  en_registerPassword_userName_rule:"Use only English letters and numbers and .ـ",
   en_registerPassword_userName_rule2:"The first letter of the username cannot be a number.",
   en_registerPassword_userName_is_reserved:"This username has already been reserved by someone else.",
   en_registerPassword_password_example:"Network Password-Example Ali65 * 4 # 5",

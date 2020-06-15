@@ -7,8 +7,8 @@ import version from './version';
 import {create} from 'mobx-persist';
 import Router from "next/router";
 // var serverUrl;
-const SERVER_URL = version.release ? "https://www.monta.ir/apaman" : 'http://monta.ir:5000';
-const SERVER_NAME = '/apaman198';
+const SERVER_URL = version.release ? "https://treenetserver.herokuapp.com" : 'http://192.168.1.161:3000';
+const SERVER_NAME = '/api';
 let firsTime = true;
 
 import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';

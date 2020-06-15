@@ -5,7 +5,7 @@ import React, {useEffect, useState,useRef} from "react";
 import {fetchStore, getWidth, deviceWide, height, showMassage, getCookie, saveCookie} from "../../utils";
 import "./index.scss";
 import ToastCard from "../ToastCard";
-import {globalState} from "../../stores";
+import {globalState, userStore} from "../../stores";
 import {View} from "../../react-native";
 import images from "../../../public/static/assets/images";
 

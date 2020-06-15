@@ -22,7 +22,7 @@ import Head from "next/head";
 import Router from "next/router";
 
 //import { appWithTranslation } from '../i18n'
-import {fetchStore, getCookie} from "../src/utils";
+import {fetchStore, getCookie, navigation} from "../src/utils";
 
 //import PageChange from "components_creative/PageChange/PageChange.js";
 
@@ -31,28 +31,29 @@ import "assets/scss/nextjs-material-kit.scss?v=1.0.0";
 import persistStore from "../src/stores/PersistStore";
 import { accountsStore, userStore } from "../src/stores";
 import { loginQuery } from "../src/network/Queries";
+import {getUserProfileApi, postQuery} from "../dataService/apiService";
+
 Router.events.on("routeChangeStart", url => {
   console.log(`Loading: ${url}`);
   document.body.classList.add("body-page-transition");
-  init();
-  if (url == '/home') {
-    ReactDOM.render(
-        null
-      /*<PageChange path={url} />, document.getElementById("page-transition")*/
-    );
-  }
+
+  onnavigate(url);
+
 
 });
-const init=async ()=>{
-  if(!global.slanguage){
-    let lng =  getCookie('lng');
-    if (lng) {
-      global.slanguage = lng.key;
-      global.isRtl = lng.rtl;
-    }
-    await fetchStore();
-  }
+const onnavigate=async (url)=>{
+  /*if(url.search('adminPanel')>-1){
+
+  }*/
+
+  /*if (url == '/home') {
+    ReactDOM.render(
+        null
+        /!*<PageChange path={url} />, document.getElementById("page-transition")*!/
+    );
+  }*/
 }
+
 Router.events.on("routeChangeComplete", () => {
   ReactDOM.unmountComponentAtNode(document.getElementById("page-transition"));
   document.body.classList.remove("body-page-transition");
@@ -67,27 +68,55 @@ class MyApp extends App {
   async componentDidMount() {
     let comment = document.createComment(``);
     document.insertBefore(comment, document.documentElement);
-    this.loadUserData();
+    await this.checkToken();
+
 
   }
-/*  async getInitialProps({ Component, router, ctx }) {
-    let pageProps = {};
-    console.warn("@@@@@@@@@@ App nextJs INIT");
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
+  checkToken=async ()=>{
+    await fetchStore();
+    if(persistStore.token ){
+      this.initPanelData();
+    }else{
+      Router.push('/index');
     }
-
-    return { pageProps };
-  }*/
-
-  loadUserData = (status) => {
-
   }
+
+  initPanelData=async ()=> {
+    if(!global.slanguage){
+      let lng = await getCookie('lng');
+      if (lng) {
+        global.slanguage = lng.key;
+        global.isRtl = lng.rtl;
+      }
+    };
+    this.getProfile();
+  };
+
+  getProfile(){
+    getUserProfileApi()
+        .then(res=>{
+          console.log(res);
+          navigation.navigate('/profile');
+          this.setState({loading:false});
+        })
+        .catch(err=>{
+          this.setState({loading:false});
+        });
+  }
+
+  /*  async getInitialProps({ Component, router, ctx }) {
+      let pageProps = {};
+      console.warn("@@@@@@@@@@ App nextJs INIT");
+      if (Component.getInitialProps) {
+        pageProps = await Component.getInitialProps(ctx);
+      }
+
+      return { pageProps };
+    }*/
 
 
 
   render() {
-
     const { Component, pageProps } = this.props
     return <Component {...pageProps} {...this.state} />
   }

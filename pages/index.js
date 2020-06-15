@@ -6,7 +6,7 @@ import {MenuItem, Select} from '@material-ui/core';
 import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
 import {
-    deviceWide, getCookie,
+    deviceWide, fetchStore, getCookie,
     getUrlParameter,
     mapNumbersToEnglish,
     navigation,
@@ -26,13 +26,13 @@ import {
     gr8,
     gr9,
     gr10,
-    borderSeparate
+    borderSeparate, primaryDark
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
-import {postQuery, saveEntity} from "../dataService/dataService";
+import {getUserProfileApi, postQuery, saveEntity} from "../dataService/apiService";
 import {ListDialogPopUp} from "../src/components";
 import Link from "next/link";
 //import Pagination from 'docs/src/modules/components/Pagination';
@@ -53,9 +53,39 @@ export default class Index extends Component {
 
 
 
-    componentDidMount() {
+    async componentDidMount() {
         this.applyRTLfromUserLanguage();
         this.invitationCode=getUrlParameter('invitationCode');
+        await this.checkToken();
+    }
+    checkToken=async ()=>{
+        await fetchStore();
+
+        if(persistStore.token ) {
+            this.initPanelData();
+        }
+
+    }
+
+    initPanelData=async ()=> {
+        if(!global.slanguage){
+            let lng = await getCookie('lng');
+            if (lng) {
+                global.slanguage = lng.key;
+                global.isRtl = lng.rtl;
+            }
+        };
+        this.getProfile();
+    };
+    getProfile(){
+        getUserProfileApi()
+            .then(res=>{
+                console.log(res);
+                this.setState({loading:false});
+            })
+            .catch(err=>{
+                this.setState({loading:false});
+            });
     }
     checkValidation() {
         if (!this.invitationCode) {
@@ -63,7 +93,7 @@ export default class Index extends Component {
             return translate('required_invitationLink');
         }
     }
-    nextPage(){
+    registerPage(){
         const msg=this.checkValidation();
         if(msg){
             showMassage(msg,'info')
@@ -72,6 +102,13 @@ export default class Index extends Component {
         navigation.navigate('fastRegister', {
             user: {regentCode:this.invitationCode},
         });
+    }
+    loginPanel(){
+        if(persistStore.token)
+            Router.replace('/profile');
+        else
+          Router.replace('/login');
+
     }
     async applyRTLfromUserLanguage() {
         let lng = getCookie('lng');
@@ -96,7 +133,7 @@ export default class Index extends Component {
 
         return (
 
-            <ResponsiveLayout title={`Treenet`}  style={{margin:0}}>
+            <ResponsiveLayout title={`Treenet`} loading={this.state.loading}  style={{margin:0}}>
                 <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
 
                     <Image
@@ -270,23 +307,53 @@ export default class Index extends Component {
                                 { translate('treenetDes6')}
                             </Text>
                         </View>
+                    </View>
+
+                </View>
+                <View style={{
+                    flex:1,
+                    flexDirection:'row',
+                    paddingHorizontal:16,
+                    alignItems:'center',
+                    paddingBottom:16,
+                    background:gr9
+                }} >
+                    {!persistStore.token &&(
                         <TouchableOpacity
                             style={{
                                 flex:1,
                                 marginTop:25,
-                                borderColor: gr5,
+                                borderColor: gr2,
                                 borderWidth:1,
                                 padding:0,
                                 paddingTop:0,
                                 borderRadius:12,
                                 alignItems:'center',
                                 justifyContent:'center',
+                                marginHorizontal:10,
                             }}
-                            onPress={() =>this.nextPage()}
+                            onPress={() =>this.registerPage()}
                         >
-                            <Text style={{fontSize:16,color:gr3,fontWeight:500,paddingVertical:12, paddingHorizontal:20,}}>{translate('start_network')}</Text>
+                            <Text style={{fontSize:16,color:gr2,fontWeight:500,paddingVertical:12, paddingHorizontal:20,}}>{translate('create_network')}</Text>
                         </TouchableOpacity>
-                    </View>
+                    )}
+
+                    <TouchableOpacity
+                        style={{
+                            flex:1,
+                            marginTop:25,
+                            borderColor: primaryDark,
+                            borderWidth:1,
+                            padding:0,
+                            paddingTop:0,
+                            borderRadius:12,
+                            alignItems:'center',
+                            justifyContent:'center',
+                        }}
+                        onPress={() =>this.loginPanel()}
+                    >
+                        <Text style={{fontSize:16,color:primaryDark,fontWeight:500,paddingVertical:12, paddingHorizontal:20,}}>{ translate('login_my_tree')}</Text>
+                    </TouchableOpacity>
                 </View>
             </ResponsiveLayout>
         )

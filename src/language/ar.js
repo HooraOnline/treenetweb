@@ -9,7 +9,7 @@ export const ar= {
   ar_from_local_power_to_global_power:"فقط أرسل رابط دعوة",
   ar_make_your_global_network:"بناء شبكتك المحلية والدولية.",
   ar_Select_Your_Language:"اختر لغتك.",
-  ar_start_network:"بدء الشبكات",
+  ar_create_network:"بدء الشبكات",
 
 
   ar_required_invitationLink: "لإنشاء شبكة , يجب عليك تسجيل الدخول عبر رابط الدعوة.",
@@ -44,7 +44,7 @@ export const ar= {
   ar_registerPassword_decription1: "اختر اسم مستخدم فريدًا وكلمة مرور قوية لشبكتك. يجب أن تتكون كلمة المرور من 6 أحرف على الأقل , ويوصى باستخدام مجموعة من الأحرف الكبيرة والصغيرة والأرقام والأحرف الخاصة لكلمة مرور قوية." ,
   ar_registerPassword_decription2: "إن اسم المستخدم وكلمة المرور هما مفتاح مستند تسجيل الدخول والملكية الخاصين بالشبكة. لذا عليك تذكرها وحمايتها.",
   ar_registerPassword_userName_example: "username-example ahmad_azizi" ,
-  ar_registerPassword_userName_rule: "استخدم الأحرف والأرقام الإنجليزية فقط وأحرف التسطير فقط",
+  ar_registerPassword_userName_rule: "استخدم الأحرف والأرقام الإنجليزية فقط وأحرف . ـ فقط",
   ar_registerPassword_userName_rule2: "لا يمكن أن يكون الحرف الأول من اسم المستخدم رقمًا.",
   ar_registerPassword_userName_is_reserved: "تم حجز اسم المستخدم هذا بالفعل بواسطة شخص آخر.",
   ar_registerPassword_password_example: "مثال لكلمة مرور الشبكة Ali65 * 4 # 5" ,

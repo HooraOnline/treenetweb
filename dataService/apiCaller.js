@@ -7,6 +7,8 @@ import axios from 'axios';
 import { decipher,cipher } from './pdk/utils';
 import {showMassage} from "../src/utils";
 import translate from "../src/language/translate";
+import {persistStore} from "../src/stores";
+import version from "../src/version";
 
 // axios.defaults.headers.common['Authorization']="dauJBEpEUsrQNEn5t4ziyiIICJET9qvThhVutSF7EV5vf0QDCrNvrDCsCfyjrSD9";
 //axios.defaults.headers.common['Content-Type']= "application/x-www-form-urlencoded";
@@ -25,8 +27,9 @@ import translate from "../src/language/translate";
 });*/
 
 
-export const apihost = 'http://192.168.1.161:3000/api/';
-//export const apihost = 'https://treenetserver.herokuapp.com/api/';
+
+export const apihost = version.release ? "https://treenetserver.herokuapp.com/api/" : 'http://192.168.1.161:3000/api/';
+
 class Api {
     constructor() {
 
@@ -37,12 +40,10 @@ class Api {
     static apiAddress = apihost;
     static fileContainer = apihost + "containers/";
     static token = "";
-    static setToken(token,username) {
-        Api.token =decipher(username)(token);
-        axios.defaults.headers.common['Authorization'] =  Api.token;
-    }
+
     static setHeaders() {
         axios.defaults.baseURL = apihost;
+        axios.defaults.headers.common['Authorization'] =  'Bearer ' + persistStore.token;
         // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
         // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
         // axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -55,13 +56,7 @@ class Api {
     }
     static getUri(apiPath) {
         let uri = apihost + apiPath;
-        if (!Api.token)
-            return uri;
-
-        let sp = '?';
-        if (uri.indexOf('?') > -1)
-            sp = '&';
-        return uri + sp + 'access_token=' + Api.token;
+        return uri;
     }
     static encrypt(param){
       let str=JSON.stringify(param);
@@ -69,49 +64,23 @@ class Api {
       //return b64;
       return cipher("privatekey4673")(encodeURIComponent(str));
     }
-    static fetchById(apiPath, params) {
-        let uri = apiPath + "/fetchById?params="+Api.encrypt(params);
-        //params={value:Api.encrypt(params)};
-        return axios.get(uri)
+
+    static get(apiPath, urlparams) {
+        let uri = Api.getUri(apiPath, '?');
+        let urlparameters = urlparams ? { params: urlparams } : undefined;
+        return axios.get(uri, urlparameters)
             .then(function (response) {
                 if (response.status === 200)
-                    return response.data;
+                    return response;
                 throw response;
             })
             .catch(function (error) {
+                console.log(error);
                 throw error
             });
     }
-
-  static fetch(apiPath, params) {
-    let uri=apiPath+"/fetch?params="+Api.encrypt(params);
-
-    return axios.get(uri)
-      .then(function (response) {
-        if (response.status === 200)
-          return response.data;
-        throw response;
-      })
-      .catch(function (error) {
-        console.log(error);
-        throw error
-      });
-    // let uri =  apiPath + "/fetch";
-    // params={value:Api.encrypt(params)};
-    // return axios.post(uri, params)
-    //     .then(function (response) {
-    //         if (response.status === 200)
-    //             return response;
-    //         throw response;
-    //     })
-    //     .catch(function (error) {
-    //         console.log(error);
-    //         throw error
-    //     });
-  }
     static getCount(apiPath, params) {
-        let uri =  apiPath + "/getCount?params="+Api.encrypt(params);
-        //params={value:Api.encrypt(params)};
+        let uri =  apiPath + "/count?params="+params;
         return axios.get(uri)
             .then(function (response) {
                 if (response.status === 200)
@@ -123,7 +92,7 @@ class Api {
                 throw error
             });
     }
-    static saveEntity(apiPath, model) {
+    static post(apiPath, model) {
         let uri =  apiPath;
         //model={value:Api.encrypt(model)};
         return axios.post(uri, model)
@@ -147,65 +116,6 @@ class Api {
 
             });
     }
-    static remove(apiPath, list) {
-        let uri =  apiPath + "/removeList";
-        //list={value:Api.encrypt(list)};
-        return axios.post(uri, list)
-            .then(function (response) {
-                if (response.status === 200)
-                    return response.data;
-                throw response;
-            })
-            .catch(function (error) {
-                console.log(error);
-                throw error
-            });
-    }
-    static removeWhere(apiPath, condition) {
-        let uri =  apiPath + "/removeWhere";
-        //condition={value:Api.encrypt(condition)};
-        return axios.post(uri, condition)
-            .then(function (response) {
-                if (response.status === 200)
-                    return response.data;
-                throw response;
-            })
-            .catch(function (error) {
-                console.log(error);
-                throw error
-            });
-    }
-    static get(apiPath, urlparams) {
-        let uri = Api.getUri(apiPath, '?');
-        let urlparameters = urlparams ? { params: urlparams } : undefined;
-        return axios.get(uri, urlparameters)
-
-            .then(function (response) {
-                if (response.status === 200)
-                    return response;
-                throw response;
-            })
-            .catch(function (error) {
-                console.log(error);
-                throw error
-            });
-    }
-
-    static post(apiPath, item) {
-
-        //item={value:Api.encrypt(item)};
-        return axios.post(apiPath, item)
-            .then((response) => {
-                if (response.status === 200)
-                    return response.data;
-                throw response;
-            })
-            .catch(error => {
-                console.log(error);
-                error.msg = "خطا در انجام عملیات";
-                throw error
-            });
-    }
     static put(apiPath, item) {
         let uri = Api.getUri(apiPath + '/' + item.id);
         item.udate = new Date();
@@ -226,6 +136,33 @@ class Api {
             });
     }
 
+    static remove(apiPath, list) {
+        let uri =  apiPath + "/removeList";
+        return axios.post(uri, list)
+            .then(function (response) {
+                if (response.status === 200)
+                    return response.data;
+                throw response;
+            })
+            .catch(function (error) {
+                console.log(error);
+                throw error
+            });
+    }
+    static removeWhere(apiPath, condition) {
+        let uri =  apiPath + "/removeWhere";
+        return axios.post(uri, condition)
+            .then(function (response) {
+                if (response.status === 200)
+                    return response.data;
+                throw response;
+            })
+            .catch(function (error) {
+                console.log(error);
+                throw error
+            });
+    }
+
     static delete(apiPath, id) {
         let uri = Api.getUri(apiPath + '/' + id);
         return axios.delete(uri)
@@ -243,6 +180,7 @@ class Api {
                 throw error
             });
     }
+
     //for upload files by html file input send me files array from=>event.target.files in
     static upload(files, uploadFolder, uploadingFunc) {
         let fd = new FormData();
@@ -285,6 +223,7 @@ class Api {
                 throw error
             });
     }
+
     static uploadSmallFile(files, uploadFolder, uploadingFunc) {
         let fd = new FormData();
         let uploadedfiles = [];

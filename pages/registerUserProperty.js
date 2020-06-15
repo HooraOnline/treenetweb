@@ -21,7 +21,7 @@ import {
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import {FloatingLabelTextInput,SwitchTextMulti} from "../src/components";
-import {postQuery, saveEntity} from "../dataService/dataService";
+import {postQuery, saveEntity} from "../dataService/apiService";
 import translate from "../src/language/translate";
 import LoadingPopUp from "../src/components/LoadingPopUp";
 

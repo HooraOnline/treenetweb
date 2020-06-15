@@ -10,7 +10,7 @@ export const tu={
   tu_from_local_power_to_global_power:"Sadece bir davet bağlantısı gönderin",
   tu_make_your_global_network:"Kendi yerel ve uluslararası ağınızı oluşturun.",
   tu_Select_Your_Language:"Dilinizi seçin",
-  tu_start_network:"Ağ iletişimi başlat",
+  tu_create_network:"Ağ iletişimi başlat",
 
 
   tu_required_invitationLink: "Bir ağ oluşturmak için davet bağlantısı yoluyla giriş yapmanız gerekir.",

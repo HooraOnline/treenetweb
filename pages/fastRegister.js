@@ -36,7 +36,7 @@ import {
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 
-import {postQuery,} from "../dataService/dataService";
+import {postQuery,} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
 //import SwipeableViews from 'react-swipeable-views';
 //import { autoPlay } from 'react-swipeable-views-utils';

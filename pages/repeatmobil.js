@@ -37,7 +37,7 @@ import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-nativ
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
-import {postQuery, saveEntity} from "../dataService/dataService";
+import {postQuery, saveEntity} from "../dataService/apiService";
 import {ListDialogPopUp} from "../src/components";
 import LoadingPopUp from "../src/components/LoadingPopUp";
 import {fa} from "../src/language/fa";
