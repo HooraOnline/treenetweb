@@ -11,9 +11,7 @@ export default function FlatList({data,renderItem,keyExtractor,ListEmptyComponen
     }
     if(data.length==0){
         return (
-            ListEmptyComponent || <View style={{flex:1,alignItems:'center',marginTop:30}}>
-                <Text>هیچ ایتمی وجود ندارد</Text>
-            </View>
+            ListEmptyComponent || null
         );
     }
     return (

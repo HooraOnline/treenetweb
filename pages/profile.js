@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {userStore,persistStore } from "../src/stores";
 import {permissionId} from '../src/constants/values';
 import Router from "next/router";
-import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
+import PanelLayout from "../src/components/layouts/PanelLayout";
 import {DropDownList,Toolbar,CardUnitInfo,PopupBase,ImageSelector} from "../src/components";
 
 import accountsStore from "../src/stores/Accounts";
-import {deviceWide, doDelay, logger} from "../src/utils";
+import {deviceWide, doDelay, logger, navigation} from "../src/utils";
 import images from "../public/static/assets/images";
 import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
 import {getUserBalance} from "../src/network/Queries";
@@ -18,40 +18,18 @@ import {View ,TouchableOpacity,Text,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCogs, faCompass, faMapMarkerAlt, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
+import {getUserProfileApi, logoutApi, postQuery} from "../dataService/apiService";
+import Api from "../dataService/apiCaller";
 
 
-const HOME_TYPE = 1
+const HOME_TYPE = 1;
 export default class Profile extends Component {
     constructor() {
         super();
-        //globalState.changeStatusBarColor(primaryDark);
-        //StatusBar.setTranslucent(false);
-
         this.state = {
-            selected: HOME_TYPE,
-            showAccountSelect: false,
-            loadingBalance: false,
-            showPasswordChangePopUp: false,
-            anchorEl: null,
-            showMenu:false,
-            isWide:false,
-            forms:[]
+
         };
     }
-
-
-    checkUserNotRefreshPage = () => {
-        if (!userStore.RoleID) {
-            Router.push('/Main');
-        }
-    }
-
-    manageMenuVisible=()=>{
-        let isWide=deviceWide();
-        persistStore.showMenu=persistStore.showMenu==false?false:isWide;
-        this.setState({isWide:isWide,showMenu:isWide?persistStore.showMenu:false});
-     }
-
 
     hasChangedPassword(accounts) {
         accounts.forEach((account) => {
@@ -72,93 +50,47 @@ export default class Profile extends Component {
         });
     }
 
-    selecetRole(status) {
-        this.setState({showAccountSelect: status}, () => {
-            if (status) {
-                this.getBalance();
-            }
-        });
+   async componentDidMount  () {
+
+       this.getProfile();
 
     }
+     getProfile(){
 
-    async getBalance() {
-        this.setState({loadingBalance: true});
-        getUserBalance()
-            .then(result => {
-                logger('********* getUserBalance success result:', result);
-                this.updateBalance(result);
+        getUserProfileApi()
+            .then(user=>{
+                console.log(user);
+
+                this.setState({
+                    userId:user.id,
+                    username:user.username,
+                    firstName:user.firstName,
+                    lastName:user.lastName,
+                    biarthDate:user.biarthDate,
+                    profileImage:user.profileImage,
+                    gender:user.gender,
+
+                });
             })
-            .catch(e => {
-                logger('********* getUserBalance catch e:', e);
-                this.setState({loadingBalance: false});
-                // Toast.show(e.errMessage, Toast.LONG);
+            .catch(err=>{
+                console.log(err);
+                this.setState({loading:false});
             });
     }
 
-    updateBalance(newBalance) {
-        accountsStore.accounts = accountsStore.accounts.map(function (item) {
-            if (item.UnitID) {
-                const target = newBalance.find(obj => obj.UnitID === item.UnitID);
-                item.UnitBalance = target.UnitBalance;
-                return item;
-            } else {
-                return item;
-            }
-        });
-        this.setState({loadingBalance: false});
-    }
-
-    onRoleSelected(item) {
-
-        persistStore.selected = item.ID;
-        userStore.setUser(item);
-        userStore.setUnitBalance(item.UnitBalance);
-        this.costPermission = userStore.findPermission(permissionId.costCalculation);
-        this.payAnnouncePermissioin = userStore.findPermission(userStore.RoleID === 1 ? permissionId.manualPay : permissionId.pay);
-        console.info('%%%%%%%%%%% onRoleSelected item selected: ', item);
-        this.setState({showAccountSelect:false});
-        this.initDrawer && this.initDrawer();
-        this.loadForms()
-    }
-
-    async getAllNotifications() {
-        // this.showLoading();
-        globalState.showBgLoading();
-        getAllNotification()
-            .then(result => this.setState({notifications: result}))
-            .catch(e => globalState.showToastCard())
-            .finally(() => globalState.hideBgLoading());
-    }
-
-    onPressMenu() {
-        //this.props.navigation.openDrawer();
-        if(this.state.isWide){
-            persistStore.showMenu=!persistStore.showMenu;
-            this.setState({showMenu:persistStore.showMenu});
-        }else{
-            this.setState({showMenu:!this.state.showMenu});
-        }
-    }
-
-    async onPressAccount() {
-        this.selecetRole(!this.state.showAccountSelect);
-        // this.setState({showAccountSelect: true});
-        this.setState({showMenu:false});
-    }
-
-    componentDidMount() {
-       // this.checkUserNotRefreshPage();
-       // setTimeout(() => this.setState({roleId: userStore.RoleID}), 100);
-       // this.manageMenuVisible();
-       // this.initPanel();
-    }
-
-    initPanel(){
-        doDelay(20)
-            .then(()=>{
-
+    setProfileImage=(fileName)=>{
+        const data={id:this.state.userId,profileImage:fileName}
+        postQuery('Members/me/setProfileImage',data)
+            .then(res=>{
+                profileImage:res.profileImage;
+                this.setState({loading:false});
+            })
+            .catch(err=>{
+                console.log(err);
+                this.setState({loading:false});
             })
     }
+
     render() {
 
         const toolbarStyle = {
@@ -166,17 +98,25 @@ export default class Profile extends Component {
                 content: images.ic_back,
             },
             title: 'پروفایل',
+            end: {
+                onPress: ()=>logoutApi(),
+                icon: images.ic_Period,
+            },
 
         };
         const open = Boolean(this.state.anchorEl);
         const PopperId = open ? 'simple-popper' : undefined;
         const {children}=this.props;
+
+        let {firstName='',lastName='',biarthDate='',profileImage='',gender=0,username=''}=this.state;
+         const dateYear=new Date(biarthDate).getFullYear();
+        const genderText=(gender==0)?'انتخاب نشده':(gender==1)?'مرد':'زن';
         return (
             //<PanelLayout title={`صفحه اصلی`} onRoleSelected={onRoleSelected}>
-            <ResponsiveLayout title={`صفحه اصلی`} showMenu={this.state.showMenu}
+            <PanelLayout title={`صفحه اصلی`} showMenu={this.state.showMenu}
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
                               onCloseMenu={()=>this.setState({showMenu:false})}
-                              style={{margin:0}}
+                              style={{alignItems:'center'}}
                               header={
                                   <Toolbar
                                    customStyle={toolbarStyle}
@@ -204,28 +144,50 @@ export default class Profile extends Component {
                                       ]}/>
                                   </View>
                               }>
-                <View style={{padding:16}}>
-                    <ImageSelector
-                        style={{ }}
-                        canUpload={true}
-                        autoUpload={true}
-                        imageStyle={{height:150,width:150,borderRadius:75}}
-                        image={userStore.profileImage}
-                        noImage={images.default_ProPic}
-                        hideDeleteBtn={true}
-                        //onrender={(imageSelector)=>imageSelector.setState({image:this.state.userImage})}
-                        onUplodedFile={(fileName)=>{
-                            this.setState({image: fileName});
-                            this.setProfileImage(fileName);
-                        }}
-                        onRemoveImage={(fileName)=>{
-                            this.setState({image: null});
-                        }}
+                <View style={{  padding:0,marginTop:0,alignItems:'center'}}>
+                        <View style={{width:'100%',  padding:24,marginTop:0,alignItems:'center',maxWidth:300}}>
+                            <ImageSelector
+                                style={{ }}
+                                canUpload={true}
+                                autoUpload={true}
+                                imageStyle={{height:150,width:150,borderRadius:75}}
+                                image={profileImage}
+                                noImage={images.default_ProPic}
+                                hideDeleteBtn={true}
+                                //onrender={(imageSelector)=>imageSelector.setState({image:this.state.userImage})}
+                                onUplodedFile={(fileName)=>{
+                                    this.setState({image: fileName});
+                                    this.setProfileImage(fileName);
+                                }}
+                                onRemoveImage={(fileName)=>{
+                                    this.setState({image: null});
+                                }}
 
-                    />
-                    <Text>{userStore.firstName}</Text>
-                </View>
-            </ResponsiveLayout>
+                            />
+                            <View style={{width:'100%',  flexDirection:'row',marginVertical:10,marginTop:16,justifyContent:'space-between'}}>
+                                <Text style={{fontWeight:800}} > نام کاربری:</Text>
+                                <Text>{this.state.username}</Text>
+                            </View>
+                            <View style={{width:'100%',  flexDirection:'row',marginVertical:10,justifyContent:'space-between'}}>
+                                <Text style={{fontWeight:800}} > نام:</Text>
+                                <Text>{this.state.firstName}</Text>
+                            </View>
+                            <View style={{width:'100%',  flexDirection:'row',marginVertical:10,justifyContent:'space-between'}}>
+                                <Text style={{fontWeight:800,width:100}} > نام خانوادگی:</Text>
+                                <Text>{lastName}</Text>
+                            </View>
+                            <View style={{width:'100%',  flexDirection:'row',marginVertical:10,justifyContent:'space-between'}}>
+                                <Text style={{fontWeight:800,width:100}} > سال تولد:</Text>
+                                <Text>{dateYear} میلادی </Text>
+                            </View>
+                            <View style={{width:'100%',  flexDirection:'row',marginVertical:10,justifyContent:'space-between'}}>
+                                <Text style={{fontWeight:800,width:100}} > جنسیت:</Text>
+                                <Text>{genderText}  </Text>
+                            </View>
+
+                        </View>
+                    </View>
+            </PanelLayout>
         )
     }
 

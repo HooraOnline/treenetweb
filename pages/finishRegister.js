@@ -17,7 +17,7 @@ import {
     gr9,
     gr5,
     gr1, gr2,
-    primaryDark, gr4, grL5, grayVD7
+    primaryDark, gr4, grL5, grayVD7, gr6, primary
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import {FloatingLabelTextInput,SwitchTextMulti} from "../src/components";
@@ -100,12 +100,29 @@ export default class FinishRegister extends Component {
                                 fontSize:16,
                                 fontWeight:800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                color:gr3,
+                                color:primaryDark,
                                 alignSelf:'center',
                                 padding:5,
                             }}>
                            { translate('finishRegister_welcom_to_treenet')}
                         </Text>
+                        <TouchableOpacity
+                            onPress={()=>navigation.navigate('login')}
+                            style={{
+                                alignItems:'center',
+                                justifyContent:'center',
+                                color:gr10,
+                                backgroundColor:primaryDark,
+                                padding:8,
+                                borderWidth:1,
+                                borderRadius:8,
+                                borderColor:primary,
+                                width:150,
+                                alignSelf:'center'
+
+                            }} >
+                            <Text>{translate('ورود به پنل')}</Text>
+                        </TouchableOpacity>
 
                         <View  style={{marginTop:5, }}  >
 

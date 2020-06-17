@@ -25,16 +25,10 @@ import {
     textItem,
     textItemBlack
 } from '../src/constants/colors';
-import {accountsStore, globalState, persistStore, userStore} from '../src/stores';
-import {loginQuery, roleQuery} from '../src/network/Queries';
+import { globalState, } from '../src/stores';
 import {
-    fetchStore,
-    getCookie,
+
     getWidth,
-    inputNumberValidation,
-    logger,
-    mapNumbersToEnglish,
-    saveCookie, showMassage
 } from '../src/utils';
 import {FloatingLabelTextInput, LoadingPopUp} from '../src/components';
 import translate from "../src/language/translate";
@@ -110,6 +104,7 @@ export default class LoginPage extends PureComponent {
 
     onSuccessLogin=(user)=>{
         Router.replace('/profile');
+
     }
 
     async onLogin() {

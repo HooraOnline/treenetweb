@@ -548,11 +548,12 @@ String.prototype.replaceAll = function(str1, str2)
 
 
 
-export function saveCookie(key,value){
+export const  saveCookie=async(key,value)=>{
     value=JSON.stringify(value);
-    bake_cookie(key, value);
+
+    await bake_cookie(key, value);
 }
-export function getCookie(key){
+export function getCookie (key){
    let val= read_cookie(key);
    if(!val || typeof(val)!=='string' ) return;
    return JSON.parse(val);
@@ -570,14 +571,16 @@ export const navigation={
     },
     navigate:(screenPath,params)=>{
 
-        let jsonStr=JSON.stringify(params);
-        let encodeParam=encodeURIComponent(jsonStr);
         screenPath=screenPath.startsWith('/')?screenPath:'/'+screenPath;
-        Router.push({
-            pathname: screenPath,
-            query: {params: encodeParam,},
-        })
+        const navigateData={ pathname: screenPath };
+        if(params){
+            let jsonStr=JSON.stringify(params);
+            let encodeParam=encodeURIComponent(jsonStr);
+            navigateData.query= {params: encodeParam};
+        }
+        Router.push(navigateData);
     },
+
     getParam:(paramName,defaultValue)=>{
         doDelay();
         if(!Router.query.params)

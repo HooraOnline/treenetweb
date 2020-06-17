@@ -8,9 +8,11 @@ import ToastCard from "../ToastCard";
 import {globalState, userStore} from "../../stores";
 import {View} from "../../react-native";
 import images from "../../../public/static/assets/images";
+import persistStore from "../../stores/PersistStore";
+import Router from "next/router";
 
 const  maxWidth=700;
-const ResponsiveLayout = observer( props => {
+const PanelLayout = observer( props => {
     const [showToast, setShowToast] = useState();
     const [loadingBalance, setLoadingBalance] = useState(false);
     const [accountSelectorVisible, setAccountSelectorVisible] = useState(false);
@@ -44,7 +46,14 @@ const ResponsiveLayout = observer( props => {
         };
     }
 
-
+    const checkToken=async()=> {
+        //await fetchStore();
+        persistStore.token=await getCookie('token');
+        if(!persistStore.token ){
+            Router.push('/index');
+        }
+    }
+    checkToken();
     useEffect(() => {
         init();
         document.title = props.title;
@@ -75,14 +84,14 @@ const ResponsiveLayout = observer( props => {
 
                 position:'relative'
             }}>
-                <View style={[props.style,{flex:1}]}>
+                <View style={[props.style,{width:'100%',}]}>
                     <div id={"header"} style={{position:'fixed',top:0,width:global.width,zIndex:4,}}>
                         {props.header}
                     </div>
                     <View id={'body'} style={{flex:1,width:global.width}}>
                         {props.children}
                     </View>
-                    <div style={{position:'fixed',bottom:0,width:global.width,zIndex:4,}}>
+                    <div style={{position:'fixed',bottom:0,width:global.width,zIndex:4,backgroundColor:bgScreen,paddingTop:10 }}>
                         {props.footer}
                     </div>
                     <ToastCard
@@ -98,4 +107,4 @@ const ResponsiveLayout = observer( props => {
     );
 });
 
-export default ResponsiveLayout;
+export default PanelLayout;

@@ -59,7 +59,6 @@ export default class FastRegister extends Component {
     componentDidMount() {
         doDelay(30)
             .then(()=>{
-
                 this.user= navigation.getParam('user');
             })
     }
@@ -90,7 +89,6 @@ export default class FastRegister extends Component {
 
     }
     registerPhone(){
-
         const msg=this.checkValidation();
         if(msg){
             showMassage(msg,'info')
@@ -120,6 +118,7 @@ export default class FastRegister extends Component {
 
     }
     nextPage(res){
+        debugger
         navigation.navigate('registerPassword', {
             user: res,
         });

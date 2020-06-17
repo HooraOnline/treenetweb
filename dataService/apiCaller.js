@@ -5,7 +5,7 @@ import axios from 'axios';
 //for notification
 //import Toasted from 'vue-toasted'
 import { decipher,cipher } from './pdk/utils';
-import {showMassage} from "../src/utils";
+import {getCookie, showMassage} from "../src/utils";
 import translate from "../src/language/translate";
 import {persistStore} from "../src/stores";
 import version from "../src/version";
@@ -41,8 +41,9 @@ class Api {
     static fileContainer = apihost + "containers/";
     static token = "";
 
-    static setHeaders() {
+    static  setHeaders =async ()=> {
         axios.defaults.baseURL = apihost;
+        persistStore.token=await getCookie('token');
         axios.defaults.headers.common['Authorization'] =  'Bearer ' + persistStore.token;
         // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
         // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -55,6 +56,8 @@ class Api {
         return apihost + "containers/" + model + "/download/"
     }
     static getUri(apiPath) {
+
+        axios.defaults.headers.common['Authorization'] =  'Bearer ' + persistStore.token;
         let uri = apihost + apiPath;
         return uri;
     }
@@ -71,7 +74,7 @@ class Api {
         return axios.get(uri, urlparameters)
             .then(function (response) {
                 if (response.status === 200)
-                    return response;
+                    return response.data;
                 throw response;
             })
             .catch(function (error) {
@@ -95,6 +98,7 @@ class Api {
     static post(apiPath, model) {
         let uri =  apiPath;
         //model={value:Api.encrypt(model)};
+        debugger
         return axios.post(uri, model)
             .then(function (response) {
                 if (response.status === 200)
@@ -104,7 +108,7 @@ class Api {
             .catch(function (error) {
                 console.log(error);
 
-                if(error.response && error.response.data && error.response.data.error.key){
+                if(error.response && error.response.data && error.response.data.error && error.response.data.error.key){
                     showMassage(translate( error.response.data.error.key),'info')
                 }
                 if(error.response.data){

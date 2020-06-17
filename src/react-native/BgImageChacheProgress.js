@@ -6,6 +6,8 @@ import {globalState, persistStore, userStore} from "../stores";
 import {PureComponent} from "react";
 import fetch from "isomorphic-unfetch";
 import {getImageBase64Query} from "../network/Queries";
+import {getImageBase64Api} from "../../dataService/apiService";
+import Alert from "./Alert";
 
 
 export default class BgImageChacheProgress extends PureComponent{
@@ -24,7 +26,8 @@ export default class BgImageChacheProgress extends PureComponent{
         } else return 'مشکلی پیش آمده! با پشتیبانی تماس بگیرید.';
     }
     async downloadImage(imageName){
-        await getImageBase64Query(imageName)
+
+        await getImageBase64Api(this.props.imageFolder,imageName)
             .then(result => {
                 this.setState({loadingImage: false, source: result});
             })
@@ -45,7 +48,7 @@ export default class BgImageChacheProgress extends PureComponent{
         }
         if(typeof(source)==='string'){
             this.setState({source:source})
-        } else if(source.uri){
+        } else if(source.imageName){
             setTimeout(()=>{
                 this.downloadImage(source.imageName)
             },200)

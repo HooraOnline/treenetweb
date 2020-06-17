@@ -23,6 +23,7 @@ import ImageBackground  from './ImageBackground';
 import Progress  from './Progress';
 import BgImageChacheProgress  from './BgImageChacheProgress';
 import SectionList  from './SectionList';
+import DateTime  from './DateTime';
 export {
     View,
     ScrollView,
@@ -49,5 +50,6 @@ export {
     Progress,
     BgImageChacheProgress,
     SectionList,
+    DateTime
 
 }

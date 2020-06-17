@@ -11,6 +11,7 @@ class UserStore {
     @observable firstName= null ;
     @observable gender= null ;
     @observable invitationCode=null ;
+    @observable invitationLink=null ;
     @observable lastName=null ;
     @observable location=null ;
     @observable loginDate=null ;
@@ -34,6 +35,7 @@ class UserStore {
         this.firstName= user.firstName ;
         this.gender= user.gender ;
         this.invitationCode=user.invitationCode ;
+        this.invitationLink=`https://treenetgram.com/?invitationCode=${user.invitationCode}`
         this.lastName=user.lastName ;
         this.location=user.location ;
         this.loginDate=user.loginDate ;
@@ -68,6 +70,7 @@ class UserStore {
         this.firstName= null ;
         this.gender= null ;
         this.invitationCode=null ;
+        this.invitationLink=null ;
         this.lastName=null ;
         this.location=null ;
         this.loginDate=null ;

@@ -36,7 +36,6 @@ import {getUserProfileApi, postQuery} from "../dataService/apiService";
 Router.events.on("routeChangeStart", url => {
   console.log(`Loading: ${url}`);
   document.body.classList.add("body-page-transition");
-
   onnavigate(url);
 
 
@@ -65,19 +64,22 @@ Router.events.on("routeChangeError", () => {
 
 class MyApp extends App {
 
+  constructor() {
+    super();
+     //this.checkToken();
+  }
+
   async componentDidMount() {
+
     let comment = document.createComment(``);
     document.insertBefore(comment, document.documentElement);
-    await this.checkToken();
-
 
   }
   checkToken=async ()=>{
-    await fetchStore();
+    //await fetchStore();
+    persistStore.token=await getCookie('token');
     if(persistStore.token ){
       this.initPanelData();
-    }else{
-      Router.push('/index');
     }
   }
 
@@ -92,11 +94,14 @@ class MyApp extends App {
     this.getProfile();
   };
 
-  getProfile(){
-    getUserProfileApi()
+  async getProfile(){
+    if(userStore.username){
+      return;
+    }
+    this.setState({loading:true});
+     getUserProfileApi()
         .then(res=>{
           console.log(res);
-          navigation.navigate('/profile');
           this.setState({loading:false});
         })
         .catch(err=>{

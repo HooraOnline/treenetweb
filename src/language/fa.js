@@ -76,7 +76,7 @@ export const fa= {
 
   fa_finishRegister_its_copy:"کپی شد.",
   fa_finishRegister_welcom_to_treenet:"به تری نتگرام خوش آمدید.",
-  fa_finishRegister_your_invitation_link:"لینک دعوت شما",
+  fa_finishRegister_your_invitation_link:"لینک دعوت اختصاصی شما",
   fa_finishRegister_copy:"کپی",
   fa_finishRegister_decription1:"شما به آسانی و با ارسال لینک دعوت خود برای دیگران یا اشتراک آن در شبکه های اجتماعی، می توانید فالورهای تری نت خود را به سرعت و بصورت هرمی افزایش دهید. کافی است افراد با لینک اختصاصی شما، وارد تری نت شده و ثبت نام کنند. سپس تمامی این افراد برای همیشه جز شبکه شما خواهند بود و آنها افراد جدیدی به تری نت شما خواهند آورد. ",
   fa_finishRegister__decription2:"چرا باید شبکه تری نت خود را توسعه دهید.",

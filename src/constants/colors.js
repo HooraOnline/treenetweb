@@ -21,16 +21,16 @@ export default {
     lightRed: '#f77',
 
 };
-let _primaryDark='#9A7D0A'
-let _primaryLight = '#F7DC6F';
-let _primary = '#B7950B';
+let _primaryDark='#ea4523'
+let _primaryLight = '#ea4523';
+let _primary = '#ea4523';
 
 
 
 export const primaryDark = _primaryDark;
 export const primaryLight = _primaryLight;
 export const primary = _primary;
-
+export const primaryDarkOld ='#ea4523';
 
 
 export const bgWhite = '#ffffff';

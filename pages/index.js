@@ -53,40 +53,15 @@ export default class Index extends Component {
 
 
 
-    async componentDidMount() {
+   async componentDidMount () {
+        persistStore.token= await getCookie('token');
         this.applyRTLfromUserLanguage();
+       if(persistStore.token){
+           navigation.navigate('/profile');
+       }
         this.invitationCode=getUrlParameter('invitationCode');
-        await this.checkToken();
-    }
-    checkToken=async ()=>{
-        await fetchStore();
-
-        if(persistStore.token ) {
-            this.initPanelData();
-        }
-
     }
 
-    initPanelData=async ()=> {
-        if(!global.slanguage){
-            let lng = await getCookie('lng');
-            if (lng) {
-                global.slanguage = lng.key;
-                global.isRtl = lng.rtl;
-            }
-        };
-        this.getProfile();
-    };
-    getProfile(){
-        getUserProfileApi()
-            .then(res=>{
-                console.log(res);
-                this.setState({loading:false});
-            })
-            .catch(err=>{
-                this.setState({loading:false});
-            });
-    }
     checkValidation() {
         if (!this.invitationCode) {
             this.setState({invitationCodeValidation: false});
@@ -129,8 +104,9 @@ export default class Index extends Component {
     }
 
     render() {
-        //const { height, width } = useWindowDimensions();
-
+     /*  if(!global.isCheckedToken){
+           return  <View style={{flex:1,alignItems:'center',padding:20,fontSize:30,paddingTop:50,color:gr8}} >Welcom to Treenetgram</View>;
+       }*/
         return (
 
             <ResponsiveLayout title={`Treenet`} loading={this.state.loading}  style={{margin:0}}>

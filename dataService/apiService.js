@@ -2,7 +2,9 @@
 //created by by saeed yousefi
 import Api from './apiCaller'
 import { cipher } from './pdk/utils';
-import {persistStore, userStore} from "../src/stores";
+import {globalState, persistStore, userStore} from "../src/stores";
+import {deleteCookie, getCookie, getFileDownloadURL, logger, navigation, saveCookie} from "../src/utils";
+import fetch from "isomorphic-unfetch";
 
 export let currentUser = {};
 //urlparams={userName:1232}
@@ -178,14 +180,49 @@ export const getFilePath = function (apiPath) {
   return Api.getFilePath(apiPath);
 };
 export const getFileUri = function (folder, imageName) {
-  let img = imageName.replace('fileLibrary/', '');
-  if (imageName.search('fileLibrary') > -1) {
-    folder = 'fileLibrary'
-  }
-  let path = Api.fileContainer + folder + '/download/' + img;
+
+  let path = Api.fileContainer + folder + '/download/' + imageName;
   return path;
 };
-export const saveInCoolkie = function (key, object, secend) {
+function arrayBufferToBase64(buffer) {
+    debugger
+    let binary = '';
+    let bytes = [].slice.call(new Uint8Array(buffer));
+
+    bytes.forEach((b) => binary += String.fromCharCode(b));
+
+    return window.btoa(binary);
+};
+ export const getImageBase64Api=async (folder, imageName)=> {
+
+     const headersSetting={
+         'Access-Control-Allow-Origin': '*',
+         'Accept'        : 'application/json',
+         'Content-Type'  : 'application/json',
+         'Authorization' : 'Bearer ' + persistStore.token,
+     }
+
+     let requestURL=getFileUri(folder, imageName);
+     try{
+         const response = await fetch(requestURL, {
+             headers: headersSetting,
+             method: 'GET'
+         });
+         console.log(response);
+         if (response.status === 200) {
+
+             let imageStr
+             imageStr = arrayBufferToBase64(response.body);
+             debugger
+             return await 'data:image/jpeg;base64,'+imageStr;
+         }
+     }
+     catch (e) {
+
+     }
+
+ }
+        export const saveInCoolkie = function (key, object, secend) {
   let obj = JSON.stringify(object);
   //VueCookies.set(key, obj, secend);
 };
@@ -289,19 +326,37 @@ export const getUserProfileApi = function (fields, include) {
   //params.userId = userId;
   params.filter.fields = fields;
   params.filter.include = include;
-  return Api.get('members/me/getProfile', params)
+  return  Api.get('members/me/getProfile', params)
       .then(user=>{
-        persistStore.token=user.token;
         userStore.setUser(user);
+        return user
       });
+};
+export const getUserSubsetApi = (fields, include)=> {
+    let params = {};
+    //params.filter = {};
+    //params.filter.fields = fields;
+    //params.filter.include = include;
+    return  Api.post('members/me/getSubsetList', params)
+        .then(subsetlist=>{
+            return subsetlist;
+        });
 };
 
 export const loginApi=function (username,password) {
   return  postQuery('Members/me/login',{username,password})
       .then(user=>{
+        saveCookie('token',user.token);
         persistStore.token=user.token;
         userStore.setUser(user);
+        Api.setHeaders();
       })
+}
+export const logoutApi=function (username,password) {
+    deleteCookie('token');
+    persistStore.clearStore();
+    userStore.clear();
+    navigation.navigate('index');
 }
 
 

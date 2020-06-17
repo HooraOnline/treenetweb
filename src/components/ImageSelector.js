@@ -17,7 +17,7 @@ import {getFileDownloadURL, uploadFileByFormData} from '../utils';
 import {fab, bgScreen, subTextItem, textItem, grayVD7} from "../constants/colors";
 import {AlertMessage, OverlayModal,} from "./index";
 import FileInput from "../react-native/FileInput";
-import {upload} from "../../dataService/apiService";
+import {getFileUri, upload} from "../../dataService/apiService";
 //import Permissions from "react-native-permissions";
 
 export default class ImageSelector extends PureComponent {
@@ -82,8 +82,7 @@ export default class ImageSelector extends PureComponent {
     }
 
     render() {
-        this.props.onrender &&  this.props.onrender(this)
-        const {style,canUpload=true,hideDeleteBtn, noImage, imageStyle, children, renderContent, selectBtnStyle} = this.props;
+        const {style,canUpload=true,hideDeleteBtn,image, noImage, imageStyle, children, renderContent, selectBtnStyle} = this.props;
 
         return (
             <View style={[{ position: 'relative',alignItems:'center',justifyContent:'center' },style]}>
@@ -105,11 +104,9 @@ export default class ImageSelector extends PureComponent {
                         }}
                     >
                         <BgImageChacheProgress
-
                             style={[{width:100,height:100},imageStyle]}
                             resizeMode="cover"
-                            source={this.state.selectedImage?this.state.selectedImage: this.state.image ? 'http://192.168.1.161:3000/api/containers/member/download/'+this.state.image: noImage}
-                            //source={this.state.selectedImage?this.state.selectedImage:noImage}
+                            source={this.state.selectedImage?this.state.selectedImage: image ? getFileUri('member',image) : noImage}
                             indicator={() => <Progress.Circle
                                 progress={this.state.imageProgress}
                                 indeterminate={this.state.imageIndeterminate}

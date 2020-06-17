@@ -12,7 +12,7 @@ class PersistStore {
     @persist('list') @observable roles = [];
 
     @persist @observable username = null; // TODO : MUST BE DELETED
-
+    @persist @observable persist11 = 14;
 
     @observable pushID = null;
 
@@ -24,6 +24,10 @@ class PersistStore {
         this.username = null;
         this.paymentId = null;
         this.locale = null;
+    }
+    @action
+    setAuthToken(token) {
+        this.token = token;
     }
 }
 
