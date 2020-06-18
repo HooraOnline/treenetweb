@@ -68,22 +68,14 @@ export default class LoginPage extends PureComponent {
             loading:false,
         };
     }
-
-
-
     async componentDidMount() {
-
         this.setState({
             progressWidth: getWidth() - 50,
             boxWidth: getWidth() > 500 ? 400 : getWidth() - 50,
             bgImage: getWidth() > 600 ? images.bg_loginweb : images.bg_login
         });
         this.showLogin();
-
-
-
     }
-
 
     showLogin() {
         setTimeout(() => {
@@ -92,12 +84,12 @@ export default class LoginPage extends PureComponent {
         }, 1500);
         console.warn('*** Show login Start ***');
     }
-
     keyPress=(e)=>{
         if(e.keyCode === 13){
             this.onLogin()
         }
     }
+
     checkValidation() {
         return this.state.userName.length >2  && this.state.password.length >5;
     }
