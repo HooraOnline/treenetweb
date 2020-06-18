@@ -29,6 +29,7 @@ const ResponsiveLayout = observer( props => {
     const manageResizeScreen=()=> {
         setIsWide(deviceWide());
         setScreenwidth(width);
+
         const width = ref.current ? ref.current.offsetWidth : maxWidth;
         const height = ref.current ? ref.current.offsetHeight : 800;
         global.width=width;
@@ -42,6 +43,7 @@ const ResponsiveLayout = observer( props => {
                 props.onResizeScreen && props.onResizeScreen(ref.current.offsetWidth,ref.current.offsetHeight);
             }
         };
+
     }
 
 

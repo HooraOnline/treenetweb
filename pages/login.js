@@ -103,13 +103,12 @@ export default class LoginPage extends PureComponent {
     }
 
     onSuccessLogin=(user)=>{
+        global.width=null;//reset new panel width
         Router.replace('/profile');
-
     }
 
     async onLogin() {
         this.setState({loading: true});
-
         const data={};
         this.setState({loading:true});
         console.log(data);

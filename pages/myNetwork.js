@@ -123,7 +123,9 @@ import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
                                     borderWidth:1,
                                     padding:3,
                                 }}>
-                                <View style={{flexDirection:'row',alignItems:'center'}} >
+                                <TouchableOpacity
+                                    onPress={()=>this.open(item)}
+                                    style={{flexDirection:'row',alignItems:'center'}} >
                                     <Image
                                         style={{width:60,height:60,borderRadius:30,}}
                                         resizeMode="cover"
@@ -137,7 +139,7 @@ import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
                                             <DateTime>{cdate}</DateTime>
                                         </View>
                                     </View>
-                                </View>
+                                </TouchableOpacity>
 
                             </View>
                             <View
@@ -276,7 +278,7 @@ export default class MyNetwork extends Component {
                         subsetList={this.state.subsetList}
                         level={1}
                     />
-                    {this.state.subsetList&&(
+                    {this.state.subsetList.length &&(
                         <View style={{marginTop:20}}>
                             <Text
                                 style={{textAlign:'justify',paddingHorizontal:30,fontSize:14,color:itemListText}}

@@ -102,7 +102,6 @@ export default class Profile extends Component {
                 onPress: ()=>logoutApi(),
                 icon: images.ic_Period,
             },
-
         };
         const open = Boolean(this.state.anchorEl);
         const PopperId = open ? 'simple-popper' : undefined;
