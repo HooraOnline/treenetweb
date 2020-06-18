@@ -2,7 +2,7 @@
 import {bgScreen} from "../../constants/colors";
 import {observer} from 'mobx-react';
 import React, {useEffect, useState,useRef} from "react";
-import { deviceWide, height, showMassage, getCookie, saveCookie} from "../../utils";
+import {deviceWide, height, showMassage, getCookie, saveCookie, setDemansion} from "../../utils";
 import "./index.scss";
 import ToastCard from "../ToastCard";
 import {globalState, userStore} from "../../stores";
@@ -11,7 +11,7 @@ import images from "../../../public/static/assets/images";
 import persistStore from "../../stores/PersistStore";
 import Router from "next/router";
 
-const  maxWidth=700;
+const  screenMaxWidth=700;
 const PanelLayout = observer( props => {
     const [showToast, setShowToast] = useState();
     const [loadingBalance, setLoadingBalance] = useState(false);
@@ -26,23 +26,25 @@ const PanelLayout = observer( props => {
         getBalance();
     }
     const init=async()=> {
+        manageScreenSize();
+        setLanguage();
 
     }
-    const manageResizeScreen=()=> {
-        setIsWide(deviceWide());
-        setScreenwidth(width);
-        const width = ref.current ? ref.current.offsetWidth : maxWidth;
-        const height = ref.current ? ref.current.offsetHeight : 800;
-        global.width=width;
-        global.height=height;
-        document.body.onresize = () => {
-            if(ref.current){
-                setScreenwidth(ref.current.offsetWidth);
-                global.width=ref.current.offsetWidth;
-                global.height=ref.current.offsetHeight;
-                window.ss=ref.current
-                props.onResizeScreen && props.onResizeScreen(ref.current.offsetWidth,ref.current.offsetHeight);
+    const setLanguage=async()=>{
+        if(!global.slanguage){
+            let lng = await getCookie('lng');
+            if (lng) {
+                global.slanguage = lng.key;
+                global.isRtl = lng.rtl;
             }
+        };
+    }
+
+    const manageScreenSize=()=> {
+        setDemansion(screenMaxWidth);
+        document.body.onresize = () => {
+            setDemansion(screenMaxWidth);
+            props.onResizeScreen && props.onResizeScreen(global.width,global.height);
         };
     }
 
@@ -57,7 +59,7 @@ const PanelLayout = observer( props => {
     useEffect(() => {
         init();
         document.title = props.title;
-        manageResizeScreen();
+
 
     },  [ref.current]);
 
@@ -73,22 +75,19 @@ const PanelLayout = observer( props => {
             backgroundAttachment: 'fixed',
             backgroundImage: `url(${images.publicPg})`}}
         >
-
             <div  ref={ref}   style={{
                 display:'flex',
                 flex:1,
-                maxWidth:maxWidth,
-                backgroundColor:screenwidth<maxWidth?bgScreen:bgScreen,
+                maxWidth:screenMaxWidth,
+                backgroundColor:bgScreen,
                 flexDirection:'column',
-                margin:isWide?3:0,paddingTop:props.header?63:0,
-
                 position:'relative'
             }}>
                 <View style={[props.style,{width:'100%',}]}>
-                    <div id={"header"} style={{position:'fixed',top:0,width:global.width,zIndex:4,}}>
+                    <div id={"header"} style={{position:'fixed',top:0,width:global.width,zIndex:4,marginBottom:60}}>
                         {props.header}
                     </div>
-                    <View id={'body'} style={{flex:1,width:global.width}}>
+                    <View id={'body'} style={{flex:1,width:global.width,marginTop:props.header?60:0,marginBottom:props.footer?60:0}}>
                         {props.children}
                     </View>
                     <div style={{position:'fixed',bottom:0,width:global.width,zIndex:4,backgroundColor:bgScreen,paddingTop:10 }}>

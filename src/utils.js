@@ -494,9 +494,18 @@ export function getWidth(){
 
 export function deviceWide(){
 
-    let windowWidth = window.screen.width < window.outerWidth ?
-        window.screen.width : window.outerWidth;
+    let windowWidth = window.screen.width < window.outerWidth ?  window.screen.width : window.outerWidth;
+
     return  windowWidth>700;
+}
+export function setDemansion(screenMaxWidth){
+    const width =  window.innerWidth>screenMaxWidth?screenMaxWidth:window.innerWidth;
+    const height = window.innerHeight;
+    global.width=width;
+    global.height=height;
+}
+export function getDemansion(){
+   return {width:global.width,height:global.height};
 }
 
 export function Platform(){

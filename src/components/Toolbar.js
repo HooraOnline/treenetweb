@@ -218,7 +218,7 @@ export default class Toolbar extends PureComponent {
                         style={{
                             width: '100%',
                             backgroundColor: primary,
-                            height: 65,
+                            height: 50,
                             elevation: 4,
                         }}>
                         {/* <StatusBar backgroundColor={globalState.statusBarColor} barStyle="light-content"/>*/}
@@ -242,10 +242,10 @@ export default class Toolbar extends PureComponent {
                                         style={styles.img}/>
                                 </TouchableOpacity>
                             ) : (
-                                <View style={{marginStart: 72}}/>
+                                <View style={{marginStart: 24}}/>
                             )}
                             {title && (
-                                <View style={{flexDirection: 'column', paddingTop: 3, flex: 1}}>
+                                <View style={{flexDirection: 'column',  flex: 1}}>
                   <Text style={styles.title}>
                     {title.length < titleAllowLength
                         ? title
@@ -333,9 +333,9 @@ export default class Toolbar extends PureComponent {
                                                 fontFamily: 'IRANYekanBold(FaNum)',
                                                 alignSelf: 'flex-start',
                                             }}>
-                        {end.text}
-                      </Text>
-                                    )}
+                                             {end.text}
+                                           </Text>
+                                            )}
                                 </View>
                             )}
                             {sort && (
@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: toolbarItem,
-        fontSize: 20,
+        fontSize: 16,
         fontFamily: 'IRANYekanMedium',
         alignSelf: 'flex-start',
     },
@@ -420,8 +420,8 @@ const styles = StyleSheet.create({
     },
     actionIcon: {
         padding: 16,
-        paddingTop: 24,
-        paddingBottom: 16,
+        //paddingTop: 24,
+        //paddingBottom: 16,
         //height: '100%',
     },
     searchContainer: {

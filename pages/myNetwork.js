@@ -32,6 +32,7 @@ import {getFileUri, getUserProfileApi, getUserSubsetApi} from "../dataService/ap
 import Image from "../src/react-native/Image";
 import DateTime from "../src/react-native/DateTime";
 import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
+import copy from "copy-to-clipboard";
 
 
  class TreeView extends PureComponent {
@@ -47,7 +48,7 @@ import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
            this.setState({open:!this.state.open})
          else{
              let name=item.username;
-             let message=name+' هنوز زیر مجموعه ای برای شما جمع نکرده است.';
+             let message=name+' فعلا زیر مجموعه ای ندارد.';
              showMassage(message,'warning');
          }
 
@@ -97,7 +98,7 @@ import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
                 data={this.props.subsetList}
                 ListEmptyComponent22={
                     <View style={{ padding:10}}>
-                        <Text style={{fontSize:12}}>هنوز زیر مجموعه ای برای شما جذب نکرده است.</Text>
+                        <Text style={{fontSize:12}}>بدون شاخه.</Text>
 
                     </View>
                 }
@@ -225,6 +226,10 @@ export default class MyNetwork extends Component {
             this.calculateCount(subsets[p]);
         }
     }
+    copyLink=()=> {
+        copy(userStore.invitationLink);
+        showMassage(translate('finishRegister_its_copy'),'success');
+    }
     render() {
         const toolbarStyle = {
             start22: {
@@ -270,19 +275,30 @@ export default class MyNetwork extends Component {
                                   </View>
                               }>
                 <View style={{marginHorizontal: 10,marginTop:24,paddingBottom:60}}>
-                    <Text  > شاخ و برگهای درخت {this.state.totalSubsetsCount+this.state.subsetList.length } نفر </Text>
-                    <Text  > شاخه های درخت{this.state.subsetList.length } نفر </Text>
-                    <Text  > برگهای درخت{this.state.totalSubsetsCount } نفر </Text>
+                    <View style={{width:'100%',
+                        flexDirection:'row',
+                        justifyContent:'space-between',
+                        alignItems:'space-between',
+                        padding:5,
+                        paddingHorizontal:16,
+                        borderWidth:1,
+                        borderRadius:12,
+                        backgroundColor:bgItemRed
+                    }} >
+                        <Text style={{fontSize:12}}> {this.state.subsetList.length } شاخه </Text>
+                        <Text  style={{fontSize:12}}> {this.state.totalSubsetsCount } برگ </Text>
+                        <Text  style={{fontSize:12}}>{this.state.totalSubsetsCount+this.state.subsetList.length+1 } عضو </Text>
+                    </View>
                     <TreeView
                         style={{paddingBottom:60}}
                         subsetList={this.state.subsetList}
                         level={1}
                     />
-                    {this.state.subsetList.length &&(
+                    {this.state.subsetList.length==0 &&(
                         <View style={{marginTop:20}}>
                             <Text
                                 style={{textAlign:'justify',paddingHorizontal:30,fontSize:14,color:itemListText}}
-                            >شما هنوز هیچ فردی را به تری نتگرام دعوت نکرده اید. برای ایجاد شاخه های درخت خود، کافی است لینک اختصاصی خود را برای چند نفر ارسال کنید یا آنرا در شبکه های اجتماعی مانند فیسبوک یا تلگرام به اشتراک بگذارید. </Text>
+                            > برای ایجاد شاخه های درخت خود، کافی است لینک اختصاصی خود را برای چند نفر ارسال کنید یا آنرا در شبکه های اجتماعی مانند فیسبوک یا تلگرام به اشتراک بگذارید. </Text>
                             <View style={{padding:24,marginTop:0}}>
                                 <Text
                                     style={{
