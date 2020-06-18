@@ -242,8 +242,8 @@ export default class MyNetwork extends Component {
         const PopperId = open ? 'simple-popper' : undefined;
         const {children}=this.props;
         return (
-            //<PanelLayout title={`صفحه اصلی`} onRoleSelected={onRoleSelected}>
-            <PanelLayout title={`صفحه اصلی`} showMenu={this.state.showMenu}
+            //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
+            <PanelLayout title={`Treenetgram`} showMenu={this.state.showMenu}
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
                               onCloseMenu={()=>this.setState({showMenu:false})}
                               style={{paddingBottom:10}}

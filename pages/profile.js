@@ -103,16 +103,14 @@ export default class Profile extends Component {
                 icon: images.ic_Period,
             },
         };
-        const open = Boolean(this.state.anchorEl);
-        const PopperId = open ? 'simple-popper' : undefined;
-        const {children}=this.props;
+
 
         let {firstName='',lastName='',biarthDate='',profileImage='',gender=0,username=''}=this.state;
          const dateYear=new Date(biarthDate).getFullYear();
         const genderText=(gender==0)?'انتخاب نشده':(gender==1)?'مرد':'زن';
         return (
-            //<PanelLayout title={`صفحه اصلی`} onRoleSelected={onRoleSelected}>
-            <PanelLayout title={`صفحه اصلی`} showMenu={this.state.showMenu}
+            //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
+            <PanelLayout title={`Treenetgram`} showMenu={this.state.showMenu}
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
                               onCloseMenu={()=>this.setState({showMenu:false})}
                               style={{alignItems:'center'}}
@@ -169,7 +167,7 @@ export default class Profile extends Component {
                             </View>
                             <View style={{width:'100%',  flexDirection:'row',marginVertical:10,justifyContent:'space-between'}}>
                                 <Text style={{fontWeight:800}} > نام:</Text>
-                                <Text>{this.state.firstName}</Text>
+                                <Text>{firstName}</Text>
                             </View>
                             <View style={{width:'100%',  flexDirection:'row',marginVertical:10,justifyContent:'space-between'}}>
                                 <Text style={{fontWeight:800,width:100}} > نام خانوادگی:</Text>

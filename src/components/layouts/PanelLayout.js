@@ -14,7 +14,7 @@ import Router from "next/router";
 const  screenMaxWidth=700;
 const PanelLayout = observer( props => {
     const [showToast, setShowToast] = useState();
-    const [loadingBalance, setLoadingBalance] = useState(false);
+    const [isRtl, setIsRtl] = useState(true);
     const [accountSelectorVisible, setAccountSelectorVisible] = useState(false);
     const [screenwidth, setScreenwidth] = useState(900);
     const [isWide, setIsWide] = useState(false);
@@ -37,13 +37,16 @@ const PanelLayout = observer( props => {
                 global.slanguage = lng.key;
                 global.isRtl = lng.rtl;
             }
+            setIsRtl(global.isRtl);
         };
     }
 
     const manageScreenSize=()=> {
         setDemansion(screenMaxWidth);
+        setScreenwidth(global.width);
         document.body.onresize = () => {
             setDemansion(screenMaxWidth);
+            setScreenwidth(global.width);
             props.onResizeScreen && props.onResizeScreen(global.width,global.height);
         };
     }
@@ -64,7 +67,7 @@ const PanelLayout = observer( props => {
     },  [ref.current]);
 
     return (
-        <div  dir={global.isRtl?'rtl':'ltr'}  style={{
+        <div   dir={global.isRtl?'rtl':'ltr'}  style={{
             textAlign:global.isRtl?"right":"left",
             display: 'flex',flex:1,
             justifyContent:'center',
@@ -84,13 +87,13 @@ const PanelLayout = observer( props => {
                 position:'relative'
             }}>
                 <View style={[props.style,{width:'100%',}]}>
-                    <div id={"header"} style={{position:'fixed',top:0,width:global.width,zIndex:4,marginBottom:60}}>
+                    <div id={"header"} style={{position:'fixed',top:0,width:screenwidth,zIndex:4,marginBottom:60}}>
                         {props.header}
                     </div>
-                    <View id={'body'} style={{flex:1,width:global.width,marginTop:props.header?60:0,marginBottom:props.footer?60:0}}>
+                    <View id={'body'} style={{flex:1,width:screenwidth,marginTop:props.header?60:0,marginBottom:props.footer?60:0}}>
                         {props.children}
                     </View>
-                    <div style={{position:'fixed',bottom:0,width:global.width,zIndex:4,backgroundColor:bgScreen,paddingTop:10 }}>
+                    <div style={{position:'fixed',bottom:0,width:screenwidth,zIndex:4,backgroundColor:bgScreen,paddingTop:10 }}>
                         {props.footer}
                     </div>
                     <ToastCard

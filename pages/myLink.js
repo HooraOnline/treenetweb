@@ -50,9 +50,7 @@ export default class MyLink extends Component {
             title: 'لینک من',
 
         };
-        const open = Boolean(this.state.anchorEl);
-        const PopperId = open ? 'simple-popper' : undefined;
-        const {children} = this.props;
+
         return (
             <PanelLayout title={`Panel`} showMenu={this.state.showMenu}
                          onRef={(initDrawer) => this.initDrawer = initDrawer}
