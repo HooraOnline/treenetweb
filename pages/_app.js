@@ -66,7 +66,7 @@ class MyApp extends App {
 
   constructor() {
     super();
-     //this.checkToken();
+     this.checkToken();
   }
 
   async componentDidMount() {
@@ -84,6 +84,7 @@ class MyApp extends App {
   }
 
   initPanelData=async ()=> {
+
     if(!global.slanguage){
       let lng = await getCookie('lng');
       if (lng) {

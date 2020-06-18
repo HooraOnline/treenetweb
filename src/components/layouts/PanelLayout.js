@@ -10,21 +10,17 @@ import {View} from "../../react-native";
 import images from "../../../public/static/assets/images";
 import persistStore from "../../stores/PersistStore";
 import Router from "next/router";
+import {getUserProfileApi} from "../../../dataService/apiService";
 
 const  screenMaxWidth=700;
 const PanelLayout = observer( props => {
     const [showToast, setShowToast] = useState();
     const [isRtl, setIsRtl] = useState(true);
-    const [accountSelectorVisible, setAccountSelectorVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [screenwidth, setScreenwidth] = useState(900);
     const [isWide, setIsWide] = useState(false);
-    let costPermission=null;
-    let payAnnouncePermissioin=null;
     const ref = useRef(null);
-    const selecetRole=(status)=> {
-        setAccountSelectorVisible(status);
-        getBalance();
-    }
+
     const init=async()=> {
         manageScreenSize();
         setLanguage();
@@ -37,7 +33,7 @@ const PanelLayout = observer( props => {
                 global.slanguage = lng.key;
                 global.isRtl = lng.rtl;
             }
-            setIsRtl(global.isRtl);
+            setIsRtl(global.isRtl || true);
         };
     }
 
@@ -54,9 +50,23 @@ const PanelLayout = observer( props => {
     const checkToken=async()=> {
         //await fetchStore();
         persistStore.token=await getCookie('token');
-        if(!persistStore.token ){
+        if(!persistStore.token ) {
             Router.push('/index');
+        }else if(!userStore.username){
+            getProfile();
         }
+
+    }
+    const getProfile=()=>{
+        setLoading(true);
+        getUserProfileApi()
+            .then(res=>{
+                console.log(res);
+                setLoading(false);
+            })
+            .catch(err=>{
+                setLoading(false);
+            });
     }
     checkToken();
     useEffect(() => {
@@ -67,7 +77,7 @@ const PanelLayout = observer( props => {
     },  [ref.current]);
 
     return (
-        <div   dir={global.isRtl?'rtl':'ltr'}  style={{
+        <div   dir={isRtl || global.isRtl?'rtl':'ltr'}  style={{
             textAlign:global.isRtl?"right":"left",
             display: 'flex',flex:1,
             justifyContent:'center',
@@ -87,15 +97,18 @@ const PanelLayout = observer( props => {
                 position:'relative'
             }}>
                 <View style={[props.style,{width:'100%',}]}>
-                    <div id={"header"} style={{position:'fixed',top:0,width:screenwidth,zIndex:4,marginBottom:60}}>
+                    <div id={"header"} style={{position:'fixed',top:0,width:global.width,zIndex:4,marginBottom:60}}>
                         {props.header}
                     </div>
-                    <View id={'body'} style={{flex:1,width:screenwidth,marginTop:props.header?60:0,marginBottom:props.footer?60:0}}>
+                    <View id={'body'} style={{flex:1,width:global.width,marginTop:props.header?60:0,marginBottom:props.footer?60:0}}>
                         {props.children}
                     </View>
-                    <div style={{position:'fixed',bottom:0,width:screenwidth,zIndex:4,backgroundColor:bgScreen,paddingTop:10 }}>
+                    <div style={{position:'fixed',bottom:0,width:global.width,zIndex:4,backgroundColor:bgScreen,paddingTop:10 }}>
                         {props.footer}
                     </div>
+                    <div >{
+                        loading?'loading':''
+                    }</div>
                     <ToastCard
                         visible={globalState.toastCard}
                         type={globalState.toastType}
