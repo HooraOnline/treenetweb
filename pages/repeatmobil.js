@@ -130,12 +130,11 @@ export default class Repeatmobil extends Component {
     }
 
     render() {
-        debugger
        if(!this.user){
            return null;
        }
         return (
-            <ResponsiveLayout title={`Treenet`} run={this.state.run}  style={{margin:0}}>
+            <ResponsiveLayout title={`Treenet`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} run={this.state.run}  style={{margin:0}}>
                 <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
                     <Image
                         source={images.tree}

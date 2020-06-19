@@ -18,10 +18,12 @@ class UserStore {
     @observable mobile=null ;
     @observable mobileVerified=null ;
     @observable permissionList=null ;
+    @observable isVerify=null ;
     @observable regentId=null ;
     @observable roleList=null ;
     @observable token=null ;
     @observable udate=null ;
+    @observable countryCode=null ;
 
     @action
     setUser(user) {
@@ -41,11 +43,14 @@ class UserStore {
         this.loginDate=user.loginDate ;
         this.mobile=user.mobile ;
         this.mobileVerified=user.mobileVerified ;
+        this.isVerify=user.isVerify ;
         this.permissionList=user.permissionList ;
         this.regentId=user.regentId ;
         this.roleList=user.roleList ;
         this.token=user.user ;
         this.udate=user.udate ;
+        this.countryCode=user.geoInfo.calling_code;
+
     }
 
     @action
@@ -76,6 +81,7 @@ class UserStore {
         this.loginDate=null ;
         this.mobile=null ;
         this.mobileVerified=null ;
+        this.isVerify=null ;
         this.permissionList=null ;
         this.regentId=null ;
         this.roleList=null ;

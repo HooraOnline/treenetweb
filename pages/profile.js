@@ -20,6 +20,7 @@ import {faCogs, faCompass, faMapMarkerAlt, faUser} from "@fortawesome/free-solid
 import translate from "../src/language/translate";
 import {getUserProfileApi, logoutApi, postQuery} from "../dataService/apiService";
 import Api from "../dataService/apiCaller";
+import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 
 
 const HOME_TYPE = 1;
@@ -59,8 +60,6 @@ export default class Profile extends Component {
 
         getUserProfileApi()
             .then(user=>{
-                console.log(user);
-
                 this.setState({
                     userId:user.id,
                     username:user.username,
@@ -73,7 +72,6 @@ export default class Profile extends Component {
                 });
             })
             .catch(err=>{
-                console.log(err);
                 this.setState({loading:false});
             });
     }
@@ -86,7 +84,6 @@ export default class Profile extends Component {
                 this.setState({loading:false});
             })
             .catch(err=>{
-                console.log(err);
                 this.setState({loading:false});
             })
     }
@@ -110,7 +107,7 @@ export default class Profile extends Component {
         const genderText=(gender==0)?'انتخاب نشده':(gender==1)?'مرد':'زن';
         return (
             //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
-            <PanelLayout title={`Treenetgram`} showMenu={this.state.showMenu}
+            <PanelLayout title={`Treenetgram`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
                               onCloseMenu={()=>this.setState({showMenu:false})}
                               style={{alignItems:'center'}}
@@ -141,7 +138,7 @@ export default class Profile extends Component {
                                       ]}/>
                                   </View>
                               }>
-                <View style={{  padding:0,marginTop:0,alignItems:'center'}}>
+                <View style={{  padding:0,marginTop:20,alignItems:'center'}}>
                         <View style={{width:'100%',  padding:24,marginTop:0,alignItems:'center',maxWidth:300}}>
                             <ImageSelector
                                 style={{ }}

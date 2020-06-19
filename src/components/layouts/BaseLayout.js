@@ -18,6 +18,7 @@ import ToastCard from "../ToastCard";
 import {globalState} from "../../stores";
 import {TouchableOpacity} from "../../react-native";
 import {View} from "../../react-native";
+import LoadingPopUp from "../LoadingPopUp";
 
 
 const BaseLayout = observer( props => {
@@ -60,7 +61,10 @@ const BaseLayout = observer( props => {
                 message={globalState.responseMessage}
                 onClose={() => globalState.hideToastCard()}
             />
-
+            <LoadingPopUp
+                visible={props.loading}
+                message={props.loadingMessage || ''}
+            />
         </View>
     </div>
   );

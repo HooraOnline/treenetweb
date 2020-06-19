@@ -6,8 +6,8 @@ export const fa= {
   fa_treenetDes4:"با این ابزار شما می توانید به سادگی و فقط با ارسال لینک دعوت اختصاصی خود به دوستان، آنها را شاخه شبکه تری نت خود کنید. هر فرد دیگری که دوست شما به تری نت دعوت کند نیز عضو شبکه تری نت شما می شود و بنابراین تری نت شما به سرعت رشد می کند.",
   fa_treenetDes5:"تری نتگرام چند زبانه است و هر روز زبانهای جدید به آن اضافه می شود. بنابراین شما با ارسال لینک دعوت به افراد خارجی یا راههای ساده تر مانند اشتراک گذاری لینک دعوت در فرومها و شبکه های اجتماعی خارجی می توانید شبکه خود را جهانی کرده و یک شبکه عظیم بین المللی با قابلیت درآمد بین المللی تشکیل دهید.",
   fa_treenetDes6:"به زودی اپلیکیشن تری نتگرام، امکانات قدرتمندی مانند تابلو اعلانات شبکه، بازار اجاره شبکه، بازار خریدو فروش شبکه، کسب درآمد اتوماتیک از سیستم تبلیغات، ابزارهای تری نت مارکتینگ، کیف پول جادویی، باشگاه مشتری، مدیریت تیم فروش و غیره را در اختیار شما قرار می دهد. پس از هم اکنون و قبل از دیگران شبکه سازی رو شروع و مثل یک درخت رشد کن.",
-  fa_from_local_power_to_global_power:"فقط با اشتراک گذاری لینک دعوت اختصاصی",
-  fa_make_your_global_network:"شبکه محلی و بین المللی خودت رو بساز.",
+  fa_from_local_power_to_global_power:"لینک دعوت اختصاصی خودت رو به اشتراک بزار",
+  fa_make_your_global_network:"و بصورت هرمی و خیلی سریع فالوور جذب کن.",
   fa_Select_Your_Language:"زبان خود را انتخاب کنید",
 
 
@@ -35,17 +35,17 @@ export const fa= {
   "fa_confirm":"تایید",
 
 
-  fa_registerPassword_enter_userName:"نام کاربری را وارد کنید.",
+  fa_registerPassword_enter_username:"نام کاربری را وارد کنید.",
   fa_registerPassword_username_can_not_be_les_than:"نام کاربری نباید کمتر از 3 حرف باشد.",
   fa_registerPassword_enter_password:"رمز عبور را وارد کنید.",
   fa_registerPassword_password_can_not_be_les_than:"پسورد نباید کمتر از ۶ حرف باشد.",
   fa_registerPassword_password_and_repeat_not_equal:"پسورد و تکرار آن مساوی نیست.",
   fa_registerPassword_decription1:"یک نام کاربری منحصر بفرد و یک کلمه عبور قوی برای شبکه خود انتخاب کنید. لازم است رمز عبور شما حداقل  ۶ حرف داشته و توصیه می شود برای یک پسورد قوی از ترکیب حروف کوچک و بزرگ،اعداد و کاراکترهای خاص استفاده کنید.",
   fa_registerPassword_decription2:"نام کاربری و پسورد شما کلید ورود و سند مالکیت شبکه شما می باشد.بنابراین لازم است آنرا به خاطر داشته و از آن محافظت کنید.",
-  fa_registerPassword_userName_example:"نام کاربری-مثال ahmad_azizi",
-  fa_registerPassword_userName_rule:"فقط از حروف و اعداد انگلیسی و کاراکتر نقطه و زیر خط ـ . استفاده شود",
-  fa_registerPassword_userName_rule2:"حرف اول نام کاربری نمی تواند عدد باشد.",
-  fa_registerPassword_userName_is_reserved:"این نام کاربری قبلا توسط فرد دیگری رزرو شده است.",
+  fa_registerPassword_username_example:"نام کاربری-مثال ahmad_azizi",
+  fa_registerPassword_username_rule:"فقط از حروف و اعداد انگلیسی و کاراکتر نقطه و زیر خط ـ . استفاده شود",
+  fa_registerPassword_username_rule2:"حرف اول نام کاربری نمی تواند عدد باشد.",
+  fa_registerPassword_username_is_reserved:"این نام کاربری رزرو شده است.",
   fa_registerPassword_password_example:"رمز عبور شبکه-مثال Ali65*4#5",
   fa_registerPassword_password_rule:"فقط از حروف انگلیسی اعداد و کاراکترهای خاص مانند @،*،&،% استفاده شود",
   fa_registerPassword_password_repeat:"تکرار رمز عبور",
@@ -93,7 +93,7 @@ export const fa= {
   fa_finishRegister__login_to_panel:"ورود به پنل",
 
 
-  fa_create_network:"ایجاد شبکه",
+  fa_create_network:"ایجاد شبکه درختی",
   fa_login_my_tree:"ورود به شبکه",
   fa_login_top:'ورود به تری نتگرام',
   fa_login_enter_your_user_name:'نام کاربری خود را وارد کنید',

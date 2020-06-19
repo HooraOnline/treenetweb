@@ -22,7 +22,7 @@ class MyDocument extends Document {
           <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
           <meta name="apple-mobile-web-app-capable" content="yes"/>
           <meta name="mobile-web-app-capable" content="yes"/>
-
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 
           <meta

@@ -101,7 +101,7 @@ export default class RegisterUserProperty extends Component {
             return null;
         }
         return (
-            <ResponsiveLayout title={`Enter Confirm code`}  style={{margin:0}}>
+            <ResponsiveLayout title={`Enter Confirm code`}   loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin:0}}>
                 <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:16,paddingTop:'5%',}} >
                     <Image
                         source={images.tree}

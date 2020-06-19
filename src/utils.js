@@ -589,7 +589,17 @@ export const navigation={
         }
         Router.push(navigateData);
     },
+    replace:(screenPath,params)=>{
 
+        screenPath=screenPath.startsWith('/')?screenPath:'/'+screenPath;
+        const navigateData={ pathname: screenPath };
+        if(params){
+            let jsonStr=JSON.stringify(params);
+            let encodeParam=encodeURIComponent(jsonStr);
+            navigateData.query= {params: encodeParam};
+        }
+        Router.replace(navigateData);
+    },
     getParam:(paramName,defaultValue)=>{
         doDelay();
         if(!Router.query.params)

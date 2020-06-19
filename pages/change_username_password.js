@@ -1,87 +1,61 @@
 import React, {Component} from 'react';
 import {userStore,persistStore } from "../src/stores";
+import {permissionId} from '../src/constants/values';
 import Router from "next/router";
-import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
-import {MenuItem, Select} from '@material-ui/core';
-import translate from "../src/language/translate";
-import {LNGList} from "../src/language/aaLngUtil";
-import {
-    deviceWide, doDelay, getCookie,
-    getUrlParameter,
-    mapNumbersToEnglish,
-    navigation,
-    saveCookie,
-    showMassage,
+import PanelLayout from "../src/components/layouts/PanelLayout";
+import {DropDownList,Toolbar,CardUnitInfo,PopupBase,ImageSelector} from "../src/components";
 
-} from "../src/utils";
+import accountsStore from "../src/stores/Accounts";
+import {deviceWide, doDelay, logger, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
+import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
+import {getUserBalance} from "../src/network/Queries";
 import {
+    bgItemRed,
+    bgScreen,
     bgWhite,
+    textItemRed,
+    borderSeparate,
     border,
-
-    lightRed,
-    textItemBlack,
-    gr1,
-    gr2,
-    gr3,
-    gr4,
-    gr5,
-    gr6,
-    gr7,
-    gr8,
-    gr9,
-    gr10,
-    borderSeparate, primaryDark, textItem, grayVD7, grL5
+    primary,
+    primaryDark, gr1, gr3, textItem, gr5, gr9, textItemBlack
 } from "../src/constants/colors";
+import accounting from "accounting";
+import NavFooterButtons from "../src/components/layouts/footerButtons";
+import NavBar from "../src/components/layouts/NavBar";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCogs, faCompass, faMapMarkerAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import translate from "../src/language/translate";
+import {getUserProfileApi, logoutApi, postQuery} from "../dataService/apiService";
+import Api from "../dataService/apiCaller";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
-import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
-import {postQuery, saveEntity} from "../dataService/apiService";
-import {ListDialogPopUp} from "../src/components";
-import LoadingPopUp from "../src/components/LoadingPopUp";
-import {fa} from "../src/language/fa";
-//import Pagination from 'docs/src/modules/components/Pagination';
-//const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-import { FaBeer } from 'react-icons/fa';
-
 import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
-export default class RegisterPassword extends Component {
+import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
+
+const HOME_TYPE = 1;
+export default class change_username_password extends Component {
     constructor() {
         super();
         this.state = {
-            showMenu:false,
-            isWide:false,
-            mobileValidation:false,
-            countryCode:'+98',
-            invitationLink:'',
-
             showPassword:false,
             passwordValidation:false,
             passwor2dValidation:false,
             usernameValidation:false,
             username:'',
             password:'',
+            countryCode:userStore.countryCode?'+'+userStore.countryCode : '+98',
+            invitationLink:'',
+            mobile:'',
+            email:''
 
         };
     }
-    componentDidMount() {
-        doDelay(30)
-            .then(()=>{
-                this.user= navigation.getParam('user');
-            })
+
+   async componentDidMount() {
 
     }
-    nextPage(){
-        navigation.navigate('registerUserProperty', {
-            user: this.user,
-        });
-    }
 
-
-    isValid() {
-        return mobileValidation;
-    }
     checkValidation() {
         if (!this.state.username) {
             this.setState({usernameValidation: false});
@@ -97,9 +71,9 @@ export default class RegisterPassword extends Component {
             return translate('registerPassword_enter_password');
         }
         const passReg=/(?=(.*[0-9]))(?=.*[\!@#$%^&*()\\[\]{}\-_+=~`|:;"'<>,./?])(?=.*[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}/;
-       /* if( !passReg.test(this.state.password)){
-            return "پسورد شما باید حداقل ۶ حرف بوده و شامل حروف کوچک و بزرگ و کاراکترهای خاص باشد.";
-        }*/
+        /* if( !passReg.test(this.state.password)){
+             return "پسورد شما باید حداقل ۶ حرف بوده و شامل حروف کوچک و بزرگ و کاراکترهای خاص باشد.";
+         }*/
 
         if (this.state.password.length<6) {
             this.setState({passwordValidation: false});
@@ -109,8 +83,29 @@ export default class RegisterPassword extends Component {
             this.setState({passwordValidation: false});
             return translate('registerPassword_password_and_repeat_not_equal');
         }
+
+        if(!this.state.mobile && !this.state.email){
+            this.setState({mobileValidation: false});
+            return translate('fastRegister_atleast_fill_one')
+        }
+        if (this.state.mobile && this.state.mobile.length < 10) {
+            this.setState({mobileValidation: false});
+            return translate('the_number_of_mobile_is_not_valid');
+        }
+
+        const mobileReg = /^9[0-9]{9}$/i;
+        if (this.state.mobile && !mobileReg.test(this.state.mobile)){
+            //this.setState({mobileValidation: false});
+            return translate('invalid_mobile_number'); ;
+        }
+
+        const emailReg = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
+        if (this.state.email && !emailReg.test(this.state.email)){
+            //this.setState({emailReg: false});
+            return translate('fastRegister_invalid_email_format');
+        }
     }
-    updateUsernameAndPassword(){
+    updateUsernameAndPassword=()=>{
 
         const msg=this.checkValidation();
         if(msg){
@@ -118,14 +113,24 @@ export default class RegisterPassword extends Component {
             return;
         }
 
-        const data={id:this.user.id,username:this.state.username,password:this.state.password};
+        const data={
+            username:this.state.username,
+            password:this.state.password
+        };
+        if(this.state.mobile){
+            data.mobile=this.state.countryCode+this.state.mobile;
+        }
+        if(this.state.email){
+            data.email=this.state.email;
+        }
 
-        this.setState({loading:true});
+        this.setState({loading:true,loadingMessage:'در حال اجرا'});
         postQuery('Members/me/updateUsernameAndPassword',data)
             .then(res=>{
                 console.log(res);
-                this.nextPage();
+                navigation.replace('profile');
                 this.setState({loading:false});
+                showMassage('نام کاربری و پسورد با موفقیت تغییر یافت.','success')
             })
             .catch(err=>{
                 this.setState({loading:false});
@@ -134,30 +139,40 @@ export default class RegisterPassword extends Component {
     }
 
     render() {
-        //const { height, width } = useWindowDimensions();
+        const toolbarStyle = {
+            start: {
+                content: images.ic_back,
+                onPress: ()=>navigation.goBack(),
+            },
+            title: 'تغییر نام کاربری و پسورد',
 
+        };
+
+        let {firstName='',lastName='',biarthDate='',profileImage='',gender=0,username=''}=this.state;
+         const dateYear=new Date(biarthDate).getFullYear();
+        const genderText=(gender==0)?'انتخاب نشده':(gender==1)?'مرد':'زن';
         return (
-
-            <ResponsiveLayout title={`Treenet`}   loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
-                    <Image
-                        source={images.tree}
-                        style={{maxWidth: '25%', maxHeight: '25%',}}
-                    />
-                    <Text
-                        style={{
-                            marginTop:5,
-                            marginBottom:10,
-                            fontSize:25,
-                            fontWeight:800,
-                            fontFamily: 'IRANYekanFaNum-Bold',
-                            color:gr4
-                        }}>
-                        Treenetgram
-                    </Text>
-
+            //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
+            <PanelLayout loading={this.state.loading} loadingMessage={this.state.loadingMessage} showVerifiyMassege={false} title={`Treenetgram`} showMenu={this.state.showMenu}
+                              onRef={(initDrawer)=>this.initDrawer=initDrawer}
+                              onCloseMenu={()=>this.setState({showMenu:false})}
+                              style={{alignItems:'center'}}
+                              header={
+                                  <Toolbar
+                                   customStyle={toolbarStyle}
+                                   isExpand={this.state.showAccountSelect }
+                                  />
+                              }
+                              footer={
+                                  <TouchableOpacity
+                                      onPress={this.updateUsernameAndPassword}
+                                      style={{alignItems:'center',justifyContent:'center',padding:15, backgroundColor:primaryDark}}>
+                                      <Text style={{color:bgWhite}} >ذخیره</Text>
+                                  </TouchableOpacity>
+                              }>
+                <View style={{flex:1,alignItems:'center',padding:10,paddingTop:'5%',}} >
                     <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,padding:16}}   >
-                         {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:14,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
+                        {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:14,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
                         <Text
                             style={{
                                 alignItems:'center',
@@ -165,8 +180,6 @@ export default class RegisterPassword extends Component {
                                 fontSize:14,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign:'justify',
-                                color:gr1,
-
                             }}>
                             {translate("registerPassword_decription1")}
                         </Text>
@@ -266,19 +279,19 @@ export default class RegisterPassword extends Component {
                             <View
                                 style={{position: 'absolute', start: 30, bottom: 8}}
                             >
-                                    {this.state.checkingPassword &&(
-                                        <Image
-                                            source={images.ic_search}
-                                            style={{height: 24, width: 24,
-                                                //tintColor: textItem
-                                            }}
-                                        />
-                                    )}
+                                {this.state.checkingPassword &&(
+                                    <Image
+                                        source={images.ic_search}
+                                        style={{height: 24, width: 24,
+                                            //tintColor: textItem
+                                        }}
+                                    />
+                                )}
                             </View>
                         </View>
                         {this.state.username.length>3 && this.state.usernameValidation==false &&(
-                                <Text style={{marginTop:4, color:primaryDark,fontSize:12}} >{translate('registerPassword_username_is_reserved')}</Text>
-                            )
+                            <Text style={{marginTop:4, color:primaryDark,fontSize:12}} >{translate('registerPassword_username_is_reserved')}</Text>
+                        )
                         }
 
                         <View
@@ -402,6 +415,7 @@ export default class RegisterPassword extends Component {
                                 highlightColor={primaryDark}
                                 value={this.state.password2}
                             />
+
                             <TouchableOpacity
                                 onPress={() => {
                                     this.setState({showPassword: !this.state.showPassword});
@@ -415,7 +429,120 @@ export default class RegisterPassword extends Component {
                                 }
                             </TouchableOpacity>
                         </View>
+                        <View id='form' style={{width:'100%',maxWidth:500,marginTop:40}}   >
+                            <Text
+                                style={{
+                                    alignItems:'center',
+                                    marginTop:2,
+                                    fontSize:14,
+                                    fontFamily: 'IRANYekanFaNum-Bold',
+                                    textAlign:'justify',
 
+                                }}>
+                                {translate('حداقل یکی از موارد زیر را جهت یادآوری رمز عبور در زمان فراموشی و مالکیت کامل شبکه وارد نمایید. ')}
+                            </Text>
+
+                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                                <Text style={{
+                                    fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
+                                    fontSize: 16,
+                                    color: border,
+
+                                    padding:5,
+                                    alignSelf: 'center',
+                                }}>{this.state.countryCode}</Text>
+                                <FloatingLabelTextInput
+                                    dir={'ltr'}
+                                    reverse={global.isRtl}
+                                    style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
+                                    placeholder={translate("fastRegister_mobile_number")}
+                                    value={this.state.mobile}
+                                    onChangeText={text => {
+                                        if(text.length>1 && text.indexOf(0)==0){
+                                            text=text.substring(1);
+                                        }
+
+                                        const acceptReg =/^[0-9~.]+$/;
+                                        const mobileReg = /^9[0-9]{9}$/i;
+                                        if(acceptReg.test(text)){
+                                            text = mapNumbersToEnglish(text);
+                                            this.setState({ mobile:text, mobileValidation:mobileReg.test(text)});
+                                        }else{
+                                            showMassage(translate('fastRegister_onlyEnglish_number'),'info');
+                                        }
+                                        if(!text){
+                                            this.setState({ mobile:'', mobileValidation:false});
+                                        }
+
+                                    }}
+                                    numberOfLines={1}
+                                    isAccept={this.state.mobileValidation}
+                                    textInputStyle={{
+                                        fontFamily: 'IRANYekanFaNum-Bold',
+                                        fontSize: 16,
+                                        fontWeight:800,
+                                        color: textItemBlack,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 10,
+                                        //textAlign: 'left',
+                                    }}
+                                    underlineSize={0}
+
+                                    multiline={false}
+                                    maxLength={10}
+                                    //autoFocus={true}
+                                    keyboardType="number-pad"
+                                    returnKeyType="done"
+
+                                />
+
+                            </View>
+                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+
+                                <FloatingLabelTextInput
+                                    dir={'ltr'}
+                                    reverse={global.isRtl}
+                                    style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
+                                    placeholder={translate("fastRegister_email_address")}
+                                    value={this.state.email}
+                                    onChangeText={text => {
+                                        const acceptReg =/^[a-zA-Z0-9~@.]+$/;
+                                        const emailReg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                                        if(acceptReg.test(text)){
+                                            this.setState({ email:text, emailValidation:emailReg.test(text)});
+                                        }else{
+                                            showMassage(translate('fastRegister_only_english_number_special_charachter'),'info');
+                                        }
+                                        if(!text){
+                                            this.setState({ email:'', emailValidation:false});
+                                        }
+                                    }}
+                                    numberOfLines={1}
+
+                                    isAccept={this.state.emailValidation}
+                                    textInputStyle={{
+                                        fontFamily: 'IRANYekanFaNum-Bold',
+                                        fontSize: 16,
+                                        fontWeight:800,
+                                        color: textItemBlack,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 10,
+                                        //textAlign: 'left',
+                                    }}
+                                    underlineSize={0}
+
+                                    multiline={false}
+                                    maxLength={100}
+                                    //autoFocus={true}
+                                    returnKeyType="done"
+
+                                />
+
+
+                            </View>
+                        </View>
 
 
 
@@ -440,14 +567,9 @@ export default class RegisterPassword extends Component {
 
                     </View>
                 </View>
-                <LoadingPopUp
-                    visible={this.state.loading}
-                    message={this.state.loadingMessage}
-                />
-            </ResponsiveLayout>
+            </PanelLayout>
         )
     }
-
 
 }
 

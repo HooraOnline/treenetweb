@@ -47,8 +47,6 @@ export default class FastRegister extends Component {
     constructor() {
         super();
         this.state = {
-            showMenu:false,
-            isWide:false,
             countryCode:'+98',
             invitationLink:'',
             mobile:'',
@@ -105,7 +103,6 @@ export default class FastRegister extends Component {
         this.setState({loading:true});
         postQuery('Members/me/register',user)
             .then(res=>{
-                console.log('res===========',res);
                 this.nextPage(res);
                 this.setState({loading:false});
             })
@@ -118,7 +115,6 @@ export default class FastRegister extends Component {
 
     }
     nextPage(res){
-        debugger
         navigation.navigate('registerPassword', {
             user: res,
         });

@@ -1,65 +1,34 @@
 import React, {Component} from 'react';
-import {userStore,persistStore } from "../src/stores";
+import {persistStore} from "../src/stores";
 import Router from "next/router";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
-import {MenuItem, Select} from '@material-ui/core';
 import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
-import {
-    deviceWide, fetchStore, getCookie,
-    getUrlParameter,
-    mapNumbersToEnglish,
-    navigation,
-    saveCookie,
-    showMassage,
-
-} from "../src/utils";
+import {getCookie, getUrlParameter, navigation, saveCookie, showMassage,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {
-    gr1,
-    gr2,
-    gr3,
-    gr4,
-    gr5,
-    gr6,
-    gr7,
-    gr8,
-    gr9,
-    gr10,
-    borderSeparate, primaryDark
-} from "../src/constants/colors";
-import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
-import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
-import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
-import {getUserProfileApi, postQuery, saveEntity} from "../dataService/apiService";
+import {borderSeparate, gr10, gr2, gr3, gr4, gr5, gr9, primaryDark} from "../src/constants/colors";
+import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
-import Link from "next/link";
-//import Pagination from 'docs/src/modules/components/Pagination';
-//const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+import {getUserIp, getUserLocation, postQuery} from "../dataService/apiService";
+
 
 export default class Index extends Component {
     constructor() {
         super();
         this.state = {
-            showMenu:false,
-            isWide:false,
-            mobileValidation:false,
-            countryCode:'+98',
-            invitationLink:'',
-            languageIndex: LNGList[0].index,
+            loading: false,
         };
+
     }
 
-
-
-   async componentDidMount () {
-        persistStore.token= await getCookie('token');
+    async componentDidMount() {
+        persistStore.token = await getCookie('token');
         this.applyRTLfromUserLanguage();
-       if(persistStore.token){
-           navigation.navigate('/profile');
-       }
-        this.invitationCode=getUrlParameter('invitationCode');
+        if (persistStore.token) {
+            navigation.replace('/profile');
+        }
+        this.invitationCode = getUrlParameter('invitationCode');
+        this.getUserGeoInfo()
     }
 
     checkValidation() {
@@ -68,23 +37,67 @@ export default class Index extends Component {
             return translate('required_invitationLink');
         }
     }
-    registerPage(){
-        const msg=this.checkValidation();
-        if(msg){
-            showMassage(msg,'info')
+    getUserGeoInfo(){
+        let self=this;
+        $.getJSON('https://api.ipdata.co/?api-key=92c9cd9137ca4bd296e2a749b8cd3a7908cb960766c10013cd108f26', function(data) {
+            console.log(JSON.stringify(data, null, 2));
+            self.geoInfo=JSON.stringify(data, null, 2);
+        });
+
+        $.getJSON('https://ipapi.co/json/', function(data) {
+            console.log(JSON.stringify(data, null, 2));
+            self.geo=JSON.stringify(data, null, 2);
+        });
+        /*$.getJSON('https://geolocation-db.com/json/')
+            .done (function(location) {
+                this.usergeo_ipdata_co
+                console.log(location)
+            });
+
+        $.getJSON('http://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
+            console.log(JSON.stringify(data, null, 2));
+        });
+        $.getJSON('http://ip-api.com/json?callback=?', function(data) {
+            console.log(JSON.stringify(data, null, 2));
+        });*/
+    }
+  async registerUser () {
+        const msg = this.checkValidation();
+        if (msg) {
+            showMassage(msg, 'info');
             return;
         }
-        navigation.navigate('fastRegister', {
-            user: {regentCode:this.invitationCode},
-        });
-    }
-    loginPanel(){
-        if(persistStore.token)
-            Router.replace('/profile');
-        else
-          Router.replace('/login');
+        const user={regentCode:this.invitationCode};
+        try{
+            user.geoInfo =JSON.parse( this.geoInfo);
+            user.geo =JSON.parse( this.geo);
+        }catch (e) {
+
+        }
+
+        this.setState({loading:true,loadingMessage:'در حال ساخت شبکه...'});
+        postQuery('members/me/register',user)
+            .then(res=>{
+                this.nextPage(res);
+                this.setState({loading:false});
+            })
+            .catch(err=>{
+                this.setState({loading:false});
+            })
 
     }
+    nextPage(user){
+         navigation.navigate('registered_new', {user});
+     }
+
+    loginPanel() {
+        if (persistStore.token)
+            Router.replace('/profile');
+        else
+            Router.replace('/login');
+
+    }
+
     async applyRTLfromUserLanguage() {
         let lng = getCookie('lng');
         if (lng) {
@@ -104,49 +117,55 @@ export default class Index extends Component {
     }
 
     render() {
-     /*  if(!global.isCheckedToken){
-           return  <View style={{flex:1,alignItems:'center',padding:20,fontSize:30,paddingTop:50,color:gr8}} >Welcom to Treenetgram</View>;
-       }*/
+        /*  if(!global.isCheckedToken){
+              return  <View style={{flex:1,alignItems:'center',padding:20,fontSize:30,paddingTop:50,color:gr8}} >Welcom to Treenetgram</View>;
+          }*/
         return (
 
-            <ResponsiveLayout title={`Treenet`} loading={this.state.loading}  style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
+            <ResponsiveLayout title={`Treenet`} loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin: 0}}>
+                <View style={{flex: 1, backgroundColor: gr9, alignItems: 'center', padding: 10, paddingTop: '5%',}}>
 
                     <Image
                         source={images.tree}
-                        style={{maxWidth: '25%', maxHeight: '25%',}}
+                        style={{maxWidth: '40%', maxHeight: '40%',}}
                     />
                     <Text
                         style={{
-                            marginTop:5,
-                            marginBottom:10,
-                            fontSize:25,
-                            fontWeight:800,
+                            marginTop: 5,
+                            marginBottom: 10,
+                            fontSize: 25,
+                            fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color:gr4
+                            color: gr4
                         }}>
                         Treenetgram
                     </Text>
 
-                    <View id='form' style={{width:'100%',paddingHorizontal:5,marginTop:10, paddingBottom:20, alignItems:'center'}}   >
+                    <View id='form' style={{
+                        width: '100%',
+                        paddingHorizontal: 5,
+                        marginTop: 10,
+                        paddingBottom: 20,
+                        alignItems: 'center'
+                    }}>
                         <ListDialogPopUp
                             style={{
-                                minWidth:150
+                                minWidth: 150
                             }}
                             selectedItemStyle={{
-                                backgroundColor:gr5,
+                                backgroundColor: gr5,
                             }}
                             title={translate('Select_Your_Language')}
                             snake
                             items={LNGList}
                             selectedItem={this.state.languageIndex}
-                            height={global.height/2}
+                            height={global.height / 2}
                             validation={true}
                             searchField={"title"}
                             selectedItemCustom={
                                 <View
                                     style={{
-                                        color:gr10,
+                                        color: gr10,
                                         flexDirection: 'row',
                                         alignItems: 'center',
                                         marginHorizontal: 8,
@@ -154,17 +173,17 @@ export default class Index extends Component {
                                     }}>
                                     <Text
                                         style={{
-                                            fontFamily:'IRANYekanFaNum-Bold',
-                                            paddingTop:2,
+                                            fontFamily: 'IRANYekanFaNum-Bold',
+                                            paddingTop: 2,
                                         }}>
-                                        {this.state.languageIndex!==undefined
+                                        {this.state.languageIndex !== undefined
                                             ? LNGList[this.state.languageIndex].title
-                                            :translate('Select_Your_Language')}
+                                            : translate('Select_Your_Language')}
                                     </Text>
                                 </View>
                             }
-                            onValueChange={item =>  this.applyLanguage(item, item.index)}
-                            itemComponent={(item,index) =>{
+                            onValueChange={item => this.applyLanguage(item, item.index)}
+                            itemComponent={(item, index) => {
                                 return (
                                     <View
                                         style={{
@@ -181,41 +200,104 @@ export default class Index extends Component {
 
                                     </View>
                                 )
-                            } }
+                            }}
                         />
                         <Text
                             style={{
-                                alignItems:'center',
-                                marginTop:25,
-                                fontSize:15,
-                                fontWeight:500,
+                                alignItems: 'center',
+                                marginTop: 25,
+                                fontSize: 15,
+                                fontWeight: 500,
                                 fontFamily: 'IRANYekanRegular',
-                                color:gr3,
-                                marginBottom:5
+                                color: gr3,
+                                marginBottom: 5
                             }}>
                             {translate("from_local_power_to_global_power")}
                         </Text>
                         <Text
                             style={{
-                                alignItems:'center',
-                                marginTop:2,
-                                fontSize:18,
-                                fontWeight:800,
+                                alignItems: 'center',
+                                marginTop: 2,
+                                fontSize: 15
+                                ,
+                                fontWeight: 800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                color:gr3,
+                                color: gr3,
 
                             }}>
                             {translate("make_your_global_network")}
                         </Text>
-                        <View style={{padding:'4%',marginTop:25,}}>
+                        <View style={{
+                            flex: 1,
+                            //flexDirection:'row',
+                            paddingHorizontal: 16,
+                            alignItems: 'center',
+                            paddingBottom: 10,
+                            background: gr9
+                        }}>
+                            {!persistStore.token && (
+                                <TouchableOpacity
+                                    style={{
+                                        flex: 1,
+                                        width: 200,
+                                        maxWidth: 300,
+                                        marginTop: 25,
+                                        borderColor: gr2,
+                                        borderWidth: 1,
+                                        padding: 0,
+                                        paddingTop: 0,
+                                        borderRadius: 12,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        marginHorizontal: 10,
+
+                                    }}
+                                    onPress={() => this.registerUser()}
+                                >
+                                    <Text style={{
+                                        fontSize: 16,
+                                        color: gr2,
+                                        fontWeight: 500,
+                                        paddingVertical: 12,
+                                        paddingHorizontal: 20,
+                                    }}>{translate('create_network')}</Text>
+                                </TouchableOpacity>
+                            )}
+
+                            <TouchableOpacity
+                                style={{
+                                    flex: 1,
+                                    marginTop: 10,
+                                    width: 200,
+                                    maxWidth: 300,
+                                    borderColor: primaryDark,
+                                    borderWidth: 1,
+                                    padding: 0,
+                                    paddingTop: 0,
+                                    borderRadius: 12,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                                onPress={() => this.loginPanel()}
+                            >
+                                <Text style={{
+                                    fontSize: 16,
+                                    color: primaryDark,
+                                    fontWeight: 500,
+                                    paddingVertical: 12,
+                                    paddingHorizontal: 20,
+                                }}>{translate('login_my_tree')}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{padding: '4%', marginTop: 0,}}>
                             <Text
                                 style={{
-                                    alignItems:'center',
-                                    fontSize:16,
+                                    alignItems: 'center',
+                                    fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    color:gr3,
-                                    textAlign:'justify',
-                                    marginBottom:5
+                                    color: gr3,
+                                    textAlign: 'justify',
+                                    marginBottom: 5
                                 }}>
                                 {
                                     translate('treenetDesl')
@@ -223,112 +305,126 @@ export default class Index extends Component {
                             </Text>
                             <Text
                                 style={{
-                                    alignItems:'center',
-                                    fontSize:16,
+                                    alignItems: 'center',
+                                    fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    color:gr3,
-                                    textAlign:'justify',
-                                    marginBottom:5
+                                    color: gr3,
+                                    textAlign: 'justify',
+                                    marginBottom: 5
                                 }}>
-                                { translate('treenetDes2')}
+                                {translate('treenetDes2')}
 
                             </Text>
                             <Text
                                 style={{
-                                    alignItems:'center',
-                                    fontSize:16,
+                                    alignItems: 'center',
+                                    fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    color:gr3,
-                                    textAlign:'justify',
-                                    marginBottom:5
+                                    color: gr3,
+                                    textAlign: 'justify',
+                                    marginBottom: 5
                                 }}>
-                                { translate('treenetDes3')}
+                                {translate('treenetDes3')}
 
                             </Text>
                             <Text
                                 style={{
-                                    alignItems:'center',
-                                    fontSize:16,
+                                    alignItems: 'center',
+                                    fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    color:gr3,
-                                    textAlign:'justify',
-                                    marginBottom:5
+                                    color: gr3,
+                                    textAlign: 'justify',
+                                    marginBottom: 5
                                 }}>
-                                { translate('treenetDes4')}
+                                {translate('treenetDes4')}
                             </Text>
 
                             <Text
                                 style={{
-                                    alignItems:'center',
-                                    fontSize:16,
+                                    alignItems: 'center',
+                                    fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    color:gr3,
-                                    textAlign:'justify',
+                                    color: gr3,
+                                    textAlign: 'justify',
 
                                 }}>
-                                { translate('treenetDes5')}
+                                {translate('treenetDes5')}
 
                             </Text>
 
                             <Text
                                 style={{
-                                    alignItems:'center',
-                                    marginTop:0,
-                                    fontSize:16,
+                                    alignItems: 'center',
+                                    marginTop: 0,
+                                    fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    textAlign:'justify',
-                                    color:gr3,
+                                    textAlign: 'justify',
+                                    color: gr3,
 
                                 }}>
-                                { translate('treenetDes6')}
+                                {translate('treenetDes6')}
                             </Text>
                         </View>
                     </View>
 
                 </View>
                 <View style={{
-                    flex:1,
-                    flexDirection:'row',
-                    paddingHorizontal:16,
-                    alignItems:'center',
-                    paddingBottom:16,
-                    background:gr9
-                }} >
-                    {!persistStore.token &&(
+                    flex: 1,
+                    //flexDirection:'row',
+                    paddingHorizontal: 5,
+                    alignItems: 'center',
+                    paddingBottom: 16,
+                    background: gr9
+                }}>
+                    {!persistStore.token && (
                         <TouchableOpacity
                             style={{
-                                flex:1,
-                                marginTop:25,
+                                flex: 1,
+                                width: 250,
+                                marginTop: 25,
                                 borderColor: gr2,
-                                borderWidth:1,
-                                padding:0,
-                                paddingTop:0,
-                                borderRadius:12,
-                                alignItems:'center',
-                                justifyContent:'center',
-                                marginHorizontal:10,
+                                borderWidth: 1,
+                                padding: 0,
+                                paddingTop: 0,
+                                borderRadius: 12,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginHorizontal: 10,
                             }}
-                            onPress={() =>this.registerPage()}
+                            onPress={() => this.registerUser()}
                         >
-                            <Text style={{fontSize:16,color:gr2,fontWeight:500,paddingVertical:12, paddingHorizontal:20,}}>{translate('create_network')}</Text>
+                            <Text style={{
+                                fontSize: 16,
+                                color: gr2,
+                                fontWeight: 500,
+                                paddingVertical: 12,
+                                paddingHorizontal: 20,
+                            }}>{translate('create_network')}</Text>
                         </TouchableOpacity>
                     )}
 
                     <TouchableOpacity
                         style={{
-                            flex:1,
-                            marginTop:25,
+                            flex: 1,
+                            width: 250,
+                            marginTop: 10,
                             borderColor: primaryDark,
-                            borderWidth:1,
-                            padding:0,
-                            paddingTop:0,
-                            borderRadius:12,
-                            alignItems:'center',
-                            justifyContent:'center',
+                            borderWidth: 1,
+                            padding: 0,
+                            paddingTop: 0,
+                            borderRadius: 12,
+                            alignItems: 'center',
+                            justifyContent: 'center',
                         }}
-                        onPress={() =>this.loginPanel()}
+                        onPress={() => this.loginPanel()}
                     >
-                        <Text style={{fontSize:16,color:primaryDark,fontWeight:500,paddingVertical:12, paddingHorizontal:20,}}>{ translate('login_my_tree')}</Text>
+                        <Text style={{
+                            fontSize: 16,
+                            color: primaryDark,
+                            fontWeight: 500,
+                            paddingVertical: 12,
+                            paddingHorizontal: 20,
+                        }}>{translate('login_my_tree')}</Text>
                     </TouchableOpacity>
                 </View>
             </ResponsiveLayout>

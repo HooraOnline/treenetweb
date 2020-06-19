@@ -32,6 +32,7 @@ import persistStore from "../src/stores/PersistStore";
 import { accountsStore, userStore } from "../src/stores";
 import { loginQuery } from "../src/network/Queries";
 import {getUserProfileApi, postQuery} from "../dataService/apiService";
+import Api from "../dataService/apiCaller";
 
 Router.events.on("routeChangeStart", url => {
   console.log(`Loading: ${url}`);
@@ -66,11 +67,11 @@ class MyApp extends App {
 
   constructor() {
     super();
-     this.checkToken();
+
   }
 
   async componentDidMount() {
-
+    this.checkToken();
     let comment = document.createComment(``);
     document.insertBefore(comment, document.documentElement);
 
@@ -78,6 +79,7 @@ class MyApp extends App {
   checkToken=async ()=>{
     //await fetchStore();
     persistStore.token=await getCookie('token');
+    await Api.setHeaders(persistStore.token);
     if(persistStore.token ){
       this.initPanelData();
     }

@@ -33,6 +33,7 @@ import Image from "../src/react-native/Image";
 import DateTime from "../src/react-native/DateTime";
 import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
 import copy from "copy-to-clipboard";
+import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 
 
  class TreeView extends PureComponent {
@@ -43,7 +44,6 @@ import copy from "copy-to-clipboard";
          };
      }
      open(item){
-         debugger
          if(item.subsets.length>0)
            this.setState({open:!this.state.open})
          else{
@@ -195,7 +195,6 @@ export default class MyNetwork extends Component {
         this.getUserSubset();
     }
     static async getInitialProps (context) {
-        console.log('context========',context);
         const { pathname } = context
 
         return { pathname }
@@ -204,12 +203,10 @@ export default class MyNetwork extends Component {
         this.setState({loading:true});
         getUserSubsetApi()
             .then(subsetList=>{
-                console.log(subsetList);
                 this.calculateTotalSubsetsCount(subsetList)
                 this.setState({subsetList,totalSubsetsCount:this.totalSebsetsCount, loading:false})
             })
             .catch(err=>{
-                console.log(err);
                 this.setState({loading:false});
             });
     }
@@ -243,7 +240,7 @@ export default class MyNetwork extends Component {
         const {children}=this.props;
         return (
             //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
-            <PanelLayout title={`Treenetgram`} showMenu={this.state.showMenu}
+            <PanelLayout title={`Treenetgram`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
                               onCloseMenu={()=>this.setState({showMenu:false})}
                               style={{paddingBottom:10}}
@@ -274,7 +271,7 @@ export default class MyNetwork extends Component {
                                       ]}/>
                                   </View>
                               }>
-                <View style={{marginHorizontal: 10,marginTop:24,paddingBottom:60}}>
+                <View style={{marginHorizontal: 10,marginTop: userStore.isVerify?10:90,paddingBottom:60}}>
                     <View style={{width:'100%',
                         flexDirection:'row',
                         justifyContent:'space-between',
@@ -295,16 +292,16 @@ export default class MyNetwork extends Component {
                         level={1}
                     />
                     {this.state.subsetList.length==0 &&(
-                        <View style={{marginTop:20}}>
+                        <View style={{marginTop:10}}>
                             <Text
                                 style={{textAlign:'justify',paddingHorizontal:30,fontSize:14,color:itemListText}}
-                            > برای ایجاد شاخه های درخت خود، کافی است لینک اختصاصی خود را برای چند نفر ارسال کنید یا آنرا در شبکه های اجتماعی مانند فیسبوک یا تلگرام به اشتراک بگذارید. </Text>
+                            > شما هنوز هیچ فردی را به تری نتگرام دعوت نکرده و شاخه ای نساخته اید. برای ایجاد شاخه های درخت خود، کافی است لینک اختصاصی خود را برای چند نفر ارسال کنید یا آنرا در شبکه های اجتماعی مانند فیسبوک یا تلگرام به اشتراک بگذارید. </Text>
                             <View style={{padding:24,marginTop:0}}>
                                 <Text
                                     style={{
-                                        marginTop:10,
-                                        fontSize:16,
-                                        fontWeight:800,
+                                        marginTop:0,
+                                        fontSize:14,
+                                        fontWeight:500,
                                         fontFamily: 'IRANYekanFaNum-Bold',
                                         color:grL5,
                                     }}>
@@ -312,7 +309,7 @@ export default class MyNetwork extends Component {
                                 </Text>
                                 <View style={{
                                     flexDirection:'row',
-                                    marginTop:10,
+                                    marginTop:5,
                                     borderWidth:1,
                                     borderRadius:8,
                                     borderColor:gr8,

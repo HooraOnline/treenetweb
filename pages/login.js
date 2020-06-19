@@ -38,6 +38,7 @@ import BaseLayout from "../src/components/layouts/BaseLayout";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
 import {loginApi, postQuery} from "../dataService/apiService";
+import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 const loginInput = [];
 export default class LoginPage extends PureComponent {
     constructor(props) {
@@ -54,8 +55,8 @@ export default class LoginPage extends PureComponent {
         this.state = {
             haveNewVersion: false,
             newVersionUrl: null,
-            userName: '',
-            userNameValidation: true,
+            username: '',
+            usernameValidation: true,
 
             password: '',
             passwordValidation: true,
@@ -82,7 +83,6 @@ export default class LoginPage extends PureComponent {
             //this.animatedSplash();
             this.setState({showLogin: true});
         }, 1500);
-        console.warn('*** Show login Start ***');
     }
     keyPress=(e)=>{
         if(e.keyCode === 13){
@@ -91,7 +91,7 @@ export default class LoginPage extends PureComponent {
     }
 
     checkValidation() {
-        return this.state.userName.length >2  && this.state.password.length >5;
+        return this.state.username.length >2  && this.state.password.length >5;
     }
 
     onSuccessLogin=(user)=>{
@@ -103,10 +103,8 @@ export default class LoginPage extends PureComponent {
         this.setState({loading: true});
         const data={};
         this.setState({loading:true});
-        console.log(data);
-        loginApi(this.state.userName,this.state.password)
+        loginApi(this.state.username,this.state.password)
             .then(res=>{
-                console.log(res);
                 this.onSuccessLogin(res);
                 this.setState({loading:false});
             })
@@ -118,7 +116,7 @@ export default class LoginPage extends PureComponent {
     render() {
         if (!this.state.showLogin) {
             return (
-                <BaseLayout title={'لاگین'} maxWidth={'100%'} style={{
+                <BaseLayout title={'لاگین'} loading={this.state.loading} loadingMessage={this.state.loadingMessage} maxWidth={'100%'} style={{
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: '100% auto',
                     backgroundPosition: 'center top',
@@ -294,7 +292,7 @@ export default class LoginPage extends PureComponent {
                                     style={{textAlign: global.isRtl ? 'right' : 'left',}}
                                     numberOfLines={1}
                                     tintColor={
-                                        this.state.userNameValidation ? textItem : lightRed
+                                        this.state.usernameValidation ? textItem : lightRed
                                     }
                                     textInputStyle={{
                                         fontWeight: 'normal',
@@ -313,15 +311,15 @@ export default class LoginPage extends PureComponent {
                                     onChangeText={text => {
                                         //this.checkValidation();
                                         this.setState({
-                                            userName:text, //inputNumberValidation(text, this.state.userName, /[\d]+$/),
-                                            userNameValidation: true,
+                                            username:text, //inputNumberValidation(text, this.state.username, /[\d]+$/),
+                                            usernameValidation: true,
                                         }, () => {
-                                            //this.state.userName.length === 11 ? loginInput[1].focus() : null;
+                                            //this.state.username.length === 11 ? loginInput[1].focus() : null;
                                         });
 
                                     }}
                                     highlightColor={primaryDark}
-                                    value={this.state.userName}
+                                    value={this.state.username}
                                 />
 
                                 <View

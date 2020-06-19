@@ -35,16 +35,16 @@ class Api {
 
     }
     static init() {
-        Api.setHeaders();
+        //Api.setHeaders();
     }
     static apiAddress = apihost;
     static fileContainer = apihost + "containers/";
     static token = "";
 
-    static  setHeaders =async ()=> {
+    static  setHeaders = async(token)=> {
         axios.defaults.baseURL = apihost;
+        axios.defaults.headers.common['Authorization'] =  'Bearer ' + token;
         persistStore.token=await getCookie('token');
-        axios.defaults.headers.common['Authorization'] =  'Bearer ' + persistStore.token;
         // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
         // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
         // axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -55,9 +55,7 @@ class Api {
     static getFilePath(model) {
         return apihost + "containers/" + model + "/download/"
     }
-    static getUri(apiPath) {
-
-        axios.defaults.headers.common['Authorization'] =  'Bearer ' + persistStore.token;
+    static getUri= (apiPath)=> {
         let uri = apihost + apiPath;
         return uri;
     }
@@ -71,6 +69,7 @@ class Api {
     static get(apiPath, urlparams) {
         let uri = Api.getUri(apiPath, '?');
         let urlparameters = urlparams ? { params: urlparams } : undefined;
+
         return axios.get(uri, urlparameters)
             .then(function (response) {
                 if (response.status === 200)
@@ -98,7 +97,6 @@ class Api {
     static post(apiPath, model) {
         let uri =  apiPath;
         //model={value:Api.encrypt(model)};
-        debugger
         return axios.post(uri, model)
             .then(function (response) {
                 if (response.status === 200)
@@ -107,16 +105,21 @@ class Api {
             })
             .catch(function (error) {
                 console.log(error);
+                if(error.response && error.response.status==401){
+                    showMassage(translate('عدم دسترسی'),'info');
+                    throw error;
+                    return;
+                }
 
                 if(error.response && error.response.data && error.response.data.error && error.response.data.error.key){
-                    showMassage(translate( error.response.data.error.key),'info')
+                    showMassage(translate( error.response.data.error.key),'info');
+                    throw error;
+                    return;
                 }
                 if(error.response.data){
                     console.log(error.response.data)
                 }
-                if(error.response && error.response.data){
-                    throw error.response.data.error;
-                }
+                throw error;
 
             });
     }

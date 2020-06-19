@@ -40,7 +40,6 @@ export default class FinishRegister extends Component {
         doDelay(20)
             .then(()=>{
                 this.user= navigation.getParam('user');
-                console.log('finishRedister_this.user===========',this.user);
                 if(this.user){
                     this.setState({userImage:this.user.profileImage, invitationLink:`https://Treenetgram.com/?invitationCode=${this.user.invitationCode}`})
                 }
@@ -64,7 +63,6 @@ export default class FinishRegister extends Component {
                 this.setState({loading:false});
             })
             .catch(err=>{
-                console.log(err);
                 this.setState({loading:false});
             })
     }

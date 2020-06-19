@@ -1,16 +1,18 @@
 
-import {bgScreen} from "../../constants/colors";
+import {bgScreen, textItem} from "../../constants/colors";
 import {observer} from 'mobx-react';
 import React, {useEffect, useState,useRef} from "react";
-import {deviceWide, height, showMassage, getCookie, saveCookie, setDemansion} from "../../utils";
+import {deviceWide, height, showMassage, getCookie, saveCookie, setDemansion, navigation} from "../../utils";
 import "./index.scss";
 import ToastCard from "../ToastCard";
 import {globalState, userStore} from "../../stores";
-import {View} from "../../react-native";
+import {Image, Text, View} from "../../react-native";
 import images from "../../../public/static/assets/images";
 import persistStore from "../../stores/PersistStore";
 import Router from "next/router";
 import {getUserProfileApi} from "../../../dataService/apiService";
+import LoadingPopUp from "../LoadingPopUp";
+import TouchableOpacity from "../../react-native/TouchableOpacity";
 
 const  screenMaxWidth=700;
 const PanelLayout = observer( props => {
@@ -22,6 +24,7 @@ const PanelLayout = observer( props => {
     const ref = useRef(null);
 
     const init=async()=> {
+        checkToken();
         manageScreenSize();
         setLanguage();
 
@@ -68,7 +71,7 @@ const PanelLayout = observer( props => {
                 setLoading(false);
             });
     }
-    checkToken();
+
     useEffect(() => {
         init();
         document.title = props.title;
@@ -97,9 +100,24 @@ const PanelLayout = observer( props => {
                 position:'relative'
             }}>
                 <View style={[props.style,{width:'100%',}]}>
-                    <div id={"header"} style={{position:'fixed',top:0,width:global.width,zIndex:4,marginBottom:60}}>
+                    <div id={"header"} style={{position:'fixed',top:0,width:global.width,zIndex:4,marginBottom:50}}>
                         {props.header}
                     </div>
+                    {!userStore.isVerify && props.showVerifiyMassege!==false &&(
+                        <div  style={{position:'fixed',top:50,width:global.width,zIndex:4,marginBottom:50}}>
+                             <TouchableOpacity
+                                 onPress={()=>{navigation.navigate('change_username_password')}}
+                                 style={{flex:1,paddingBottom:40, flexDirection:'row',justifyContent:'space-between', padding:10,backgroundColor:'yellow'}}>
+                                 <Text style={{fontSize:14,color:textItem}}>جهت امنیت و حفظ مالکیت کامل شبکه، نام کاربری و رمز عبور خود را تغییر دهید. </Text>
+                                 <Image source={images.ic_edit} style={{
+                                     width: 30,
+                                     height: 30,
+                                 }}/>
+                             </TouchableOpacity>
+                        </div>
+                    )
+
+                    }
                     <View id={'body'} style={{flex:1,width:global.width,marginTop:props.header?60:0,marginBottom:props.footer?60:0}}>
                         {props.children}
                     </View>
@@ -115,6 +133,10 @@ const PanelLayout = observer( props => {
                         title={globalState.toastTitle}
                         message={globalState.responseMessage}
                         onClose={() => globalState.hideToastCard()}
+                    />
+                    <LoadingPopUp
+                        visible={props.loading}
+                        message={props.loadingMessage || ''}
                     />
                 </View>
             </div>

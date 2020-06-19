@@ -11,6 +11,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
 import copy from "copy-to-clipboard";
+import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 
 
 const HOME_TYPE = 1;
@@ -52,7 +53,7 @@ export default class MyLink extends Component {
         };
 
         return (
-            <PanelLayout title={`Panel`} showMenu={this.state.showMenu}
+            <PanelLayout title={`Panel`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
                          onRef={(initDrawer) => this.initDrawer = initDrawer}
                          onCloseMenu={() => this.setState({showMenu: false})}
                          style={{margin: 0}}
@@ -83,7 +84,7 @@ export default class MyLink extends Component {
                                  ]}/>
                              </View>
                          }>
-                <View style={{padding: 24, marginTop: 0}}>
+                <View style={{padding: 24, marginTop: userStore.isVerify?10:50}}>
                     <Text
                         style={{
                             marginTop: 10,

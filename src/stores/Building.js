@@ -5,7 +5,7 @@ class Building {
     @observable userID = null;
     @observable apartmentID = null;
     @observable apartmentName = null;
-    @observable userName = null;
+    @observable username = null;
     @observable userImage = null;
     @observable postalCode = null;
     @observable numberOfFloors = null;

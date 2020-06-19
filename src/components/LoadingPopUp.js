@@ -7,66 +7,27 @@ import {View,Text} from "../react-native";
 
 export default class LoadingPopUp extends Component {
     render() {
+
         const {visible = false, onFinish, onModal = false, message} = this.props;
-        if (onModal) {
-            return (
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={visible}
-                    //onClose={handleClose}
-                >
-                    <View style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: overlayColor,
-                    }}>
+        return (
+            <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={visible}
+                //onClose={handleClose}
+            >
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: overlayColor,
+                }}>
+                    {message &&(
                         <Content message={message}/>
-                    </View>
-                </Modal>
-               /* <Modal
-                    animationType="fade"
-                    transparent={true}
-                    visible={visible}
-                    onDismiss={onFinish}
-                    // onShow={}
-                    presentationStyle="overFullScreen"
-                >
-                    <View style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: overlayColor,
-                    }}>
-                        <Content message={message}/>
-                    </View>
-                </Modal>*/
-            );
-        } else if (visible) {
-            return (
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={visible}
-                    //onClose={handleClose}
-                >
-                    <View style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: overlayColor,
-                    }}>
-                        <Content message={message}/>
-                    </View>
-                </Modal>
-                /*<Overlay catchTouch>
-                    <Content message={message}/>
-                </Overlay>*/
-            );
-        } else {
-            return <View/>;
-        }
+                    )}
+                </View>
+            </Modal>
+        );
     }
 }
 

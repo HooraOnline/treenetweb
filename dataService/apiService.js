@@ -5,9 +5,10 @@ import { cipher } from './pdk/utils';
 import {globalState, persistStore, userStore} from "../src/stores";
 import {deleteCookie, getCookie, getFileDownloadURL, logger, navigation, saveCookie} from "../src/utils";
 import fetch from "isomorphic-unfetch";
+import axios from 'axios';
 
 export let currentUser = {};
-//urlparams={userName:1232}
+//urlparams={username:1232}
 export const callPostApi = function (apiPath, params) {
 
   return Api.post(apiPath, params)
@@ -83,7 +84,7 @@ apiPath='members'
       posts.forEach(function(post) {
         // post.owner points to the relation method instead of the owner instance
         var p = post.toJSON();
-        console.log(p.owner.posts, p.owner.orders);
+
       });
 
 });
@@ -185,7 +186,6 @@ export const getFileUri = function (folder, imageName) {
   return path;
 };
 function arrayBufferToBase64(buffer) {
-    debugger
     let binary = '';
     let bytes = [].slice.call(new Uint8Array(buffer));
 
@@ -213,7 +213,6 @@ function arrayBufferToBase64(buffer) {
 
              let imageStr
              imageStr = arrayBufferToBase64(response.body);
-             debugger
              return await 'data:image/jpeg;base64,'+imageStr;
          }
      }
@@ -319,6 +318,7 @@ export const resetPasswordApi = function (email) {
 
 
 //**************************************user******************************************
+
 //for get current user
 export const getUserProfileApi = function (fields, include) {
   let params = {};
@@ -326,11 +326,13 @@ export const getUserProfileApi = function (fields, include) {
   //params.userId = userId;
   params.filter.fields = fields;
   params.filter.include = include;
+
   return  Api.get('members/me/getProfile', params)
       .then(user=>{
         userStore.setUser(user);
         return user
-      });
+      })
+
 };
 export const getUserSubsetApi = (fields, include)=> {
     let params = {};
@@ -346,10 +348,11 @@ export const getUserSubsetApi = (fields, include)=> {
 export const loginApi=function (username,password) {
   return  postQuery('Members/me/login',{username,password})
       .then(user=>{
+        Api.setHeaders(user.token);
         saveCookie('token',user.token);
         persistStore.token=user.token;
         userStore.setUser(user);
-        Api.setHeaders();
+
       })
 }
 export const logoutApi=function (username,password) {

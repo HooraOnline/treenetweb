@@ -8,6 +8,7 @@ import ToastCard from "../ToastCard";
 import {globalState, userStore} from "../../stores";
 import {View} from "../../react-native";
 import images from "../../../public/static/assets/images";
+import LoadingPopUp from "../LoadingPopUp";
 
 const  maxWidth=700;
 const ResponsiveLayout = observer( props => {
@@ -95,6 +96,10 @@ const ResponsiveLayout = observer( props => {
                     />
                 </View>
             </div>
+            <LoadingPopUp
+                visible={props.loading}
+                message={props.loadingMessage || ''}
+            />
         </div>
     );
 });
