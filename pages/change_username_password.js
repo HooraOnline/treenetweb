@@ -3,10 +3,10 @@ import {userStore,persistStore } from "../src/stores";
 import {permissionId} from '../src/constants/values';
 import Router from "next/router";
 import PanelLayout from "../src/components/layouts/PanelLayout";
-import {DropDownList,Toolbar,CardUnitInfo,PopupBase,ImageSelector} from "../src/components";
+import {DropDownList, Toolbar, CardUnitInfo, PopupBase, ImageSelector, SwitchTextMulti} from "../src/components";
 
 import accountsStore from "../src/stores/Accounts";
-import {deviceWide, doDelay, logger, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
+import {deviceWide, doDelay, getTabWidth, logger, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
 import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
 import {getUserBalance} from "../src/network/Queries";
@@ -18,7 +18,7 @@ import {
     borderSeparate,
     border,
     primary,
-    primaryDark, gr1, gr3, textItem, gr5, gr9, textItemBlack
+    primaryDark, gr1, gr3, textItem, gr5, gr9, textItemBlack, placeholderTextColor, lightRed, gr2, gr4
 } from "../src/constants/colors";
 import accounting from "accounting";
 import NavFooterButtons from "../src/components/layouts/footerButtons";
@@ -123,6 +123,19 @@ export default class change_username_password extends Component {
         if(this.state.email){
             data.email=this.state.email;
         }
+        if(this.state.firstName){
+            data.firstName=this.state.firstName;
+        }
+        if(this.state.lastName){
+            data.lastName=this.state.lastName;
+        }
+        if(this.state.age){
+            data.age=this.state.age;
+        }
+        if(this.state.gender){
+            data.gender=this.state.gender;
+        }
+
 
         this.setState({loading:true,loadingMessage:'در حال اجرا'});
         postQuery('Members/me/updateUsernameAndPassword',data)
@@ -453,6 +466,7 @@ export default class change_username_password extends Component {
                                 }}>{this.state.countryCode}</Text>
                                 <FloatingLabelTextInput
                                     dir={'ltr'}
+                                    labelAlign={'left'}
                                     reverse={global.isRtl}
                                     style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
                                     placeholder={translate("fastRegister_mobile_number")}
@@ -501,6 +515,7 @@ export default class change_username_password extends Component {
                             <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
 
                                 <FloatingLabelTextInput
+                                    labelAlign={'left'}
                                     dir={'ltr'}
                                     reverse={global.isRtl}
                                     style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
@@ -544,24 +559,180 @@ export default class change_username_password extends Component {
                             </View>
                         </View>
 
+                        <View id='userProperty' >
+                            <Text
+                                style={{
+                                    marginTop:50,
+                                    fontSize:16,
+                                    fontWeight:400,
+                                    fontFamily: 'IRANYekanFaNum-Bold',
+                                    alignSelf:'center'
+                                }}>
+                                { translate('در صورت تمایل می توانید مشخصات شخصی خود را وارد کنید.')}
+                            </Text>
 
+                            <View  style={{marginTop:0,  padding:10}}  >
+                                <FloatingLabelTextInput
+                                    ref={input => {
+                                        this.labelInput = input;
+                                    }}
+                                    labelAlign={'left'}
+                                    placeholder={translate('firstName')}
+                                    style={{flex:1, marginTop:20}}
+                                    labelStyle={{color:gr3}}
+                                    editable={true}
+                                    multiline={false}
+                                    maxLength={70}
+                                    floatingLabelEnable={true}
+                                    keyboardType="default"
+                                    returnKeyType="done"
+                                    numberOfLines={1}
+                                    tintColor={
+                                        this.state.firstNameValidation ? placeholderTextColor : lightRed
+                                    }
+                                    textInputStyle={{
+                                        fontWeight: 'normal',
+                                        fontFamily:
+                                            Platform.OS === 'ios'
+                                                ? 'IRANYekan-ExtraBold'
+                                                : 'IRANYekanExtraBold',
+                                        color: gr2,
+                                        fontSize: 16,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 3,
+                                        //textAlign: 'right',
+                                    }}
+                                    underlineSize={1}
 
-                        <TouchableOpacity
-                            style={{
-                                flex:1,
-                                marginTop:40,
-                                borderColor: gr5,
-                                borderWidth:1,
-                                padding:0,
-                                paddingTop:0,
-                                borderRadius:12,
-                                alignItems:'center',
-                                justifyContent:'center',
-                            }}
-                            onPress={() =>this.updateUsernameAndPassword()}
-                        >
-                            <Text style={{fontSize:16,color:gr3,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
-                        </TouchableOpacity>
+                                    onChangeText={text =>
+                                        this.setState({
+                                            firstName: text,
+                                            firstNameValidation: true,
+                                        })
+                                    }
+                                    highlightColor={primaryDark}
+                                    value={this.state.firstName}
+                                />
+                                <FloatingLabelTextInput
+                                    ref={input => {
+                                        this.labelInput = input;
+                                    }}
+                                    labelAlign={'left'}
+                                    placeholder={translate('lastName')}
+                                    style={{flex:1, marginTop:20}}
+                                    labelStyle={{color:gr3}}
+                                    editable={true}
+                                    multiline={false}
+                                    maxLength={70}
+                                    floatingLabelEnable={true}
+                                    keyboardType="default"
+                                    returnKeyType="done"
+                                    numberOfLines={1}
+                                    tintColor={
+                                        this.state.lastNameValidation ? placeholderTextColor : lightRed
+                                    }
+                                    textInputStyle={{
+                                        fontWeight: 'normal',
+                                        fontFamily:
+                                            Platform.OS === 'ios'
+                                                ? 'IRANYekan-ExtraBold'
+                                                : 'IRANYekanExtraBold',
+                                        color: gr2,
+                                        fontSize: 16,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 3,
+                                        //textAlign: 'right',
+                                    }}
+                                    underlineSize={1}
+
+                                    onChangeText={text =>
+                                        this.setState({
+                                            lastName: text,
+                                            lastNameValidation: true,
+                                        })
+                                    }
+                                    highlightColor={primaryDark}
+                                    value={this.state.lastName}
+                                />
+                                <FloatingLabelTextInput
+                                    labelAlign={'left'}
+                                    reverse={global.isRtl}
+                                    placeholder={translate('age')}
+                                    style={{flex:1, marginTop:20}}
+                                    labelStyle={{color:gr3}}
+                                    editable={true}
+                                    multiline={false}
+                                    maxLength={2}
+                                    floatingLabelEnable={true}
+                                    keyboardType="number-pad"
+                                    returnKeyType="done"
+                                    numberOfLines={1}
+                                    textInputStyle={{
+                                        fontWeight: 'normal',
+                                        fontFamily:'IRANYekanExtraBold',
+                                        color: gr2,
+                                        fontSize: 16,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 3,
+                                        //textAlign: 'right',
+                                    }}
+                                    underlineSize={1}
+                                    value={this.state.age}
+                                    onChangeText={text =>{
+                                        const acceptReg =/^\d+$/;;
+                                        const ageReg=/^\d+$/;
+                                        if(acceptReg.test(text)){
+                                            this.setState({ age:text, ageValidation:ageReg.test(text)});
+                                        }else{
+                                            showMassage(translate('فقط اعداد انگلیسی'),'info');
+                                        }
+                                        if(!text){
+                                            this.setState({ age:'', ageValidation:false});
+                                        }
+
+                                    }
+
+                                    }
+                                    tintColor={
+                                        this.state.ageValidation ? placeholderTextColor : lightRed
+                                    }
+                                    highlightColor={primaryDark}
+                                    unit={translate('year')}
+                                    unitStyle={{color:gr4}}
+                                    keyboardType="number-pad"
+                                />
+
+                                <View style={{flex:1,alignItems:'center',marginTop:30}}>
+                                    <SwitchTextMulti
+                                        style={{width:300}}
+                                        activeIndex={this.state.gender}
+                                        onActivate={val => {
+                                            this.setState({gender: Number(val)});
+                                            //this.checkValidation();
+                                        }}
+                                        data={[
+                                            translate('onselect'),
+                                            translate('man'),
+                                            translate('woman'),
+                                        ]}
+                                        backgroundActive={primaryDark}
+                                        backgroundInactive={'#fff'}
+                                        itemWidth={getTabWidth(300, 3,1)}
+                                        activeTextStyle={{
+                                            paddingVertical: 6,
+                                        }}
+                                        inactiveTextStyle={{
+                                            paddingVertical: 6,
+                                        }}
+                                    />
+                                </View>
+                            </View>
+
+                        </View>
+
 
 
 
