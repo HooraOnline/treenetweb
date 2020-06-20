@@ -6,7 +6,7 @@ import PanelLayout from "../src/components/layouts/PanelLayout";
 import {DropDownList,Toolbar,CardUnitInfo,PopupBase,ImageSelector} from "../src/components";
 
 import accountsStore from "../src/stores/Accounts";
-import {deviceWide, doDelay, logger, showMassage} from "../src/utils";
+import {deviceWide, doDelay, fetchStore, logger, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
 import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
 import {getUserBalance} from "../src/network/Queries";
@@ -19,7 +19,7 @@ import {
     border,
     primary,
     fab,
-    bgr9, textItem, bbgr9, bbgr10, primaryDark, bgr8, primaryDarkOld, grL5, bbgr8, itemListText
+    bg2, textItem, bg9, bg10, primaryDark, bg3, primaryDarkOld, grL5, bg8, itemListText
 } from "../src/constants/colors";
 import accounting from "accounting";
 import NavFooterButtons from "../src/components/layouts/footerButtons";
@@ -193,7 +193,8 @@ export default class MyNetwork extends Component {
         this.totalSebsetsCount=0;
     }
 
-    componentDidMount  () {
+   async componentDidMount  () {
+        await fetchStore()
         this.getUserSubset();
     }
     static async getInitialProps (context) {
@@ -272,7 +273,7 @@ export default class MyNetwork extends Component {
                                       ]}/>
                                   </View>
                               }>
-                <View style={{marginHorizontal: 10,marginTop: userStore.isVerify?10:90,paddingBottom:60}}>
+                <View style={{marginHorizontal: 10,marginTop: userStore.isVerify?10:100,paddingBottom:60}}>
                     <View style={{width:'100%',
                         flexDirection:'row',
                         justifyContent:'space-between',
@@ -313,7 +314,7 @@ export default class MyNetwork extends Component {
                                     marginTop:5,
                                     borderWidth:1,
                                     borderRadius:8,
-                                    borderColor:bbgr8,
+                                    borderColor:bg8,
                                     alignItems:'center',
                                 }} >
                                     <TouchableOpacity
@@ -323,12 +324,12 @@ export default class MyNetwork extends Component {
                                             borderColor:grL5,
                                             alignItems:'center',
                                             justifyContent:'center',
-                                            color:bbgr10,
+                                            color:bg10,
                                             width:80,
                                             height:60,
                                             fontSize:16,
                                             marginHorizontal:0,
-                                            backgroundColor:bgr8,
+                                            backgroundColor:bg3,
                                         }}
                                         onPress={this.copyLink}>
                                         <Text style={{padding:5,}}>{translate('finishRegister_copy')}</Text>

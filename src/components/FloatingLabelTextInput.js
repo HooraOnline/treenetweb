@@ -16,6 +16,7 @@ import Platform from "../react-native/Platform";
 import MaskedInput from 'react-text-mask';
 import { IoIosBulb } from "react-icons/io";
 import { FaTree } from "react-icons/fa";
+import {persistStore} from "../stores";
 class Underline extends PureComponent {
     static propTypes = {
         underlineEnabled: bool,
@@ -222,7 +223,7 @@ export default class FloatingLabelTextInput extends PureComponent {
                                 </div>
 
                             )}
-                            <View dir={global.isRtl?'rtl':'ltr'} style={{flex:1,flexDirection: reverse?'row-reverse':'row', }}>
+                            <View dir={persistStore.isRtl?'rtl':'ltr'} style={{flex:1,flexDirection: reverse?'row-reverse':'row', }}>
 
                                 <Input
                                     {...props}
@@ -320,7 +321,7 @@ export default class FloatingLabelTextInput extends PureComponent {
                     
                     .MuiInputLabel-formControl{
                          left:undefined;
-                         right:${this.props.labelAlign=='left'?undefined: global.isRtl?0:undefined};
+                         right:${this.props.labelAlign=='left'?undefined: persistStore.isRtl?0:undefined};
                      }
                 `}</style>
             </View>

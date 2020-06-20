@@ -2,8 +2,8 @@
 //created by by saeed yousefi
 import Api from './apiCaller'
 import { cipher } from './pdk/utils';
-import {globalState, persistStore, userStore} from "../src/stores";
-import {deleteCookie, getCookie, getFileDownloadURL, logger, navigation, saveCookie} from "../src/utils";
+import { persistStore, userStore} from "../src/stores";
+import {deleteCookie, navigation, showMassage,} from "../src/utils";
 import fetch from "isomorphic-unfetch";
 import axios from 'axios';
 
@@ -199,7 +199,7 @@ function arrayBufferToBase64(buffer) {
          'Access-Control-Allow-Origin': '*',
          'Accept'        : 'application/json',
          'Content-Type'  : 'application/json',
-         'Authorization' : 'Bearer ' + persistStore.token,
+         'Authorization' : 'Bearer ' +  persistStore.apiToken,
      }
 
      let requestURL=getFileUri(folder, imageName);
@@ -348,15 +348,17 @@ export const getUserSubsetApi = (fields, include)=> {
 export const loginApi= function (username,password) {
   return  postQuery('Members/me/login',{username,password})
       .then(user=>{
-        Api.setToken(user.token);
-        saveCookie('token',user.token);
-        persistStore.token=user.token;
-        userStore.setUser(user);
-
+          persistStore.apiToken=user.token;
+          Api.setToken(user.token);
+          userStore.setUser(user);
       })
 }
 export const logoutApi=function (username,password) {
-    navigation.navigate('index');
+    if(!userStore.isVerify){
+        showMassage('قبل از خروج با لمس نوار زرد رنگ، نام کاربری و پسورد خود را عوض کنید.','info')
+        return;
+    }
+    navigation.navigate('home');
     deleteCookie('token');
     persistStore.clearStore();
     userStore.clear();

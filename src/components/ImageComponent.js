@@ -35,7 +35,7 @@ export default class ImageComponent extends PureComponent {
                 source={this.state.onError ? images.ic_error :
                     {
                         uri: getFileDownloadURL(image),
-                        headers: {Authorization: 'Bearer ' + persistStore.token},
+                        headers: {Authorization: 'Bearer ' + persistStore.apiToken},
                     }}
                 indicator={() => <Progress.Circle
                     progress={this.state.transactionImageProgress}

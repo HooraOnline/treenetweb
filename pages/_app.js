@@ -28,7 +28,7 @@ import {fetchStore, getCookie, navigation} from "../src/utils";
 
 import "assets/scss/nextjs-material-kit.scss?v=1.0.0";
 //import "assets/css/apamanGlobal.css";
-import persistStore from "../src/stores/PersistStore";
+//import persistStore from "../src/stores/PersistStore";
 import { accountsStore, userStore } from "../src/stores";
 import { loginQuery } from "../src/network/Queries";
 import {getUserProfileApi, postQuery} from "../dataService/apiService";
@@ -71,34 +71,20 @@ class MyApp extends App {
   }
 
   async componentDidMount() {
-    this.checkToken();
+    //this.refechInitData();
     let comment = document.createComment(``);
     document.insertBefore(comment, document.documentElement);
 
   }
-  checkToken=async ()=>{
-    //await fetchStore();
-    if(!persistStore.token){
-      persistStore.token=await getCookie('token');
-      if(persistStore.token ){
-         Api.setToken(persistStore.token);
-        this.initPanelData();
+/*  refechInitData=async ()=>{
+    if(!persistStore.apiToken){
+      await fetchStore();
+      if( persistStore.apiToken ){
+         Api.setToken();
+         this.getProfile();
       }
     }
-
-
-  }
-
-  initPanelData=async ()=> {
-    if(!global.slanguage){
-      let lng = await getCookie('lng');
-      if (lng) {
-        global.slanguage = lng.key;
-        global.isRtl = lng.rtl;
-      }
-    };
-    this.getProfile();
-  };
+  }*/
 
   async getProfile(){
     if(userStore.username){

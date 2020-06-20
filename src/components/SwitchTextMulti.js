@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {Animated, Platform, StyleSheet, Text, TouchableWithoutFeedback, View} from '../react-native';
-
+import {persistStore} from "../stores";
 import {border, borderSeparate, textDisabled} from '../constants/colors';
 
 
@@ -75,8 +75,8 @@ export default class SwitchTextMulti extends PureComponent {
                             //height: '100%',
                             height:50,
                             width: itemWidth,
-                            right:global.isRtl? this.state.backgroundMove:undefined,
-                            left:global.isRtl?undefined :this.state.backgroundMove,
+                            right:persistStore.isRtl? this.state.backgroundMove:undefined,
+                            left:persistStore.isRtl?undefined :this.state.backgroundMove,
                             elevation: '50deg',
                             shadowColor: backgroundActive,
                             shadowOffset: {width: 0, height: 1},

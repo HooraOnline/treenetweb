@@ -1,4 +1,3 @@
-global.isRtl=false
 export const en={
   en_treenetDesl:"In the age of information and the Internet, networking is the equivalent of the power, wealth, fame, and foundation of a successful business. Treenetgram is a great tool for networking that can grow a tree, and it's actually a social network that grows your followers pyramid. ",
   en_treenetDes2:"Treenetgram helps marketers, shopkeepers, companies, business owners and anyone who needs advertising or notification to create their own tree network for free and grow quickly.",

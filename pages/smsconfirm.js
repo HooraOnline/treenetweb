@@ -29,7 +29,7 @@ import {
     borderLight,
     lightGrey,
     textGray,
-    bbgr10, bgr8, bbgr8, bbgr9, bgr6, bgr10, bgr9
+    bg10, bg3, bg8, bg9, bg5, bg1, bg2
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
@@ -106,7 +106,7 @@ export default class Smsconfirm extends Component {
 
         return (
             <ResponsiveLayout title={`Enter Confirm code`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage}  style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:bbgr9,alignItems:'center',padding:16,paddingTop:'5%',}} >
+                <View style={{flex:1,backgroundColor:bg9,alignItems:'center',padding:16,paddingTop:'5%',}} >
                     <Image
                         source={images.tree}
                         style={{maxWidth: '50%', maxHeight: '50%',}}
@@ -118,7 +118,7 @@ export default class Smsconfirm extends Component {
                             fontSize:50,
                             fontWeight:800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color:bgr8
+                            color:bg3
                         }}>
                         Treenet
                     </Text>
@@ -130,7 +130,7 @@ export default class Smsconfirm extends Component {
                                 fontSize:16,
                                 fontWeight:800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                color:bgr8,
+                                color:bg3,
                                 alignSelf:'center'
                             }}>
                            { translate('enter_sms_confirm_code')}
@@ -142,7 +142,7 @@ export default class Smsconfirm extends Component {
                                 <FloatingLabelTextInput
                                     dir={'rtl'}
                                     //autoFocus={this.state.focus==1}
-                                    style={{ borderColor: bgr6,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
+                                    style={{ borderColor: bg5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
                                     //placeholder=""
                                     value={this.state.code1}
                                     onChangeText={text => {
@@ -184,7 +184,7 @@ export default class Smsconfirm extends Component {
                                             input.focus();
                                         }
                                     }}
-                                    style={{ borderColor: bgr6,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
+                                    style={{ borderColor: bg5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
                                     //placeholder=""
                                     value={this.state.code2}
                                     onChangeText={text => {
@@ -225,7 +225,7 @@ export default class Smsconfirm extends Component {
                                             input.focus();
                                         }
                                     }}
-                                    style={{ borderColor: bgr6,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
+                                    style={{ borderColor: bg5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
                                     //placeholder=""
                                     value={this.state.code3}
                                     onChangeText={text => {
@@ -266,7 +266,7 @@ export default class Smsconfirm extends Component {
                                             input.focus();
                                         }
                                     }}
-                                    style={{ borderColor: bgr6,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
+                                    style={{ borderColor: bg5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
                                     //placeholder=""
                                     value={this.state.code4}
                                     onChangeText={text => {
@@ -301,7 +301,7 @@ export default class Smsconfirm extends Component {
                         <TouchableOpacity
                             style={{
                                 marginTop:15,
-                                borderColor: bgr6,
+                                borderColor: bg5,
                                 borderWidth:1,
                                 padding:10,
                                 paddingTop:10,
@@ -313,7 +313,7 @@ export default class Smsconfirm extends Component {
                             }}
                             onPress={() =>this.onfirmMobile()}
                         >
-                            <Text style={{fontSize:20,color:bgr10,fontWeight:500}}>{ translate('confirm')}</Text>
+                            <Text style={{fontSize:20,color:bg1,fontWeight:500}}>{ translate('confirm')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

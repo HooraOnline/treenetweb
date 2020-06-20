@@ -3,22 +3,14 @@ import {userStore,persistStore } from "../src/stores";
 import {permissionId} from '../src/constants/values';
 import Router from "next/router";
 import PanelLayout from "../src/components/layouts/PanelLayout";
-import {DropDownList,Toolbar,CardUnitInfo,PopupBase,ImageSelector} from "../src/components";
+import {Toolbar,ImageSelector} from "../src/components";
 
 import accountsStore from "../src/stores/Accounts";
-import {deviceWide, doDelay, getCookie, logger, navigation} from "../src/utils";
+import { navigation} from "../src/utils";
 import images from "../public/static/assets/images";
-import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
-import {getUserBalance} from "../src/network/Queries";
 import {
-    bgItemRed,
-    bgScreen,
     bgWhite,
-    textItemRed,
-    borderSeparate,
-    border,
-    primary,
-    primaryDark, bgr6
+    bg5
 } from "../src/constants/colors";
 import accounting from "accounting";
 import NavFooterButtons from "../src/components/layouts/footerButtons";
@@ -67,6 +59,7 @@ export default class Profile extends Component {
 
         this.getProfile();
 
+
     }
      getProfile(){
 
@@ -114,9 +107,9 @@ export default class Profile extends Component {
         };
 
 
-        let {firstName='',lastName='',biarthDate='',profileImage='',gender=0,username=''}=this.state;
+        let {age='.........',firstName='.........',lastName='.........',biarthDate='.........',profileImage='.........',gender=0,username='.........'}=this.state;
          const dateYear=new Date(biarthDate).getFullYear();
-        const genderText=(gender==0)?'انتخاب نشده':(gender==1)?'مرد':'زن';
+        const genderText=(gender==0)?'.........':(gender==1)?'مرد':'زن';
         return (
             //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
             <PanelLayout title={`Treenetgram`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
@@ -150,13 +143,13 @@ export default class Profile extends Component {
                                       ]}/>
                                   </View>
                               }>
-                <View style={{  padding:0,marginTop:20,alignItems:'center'}}>
+                <View style={{  padding:0,marginTop:userStore.isVerify?0: 50,alignItems:'center'}}>
                         <View style={{width:'100%',  padding:24,marginTop:0,alignItems:'center',maxWidth:300}}>
                             <ImageSelector
-                                style={{ }}
+                                style={{borderWidth:2,borderColor:bg5,height:100,width:100,borderRadius:50 }}
                                 canUpload={true}
                                 autoUpload={true}
-                                imageStyle={{height:150,width:150,borderRadius:75}}
+                                imageStyle={{height:100,width:100,borderRadius:50}}
                                 image={profileImage}
                                 noImage={images.default_ProPic}
                                 hideDeleteBtn={true}
@@ -170,48 +163,49 @@ export default class Profile extends Component {
                                 }}
 
                             />
-                            <View style={{width:'100%',  flexDirection:'row',marginVertical:10,marginTop:16,justifyContent:'space-between'}}>
-                                <Text style={{fontWeight:800}} > نام کاربری:</Text>
+                            <TouchableOpacity
+                                onPress={()=>{navigation.navigate('edit_profile')}}
+                                style={{
+                                    flex:1,
+                                    marginTop:10,
+                                    width:'100%',
+                                    maxWidth:300,
+                                    borderRadius:8,
+                                    flexDirection:'row',
+                                    justifyContent:'center',
+                                    padding:10,
+                                    backgroundColor:bg5
+                                }}>
+                                <Image source={images.ic_edit} style={{
+                                    width: 24,
+                                    height: 24,
+                                    tintColor:bgWhite
+                                }}/>
+                                <Text style={{fontSize:14,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
+                            </TouchableOpacity>
+                            <View style={{width:'100%',  flexDirection:'row',marginVertical:4,marginTop:16,justifyContent:'space-between'}}>
+                                <Text style={{fontWeight:400}} > نام کاربری:</Text>
                                 <Text>{this.state.username}</Text>
                             </View>
-                            <View style={{width:'100%',  flexDirection:'row',marginVertical:10,justifyContent:'space-between'}}>
-                                <Text style={{fontWeight:800}} > نام:</Text>
+                            <View style={{width:'100%',  flexDirection:'row',marginVertical:4,justifyContent:'space-between'}}>
+                                <Text style={{fontWeight:400}} > نام:</Text>
                                 <Text>{firstName}</Text>
                             </View>
-                            <View style={{width:'100%',  flexDirection:'row',marginVertical:10,justifyContent:'space-between'}}>
-                                <Text style={{fontWeight:800,width:100}} > نام خانوادگی:</Text>
+                            <View style={{width:'100%',  flexDirection:'row',marginVertical:4,justifyContent:'space-between'}}>
+                                <Text style={{fontWeight:400,width:100}} > نام خانوادگی:</Text>
                                 <Text>{lastName}</Text>
                             </View>
-                            <View style={{width:'100%',  flexDirection:'row',marginVertical:10,justifyContent:'space-between'}}>
-                                <Text style={{fontWeight:800,width:100}} > سال تولد:</Text>
-                                <Text>{dateYear} میلادی </Text>
+                            <View style={{width:'100%',  flexDirection:'row',marginVertical:4,justifyContent:'space-between'}}>
+                                <Text style={{fontWeight:400,width:100}} > سال تولد:</Text>
+                                <Text>{dateYear.length>3?dateYear+' میلادی ':'.........'}  </Text>
                             </View>
-                            <View style={{width:'100%',  flexDirection:'row',marginVertical:10,justifyContent:'space-between'}}>
-                                <Text style={{fontWeight:800,width:100}} > جنسیت:</Text>
+                            <View style={{width:'100%',  flexDirection:'row',marginVertical:4,justifyContent:'space-between'}}>
+                                <Text style={{fontWeight:400,width:100}} > جنسیت:</Text>
                                 <Text>{genderText}  </Text>
                             </View>
 
                         </View>
-                    <TouchableOpacity
-                        onPress={()=>{navigation.navigate('edit_profile')}}
-                        style={{
-                            flex:1,
-                            marginTop:20,
-                            width:'100%',
-                            maxWidth:300,
-                            borderRadius:8,
-                            flexDirection:'row',
-                            justifyContent:'center',
-                            padding:10,
-                            backgroundColor:bgr6
-                        }}>
-                        <Image source={images.ic_edit} style={{
-                            width: 24,
-                            height: 24,
-                            tintColor:bgWhite
-                        }}/>
-                        <Text style={{fontSize:14,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
-                    </TouchableOpacity>
+
                     </View>
             </PanelLayout>
         )

@@ -51,7 +51,7 @@ const BaseLayout = observer( props => {
     },  [ref.current]);
 
   return (
-    <div dir={global.isRtl || "rtl"}  style={{ display: 'flex',flex:1,  justifyContent:'center',  height: '100%'}}>
+    <div dir={persistStore.isRtl || "rtl"}  style={{ display: 'flex',flex:1,  justifyContent:'center',  height: '100%'}}>
         <View  ref={ref} dir={"rtl"} style={[{flex:1,maxWidth:props.maxWidth || 700 ,position:'relative', backgroundColor:screenwidth<700?bgScreen:bgScreen,flexDirection:'column',margin:  isWide?0:0 },props.style]}>
             {props.children}
             <ToastCard

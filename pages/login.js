@@ -16,16 +16,16 @@ import {MenuItem, Select} from '@material-ui/core';
 import images from "../public/static/assets/images";
 import {
     border,
-    bgr9, bgr8,
-    bbgr8,
-    bbgr9,
+    bg2, bg3,
+    bg8,
+    bg9,
     lightRed,
     primaryDark,
     subTextItem,
     textItem,
     textItemBlack
 } from '../src/constants/colors';
-import { globalState, } from '../src/stores';
+import {globalState, persistStore,} from '../src/stores';
 import {
 
     getWidth,
@@ -167,7 +167,7 @@ export default class LoginPage extends PureComponent {
                                     fontWeight: 1000,
                                     fontSize: 25,
                                     alignSelf: 'center',
-                                    color:bgr8,
+                                    color:bg3,
                                     fontFamily: 'IRANYekan-ExtraBold'
                                 }}>Treenetgram</Text>
                                 <View
@@ -261,7 +261,7 @@ export default class LoginPage extends PureComponent {
                                     fontSize: 20,
                                     fontFamily: 'IRANYekanExtraBold',
                                     textAlign: 'center',
-                                    color:bgr9,
+                                    color:bg2,
                                 }}>
                                     {translate('login_top')}
                                 </Text>
@@ -279,7 +279,7 @@ export default class LoginPage extends PureComponent {
                                 <FloatingLabelTextInput
                                     refInput={input => loginInput[0] = input}
                                     dir={'ltr'}
-                                    reverse={global.isRtl}
+                                    reverse={persistStore.isRtl}
                                     floatingLabelEnable={false}
                                     floatingOffsetX={0}
                                     floatingLabelFont={{color: textItem}}
@@ -289,7 +289,7 @@ export default class LoginPage extends PureComponent {
                                     //keyboardType="numeric"
                                     returnKeyType="next"
                                     onSubmitEditing={() => loginInput[1].focus()}
-                                    style={{textAlign: global.isRtl ? 'right' : 'left',}}
+                                    style={{textAlign: persistStore.isRtl ? 'right' : 'left',}}
                                     numberOfLines={1}
                                     tintColor={
                                         this.state.usernameValidation ? textItem : lightRed
@@ -332,7 +332,7 @@ export default class LoginPage extends PureComponent {
                                     <FloatingLabelTextInput
                                         refInput={input => loginInput[1] = input}
                                         dir={'ltr'}
-                                        reverse={global.isRtl}
+                                        reverse={persistStore.isRtl}
                                         type={this.state.showPassword ? 'text' : 'password'}
                                         floatingLabelEnable={false}
                                         floatingOffsetX={0}
@@ -380,8 +380,8 @@ export default class LoginPage extends PureComponent {
                                     >
                                         {
                                             this.state.showPassword?
-                                                <IoMdEye color={bgr8}  size={24} />
-                                                :<IoMdEyeOff color={bgr8}  size={24}/>
+                                                <IoMdEye color={bg3}  size={24} />
+                                                :<IoMdEyeOff color={bg3}  size={24}/>
                                         }
                                     </TouchableOpacity>
                                 </View>
@@ -457,10 +457,10 @@ const styles = StyleSheet.create({
         padding:5,
         alignSelf: 'center',
         elevation: 7,
-        shadowColor: bgr9,
+        shadowColor: bg2,
         shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.5,
-        backgroundColor:bbgr9
+        backgroundColor:bg9
     },
     logo: {
         height: 60,

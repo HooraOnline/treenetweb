@@ -421,7 +421,7 @@ const MenuBar=observer(props=> {
     }
     const logout=()=>{
 
-        persistStore.token=null;
+        persistStore.apiToken=null;
         let browserHistory = createBrowserHistory();
         browserHistory.replace({ firstPage: true });
         Router.prefetch('/login');

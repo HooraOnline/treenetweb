@@ -5,6 +5,12 @@ class PersistStore {
     @persist @observable locale = null;
 
     @persist @observable token = null;
+
+    @persist @observable userRegisterbefor = false;
+    @persist @observable apiToken = null;
+    @persist @observable userLanguageKey = 'fa';
+    @persist @observable userLanguageId = 3;
+    @persist @observable isRtl = true;
     @persist @observable showMenu=true
 
     @persist @observable selected = 0;
@@ -12,7 +18,7 @@ class PersistStore {
     @persist('list') @observable roles = [];
 
     @persist @observable username = null; // TODO : MUST BE DELETED
-    @persist @observable persist11 = 14;
+
 
     @observable pushID = null;
 
@@ -20,6 +26,7 @@ class PersistStore {
 
     @action clearStore() {
         this.token = null;
+        this.apiToken = null;
         this.selected = 0;
         this.username = null;
         this.paymentId = null;

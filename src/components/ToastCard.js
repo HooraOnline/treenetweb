@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {Animated, Image, StyleSheet, Text, TouchableWithoutFeedback, View} from '../react-native';
-import {primary, primaryDark} from "../constants/colors";
+import {bg5, grL5, primary, primaryDark} from "../constants/colors";
 import images from 'public/static/assets/images';
 class Content extends PureComponent {
 
@@ -113,18 +113,19 @@ class Content extends PureComponent {
                 width: '100%',
 
 
+
             }}>
                 <Animated.View
                     style={{
                         transform: [{translateY: animateTranslateY}],
                         minHeight: 60,
-                        maxHeight: 60,
                         position: 'fixed',
-                        borderTopRightRadius: 20,
-                        borderTopLeftRadius: 20,
-                        bottom:'15%',
+                        //borderTopRightRadius: 20,
+                        //borderTopLeftRadius: 20,
+                        top:100,
                         left: 0,
                         right: 0,
+                        zIndex:1000,
                         alignItems: 'center'
 
                     }}
@@ -134,19 +135,18 @@ class Content extends PureComponent {
                         style={ {
                             flexDirection: 'row',
                             alignItems: 'center',
-                            borderWidth: 1,
-                            borderColor: 'white',
-                            height: 60,
+                            borderWidth: 10,
+                            borderColor: grL5,
                             backgroundColor: 'white',
                             marginHorizontal: 24,
                             borderRadius: 10,
                             overflow: 'hidden',
                             elevation: 4,
                             position:'relative',
-                            width:'90%',
+                            width:'98%',
                             maxWidth:600,
                             justifyContent:'space-between',
-                            padding:15,
+                            padding:5,
                         }}>
 
                        {/* <Image

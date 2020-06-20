@@ -5,7 +5,7 @@ import axios from 'axios';
 //for notification
 //import Toasted from 'vue-toasted'
 import { decipher,cipher } from './pdk/utils';
-import {getCookie, showMassage} from "../src/utils";
+import { showMassage} from "../src/utils";
 import translate from "../src/language/translate";
 import {persistStore} from "../src/stores";
 import version from "../src/version";
@@ -50,11 +50,8 @@ class Api {
         // axios.defaults.headers.common['dataType'] = 'json';
         // axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
     }
-    static setToken=async (token)=>{
-       if(!axios.defaults.headers.common['Authorization'] || axios.defaults.headers.common['Authorization'].length<20){
-            persistStore.token=token || await getCookie('token');
-            axios.defaults.headers.common['Authorization'] =  'Bearer ' + persistStore.token;
-       }
+    static setToken=async ()=>{
+        axios.defaults.headers.common['Authorization'] =  'Bearer ' + persistStore.apiToken;
     }
     static getFilePath(model) {
         return apihost + "containers/" + model + "/download/"

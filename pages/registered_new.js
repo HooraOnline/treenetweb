@@ -3,7 +3,7 @@ import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import translate from "../src/language/translate";
 import {doDelay, navigation, showMassage,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bgWhite, fabColor, bgr10, bgr8, bgr7, bgr6, bbgr9, lightRed, primaryDark} from "../src/constants/colors";
+import {bgWhite, fabColor, bg1, bg3, bg4, bg5, bg9, lightRed, primaryDark} from "../src/constants/colors";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {loginApi, postQuery} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
@@ -62,7 +62,7 @@ export default class registered_new extends Component {
         return (
 
             <ResponsiveLayout title={`Treenet`} loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin: 0}}>
-                <View style={{flex: 1, backgroundColor: bbgr9, alignItems: 'center', padding: 10, paddingTop: '5%',}}>
+                <View style={{flex: 1, backgroundColor: bg9, alignItems: 'center', padding: 10, paddingTop: '5%',}}>
                     <Image
                         source={images.tree}
                         style={{maxWidth: '25%', maxHeight: '25%',}}
@@ -74,7 +74,7 @@ export default class registered_new extends Component {
                             fontSize: 25,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: bgr7
+                            color: bg4
                         }}>
                         Treenetgram
                     </Text>
@@ -95,7 +95,7 @@ export default class registered_new extends Component {
                                 fontSize: 14,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign: 'justify',
-                                color: bgr10,
+                                color: bg1,
 
                             }}>
                             {translate(" شبکه درختی شما با مشخصات زیر ساخته شد. بعد از ورود می توانید، نام کاربری و رمز عبور شبکه خود را عوض کنید.")}
@@ -104,7 +104,7 @@ export default class registered_new extends Component {
                         width: '100%',
                         alignItems:'center',
                         borderWidth:1,
-                        borderColor:bgr7,
+                        borderColor:bg4,
                         borderRadius:12,
                         marginTop:30,
                         padding:10,
@@ -124,7 +124,7 @@ export default class registered_new extends Component {
                                     fontSize: 14,
                                     fontFamily: 'IRANYekanFaNum',
                                     textAlign: 'justify',
-                                    color: bgr10,
+                                    color: bg1,
 
                                 }}>
                                 {translate("نام کاربری شبکه:")}
@@ -156,7 +156,7 @@ export default class registered_new extends Component {
                                     fontSize: 14,
                                     fontFamily: 'IRANYekanFaNum',
                                     textAlign: 'justify',
-                                    color: bgr10,
+                                    color: bg1,
 
                                 }}>
                                 {translate("رمز عبور شبکه:")}
@@ -177,8 +177,8 @@ export default class registered_new extends Component {
                         <TouchableOpacity
                             style={{
                                 marginTop: 20,
-                                borderColor: bgr7,
-                                backgroundColor:bgr6,
+                                borderColor: bg4,
+                                backgroundColor:bg5,
                                 borderWidth: 1,
                                 width:200,
                                 paddingTop: 0,

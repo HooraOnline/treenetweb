@@ -17,8 +17,8 @@ import Slide from '@material-ui/core/Slide';
 import {
     bgScreen, bgWhite, border,
     borderSeparate,
-    bgr6,
-    bbgr9,
+    bg5,
+    bg9,
     gray, lightGrey,
     overlayColor,
     primaryDark,
@@ -114,7 +114,7 @@ export default class ListDialogPopUp extends PureComponent {
                         borderWidth: 1,
                         // alignItems: 'center',
                         justifyContent: 'center',
-                        borderColor: validation ? bbgr9 : primaryColor,
+                        borderColor: validation ? bg9 : primaryColor,
                         borderRadius: 10,
                         // marginVertical: 7
                     }]}

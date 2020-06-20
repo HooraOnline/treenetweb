@@ -1,4 +1,3 @@
-global.isRtl=false
 
 export const tu={
   tu_treenetDesl:"Bilgi ve internet çağında, ağ oluşturma başarılı bir işletmenin gücüne, servetine, şöhretine ve temeline eşittir. Treenetgram, bir ağaç yetiştirebilen ağ oluşturma için harika bir araçtır ve aslında takipçilerinizin piramidini büyüten bir sosyal ağdır.",

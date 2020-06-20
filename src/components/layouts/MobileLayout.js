@@ -74,7 +74,7 @@ const MobileLayout = observer( props => {
     const init=async()=> {
         await fetchStore();
 
-        if (!persistStore.token) {
+        if (!persistStore.apiToken) {
             Router.push('/login');
             return;
         }

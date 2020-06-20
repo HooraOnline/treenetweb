@@ -2,14 +2,14 @@
 import {bgScreen} from "../../constants/colors";
 import {observer} from 'mobx-react';
 import React, {useEffect, useState,useRef} from "react";
-import { deviceWide, height, showMassage, getCookie, saveCookie} from "../../utils";
+import { deviceWide, height, showMassage, } from "../../utils";
 import "./index.scss";
 import ToastCard from "../ToastCard";
 import {globalState, userStore} from "../../stores";
 import {View} from "../../react-native";
 import images from "../../../public/static/assets/images";
 import LoadingPopUp from "../LoadingPopUp";
-
+import persistStore from "../../stores/PersistStore";
 const  maxWidth=700;
 const ResponsiveLayout = observer( props => {
     const [showToast, setShowToast] = useState();
@@ -55,8 +55,8 @@ const ResponsiveLayout = observer( props => {
     },  [ref.current]);
 
     return (
-        <div  dir={global.isRtl?'rtl':'ltr'}  style={{
-            textAlign:global.isRtl?"right":"left",
+        <div  dir={persistStore.isRtl?'rtl':'ltr'}  style={{
+            textAlign:persistStore.isRtl?"right":"left",
             display: 'flex',flex:1,
             justifyContent:'center',
             minHeight: '100%',

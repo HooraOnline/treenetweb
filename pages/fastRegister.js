@@ -6,11 +6,9 @@ import {MenuItem, Select} from '@material-ui/core';
 import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
 import {
-    deviceWide, doDelay, getCookie,
-    getUrlParameter,
+    doDelay,
     mapNumbersToEnglish,
     navigation,
-    saveCookie,
     showMassage,
 
 } from "../src/utils";
@@ -21,16 +19,16 @@ import {
     placeholderTextColor,
     lightRed,
     textItemBlack,
-    bgr10,
-    bgr9,
-    bgr8,
-    bgr7,
-    bgr6,
-    bbgr6,
-    bbgr7,
-    bbgr8,
-    bbgr9,
-    bbgr10,
+    bg1,
+    bg2,
+    bg3,
+    bg4,
+    bg5,
+    bg6,
+    bg7,
+    bg8,
+    bg9,
+    bg10,
     borderSeparate, grL5, primaryDark, grayVD7
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
@@ -126,7 +124,7 @@ export default class FastRegister extends Component {
         return (
 
             <ResponsiveLayout title={`Treenet`}  style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:bbgr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
+                <View style={{flex:1,backgroundColor:bg9,alignItems:'center',padding:10,paddingTop:'5%',}} >
                     <Image
                         source={images.tree}
                         style={{maxWidth: '25%', maxHeight: '25%',}}
@@ -138,7 +136,7 @@ export default class FastRegister extends Component {
                             fontSize:25,
                             fontWeight:800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color:bgr7
+                            color:bg4
                         }}>
                         Treenetgram
                     </Text>
@@ -151,7 +149,7 @@ export default class FastRegister extends Component {
                                 fontSize:14,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign:'justify',
-                                color:bgr8,
+                                color:bg3,
                             }}>
                             {translate('fastRegister_desc')}
                         </Text>
@@ -161,11 +159,11 @@ export default class FastRegister extends Component {
                                 fontSize:16,
                                 fontWight:800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                color:bgr8,
+                                color:bg3,
                             }}>
                             {translate('fastRegister_atleast_fill_one_down')}
                         </Text>
-                         <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bgr6,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                         <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
                             <Text style={{
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                 fontSize: 16,
@@ -176,7 +174,7 @@ export default class FastRegister extends Component {
                             }}>{this.state.countryCode}</Text>
                             <FloatingLabelTextInput
                                 dir={'ltr'}
-                                reverse={global.isRtl}
+                                reverse={persistStore.isRtl}
                                 style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
                                 placeholder={translate("fastRegister_mobile_number")}
                                 value={this.state.mobile}
@@ -221,11 +219,11 @@ export default class FastRegister extends Component {
                             />
 
                         </View>
-                        <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bgr6,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                        <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
 
                             <FloatingLabelTextInput
                                 dir={'ltr'}
-                                reverse={global.isRtl}
+                                reverse={persistStore.isRtl}
                                 style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
                                 placeholder={translate("fastRegister_email_address")}
                                 value={this.state.email}
@@ -270,7 +268,7 @@ export default class FastRegister extends Component {
                             style={{
                                 flex:1,
                                 marginTop:15,
-                                borderColor: bgr6,
+                                borderColor: bg5,
                                 borderWidth:1,
                                 padding:0,
                                 paddingTop:0,
@@ -280,7 +278,7 @@ export default class FastRegister extends Component {
                             }}
                             onPress={() =>this.registerPhone()}
                         >
-                            <Text style={{fontSize:16,color:bgr8,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
+                            <Text style={{fontSize:16,color:bg3,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

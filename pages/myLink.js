@@ -4,7 +4,7 @@ import PanelLayout from "../src/components/layouts/PanelLayout";
 import {Toolbar} from "../src/components";
 import {showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bbgr10, bgr8, bbgr8, grL5, itemListText} from "../src/constants/colors";
+import {bg10, bg3, bg8, grL5, itemListText} from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
 import {Text, TextInput, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -84,7 +84,7 @@ export default class MyLink extends Component {
                                  ]}/>
                              </View>
                          }>
-                <View style={{padding: 24, marginTop: userStore.isVerify?0:60}}>
+                <View style={{padding: 24, marginTop: userStore.isVerify?0:70}}>
                     <Text
                         style={{
                             marginTop: 0,
@@ -100,7 +100,7 @@ export default class MyLink extends Component {
                         marginTop: 10,
                         borderWidth: 1,
                         borderRadius: 8,
-                        borderColor: bbgr8,
+                        borderColor: bg8,
                         alignItems: 'center',
                     }}>
                         <TouchableOpacity
@@ -110,12 +110,12 @@ export default class MyLink extends Component {
                                 borderColor: grL5,
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                color: bbgr10,
+                                color: bg10,
                                 width: 80,
                                 height: 60,
                                 fontSize: 16,
                                 marginHorizontal: 0,
-                                backgroundColor: bgr8,
+                                backgroundColor: bg3,
                             }}
                             onPress={this.copyLink}>
                             <Text style={{padding: 5,}}>{translate('finishRegister_copy')}</Text>

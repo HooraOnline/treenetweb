@@ -25,7 +25,7 @@ export async function fetchFactory(url, options) {
         'Access-Control-Allow-Origin': '*',
         'Accept'        : 'application/json',
         'Content-Type'  : 'application/json',
-        'Authorization' : 'Bearer ' + persistStore.token,
+        'Authorization' : 'Bearer ' + persistStore.apiToken,
     }
         const response = await fetch(requestURL, {
             headers: headersSetting,
@@ -147,7 +147,7 @@ export async function uploadFile(path) {
         headers: {
             // 'Accept': 'application/json',
             // 'Content-Type': 'multipart/form-data',
-            Authorization: 'Bearer ' + persistStore.token,
+            Authorization: 'Bearer ' + persistStore.apiToken,
         },
     });
 
@@ -163,7 +163,7 @@ export async function uploadFileByFormData(formData) {
         headers: {
             // 'Accept': 'application/json',
             // 'Content-Type': 'multipart/form-data',
-            Authorization: 'Bearer ' + persistStore.token,
+            Authorization: 'Bearer ' + persistStore.apiToken,
         },
     });
 
@@ -624,7 +624,7 @@ export  function getUrlParameter(paramName, url) {
 }
 export function waitForData(func){
 
-    setTimeout(func,persistStore.token?0:20)
+    setTimeout(func,persistStore.apiToken?0:20)
 }
 
 export function doDelay(time){

@@ -2,7 +2,12 @@
 import {bgScreen, textItem} from "../../constants/colors";
 import {observer} from 'mobx-react';
 import React, {useEffect, useState,useRef} from "react";
-import {deviceWide, height, showMassage, getCookie, saveCookie, setDemansion, navigation} from "../../utils";
+import {
+    getCookie,
+    setDemansion,
+    navigation,
+    fetchStore
+} from "../../utils";
 import "./index.scss";
 import ToastCard from "../ToastCard";
 import {globalState, userStore} from "../../stores";
@@ -24,41 +29,21 @@ const PanelLayout = observer( props => {
     const ref = useRef(null);
 
     const init=async()=> {
+        if(!userStore.username) {
+            await fetchStore();
+        }
         checkToken();
+        setIsRtl(persistStore.isRtl);
         manageScreenSize();
-        setLanguage();
-
-    }
-    const setLanguage=async()=>{
-        if(!global.slanguage){
-            let lng = await getCookie('lng');
-            if (lng) {
-                global.slanguage = lng.key;
-                global.isRtl = lng.rtl;
-            }
-            setIsRtl(global.isRtl || true);
-        };
     }
 
-    const manageScreenSize=()=> {
-        setDemansion(screenMaxWidth);
-        setScreenwidth(global.width);
-        document.body.onresize = () => {
-            setDemansion(screenMaxWidth);
-            setScreenwidth(global.width);
-            props.onResizeScreen && props.onResizeScreen(global.width,global.height);
-        };
-    }
-
-    const checkToken=async()=> {
-        //await fetchStore();
-        persistStore.token=await getCookie('token');
-        if(!persistStore.token ) {
-            Router.push('/index');
-        }else if(!userStore.username){
+    const checkToken=()=> {
+        if(!persistStore.apiToken ) {
+            navigation.replace('/home')
+        }else{
+            persistStore.userRegisterbefor=true;
             getProfile();
         }
-
     }
     const getProfile=()=>{
         setLoading(true);
@@ -71,7 +56,15 @@ const PanelLayout = observer( props => {
                 setLoading(false);
             });
     }
-
+    const manageScreenSize=()=> {
+        setDemansion(screenMaxWidth);
+        setScreenwidth(global.width);
+        document.body.onresize = () => {
+            setDemansion(screenMaxWidth);
+            setScreenwidth(global.width);
+            props.onResizeScreen && props.onResizeScreen(global.width,global.height);
+        };
+    }
     useEffect(() => {
         init();
         document.title = props.title;
@@ -80,8 +73,8 @@ const PanelLayout = observer( props => {
     },  [ref.current]);
 
     return (
-        <div   dir={isRtl || global.isRtl?'rtl':'ltr'}  style={{
-            textAlign:global.isRtl?"right":"left",
+        <div   dir={isRtl || persistStore.isRtl?'rtl':'ltr'}  style={{
+            textAlign:persistStore.isRtl?"right":"left",
             display: 'flex',flex:1,
             justifyContent:'center',
             minHeight: '100%',
@@ -108,7 +101,7 @@ const PanelLayout = observer( props => {
                              <TouchableOpacity
                                  onPress={()=>{navigation.navigate('change_username_password')}}
                                  style={{flex:1,paddingBottom:40, flexDirection:'row',justifyContent:'space-between', padding:10,backgroundColor:'yellow'}}>
-                                 <Text style={{fontSize:14,color:textItem}}>جهت امنیت و حفظ مالکیت کامل شبکه، نام کاربری و رمز عبور خود را تغییر دهید. </Text>
+                                 <Text style={{fontSize:14,color:textItem}}>توجه:جهت امنیت و حفظ مالکیت کامل شبکه خود،  ایکون مداد را لمس کرده و نام کاربری و رمز عبور خود را تغییر دهید. </Text>
                                  <Image source={images.ic_edit} style={{
                                      width: 30,
                                      height: 30,

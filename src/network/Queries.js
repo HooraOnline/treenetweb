@@ -10,12 +10,12 @@ export async function loginQuery(username, password) {
                 username: username,
                 password: password,
                 DeviceID: 'user ip',
-                HasAuthenticated: persistStore.token ? 1 : 0,
+                HasAuthenticated: persistStore.apiToken ? 1 : 0,
             },
         }).then(response => {
             console.info('***** loginQuery response: ', response);
             accountsStore.accounts = response.data;
-            persistStore.token = response.token;
+            persistStore.apiToken = response.apiToken;
             persistStore.username = username;
         });
     } catch (e) {
@@ -1438,7 +1438,7 @@ export async function getImageBase64Query(fileName) {
         'Access-Control-Allow-Origin': '*',
         'Accept'        : 'application/json',
         'Content-Type'  : 'application/json',
-        'Authorization' : 'Bearer ' + persistStore.token,
+        'Authorization' : 'Bearer ' + persistStore.apiToken,
     }
 
     let requestURL=getFileDownloadURL(fileName)

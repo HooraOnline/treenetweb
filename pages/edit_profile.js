@@ -11,13 +11,13 @@ import images from "../public/static/assets/images";
 import {
     placeholderTextColor,
     lightRed,
-    bbgr10,
-    bgr8,
-    bbgr8,
-    bbgr9,
-    bgr6,
-    bgr10, bgr9,
-    primaryDark, bgr7, bgWhite
+    bg10,
+    bg3,
+    bg8,
+    bg9,
+    bg5,
+    bg1, bg2,
+    primaryDark, bg4, bgWhite
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import {FloatingLabelTextInput, SwitchTextMulti, Toolbar} from "../src/components";
@@ -139,7 +139,7 @@ export default class edit_profile extends Component {
                                 fontSize:16,
                                 fontWeight:800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                color:bgr8,
+                                color:bg3,
                                 alignSelf:'center'
                             }}>
                            { translate('ویرایش پروفایل')}
@@ -152,7 +152,7 @@ export default class edit_profile extends Component {
                                 }}
                                 placeholder={translate('firstName')}
                                 style={{flex:1, marginTop:40}}
-                                labelStyle={{color:bgr8}}
+                                labelStyle={{color:bg3}}
                                 editable={true}
                                 multiline={false}
                                 maxLength={70}
@@ -169,7 +169,7 @@ export default class edit_profile extends Component {
                                         Platform.OS === 'ios'
                                             ? 'IRANYekan-ExtraBold'
                                             : 'IRANYekanExtraBold',
-                                    color: bgr9,
+                                    color: bg2,
                                     fontSize: 16,
                                     paddingStart: 4,
                                     paddingTop: 1,
@@ -193,7 +193,7 @@ export default class edit_profile extends Component {
                                 }}
                                 placeholder={translate('lastName')}
                                 style={{flex:1, marginTop:40}}
-                                labelStyle={{color:bgr8}}
+                                labelStyle={{color:bg3}}
                                 editable={true}
                                 multiline={false}
                                 maxLength={70}
@@ -210,7 +210,7 @@ export default class edit_profile extends Component {
                                         Platform.OS === 'ios'
                                             ? 'IRANYekan-ExtraBold'
                                             : 'IRANYekanExtraBold',
-                                    color: bgr9,
+                                    color: bg2,
                                     fontSize: 16,
                                     paddingStart: 4,
                                     paddingTop: 1,
@@ -231,7 +231,7 @@ export default class edit_profile extends Component {
                             <FloatingLabelTextInput
                                 placeholder={translate('age')}
                                 style={{flex:1, marginTop:40}}
-                                labelStyle={{color:bgr8}}
+                                labelStyle={{color:bg3}}
                                 editable={true}
                                 multiline={false}
                                 maxLength={2}
@@ -242,7 +242,7 @@ export default class edit_profile extends Component {
                                 textInputStyle={{
                                     fontWeight: 'normal',
                                     fontFamily:'IRANYekanExtraBold',
-                                    color: bgr9,
+                                    color: bg2,
                                     fontSize: 16,
                                     paddingStart: 4,
                                     paddingTop: 1,
@@ -277,7 +277,7 @@ export default class edit_profile extends Component {
                                 }
                                 highlightColor={primaryDark}
                                 unit={translate('year')}
-                                unitStyle={{color:bgr7}}
+                                unitStyle={{color:bg4}}
                                 keyboardType="number-pad"
                             />
 

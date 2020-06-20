@@ -91,16 +91,16 @@ export const borderRed = '#EA4A29';
 export const yellowmin = '#FFC107';
 export const greenDark = '#00A28C';
 export const textGray = '#CCD1D1';
-export const bbgr10 = '#E8F6F3';
-export const bbgr9 = '#D0ECE7';
-export const bbgr8 = '#A2D9CE';
-export const bbgr7 = '#73C6B6';
-export const bbgr6 = '#45B39D';
-export const bgr6 = '#1ABC9C';
-export const bgr7 = '#17A589';
-export const bgr8 = '#117A65';
-export const bgr9 = '#117864';
-export const bgr10 = '#0B5345';
+export const bg10 = '#E8F6F3';
+export const bg9 = '#D0ECE7';
+export const bg8 = '#A2D9CE';
+export const bg7 = '#73C6B6';
+export const bg6 = '#45B39D';
+export const bg5 = '#1ABC9C';
+export const bg4 = '#17A589';
+export const bg3 = '#117A65';
+export const bg2 = '#117864';
+export const bg1 = '#0B5345';
 
 
 export const grL5  = '#28B463';

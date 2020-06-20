@@ -1,4 +1,3 @@
-global.isRtl=false
 export const ch= {
   ch_treenetDesl:" 在信息和时代,网络相当于成功企业的力量,财富,名声和基础,Treenetgram 是一个伟大的网络工具,可以长出一棵树,它实际上是一个社交网络,可以使您的追随者不断壮大",
   ch_treenetDes2:"Treenetgram 幫助營銷人員,店主,公司,企業主以及任何需要廣告或通知來免費創建自己的樹形網絡并快速增長的人",
