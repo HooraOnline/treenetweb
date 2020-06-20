@@ -4,7 +4,7 @@ import PanelLayout from "../src/components/layouts/PanelLayout";
 import {Toolbar} from "../src/components";
 import {showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import {gr10, gr3, gr8, grL5, itemListText} from "../src/constants/colors";
+import {bbgr10, bgr8, bbgr8, grL5, itemListText} from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
 import {Text, TextInput, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -100,7 +100,7 @@ export default class MyLink extends Component {
                         marginTop: 10,
                         borderWidth: 1,
                         borderRadius: 8,
-                        borderColor: gr8,
+                        borderColor: bbgr8,
                         alignItems: 'center',
                     }}>
                         <TouchableOpacity
@@ -110,12 +110,12 @@ export default class MyLink extends Component {
                                 borderColor: grL5,
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                color: gr10,
+                                color: bbgr10,
                                 width: 80,
                                 height: 60,
                                 fontSize: 16,
                                 marginHorizontal: 0,
-                                backgroundColor: gr3,
+                                backgroundColor: bgr8,
                             }}
                             onPress={this.copyLink}>
                             <Text style={{padding: 5,}}>{translate('finishRegister_copy')}</Text>

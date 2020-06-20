@@ -6,7 +6,7 @@ import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
 import {getCookie, getUrlParameter, navigation, saveCookie, showMassage,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {borderSeparate, gr10, gr2, gr3, gr4, gr5, gr9, primaryDark} from "../src/constants/colors";
+import {borderSeparate, bbgr10, bgr9, bgr8, bgr7, bgr6, bbgr9, primaryDark} from "../src/constants/colors";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
 import {getUserIp, getUserLocation, postQuery} from "../dataService/apiService";
@@ -117,12 +117,12 @@ export default class Index extends Component {
 
     render() {
         /*  if(!global.isCheckedToken){
-              return  <View style={{flex:1,alignItems:'center',padding:20,fontSize:30,paddingTop:50,color:gr8}} >Welcom to Treenetgram</View>;
+              return  <View style={{flex:1,alignItems:'center',padding:20,fontSize:30,paddingTop:50,color:bbgr8}} >Welcom to Treenetgram</View>;
           }*/
         return (
 
             <ResponsiveLayout title={`Treenet`} loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin: 0}}>
-                <View style={{flex: 1, backgroundColor: gr9, alignItems: 'center', padding: 10, paddingTop: '5%',}}>
+                <View style={{flex: 1, backgroundColor: bbgr9, alignItems: 'center', padding: 10, paddingTop: '5%',}}>
 
                     <Image
                         source={images.tree}
@@ -135,7 +135,7 @@ export default class Index extends Component {
                             fontSize: 25,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: gr4
+                            color: bgr7
                         }}>
                         Treenetgram
                     </Text>
@@ -152,7 +152,7 @@ export default class Index extends Component {
                                 minWidth: 150
                             }}
                             selectedItemStyle={{
-                                backgroundColor: gr5,
+                                backgroundColor: bgr6,
                             }}
                             title={translate('Select_Your_Language')}
                             snake
@@ -164,7 +164,7 @@ export default class Index extends Component {
                             selectedItemCustom={
                                 <View
                                     style={{
-                                        color: gr10,
+                                        color: bbgr10,
                                         flexDirection: 'row',
                                         alignItems: 'center',
                                         marginHorizontal: 8,
@@ -208,7 +208,7 @@ export default class Index extends Component {
                                 fontSize: 15,
                                 fontWeight: 500,
                                 fontFamily: 'IRANYekanRegular',
-                                color: gr3,
+                                color: bgr8,
                                 marginBottom: 5
                             }}>
                             {translate("from_local_power_to_global_power")}
@@ -221,7 +221,7 @@ export default class Index extends Component {
                                 ,
                                 fontWeight: 800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                color: gr3,
+                                color: bgr8,
 
                             }}>
                             {translate("make_your_global_network")}
@@ -232,7 +232,7 @@ export default class Index extends Component {
                             paddingHorizontal: 16,
                             alignItems: 'center',
                             paddingBottom: 10,
-                            background: gr9
+                            background: bbgr9
                         }}>
                             {!persistStore.token && (
                                 <TouchableOpacity
@@ -241,7 +241,7 @@ export default class Index extends Component {
                                         width: 200,
                                         maxWidth: 300,
                                         marginTop: 25,
-                                        borderColor: gr2,
+                                        borderColor: bgr9,
                                         borderWidth: 1,
                                         padding: 0,
                                         paddingTop: 0,
@@ -255,7 +255,7 @@ export default class Index extends Component {
                                 >
                                     <Text style={{
                                         fontSize: 16,
-                                        color: gr2,
+                                        color: bgr9,
                                         fontWeight: 500,
                                         paddingVertical: 12,
                                         paddingHorizontal: 20,
@@ -294,7 +294,7 @@ export default class Index extends Component {
                                     alignItems: 'center',
                                     fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    color: gr3,
+                                    color: bgr8,
                                     textAlign: 'justify',
                                     marginBottom: 5
                                 }}>
@@ -307,7 +307,7 @@ export default class Index extends Component {
                                     alignItems: 'center',
                                     fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    color: gr3,
+                                    color: bgr8,
                                     textAlign: 'justify',
                                     marginBottom: 5
                                 }}>
@@ -319,7 +319,7 @@ export default class Index extends Component {
                                     alignItems: 'center',
                                     fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    color: gr3,
+                                    color: bgr8,
                                     textAlign: 'justify',
                                     marginBottom: 5
                                 }}>
@@ -331,7 +331,7 @@ export default class Index extends Component {
                                     alignItems: 'center',
                                     fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    color: gr3,
+                                    color: bgr8,
                                     textAlign: 'justify',
                                     marginBottom: 5
                                 }}>
@@ -343,7 +343,7 @@ export default class Index extends Component {
                                     alignItems: 'center',
                                     fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
-                                    color: gr3,
+                                    color: bgr8,
                                     textAlign: 'justify',
 
                                 }}>
@@ -358,7 +358,7 @@ export default class Index extends Component {
                                     fontSize: 16,
                                     fontFamily: 'IRANYekanRegular',
                                     textAlign: 'justify',
-                                    color: gr3,
+                                    color: bgr8,
 
                                 }}>
                                 {translate('treenetDes6')}
@@ -373,7 +373,7 @@ export default class Index extends Component {
                     paddingHorizontal: 5,
                     alignItems: 'center',
                     paddingBottom: 16,
-                    background: gr9
+                    background: bbgr9
                 }}>
                     {!persistStore.token && (
                         <TouchableOpacity
@@ -381,7 +381,7 @@ export default class Index extends Component {
                                 flex: 1,
                                 width: 250,
                                 marginTop: 25,
-                                borderColor: gr2,
+                                borderColor: bgr9,
                                 borderWidth: 1,
                                 padding: 0,
                                 paddingTop: 0,
@@ -394,7 +394,7 @@ export default class Index extends Component {
                         >
                             <Text style={{
                                 fontSize: 16,
-                                color: gr2,
+                                color: bgr9,
                                 fontWeight: 500,
                                 paddingVertical: 12,
                                 paddingHorizontal: 20,

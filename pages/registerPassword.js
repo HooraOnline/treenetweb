@@ -21,16 +21,16 @@ import {
 
     lightRed,
     textItemBlack,
-    gr1,
-    gr2,
-    gr3,
-    gr4,
-    gr5,
-    gr6,
-    gr7,
-    gr8,
-    gr9,
-    gr10,
+    bgr10,
+    bgr9,
+    bgr8,
+    bgr7,
+    bgr6,
+    bbgr6,
+    bbgr7,
+    bbgr8,
+    bbgr9,
+    bbgr10,
     borderSeparate, primaryDark, textItem, grayVD7, grL5
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
@@ -139,7 +139,7 @@ export default class RegisterPassword extends Component {
         return (
 
             <ResponsiveLayout title={`Treenet`}   loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
+                <View style={{flex:1,backgroundColor:bbgr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
                     <Image
                         source={images.tree}
                         style={{maxWidth: '25%', maxHeight: '25%',}}
@@ -151,7 +151,7 @@ export default class RegisterPassword extends Component {
                             fontSize:25,
                             fontWeight:800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color:gr4
+                            color:bgr7
                         }}>
                         Treenetgram
                     </Text>
@@ -165,7 +165,7 @@ export default class RegisterPassword extends Component {
                                 fontSize:14,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign:'justify',
-                                color:gr1,
+                                color:bgr10,
 
                             }}>
                             {translate("registerPassword_decription1")}
@@ -177,7 +177,7 @@ export default class RegisterPassword extends Component {
                                 fontSize:14,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign:'justify',
-                                color:gr1,
+                                color:bgr10,
 
                             }}>
                             {translate("registerPassword_decription2")}
@@ -198,7 +198,7 @@ export default class RegisterPassword extends Component {
                                 reverse={global.isRtl}
                                 placeholder={translate('registerPassword_username_example')}
                                 style={{flex:1, marginTop:0}}
-                                labelStyle={{color:gr3,marginTop:-19}}
+                                labelStyle={{color:bgr8,marginTop:-19}}
                                 editable={true}
                                 multiline={false}
                                 maxLength={50}
@@ -208,12 +208,12 @@ export default class RegisterPassword extends Component {
                                 returnKeyType="done"
                                 numberOfLines={1}
                                 underlineSize={4}
-                                underlineColor={this.state.usernameValidation ? gr3 : primaryDark}
+                                underlineColor={this.state.usernameValidation ? bgr8 : primaryDark}
                                 isAccept={this.state.usernameValidation}
                                 textInputStyle={{
                                     fontWeight: 'normal',
                                     fontFamily:'IRANYekanRegular',
-                                    color: gr1,
+                                    color: bgr10,
                                     fontSize: 14,
                                     paddingStart: 4,
                                     paddingTop: 1,
@@ -305,11 +305,11 @@ export default class RegisterPassword extends Component {
                                 keyboardType="default"
                                 returnKeyType="done"
                                 numberOfLines={1}
-                                labelStyle={{color:gr3,marginTop:-17}}
+                                labelStyle={{color:bgr8,marginTop:-17}}
                                 textInputStyle={{
                                     fontWeight: 'normal',
                                     fontFamily:'IRANYekanRegular',
-                                    color:gr1,
+                                    color:bgr10,
                                     fontSize: 14,
                                     paddingStart: 4,
                                     paddingTop: 1,
@@ -317,7 +317,7 @@ export default class RegisterPassword extends Component {
                                     //paddingLeft:35,
                                 }}
                                 underlineSize={4}
-                                underlineColor={this.state.passwordValidation ? gr3 : primaryDark}
+                                underlineColor={this.state.passwordValidation ? bgr8 : primaryDark}
                                 isAccept={this.state.passwordValidation}
                                 style={{flex: 1,marginTop:0}}
                                 onChangeText={text => {
@@ -347,8 +347,8 @@ export default class RegisterPassword extends Component {
                             >
                                 {
                                     this.state.showPassword?
-                                        <IoMdEye color={gr3}  size={24} />
-                                        :<IoMdEyeOff color={gr3}  size={24}/>
+                                        <IoMdEye color={bgr8}  size={24} />
+                                        :<IoMdEyeOff color={bgr8}  size={24}/>
                                 }
                             </TouchableOpacity>
                         </View>
@@ -372,21 +372,21 @@ export default class RegisterPassword extends Component {
                                 maxLength={100}
                                 floatingLabelEnable={true}
                                 labelAlign={'left'}
-                                labelStyle={{color:gr3,marginTop:-17}}
+                                labelStyle={{color:bgr8,marginTop:-17}}
                                 keyboardType="default"
                                 returnKeyType="done"
                                 numberOfLines={1}
                                 textInputStyle={{
                                     fontWeight: 'normal',
                                     fontFamily:'IRANYekanRegular',
-                                    color:gr1,
+                                    color:bgr10,
                                     fontSize: 14,
                                     paddingStart: 4,
                                     paddingTop: 1,
                                     //textAlign: 'left',
                                     //paddingLeft:35,
                                 }}
-                                underlineColor={this.state.passwor2dValidation ? gr3 : primaryDark}
+                                underlineColor={this.state.passwor2dValidation ? bgr8 : primaryDark}
                                 isAccept={this.state.passwor2dValidation}
                                 underlineSize={1}
 
@@ -410,8 +410,8 @@ export default class RegisterPassword extends Component {
                             >
                                 {
                                     this.state.showPassword?
-                                        <IoMdEye color={gr3}  size={24} />
-                                        :<IoMdEyeOff color={gr3}  size={24} />
+                                        <IoMdEye color={bgr8}  size={24} />
+                                        :<IoMdEyeOff color={bgr8}  size={24} />
                                 }
                             </TouchableOpacity>
                         </View>
@@ -423,7 +423,7 @@ export default class RegisterPassword extends Component {
                             style={{
                                 flex:1,
                                 marginTop:40,
-                                borderColor: gr5,
+                                borderColor: bgr6,
                                 borderWidth:1,
                                 padding:0,
                                 paddingTop:0,
@@ -433,7 +433,7 @@ export default class RegisterPassword extends Component {
                             }}
                             onPress={() =>this.updateUsernameAndPassword()}
                         >
-                            <Text style={{fontSize:16,color:gr3,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
+                            <Text style={{fontSize:16,color:bgr8,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
                         </TouchableOpacity>
 
 

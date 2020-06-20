@@ -19,7 +19,7 @@ import {
     border,
     primary,
     fab,
-    gr2, textItem, gr9, gr10, primaryDark, gr3, primaryDarkOld, grL5, gr8, itemListText
+    bgr9, textItem, bbgr9, bbgr10, primaryDark, bgr8, primaryDarkOld, grL5, bbgr8, itemListText
 } from "../src/constants/colors";
 import accounting from "accounting";
 import NavFooterButtons from "../src/components/layouts/footerButtons";
@@ -313,7 +313,7 @@ export default class MyNetwork extends Component {
                                     marginTop:5,
                                     borderWidth:1,
                                     borderRadius:8,
-                                    borderColor:gr8,
+                                    borderColor:bbgr8,
                                     alignItems:'center',
                                 }} >
                                     <TouchableOpacity
@@ -323,12 +323,12 @@ export default class MyNetwork extends Component {
                                             borderColor:grL5,
                                             alignItems:'center',
                                             justifyContent:'center',
-                                            color:gr10,
+                                            color:bbgr10,
                                             width:80,
                                             height:60,
                                             fontSize:16,
                                             marginHorizontal:0,
-                                            backgroundColor:gr3,
+                                            backgroundColor:bgr8,
                                         }}
                                         onPress={this.copyLink}>
                                         <Text style={{padding:5,}}>{translate('finishRegister_copy')}</Text>

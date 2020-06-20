@@ -16,9 +16,9 @@ import {MenuItem, Select} from '@material-ui/core';
 import images from "../public/static/assets/images";
 import {
     border,
-    gr2, gr3,
-    gr8,
-    gr9,
+    bgr9, bgr8,
+    bbgr8,
+    bbgr9,
     lightRed,
     primaryDark,
     subTextItem,
@@ -167,7 +167,7 @@ export default class LoginPage extends PureComponent {
                                     fontWeight: 1000,
                                     fontSize: 25,
                                     alignSelf: 'center',
-                                    color:gr3,
+                                    color:bgr8,
                                     fontFamily: 'IRANYekan-ExtraBold'
                                 }}>Treenetgram</Text>
                                 <View
@@ -261,7 +261,7 @@ export default class LoginPage extends PureComponent {
                                     fontSize: 20,
                                     fontFamily: 'IRANYekanExtraBold',
                                     textAlign: 'center',
-                                    color:gr2,
+                                    color:bgr9,
                                 }}>
                                     {translate('login_top')}
                                 </Text>
@@ -380,8 +380,8 @@ export default class LoginPage extends PureComponent {
                                     >
                                         {
                                             this.state.showPassword?
-                                                <IoMdEye color={gr3}  size={24} />
-                                                :<IoMdEyeOff color={gr3}  size={24}/>
+                                                <IoMdEye color={bgr8}  size={24} />
+                                                :<IoMdEyeOff color={bgr8}  size={24}/>
                                         }
                                     </TouchableOpacity>
                                 </View>
@@ -457,10 +457,10 @@ const styles = StyleSheet.create({
         padding:5,
         alignSelf: 'center',
         elevation: 7,
-        shadowColor: gr2,
+        shadowColor: bgr9,
         shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.5,
-        backgroundColor:gr9
+        backgroundColor:bbgr9
     },
     logo: {
         height: 60,

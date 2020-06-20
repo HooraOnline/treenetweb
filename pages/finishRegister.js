@@ -11,13 +11,13 @@ import images from "../public/static/assets/images";
 import {
     placeholderTextColor,
     lightRed,
-    gr10,
-    gr3,
-    gr8,
-    gr9,
-    gr5,
-    gr1, gr2,
-    primaryDark, gr4, grL5, grayVD7, gr6, primary
+    bbgr10,
+    bgr8,
+    bbgr8,
+    bbgr9,
+    bgr6,
+    bgr10, bgr9,
+    primaryDark, bgr7, grL5, grayVD7, bbgr6, primary
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
 import {FloatingLabelTextInput,SwitchTextMulti} from "../src/components";
@@ -69,7 +69,7 @@ export default class FinishRegister extends Component {
     render() {
         return (
             <ResponsiveLayout title={`Enter Confirm code`}  style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:16,paddingTop:'5%',}} >
+                <View style={{flex:1,backgroundColor:bbgr9,alignItems:'center',padding:16,paddingTop:'5%',}} >
 
 
                     <ImageSelector
@@ -109,7 +109,7 @@ export default class FinishRegister extends Component {
                             style={{
                                 alignItems:'center',
                                 justifyContent:'center',
-                                color:gr10,
+                                color:bbgr10,
                                 backgroundColor:primaryDark,
                                 padding:8,
                                 borderWidth:1,
@@ -139,7 +139,7 @@ export default class FinishRegister extends Component {
                                     flexDirection:'row',
                                     borderWidth:1,
                                     borderRadius:8,
-                                    borderColor:gr8,
+                                    borderColor:bbgr8,
                                     alignItems:'center',
                                 }} >
                                     <TouchableOpacity
@@ -149,12 +149,12 @@ export default class FinishRegister extends Component {
                                             borderColor:grL5,
                                             alignItems:'center',
                                             justifyContent:'center',
-                                            color:gr10,
+                                            color:bbgr10,
                                             width:60,
                                             height:60,
                                             fontSize:16,
                                             marginHorizontal:0,
-                                            backgroundColor:gr3,
+                                            backgroundColor:bgr8,
                                         }}
                                         onPress={this.copyLink}>
                                         <Text style={{padding:5,}}>{translate('finishRegister_copy')}</Text>
@@ -177,7 +177,7 @@ export default class FinishRegister extends Component {
                                         fontSize:16,
                                         paddingHorizontal:5,
                                         fontFamily: 'IRANYekanRegular',
-                                        color:gr3,
+                                        color:bgr8,
                                         textAlign:'justify',
                                     }}>
                                     { translate('finishRegister_decription1')}
@@ -189,7 +189,7 @@ export default class FinishRegister extends Component {
                                         fontWeight:800,
                                         paddingHorizontal:5,
                                         fontFamily: 'IRANYekanRegular',
-                                        color:gr3,
+                                        color:bgr8,
                                         textAlign:'justify',
                                     }}>
                                     { translate('finishRegister__decription2')}
@@ -199,7 +199,7 @@ export default class FinishRegister extends Component {
                                         margin:5,
                                         fontSize:16,
                                         fontFamily: 'IRANYekanRegular',
-                                        color:gr3,
+                                        color:bgr8,
                                         alignSelf:'center',
                                         textAlign:'justify',
                                     }}
@@ -220,7 +220,7 @@ export default class FinishRegister extends Component {
                                         marginTop:10,
                                         fontSize:16,
                                         fontFamily: 'IRANYekanFaNum',
-                                        color:gr3,
+                                        color:bgr8,
                                         paddingHorizontal:5,
                                         textAlign:'justify',
                                     }}>
@@ -232,7 +232,7 @@ export default class FinishRegister extends Component {
                                         fontSize:16,
                                         fontWeight:400,
                                         fontFamily: 'IRANYekanFaNum',
-                                        color:gr3,
+                                        color:bgr8,
                                         paddingHorizontal:5,
                                         alignSelf:'center'
                                     }}>
@@ -256,7 +256,7 @@ export default class FinishRegister extends Component {
                             flexDirection:'row',
                             borderWidth:1,
                             borderRadius:8,
-                            borderColor:gr8,
+                            borderColor:bbgr8,
                             alignItems:'center',
                         }} >
                             <TouchableOpacity
@@ -266,12 +266,12 @@ export default class FinishRegister extends Component {
                                     borderColor:grL5,
                                     alignItems:'center',
                                     justifyContent:'center',
-                                    color:gr10,
+                                    color:bbgr10,
                                     width:60,
                                     height:60,
                                     fontSize:16,
                                     marginHorizontal:0,
-                                    backgroundColor:gr3,
+                                    backgroundColor:bgr8,
                                 }}
                                 onPress={this.copyLink}>
                                 <Text style={{padding:5,}}>{translate('finishRegister_copy')}</Text>
@@ -293,7 +293,7 @@ export default class FinishRegister extends Component {
                        {/* <TouchableOpacity
                             style={{
                                 marginTop:30,
-                                borderColor: gr5,
+                                borderColor: bgr6,
                                 borderWidth:1,
                                 padding:10,
                                 paddingTop:10,
@@ -305,7 +305,7 @@ export default class FinishRegister extends Component {
                             }}
                             onPress={() =>this.registerUserProps()}
                         >
-                            <Text style={{fontSize:20,color:gr1,fontWeight:500}}>{ translate('finishRegister__login_to_panel')}</Text>
+                            <Text style={{fontSize:20,color:bgr10,fontWeight:500}}>{ translate('finishRegister__login_to_panel')}</Text>
                         </TouchableOpacity>*/}
                     </View>
 

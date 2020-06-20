@@ -18,7 +18,7 @@ import {
     borderSeparate,
     border,
     primary,
-    primaryDark, gr5
+    primaryDark, bgr6
 } from "../src/constants/colors";
 import accounting from "accounting";
 import NavFooterButtons from "../src/components/layouts/footerButtons";
@@ -203,7 +203,7 @@ export default class Profile extends Component {
                             flexDirection:'row',
                             justifyContent:'center',
                             padding:10,
-                            backgroundColor:gr5
+                            backgroundColor:bgr6
                         }}>
                         <Image source={images.ic_edit} style={{
                             width: 24,

@@ -21,16 +21,16 @@ import {
     placeholderTextColor,
     lightRed,
     textItemBlack,
-    gr1,
-    gr2,
-    gr3,
-    gr4,
-    gr5,
-    gr6,
-    gr7,
-    gr8,
-    gr9,
-    gr10,
+    bgr10,
+    bgr9,
+    bgr8,
+    bgr7,
+    bgr6,
+    bbgr6,
+    bbgr7,
+    bbgr8,
+    bbgr9,
+    bbgr10,
     borderSeparate, grL5
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
@@ -135,7 +135,7 @@ export default class Repeatmobil extends Component {
        }
         return (
             <ResponsiveLayout title={`Treenet`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} run={this.state.run}  style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
+                <View style={{flex:1,backgroundColor:bbgr9,alignItems:'center',padding:10,paddingTop:'5%',}} >
                     <Image
                         source={images.tree}
                         style={{maxWidth: '25%', maxHeight: '24%',}}
@@ -147,7 +147,7 @@ export default class Repeatmobil extends Component {
                             fontSize:25,
                             fontWeight:800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color:gr4
+                            color:bgr7
                         }}>
                         Treenetgram
                     </Text>
@@ -161,7 +161,7 @@ export default class Repeatmobil extends Component {
                                 fontSize:14,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign:'justify',
-                                color:gr3,
+                                color:bgr8,
 
                             }}>
                             {translate("جهت اطمینان از صحت ورود اطلاعات در مرحله قبل، اطلاعات تماس خود را مجددا وارد کنید. ")}
@@ -169,7 +169,7 @@ export default class Repeatmobil extends Component {
 
 
                         {this.user.mobile &&(
-                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bgr6,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
                                 <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                     fontSize: 16,
@@ -216,7 +216,7 @@ export default class Repeatmobil extends Component {
                         )}
 
                         {this.user.email &&(
-                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: gr5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bgr6,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
                                 <FloatingLabelTextInput
                                     dir={'ltr'}
                                     style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
@@ -254,7 +254,7 @@ export default class Repeatmobil extends Component {
                             style={{
                                 flex:1,
                                 marginTop:15,
-                                borderColor: gr5,
+                                borderColor: bgr6,
                                 borderWidth:1,
                                 padding:0,
                                 paddingTop:0,
@@ -264,14 +264,14 @@ export default class Repeatmobil extends Component {
                             }}
                             onPress={() =>this.registerPhone()}
                         >
-                            <Text style={{fontSize:16,color:gr3,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
+                            <Text style={{fontSize:16,color:bgr8,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
                         </TouchableOpacity>
                         {(!this.state.repeateMobileValidation2 || !this.state.repeateEmailValidation2 || this.state.registerBefore) &&(
                             <TouchableOpacity
                                 style={{
                                     flex:1,
                                     marginTop:15,
-                                    borderColor: gr5,
+                                    borderColor: bgr6,
                                     borderWidth:1,
                                     padding:0,
                                     paddingTop:0,
@@ -281,7 +281,7 @@ export default class Repeatmobil extends Component {
                                 }}
                                 onPress={() =>this.perevius()}
                             >
-                                <Text style={{fontSize:16,color:gr3,fontWeight:500,paddingVertical:12}}>{translate('اصلاح اطلاعات مرحله قبل')}</Text>
+                                <Text style={{fontSize:16,color:bgr8,fontWeight:500,paddingVertical:12}}>{translate('اصلاح اطلاعات مرحله قبل')}</Text>
                             </TouchableOpacity>
                         )
                         }
