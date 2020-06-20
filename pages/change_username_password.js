@@ -45,7 +45,7 @@ export default class change_username_password extends Component {
             usernameValidation:false,
             countryCode:userStore.countryCode?'+'+userStore.countryCode : '+98',
             username:'',
-            mobile:userStore.mobile.replace(contryCode,'') ||'',
+            mobile:userStore.mobile?userStore.mobile.replace(contryCode,''):'',
             email:userStore.email ||'',
             firstName:userStore.firstName ||'',
             lastName:userStore.lastName ||'',

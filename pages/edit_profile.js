@@ -60,7 +60,7 @@ export default class edit_profile extends Component {
     isValid() {
         return mobileValidation;
     }
-    checkValidation() {
+    checkValidation=()=> {
         if(!this.state.firstName ){
             this.setState({firsNameValidation: false});
             return translate('enter_your_firstName');
@@ -79,7 +79,7 @@ export default class edit_profile extends Component {
         }
 
     }
-    registerUserProps(){
+    registerUserProps=()=>{
         const msg=this.checkValidation();
         if(msg){
             showMassage(msg,'info')
