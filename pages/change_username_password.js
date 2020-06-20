@@ -37,18 +37,20 @@ const HOME_TYPE = 1;
 export default class change_username_password extends Component {
     constructor() {
         super();
+        const contryCode='+'+userStore.countryCode
         this.state = {
             showPassword:false,
             passwordValidation:false,
             passwor2dValidation:false,
             usernameValidation:false,
-            username:'',
-            password:'',
             countryCode:userStore.countryCode?'+'+userStore.countryCode : '+98',
-            invitationLink:'',
-            mobile:'',
-            email:''
-
+            username:'',
+            mobile:userStore.mobile.replace(contryCode,'') ||'',
+            email:userStore.email ||'',
+            firstName:userStore.firstName ||'',
+            lastName:userStore.lastName ||'',
+            age:userStore.biarthDate?new Date().getFullYear()-new Date(userStore.biarthDate).getFullYear():'' ,
+            gender:userStore.gender ||'',
         };
     }
 
@@ -57,6 +59,7 @@ export default class change_username_password extends Component {
     }
 
     checkValidation() {
+
         if (!this.state.username) {
             this.setState({usernameValidation: false});
             return translate('registerPassword_enter_username');
@@ -66,6 +69,10 @@ export default class change_username_password extends Component {
             return translate('registerPassword_username_can_not_be_les_than');
         }
 
+        if(this.state.usernameReserved==false && userStore.username!=this.state.username){
+            this.setState({usernameValidation: false});
+            return translate('registerPassword_username_is_reserved');
+        }
         if (!this.state.password) {
             this.setState({passwordValidation: false});
             return translate('registerPassword_enter_password');
@@ -161,9 +168,8 @@ export default class change_username_password extends Component {
 
         };
 
-        let {firstName='',lastName='',biarthDate='',profileImage='',gender=0,username=''}=this.state;
-         const dateYear=new Date(biarthDate).getFullYear();
-        const genderText=(gender==0)?'انتخاب نشده':(gender==1)?'مرد':'زن';
+
+
         return (
             //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
             <PanelLayout loading={this.state.loading} loadingMessage={this.state.loadingMessage} showVerifiyMassege={false} title={`Treenetgram`} showMenu={this.state.showMenu}
@@ -274,7 +280,7 @@ export default class change_username_password extends Component {
                                         this.setState({checkingPassword:true});
                                         postQuery('Members/me/checkUserNameExist',{username:text})
                                             .then((usernameExist)=>{
-                                                this.setState({usernameValidation:!usernameExist});
+                                                this.setState({usernameReserved:usernameExist,usernameValidation:!usernameExist});
                                             })
                                             .finally(()=>this.setState({checkingPassword:false}))
 
@@ -302,7 +308,7 @@ export default class change_username_password extends Component {
                                 )}
                             </View>
                         </View>
-                        {this.state.username.length>3 && this.state.usernameValidation==false &&(
+                        {this.state.usernameReserved && userStore.username!=this.state.username && (
                             <Text style={{marginTop:4, color:primaryDark,fontSize:12}} >{translate('registerPassword_username_is_reserved')}</Text>
                         )
                         }
@@ -674,7 +680,7 @@ export default class change_username_password extends Component {
                                         fontFamily:'IRANYekanExtraBold',
                                         color: gr2,
                                         fontSize: 16,
-                                        paddingStart: 4,
+                                        paddingRight: 10,
                                         paddingTop: 1,
                                         paddingBottom: 3,
                                         //textAlign: 'right',
@@ -732,10 +738,6 @@ export default class change_username_password extends Component {
                             </View>
 
                         </View>
-
-
-
-
                     </View>
                 </View>
             </PanelLayout>

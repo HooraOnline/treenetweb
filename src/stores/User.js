@@ -17,6 +17,8 @@ class UserStore {
     @observable loginDate=null ;
     @observable mobile=null ;
     @observable mobileVerified=null ;
+    @observable email=null ;
+    @observable emailVerified=null ;
     @observable permissionList=null ;
     @observable isVerify=null ;
     @observable regentId=null ;
@@ -43,13 +45,15 @@ class UserStore {
         this.loginDate=user.loginDate ;
         this.mobile=user.mobile ;
         this.mobileVerified=user.mobileVerified ;
+        this.email=user.email ;
+        this.emailVerified=user.emailVerified ;
         this.isVerify=user.isVerify ;
         this.permissionList=user.permissionList ;
         this.regentId=user.regentId ;
         this.roleList=user.roleList ;
         this.token=user.user ;
         this.udate=user.udate ;
-        this.countryCode=user.geoInfo.calling_code;
+        this.countryCode=user.geoInfo?user.geoInfo.calling_code:'98';
 
     }
 
@@ -81,6 +85,8 @@ class UserStore {
         this.loginDate=null ;
         this.mobile=null ;
         this.mobileVerified=null ;
+        this.email=null ;
+        this.emailVerified=null ;
         this.isVerify=null ;
         this.permissionList=null ;
         this.regentId=null ;

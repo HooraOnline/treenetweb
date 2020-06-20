@@ -34,6 +34,7 @@ import DateTime from "../src/react-native/DateTime";
 import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
 import copy from "copy-to-clipboard";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
+import {observer} from "mobx-react";
 
 
  class TreeView extends PureComponent {
@@ -178,7 +179,8 @@ import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
         );
     }
 }
-const HOME_TYPE = 1
+const HOME_TYPE = 1;
+@observer
 export default class MyNetwork extends Component {
     constructor() {
         super();
@@ -239,8 +241,7 @@ export default class MyNetwork extends Component {
         const PopperId = open ? 'simple-popper' : undefined;
         const {children}=this.props;
         return (
-            //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
-            <PanelLayout title={`Treenetgram`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
+              <PanelLayout title={`Treenetgram`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
                               onCloseMenu={()=>this.setState({showMenu:false})}
                               style={{paddingBottom:10}}
@@ -355,8 +356,6 @@ export default class MyNetwork extends Component {
                         </View>
                     )}
                 </View>
-
-
             </PanelLayout>
             //</PanelLayout>
 

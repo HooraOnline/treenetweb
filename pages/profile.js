@@ -6,11 +6,20 @@ import PanelLayout from "../src/components/layouts/PanelLayout";
 import {DropDownList,Toolbar,CardUnitInfo,PopupBase,ImageSelector} from "../src/components";
 
 import accountsStore from "../src/stores/Accounts";
-import {deviceWide, doDelay, logger, navigation} from "../src/utils";
+import {deviceWide, doDelay, getCookie, logger, navigation} from "../src/utils";
 import images from "../public/static/assets/images";
 import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
 import {getUserBalance} from "../src/network/Queries";
-import {bgItemRed, bgScreen, bgWhite, textItemRed, borderSeparate, border,primary} from "../src/constants/colors";
+import {
+    bgItemRed,
+    bgScreen,
+    bgWhite,
+    textItemRed,
+    borderSeparate,
+    border,
+    primary,
+    primaryDark, gr5
+} from "../src/constants/colors";
 import accounting from "accounting";
 import NavFooterButtons from "../src/components/layouts/footerButtons";
 import NavBar from "../src/components/layouts/NavBar";
@@ -21,9 +30,12 @@ import translate from "../src/language/translate";
 import {getUserProfileApi, logoutApi, postQuery} from "../dataService/apiService";
 import Api from "../dataService/apiCaller";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
+import {observer} from "mobx-react";
+import Image from "../src/react-native/Image";
 
 
 const HOME_TYPE = 1;
+@observer
 export default class Profile extends Component {
     constructor() {
         super();
@@ -53,7 +65,7 @@ export default class Profile extends Component {
 
    async componentDidMount  () {
 
-       this.getProfile();
+        this.getProfile();
 
     }
      getProfile(){
@@ -180,6 +192,26 @@ export default class Profile extends Component {
                             </View>
 
                         </View>
+                    <TouchableOpacity
+                        onPress={()=>{navigation.navigate('edit_profile')}}
+                        style={{
+                            flex:1,
+                            marginTop:20,
+                            width:'100%',
+                            maxWidth:300,
+                            borderRadius:8,
+                            flexDirection:'row',
+                            justifyContent:'center',
+                            padding:10,
+                            backgroundColor:gr5
+                        }}>
+                        <Image source={images.ic_edit} style={{
+                            width: 24,
+                            height: 24,
+                            tintColor:bgWhite
+                        }}/>
+                        <Text style={{fontSize:14,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
+                    </TouchableOpacity>
                     </View>
             </PanelLayout>
         )

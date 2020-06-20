@@ -78,15 +78,18 @@ class MyApp extends App {
   }
   checkToken=async ()=>{
     //await fetchStore();
-    persistStore.token=await getCookie('token');
-    await Api.setHeaders(persistStore.token);
-    if(persistStore.token ){
-      this.initPanelData();
+    if(!persistStore.token){
+      persistStore.token=await getCookie('token');
+      if(persistStore.token ){
+         Api.setToken(persistStore.token);
+        this.initPanelData();
+      }
     }
+
+
   }
 
   initPanelData=async ()=> {
-
     if(!global.slanguage){
       let lng = await getCookie('lng');
       if (lng) {
@@ -106,6 +109,7 @@ class MyApp extends App {
         .then(res=>{
           console.log(res);
           this.setState({loading:false});
+          return res;
         })
         .catch(err=>{
           this.setState({loading:false});

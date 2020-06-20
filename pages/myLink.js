@@ -84,10 +84,10 @@ export default class MyLink extends Component {
                                  ]}/>
                              </View>
                          }>
-                <View style={{padding: 24, marginTop: userStore.isVerify?10:50}}>
+                <View style={{padding: 24, marginTop: userStore.isVerify?0:60}}>
                     <Text
                         style={{
-                            marginTop: 10,
+                            marginTop: 0,
                             fontSize: 16,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',

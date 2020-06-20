@@ -208,7 +208,6 @@ function arrayBufferToBase64(buffer) {
              headers: headersSetting,
              method: 'GET'
          });
-         console.log(response);
          if (response.status === 200) {
 
              let imageStr
@@ -326,11 +325,12 @@ export const getUserProfileApi = function (fields, include) {
   //params.userId = userId;
   params.filter.fields = fields;
   params.filter.include = include;
-
   return  Api.get('members/me/getProfile', params)
       .then(user=>{
         userStore.setUser(user);
         return user
+      }).catch((error)=>{
+          throw error
       })
 
 };
@@ -345,10 +345,10 @@ export const getUserSubsetApi = (fields, include)=> {
         });
 };
 
-export const loginApi=function (username,password) {
+export const loginApi= function (username,password) {
   return  postQuery('Members/me/login',{username,password})
       .then(user=>{
-        Api.setHeaders(user.token);
+        Api.setToken(user.token);
         saveCookie('token',user.token);
         persistStore.token=user.token;
         userStore.setUser(user);
@@ -356,10 +356,11 @@ export const loginApi=function (username,password) {
       })
 }
 export const logoutApi=function (username,password) {
+    navigation.navigate('index');
     deleteCookie('token');
     persistStore.clearStore();
     userStore.clear();
-    navigation.navigate('index');
+
 }
 
 

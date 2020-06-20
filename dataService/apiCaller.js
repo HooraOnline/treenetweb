@@ -29,28 +29,32 @@ import version from "../src/version";
 
 
 export const apihost = version.release ? "https://treenetserver.herokuapp.com/api/" : 'http://192.168.1.161:3000/api/';
-
+let isSetToken=false;
 class Api {
     constructor() {
 
     }
     static init() {
-        //Api.setHeaders();
+        Api.setHeaders();
     }
     static apiAddress = apihost;
     static fileContainer = apihost + "containers/";
     static token = "";
 
-    static  setHeaders = async(token)=> {
+    static  setHeaders = (token)=> {
         axios.defaults.baseURL = apihost;
-        axios.defaults.headers.common['Authorization'] =  'Bearer ' + token;
-        persistStore.token=await getCookie('token');
         // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
         // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
         // axios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
         // axios.defaults.headers.common['Accept'] = 'application/json';
         // axios.defaults.headers.common['dataType'] = 'json';
         // axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
+    }
+    static setToken=async (token)=>{
+       if(!axios.defaults.headers.common['Authorization'] || axios.defaults.headers.common['Authorization'].length<20){
+            persistStore.token=token || await getCookie('token');
+            axios.defaults.headers.common['Authorization'] =  'Bearer ' + persistStore.token;
+       }
     }
     static getFilePath(model) {
         return apihost + "containers/" + model + "/download/"
@@ -66,7 +70,8 @@ class Api {
       return cipher("privatekey4673")(encodeURIComponent(str));
     }
 
-    static get(apiPath, urlparams) {
+    static get=async (apiPath, urlparams)=> {
+        await this.setToken();
         let uri = Api.getUri(apiPath, '?');
         let urlparameters = urlparams ? { params: urlparams } : undefined;
 
@@ -81,7 +86,8 @@ class Api {
                 throw error
             });
     }
-    static getCount(apiPath, params) {
+    static getCount=async (apiPath, params)=> {
+        await this.setToken();
         let uri =  apiPath + "/count?params="+params;
         return axios.get(uri)
             .then(function (response) {
@@ -94,7 +100,8 @@ class Api {
                 throw error
             });
     }
-    static post(apiPath, model) {
+    static post=async (apiPath, model)=> {
+        await this.setToken();
         let uri =  apiPath;
         //model={value:Api.encrypt(model)};
         return axios.post(uri, model)

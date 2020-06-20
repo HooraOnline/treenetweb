@@ -45,7 +45,6 @@ export default class Index extends Component {
         });
 
         $.getJSON('https://ipapi.co/json/', function(data) {
-            console.log(JSON.stringify(data, null, 2));
             self.geo=JSON.stringify(data, null, 2);
         });
         /*$.getJSON('https://geolocation-db.com/json/')

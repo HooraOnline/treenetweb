@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
+import PanelLayout from "../src/components/layouts/PanelLayout";
 
 import {
     doDelay,
@@ -17,15 +17,16 @@ import {
     gr9,
     gr5,
     gr1, gr2,
-    primaryDark, gr4
+    primaryDark, gr4, bgWhite
 } from "../src/constants/colors";
 import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
-import {FloatingLabelTextInput,SwitchTextMulti} from "../src/components";
-import {postQuery, saveEntity} from "../dataService/apiService";
+import {FloatingLabelTextInput, SwitchTextMulti, Toolbar} from "../src/components";
+import {getUserProfileApi, postQuery, saveEntity} from "../dataService/apiService";
 import translate from "../src/language/translate";
 import LoadingPopUp from "../src/components/LoadingPopUp";
+import {userStore} from "../src/stores";
 
-export default class RegisterUserProperty extends Component {
+export default class edit_profile extends Component {
     constructor() {
         super();
         this.state = {
@@ -34,12 +35,26 @@ export default class RegisterUserProperty extends Component {
         };
     }
     componentDidMount() {
-        doDelay(20)
-            .then(()=>{
-                this.user= navigation.getParam('user');
-                if(this.user){
-                    this.setState({haveUser:true})
-                }
+
+        this.getProfile();
+    }
+    getProfile(){
+
+        getUserProfileApi()
+            .then(user=>{
+                this.setState({
+                    username:user.username,
+                    firstName:user.firstName,
+                    lastName:user.lastName,
+                    biarthDate:user.biarthDate,
+                    profileImage:user.profileImage,
+                    gender:user.gender,
+                    age:user.biarthDate?new Date().getFullYear()-new Date(userStore.biarthDate).getFullYear():'',
+
+                });
+            })
+            .catch(err=>{
+                this.setState({loading:false});
             });
     }
     isValid() {
@@ -71,8 +86,6 @@ export default class RegisterUserProperty extends Component {
             return;
         }
         const data={
-            id:this.user.id,
-            mobile:this.user.mobile,
             firstName:this.state.firstName,
             lastName:this.state.lastName,
             age:this.state.age,
@@ -81,7 +94,7 @@ export default class RegisterUserProperty extends Component {
         this.setState({loading:true});
         postQuery('Members/me/initProfile',data)
           .then(res=>{
-              this.nextPage(res);
+              navigation.navigate('profile');
               this.setState({loading:false});
           })
           .catch(err=>{
@@ -89,35 +102,35 @@ export default class RegisterUserProperty extends Component {
               this.setState({loading:false});
           })
     }
-    nextPage(res){
-        navigation.navigate('finishRegister', {
-            user: res,
-        });
-    }
 
 
     render() {
-        if(!this.state.haveUser){
-            return null;
-        }
+        const toolbarStyle = {
+            start: {
+                content: images.ic_back,
+                onPress: ()=>navigation.goBack(),
+            },
+            title: 'ویرایش پروفایل',
+
+        };
         return (
-            <ResponsiveLayout title={`Enter Confirm code`}   loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:gr9,alignItems:'center',padding:16,paddingTop:'5%',}} >
-                    <Image
-                        source={images.tree}
-                        style={{maxWidth: '20%', maxHeight: '20%',}}
-                    />
-                    <Text
-                        style={{
-                            marginTop:10,
-                            marginBottom:20,
-                            fontSize:30,
-                            fontWeight:800,
-                            fontFamily: 'IRANYekanFaNum-Bold',
-                            color:gr3
-                        }}>
-                        Treenet
-                    </Text>
+            <PanelLayout title={`Enter Confirm code`}   loading={this.state.loading} loadingMessage={this.state.loadingMessage}
+                         style={{margin:0}}
+                         header={
+                             <Toolbar
+                                 customStyle={toolbarStyle}
+                                 isExpand={this.state.showAccountSelect }
+                             />
+                         }
+                         footer={
+                             <TouchableOpacity
+                                 onPress={this.registerUserProps}
+                                 style={{alignItems:'center',justifyContent:'center',padding:15, backgroundColor:primaryDark}}>
+                                 <Text style={{color:bgWhite}} >ذخیره</Text>
+                             </TouchableOpacity>
+                         }>
+            >
+                <View style={{flex:1,alignItems:'center',padding:16,paddingTop:'5%',}} >
 
                     <View id='form' >
                         <Text
@@ -129,7 +142,7 @@ export default class RegisterUserProperty extends Component {
                                 color:gr3,
                                 alignSelf:'center'
                             }}>
-                           { translate('enter_your_props_to_get_your_invitation_link')}
+                           { translate('ویرایش پروفایل')}
                         </Text>
 
                         <View  style={{marginTop:10,  padding:10}}  >
@@ -138,7 +151,7 @@ export default class RegisterUserProperty extends Component {
                                     this.labelInput = input;
                                 }}
                                 placeholder={translate('firstName')}
-                                style={{flex:1, marginTop:20}}
+                                style={{flex:1, marginTop:40}}
                                 labelStyle={{color:gr3}}
                                 editable={true}
                                 multiline={false}
@@ -179,7 +192,7 @@ export default class RegisterUserProperty extends Component {
                                     this.labelInput = input;
                                 }}
                                 placeholder={translate('lastName')}
-                                style={{flex:1, marginTop:20}}
+                                style={{flex:1, marginTop:40}}
                                 labelStyle={{color:gr3}}
                                 editable={true}
                                 multiline={false}
@@ -217,7 +230,7 @@ export default class RegisterUserProperty extends Component {
                             />
                             <FloatingLabelTextInput
                                 placeholder={translate('age')}
-                                style={{flex:1, marginTop:20}}
+                                style={{flex:1, marginTop:40}}
                                 labelStyle={{color:gr3}}
                                 editable={true}
                                 multiline={false}
@@ -293,35 +306,9 @@ export default class RegisterUserProperty extends Component {
                                 />
                             </View>
                         </View>
-
-
-
-                        <TouchableOpacity
-                            style={{
-                                marginTop:30,
-                                borderColor: gr5,
-                                borderWidth:1,
-                                padding:10,
-                                paddingTop:10,
-                                paddingHorizontal:30,
-                                borderRadius:12,
-                                alignItems:'center',
-                                justifyContent:'center',
-
-                            }}
-                            onPress={() =>this.registerUserProps()}
-                        >
-                            <Text style={{fontSize:20,color:gr1,fontWeight:500}}>{ translate('confirm')}</Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
-                <LoadingPopUp
-                    visible={this.state.loading}
-                    message={this.state.loadingMessage}
-                />
-            </ResponsiveLayout>
-
-
+            </PanelLayout>
         )
     }
 
