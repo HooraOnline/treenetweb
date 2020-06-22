@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {Animated, Image, StyleSheet, Text, TouchableWithoutFeedback, View} from '../react-native';
-import {bg5, grL5, primary, primaryDark} from "../constants/colors";
+import {bg5, bgWhite, grL5, primary, primaryDark} from "../constants/colors";
 import images from 'public/static/assets/images';
 class Content extends PureComponent {
 
@@ -21,15 +21,15 @@ class Content extends PureComponent {
                 this.title = 'تبریک!';
                 this.message = 'عملیات با موفقیت انجام شد';
                 this.titleColor = '#00A28C';
-                this.messageColor = '#1CC4AD';
+                this.messageColor = '#4caf50';
                 this.image = images.bg_ntf_Success;
                 this.timeOut = 4000;
                 break;
             case 'warning':
                 this.title = 'مشکلی پیش آمده!';
                 this.message = 'خطایی رخ داده، لطفا دوباره سعی کنید';
-                this.titleColor = '#C73618';
-                this.messageColor = '#FF9D88';
+                this.titleColor = '#ff9800';
+                this.messageColor = '#ff9800';
                 this.image = images.bg_ntf_Warning;
                 this.timeOut = 6000;
                 break;
@@ -37,15 +37,15 @@ class Content extends PureComponent {
                 this.title = 'خطایی رخ داد';
                 this.message = 'متاسفانه اینکار انجام نشد';
                 this.titleColor = '#B28600';
-                this.messageColor = '#FFC107';
+                this.messageColor = '#f44336';
                 this.image = images.bg_ntf_Error;
                 this.timeOut = 10000;
                 break;
             case 'info':
                 this.title = '';
                 this.message = '';
-                this.titleColor = '#B28600';
-                this.messageColor = primary;
+                this.titleColor = '#2196f3';
+                this.messageColor = '#2196f3';
                 this.image = images.bg_ntf_Error;
                 this.timeOut = 5000;
                 break;
@@ -122,7 +122,7 @@ class Content extends PureComponent {
                         position: 'fixed',
                         //borderTopRightRadius: 20,
                         //borderTopLeftRadius: 20,
-                        top:100,
+                        bottom:100,
                         left: 0,
                         right: 0,
                         zIndex:1000,
@@ -135,16 +135,16 @@ class Content extends PureComponent {
                         style={ {
                             flexDirection: 'row',
                             alignItems: 'center',
-                            borderWidth: 10,
-                            borderColor: grL5,
-                            backgroundColor: 'white',
+                            borderWidth: 0,
+                            borderColor: this.messageColor,
+                            backgroundColor: this.messageColor,
                             marginHorizontal: 24,
-                            borderRadius: 10,
+                            borderRadius: 4,
                             overflow: 'hidden',
                             elevation: 4,
                             position:'relative',
-                            width:'98%',
-                            maxWidth:600,
+                            width:'99%',
+                            maxWidth:650,
                             justifyContent:'space-between',
                             padding:5,
                         }}>
@@ -154,8 +154,9 @@ class Content extends PureComponent {
                             style={{position: 'absolute', start: 0, top: 0, height: 59, width: 57}}
                         />*/}
                         <Text style={{
-                            color: this.messageColor,
-                            fontSize: 12,
+                            color: bgWhite,
+                            fontSize: 14,
+                            padding:10,
 
                         }}>{this.message}</Text>
                         <TouchableWithoutFeedback
@@ -165,7 +166,7 @@ class Content extends PureComponent {
                             <Image
                                 source={images.ic_close}
                                 style={{
-                                    //tintColor: '#BFACAC',
+                                    tintColor: '#BFACAC',
                                     height: 24,
                                     width: 24,
                                 }}

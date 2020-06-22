@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {userStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {Toolbar} from "../src/components";
 import {showMassage} from "../src/utils";
@@ -12,7 +11,8 @@ import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
 import copy from "copy-to-clipboard";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
-
+import {userStore,persistStore } from "../src/stores";
+import {getUserProfileApi} from "../dataService/apiService";
 
 const HOME_TYPE = 1;
 export default class MyLink extends Component {
@@ -34,8 +34,21 @@ export default class MyLink extends Component {
     }
 
 
-    componentDidMount() {
+    async componentDidMount  () {
 
+        this.getProfile();
+
+
+    }
+    getProfile(){
+        this.setState({loading:true});
+        getUserProfileApi()
+            .then(user=>{
+                this.setState({loading:false});
+            })
+            .catch(err=>{
+                this.setState({loading:false});
+            });
     }
 
     copyLink = () => {
@@ -84,92 +97,99 @@ export default class MyLink extends Component {
                                  ]}/>
                              </View>
                          }>
-                <View style={{padding: 24, marginTop: userStore.isVerify?0:70}}>
-                    <Text
-                        style={{
-                            marginTop: 0,
-                            fontSize: 16,
-                            fontWeight: 800,
-                            fontFamily: 'IRANYekanFaNum-Bold',
-                            color: grL5,
-                        }}>
-                        {translate('finishRegister_your_invitation_link')}
-                    </Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        marginTop: 10,
-                        borderWidth: 1,
-                        borderRadius: 8,
-                        borderColor: bg8,
-                        alignItems: 'center',
-                    }}>
-                        <TouchableOpacity
-                            style={{
-                                borderWidth: 1,
-                                borderRadius: 0,
-                                borderColor: grL5,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: bg10,
-                                width: 80,
-                                height: 60,
-                                fontSize: 16,
-                                marginHorizontal: 0,
-                                backgroundColor: bg3,
-                            }}
-                            onPress={this.copyLink}>
-                            <Text style={{padding: 5,}}>{translate('finishRegister_copy')}</Text>
-                        </TouchableOpacity>
-                        <TextInput
-                            style={{
-                                fontSize: 14,
-                                fontFamily: 'IRANYekanRegular',
-                                color: grL5,
-                                //maxWidth:global.width-50,
-                                textAlign: 'left',
-                                paddingHorizontal: 5,
-                                width: '100%',
-                                height: 60,
-                            }}
-                            readonly
-                            numberOfLines={5}
-                            value={userStore.invitationLink}
-                        >
 
-                        </TextInput>
+                    <View>
+                        <View style={{padding: 24, marginTop: 0}}>
+                            <Text
+                                style={{
+                                    marginTop: 0,
+                                    fontSize: 16,
+                                    fontWeight: 800,
+                                    fontFamily: 'IRANYekanFaNum-Bold',
+                                    color: grL5,
+                                }}>
+                                {translate('finishRegister_your_invitation_link')}
+                            </Text>
+                            <View style={{
+                                flexDirection: 'row',
+                                marginTop: 10,
+                                borderWidth: 1,
+                                borderRadius: 8,
+                                borderColor: bg8,
+                                alignItems: 'center',
+                            }}>
+                                <TouchableOpacity
+                                    style={{
+                                        borderWidth: 1,
+                                        borderRadius: 0,
+                                        borderColor: grL5,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: bg10,
+                                        width: 80,
+                                        height: 60,
+                                        fontSize: 16,
+                                        marginHorizontal: 0,
+                                        backgroundColor: bg3,
+                                    }}
+                                    onPress={this.copyLink}>
+                                    <Text style={{padding: 5,}}>{translate('finishRegister_copy')}</Text>
+                                </TouchableOpacity>
+                                <TextInput
+                                    style={{
+                                        fontSize: 14,
+                                        fontFamily: 'IRANYekanRegular',
+                                        color: grL5,
+                                        //maxWidth:global.width-50,
+                                        textAlign: 'left',
+                                        paddingHorizontal: 5,
+                                        width: '100%',
+                                        height: 60,
+                                    }}
+                                    readonly
+                                    numberOfLines={5}
+                                    value={userStore.invitationLink}
+                                >
+
+                                </TextInput>
+                            </View>
+
+                        </View>
+                        <Text style={{
+                            textAlign: 'justify',
+                            paddingHorizontal: 30,
+                            fontSize: 14,
+                            color: itemListText
+                        }}>{translate('با کپی کردن لینک اختصاصی خودت و ارسال آن برای دوستان و آشنایان یا اشتراک گذاری آن در شبکه های اجتماعی، خیلی سریع شبکه خودتو بزرگ کن.')}</Text>
+                        <Text style={{
+                            textAlign: 'justify',
+                            paddingHorizontal: 30,
+                            fontSize: 14,
+                            color: itemListText
+                        }}>{translate('کافیه لینک رو برای چند نفر بفرستی تا شبکه ات خودبخود شروع به رشد کنه و هر روز بتونی رشد درخت شبکه ات رو ببینی.')}</Text>
+                        <Text style={{
+                            textAlign: 'justify',
+                            paddingHorizontal: 30,
+                            fontSize: 14,
+                            color: itemListText
+                        }}>{translate('اگر در خارج از کشور آشنایی داری، یا در شبکه های اجتماعی بین المللی  مثل فیسبوک عضوی لینکتو برای خارجی ها به اشتراک بذار، تا شبکه ات در سطح بین الملل هم رشد کنه .')}</Text>
+                        <Text style={{
+                            textAlign: 'justify',
+                            paddingHorizontal: 30,
+                            fontSize: 14,
+                            color: itemListText
+                        }}>{translate('برای معرفی بهتر می تونی لینک خودت رو به همراه یه پیام برای دوستات ارسال کنی تا تاثیر بهتری داشته باشه.')}</Text>
+                        <Text style={{
+                            textAlign: 'justify',
+                            paddingHorizontal: 30,
+                            fontSize: 14,
+                            color: itemListText
+                        }}>{translate('شبکه خودتو توسعه بده و منتظر  اپلیکیشن ترینتگرام باش. این اپلیکیشن با امکاناتی که داره، بصورت اتوماتیک به تو قدرت تبلیغاتی، رسانه ای و ثروت آفرینی میده. پس از همین الان شروع کن و شبکه خودتو سریعتر از دیگران توسعه بده.')}</Text>
+
                     </View>
 
-                </View>
-                <Text style={{
-                    textAlign: 'justify',
-                    paddingHorizontal: 30,
-                    fontSize: 14,
-                    color: itemListText
-                }}>{translate('با کپی کردن لینک اختصاصی خودت و ارسال آن برای دوستان و آشنایان یا اشتراک گذاری آن در شبکه های اجتماعی، خیلی سریع شبکه خودتو بزرگ کن.')}</Text>
-                <Text style={{
-                    textAlign: 'justify',
-                    paddingHorizontal: 30,
-                    fontSize: 14,
-                    color: itemListText
-                }}>{translate('کافیه لینک رو برای چند نفر بفرستی تا شبکه ات خودبخود شروع به رشد کنه و هر روز بتونی رشد درخت شبکه ات رو ببینی.')}</Text>
-                <Text style={{
-                    textAlign: 'justify',
-                    paddingHorizontal: 30,
-                    fontSize: 14,
-                    color: itemListText
-                }}>{translate('اگر در خارج از کشور آشنایی داری، یا در شبکه های اجتماعی بین المللی  مثل فیسبوک عضوی لینکتو برای خارجی ها به اشتراک بذار، تا شبکه ات در سطح بین الملل هم رشد کنه .')}</Text>
-                <Text style={{
-                    textAlign: 'justify',
-                    paddingHorizontal: 30,
-                    fontSize: 14,
-                    color: itemListText
-                }}>{translate('برای معرفی بهتر می تونی لینک خودت رو به همراه یه پیام برای دوستات ارسال کنی تا تاثیر بهتری داشته باشه.')}</Text>
-                <Text style={{
-                    textAlign: 'justify',
-                    paddingHorizontal: 30,
-                    fontSize: 14,
-                    color: itemListText
-                }}>{translate('شبکه خودتو توسعه بده و منتظر  اپلیکیشن ترینتگرام باش. این اپلیکیشن با امکاناتی که داره، بصورت اتوماتیک به تو قدرت تبلیغاتی، رسانه ای و ثروت آفرینی میده. پس از همین الان شروع کن و شبکه خودتو سریعتر از دیگران توسعه بده.')}</Text>
+
+
 
             </PanelLayout>
             //</PanelLayout>

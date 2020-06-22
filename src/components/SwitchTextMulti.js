@@ -10,41 +10,25 @@ export default class SwitchTextMulti extends PureComponent {
         this.firsSet = true;
         // this.backgroundMove = useState();
         this.state = {
-            backgroundMove: new Animated.Value(0),
+            backgroundMove: 0,
         };
 
     }
 
     componentDidMount() {
-         const {value} = this.props;
+         const {selectedIndex} = this.props;
 
-         this.animateSwitch(value, () => null);
+         this.setState({backgroundMove: selectedIndex * this.props.itemWidth});
     }
 
-    componentDidUpdate() {
-        //this.animateSwitch(this.props.activeIndex, () => null);
-    }
+    onselect = (index)=>{
 
-
- /*   animateSwitch = (activeIndex, cb = () => {}) => {
-        Animated.parallel([
-            Animated.timing(this.state.backgroundMove, {
-                toValue: activeIndex * this.props.itemWidth,
-                duration: 150,
-                friction: 3,
-                tension: 40,
-            }),
-        ]).start(cb);
-    };*/
-
-    animateSwitch = (activeIndex=0)=>{
-
-        this.props.onActivate && this.props.onActivate(activeIndex);
-        this.setState({backgroundMove: activeIndex * this.props.itemWidth})
+        this.setState({backgroundMove: index * this.props.itemWidth});
+        this.props.onSelect && this.props.onSelect(index);
     };
 
     render() {
-        const {style,data, activeIndex, itemWidth, backgroundActive, backgroundInactive, activeTextStyle, inactiveTextStyle, onActivate} = this.props;
+        const {style,data, selectedIndex, itemWidth, backgroundActive, backgroundInactive, activeTextStyle, inactiveTextStyle, onActivate} = this.props;
 
         // const moveBackground = backgroundMove.interpolate({
         //     inputRange: [0, data.length],
@@ -86,23 +70,23 @@ export default class SwitchTextMulti extends PureComponent {
                             justifyContent: 'center'
 
                         }}>
-                   {/* <Text style={{color:'#fff',alignSelf:'center'  }} >{data[activeIndex]}</Text>*/}
                 </Animated.View>
 
                 {data.map((item, index) => {
+
+                    let selected=index ==Number(selectedIndex)
                     return (
                         <TouchableWithoutFeedback
                             style={{flex:1,padding:5}}
-                            onPress={() => this.animateSwitch(index)}>
+                            onPress={() => this.onselect(index)}>
                             <View style={[styles.item]} key={index.toString()}>
                                 <Text
                                     style={[styles.text, {
-                                        fontFamily: index === activeIndex ?
-                                            Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)' :
-                                            Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                        fontSize: index === activeIndex ? 16 : 14,
-                                        color: index === activeIndex ? 'white' : border,
-                                    }, index === activeIndex ? activeTextStyle : inactiveTextStyle]}>{item}</Text>
+                                        fontFamily: selected ?
+                                            'IRANYekanFaNum-Bold': 'IRANYekanFaNum' ,
+                                        fontSize: selected ? 16 : 14,
+                                        color: selected ? 'white' : border,
+                                    },selected ? activeTextStyle : inactiveTextStyle]}>{item}</Text>
                             </View>
                         </TouchableWithoutFeedback>
                     );

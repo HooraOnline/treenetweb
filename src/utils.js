@@ -491,19 +491,21 @@ export function getWidth(){
         window.screen.width : window.outerWidth;
     return  windowWidth;
 }
-
+export function setScreenSize(){
+    let width=Math.min(window.innerWidth, 700);
+    let height=globalState.innerHeight;
+    global.width=width;
+    global.height=height;
+    globalState.width=width;
+    globalState.height=height;
+}
 export function deviceWide(){
 
     let windowWidth = window.screen.width < window.outerWidth ?  window.screen.width : window.outerWidth;
 
     return  windowWidth>700;
 }
-export function setDemansion(screenMaxWidth){
-    const width =  window.innerWidth>screenMaxWidth?screenMaxWidth:window.innerWidth;
-    const height = window.innerHeight;
-    global.width=width;
-    global.height=height;
-}
+
 export function getDemansion(){
    return {width:global.width,height:global.height};
 }

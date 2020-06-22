@@ -105,7 +105,7 @@ import {observer} from "mobx-react";
                 }
                 renderItem={({item}) =>{
 
-                    let {subsets,cdate,firstName='',lastName='',biarthDate='',profileImage='',gender=0,username=''}=item;
+                    let {subsets,cdate,firstName='',lastName='',birthDate='',profileImage='',gender=0,username=''}=item;
                     return(
                         <View style={{
                             borderBottomWidth: 1,
@@ -133,6 +133,7 @@ import {observer} from "mobx-react";
                                         resizeMode="cover"
                                         source={getFileUri('member',profileImage)}
                                     />
+
                                     <View style={{ padding:5,margin:5,}}>
                                         <Text style={{}}>{firstName+' '+lastName}</Text>
                                         <Text style={{fontSize:12}}>{username}</Text>
@@ -194,14 +195,15 @@ export default class MyNetwork extends Component {
     }
 
    async componentDidMount  () {
-        await fetchStore()
-        this.getUserSubset();
-    }
-    static async getInitialProps (context) {
-        const { pathname } = context
+       try{
+           this.getUserSubset();
+       }
+       catch (e) {
+          //showMassage('')
+       }
 
-        return { pathname }
     }
+
     getUserSubset(){
         this.setState({loading:true});
         getUserSubsetApi()
@@ -246,34 +248,35 @@ export default class MyNetwork extends Component {
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
                               onCloseMenu={()=>this.setState({showMenu:false})}
                               style={{paddingBottom:10}}
+                              notif={persistStore.userChangedUserName==false?"رمز موقت را تغییر دهید.":""}
                               header={
                                   <Toolbar
                                       customStyle={toolbarStyle}
                                       isExpand={this.state.showAccountSelect }
                                   />
                               }
-                              footer={
-                                  <View style={{paddingHorizontal:10}}>
-                                      <NavBar navButtons={[
-                                          {
-                                              label: translate('پروفایل'),
-                                              path: "/profile",
-                                              icon: <FontAwesomeIcon icon={faUser} />
-                                          },
-                                          {
-                                              label: translate('شبکه من'),
-                                              path: "/myNetwork",
-                                              icon: <FontAwesomeIcon icon={faCogs} />
-                                          },
-                                          {
-                                              label: translate('لینک دعوت'),
-                                              path: "/myLink",
-                                              icon: <FontAwesomeIcon icon={faCompass} />
-                                          },
-                                      ]}/>
-                                  </View>
-                              }>
-                <View style={{marginHorizontal: 10,marginTop: userStore.isVerify?10:100,paddingBottom:60}}>
+                            footer={
+                                <NavBar navButtons={[
+                                    {
+                                        label: translate('پروفایل'),
+                                        path: "/profile",
+                                        icon: <FontAwesomeIcon icon={faUser}/>
+                                    },
+                                    {
+                                        label: translate('شبکه من'),
+                                        path: "/myNetwork",
+                                        icon: <FontAwesomeIcon icon={faCogs}/>
+                                    },
+                                    {
+                                        label: translate('لینک دعوت'),
+                                        path: persistStore.userChangedUserName ? "/myLink" : "/change_username_password",
+                                        icon: <FontAwesomeIcon icon={faCompass}/>
+                                    },
+                                ]}/>
+                            }
+
+                              >
+                <View style={{marginHorizontal: 10,marginTop: persistStore.userChangedUserName?10:100,paddingBottom:60}}>
                     <View style={{width:'100%',
                         flexDirection:'row',
                         justifyContent:'space-between',
@@ -349,7 +352,6 @@ export default class MyNetwork extends Component {
                                         numberOfLines={5}
                                         value={ userStore.invitationLink}
                                     >
-
                                     </TextInput>
                                 </View>
 
@@ -358,7 +360,6 @@ export default class MyNetwork extends Component {
                     )}
                 </View>
             </PanelLayout>
-            //</PanelLayout>
 
         )
     }

@@ -22,14 +22,14 @@ import Head from "next/head";
 import Router from "next/router";
 
 //import { appWithTranslation } from '../i18n'
-import {fetchStore, getCookie, navigation} from "../src/utils";
+import {fetchStore, getCookie, navigation, setScreenSize} from "../src/utils";
 
 //import PageChange from "components_creative/PageChange/PageChange.js";
 
 import "assets/scss/nextjs-material-kit.scss?v=1.0.0";
 //import "assets/css/apamanGlobal.css";
 //import persistStore from "../src/stores/PersistStore";
-import { accountsStore, userStore } from "../src/stores";
+import { globalState, userStore } from "../src/stores";
 import { loginQuery } from "../src/network/Queries";
 import {getUserProfileApi, postQuery} from "../dataService/apiService";
 import Api from "../dataService/apiCaller";
@@ -71,6 +71,7 @@ class MyApp extends App {
   }
 
   async componentDidMount() {
+    setScreenSize();
     //this.refechInitData();
     let comment = document.createComment(``);
     document.insertBefore(comment, document.documentElement);

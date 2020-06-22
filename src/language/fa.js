@@ -22,7 +22,7 @@ export const fa= {
   fa_fastRegister_atleast_fill_one_down:"حداقل یک مورد از موارد زیر را پر کنید.",
   fa_fastRegister_mobile_number:"شماره موبایل",
   fa_fastRegister_onlyEnglish_number:"فقط از اعداد انگلیسی استفاده شود.",
-  fa_fastRegister_email_address:"آدرس ایمیل",
+  fa_fastRegister_email_address:"اگر ایمیل دارید وارد کنید",
   fa_fastRegister_only_english_number_special_charachter:"فقط از حروف انگلیسی اعداد و کاراکترهای ایمیل مانند @. استفاده شود.",
 
 
@@ -39,7 +39,7 @@ export const fa= {
   fa_registerPassword_enter_password:"رمز عبور را وارد کنید.",
   fa_registerPassword_password_can_not_be_les_than:"پسورد نباید کمتر از ۶ حرف باشد.",
   fa_registerPassword_password_and_repeat_not_equal:"پسورد و تکرار آن مساوی نیست.",
-  fa_registerPassword_decription1:"یک نام کاربری منحصر بفرد و یک کلمه عبور قوی برای شبکه خود انتخاب کنید. لازم است رمز عبور شما حداقل  ۶ حرف داشته و توصیه می شود برای یک پسورد قوی از ترکیب حروف کوچک و بزرگ،اعداد و کاراکترهای خاص استفاده کنید.",
+  fa_registerPassword_decription1:"برای دریافت لینک دعوت اختصاصی خود و شروع شبکه سازی، با استفاده از همین فرم، نام کاربری و رمز عبور موقت خود را عوض کنید.حتما رمز عبور و نام کاربری انتخابی خود را بخاطر بسپارید.",
   fa_registerPassword_decription2:"نام کاربری و پسورد شما کلید ورود و سند مالکیت شبکه شما می باشد.بنابراین لازم است آنرا به خاطر داشته و از آن محافظت کنید.",
   fa_registerPassword_username_example:"نام کاربری-مثال ahmad_azizi",
   fa_registerPassword_username_rule:"فقط از حروف و اعداد انگلیسی و کاراکتر نقطه و زیر خط ـ . استفاده شود",

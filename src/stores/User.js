@@ -5,7 +5,7 @@ class UserStore {
     @observable userID= null ;
     @observable username= null ;
     @observable beforloginDate=null;
-    @observable biarthDate= null ;
+    @observable dateYear= null ;
     @observable birthDate= null ;
     @observable displayName= null ;
     @observable firstName= null ;
@@ -26,15 +26,20 @@ class UserStore {
     @observable token=null ;
     @observable udate=null ;
     @observable countryCode=null ;
+    @observable birthYear=null ;
+    @observable profileImage=null ;
 
     @action
     setUser(user) {
+        const birthYear=user.birthDate?new Date(user.birthDate).getFullYear():'';
         this.user=user;
         this.userID= user.id ;
         this.username= user.username ;
+        this.profileImage= user.profileImage ;
         this.beforloginDate=user.beforloginDate;
-        this.biarthDate= user.biarthDate ;
         this.birthDate= user.birthDate ;
+        this.birthYear=birthYear ;
+        this.age=user.birthDate?(new Date()).getFullYear()-birthYear:'';
         this.displayName= user.displayNme ;
         this.firstName= user.firstName ;
         this.gender= user.gender ;
@@ -73,7 +78,7 @@ class UserStore {
         this.userID= null ;
         this.username= null ;
         this.beforloginDate=null;
-        this.biarthDate= null ;
+        this.birthDate= null ;
         this.birthDate= null ;
         this.displayName= null ;
         this.firstName= null ;

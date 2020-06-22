@@ -1,5 +1,5 @@
 
-export default {name: 'treenetSite', release: true}
+export default {name: 'treenetSite', release: false}
 
 
 

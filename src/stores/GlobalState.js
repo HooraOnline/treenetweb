@@ -11,8 +11,8 @@ class GlobalState {
     @observable toastType = 'success';
     @observable toastTitle = '';
     @observable statusBarColor = primaryDark;
-    @observable width = 500;
-    @observable height = 700;
+    @observable width = null;
+    @observable height = null;
 
 
     @action

@@ -18,12 +18,26 @@ import {
     borderSeparate,
     border,
     primary,
-    primaryDark, bg1, bg3, textItem, bg5, bg9, textItemBlack, placeholderTextColor, lightRed, bg2, bg4
+    primaryDark,
+    bg1,
+    bg3,
+    textItem,
+    bg5,
+    bg9,
+    textItemBlack,
+    placeholderTextColor,
+    lightRed,
+    bg2,
+    bg4,
+    grL5,
+    bg8,
+    bg10,
+    itemListText
 } from "../src/constants/colors";
 import accounting from "accounting";
 import NavFooterButtons from "../src/components/layouts/footerButtons";
 import NavBar from "../src/components/layouts/NavBar";
-import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
+import {View, TouchableOpacity, Text, Image, Platform, TextInput,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCogs, faCompass, faMapMarkerAlt, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
@@ -39,6 +53,7 @@ export default class change_username_password extends Component {
         super();
         const contryCode='+'+userStore.countryCode
         this.state = {
+            password:'',
             showPassword:false,
             passwordValidation:false,
             passwor2dValidation:false,
@@ -49,30 +64,31 @@ export default class change_username_password extends Component {
             email:userStore.email ||'',
             firstName:userStore.firstName ||'',
             lastName:userStore.lastName ||'',
-            age:userStore.biarthDate?new Date().getFullYear()-new Date(userStore.biarthDate).getFullYear():'' ,
-            gender:userStore.gender ||'',
+            age:userStore.age ,
+            gender:Number(userStore.gender ||0),
         };
+
     }
 
-   async componentDidMount() {
+    async componentDidMount() {
 
     }
 
     checkValidation() {
 
-        if (!this.state.username) {
+        if (!this.state.username ) {
             this.setState({usernameValidation: false});
             return translate('registerPassword_enter_username');
+        }
+        if (this.state.username==persistStore.username) {
+            this.setState({usernameValidation: false});
+            return translate('نام کاربری پیشفرض را عوض کنید.');
         }
         if (this.state.username.length<3) {
             this.setState({usernameValidation: false});
             return translate('registerPassword_username_can_not_be_les_than');
         }
 
-        if(this.state.usernameReserved && userStore.username!=this.state.username){
-            this.setState({usernameValidation: false});
-            return translate('registerPassword_username_is_reserved');
-        }
         if (!this.state.password) {
             this.setState({passwordValidation: false});
             return translate('registerPassword_enter_password');
@@ -91,9 +107,10 @@ export default class change_username_password extends Component {
             return translate('registerPassword_password_and_repeat_not_equal');
         }
 
-        if(!this.state.mobile && !this.state.email){
+
+        if(!this.state.mobile){
             this.setState({mobileValidation: false});
-            return translate('fastRegister_atleast_fill_one')
+            return translate('موبایل خود را وارد کنید.')
         }
         if (this.state.mobile && this.state.mobile.length < 10) {
             this.setState({mobileValidation: false});
@@ -111,18 +128,33 @@ export default class change_username_password extends Component {
             //this.setState({emailReg: false});
             return translate('fastRegister_invalid_email_format');
         }
+        if (!this.state.firstName){
+
+            return translate('نام خود را وارد کنید.');
+        }
+        if (!this.state.lastName){
+            //this.setState({emailReg: false});
+            return translate('نام خانوادگی خود را وارد کنید.');
+        }
+        if (!this.state.age){
+            return translate('سن را وارد کنید');
+        }
+        if (!this.state.gender){
+            return translate('جنسیت را وارد کنید');
+        }
     }
     updateUsernameAndPassword=()=>{
 
         const msg=this.checkValidation();
         if(msg){
-            showMassage(msg,'info')
+            showMassage(msg,'warning')
             return;
         }
 
         const data={
             username:this.state.username,
-            password:this.state.password
+            password:this.state.password,
+            showNotifAction:true,
         };
         if(this.state.mobile){
             data.mobile=this.state.countryCode+this.state.mobile;
@@ -139,8 +171,8 @@ export default class change_username_password extends Component {
         if(this.state.age){
             data.age=this.state.age;
         }
-        if(this.state.gender){
-            data.gender=this.state.gender;
+        if(this.state.gender!==undefined){
+            data.gender=Number(this.state.gender);
         }
 
 
@@ -148,14 +180,25 @@ export default class change_username_password extends Component {
         postQuery('Members/me/updateUsernameAndPassword',data)
             .then(res=>{
                 console.log(res);
-                navigation.replace('profile');
+                navigation.replace('myLink');
                 this.setState({loading:false});
-                showMassage('نام کاربری و پسورد با موفقیت تغییر یافت.','success')
+                showMassage('مشخصات با موفقیت ویرایش شد.','success')
             })
             .catch(err=>{
                 this.setState({loading:false});
             })
 
+    }
+    setProfileImage=(fileName)=>{
+        const data={profileImage:fileName}
+        postQuery('Members/me/setProfileImage',data)
+            .then(res=>{
+                profileImage:res.profileImage;
+                this.setState({loading:false});
+            })
+            .catch(err=>{
+                this.setState({loading:false});
+            })
     }
 
     render() {
@@ -164,34 +207,40 @@ export default class change_username_password extends Component {
                 content: images.ic_back,
                 onPress: ()=>navigation.goBack(),
             },
-            title: 'تغییر نام کاربری و پسورد',
+            title: 'تغییر پسورد',
 
         };
 
 
 
         return (
-            //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
-            <PanelLayout loading={this.state.loading} loadingMessage={this.state.loadingMessage} showVerifiyMassege={false} title={`Treenetgram`} showMenu={this.state.showMenu}
-                              onRef={(initDrawer)=>this.initDrawer=initDrawer}
-                              onCloseMenu={()=>this.setState({showMenu:false})}
-                              style={{alignItems:'center'}}
-                              header={
-                                  <Toolbar
-                                   customStyle={toolbarStyle}
-                                   isExpand={this.state.showAccountSelect }
-                                  />
-                              }
-                              footer={
-                                  <TouchableOpacity
-                                      onPress={this.updateUsernameAndPassword}
-                                      style={{alignItems:'center',justifyContent:'center',padding:15, backgroundColor:primaryDark}}>
-                                      <Text style={{color:bgWhite}} >ذخیره</Text>
-                                  </TouchableOpacity>
-                              }>
-                <View style={{flex:1,alignItems:'center',padding:10,paddingTop:'5%',}} >
-                    <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,padding:16}}   >
-                        {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:14,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
+            <PanelLayout
+                loading={this.state.loading}
+                loadingMessage={this.state.loadingMessage}
+                title={`Treenetgram`}
+                showNotifAction={false}
+                showMenu={this.state.showMenu}
+                onRef={(initDrawer)=>this.initDrawer=initDrawer}
+                onCloseMenu={()=>this.setState({showMenu:false})}
+                style={{alignItems:'center'}}
+                header={
+                    <Toolbar
+                        customStyle={toolbarStyle}
+                        isExpand={this.state.showAccountSelect }
+                    />
+                }
+                footer={
+                    <TouchableOpacity
+                        onPress={this.updateUsernameAndPassword}
+                        style={{alignItems:'center',justifyContent:'center',padding:15, backgroundColor:primaryDark}}>
+                        <Text style={{color:bgWhite}} >ذخیره</Text>
+                    </TouchableOpacity>
+                }>
+                <View style={{flex:1,alignItems:'center',paddingHorizontal:13,paddingTop:0,}} >
+
+
+                    <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,}}   >
+
                         <Text
                             style={{
                                 alignItems:'center',
@@ -202,18 +251,7 @@ export default class change_username_password extends Component {
                             }}>
                             {translate("registerPassword_decription1")}
                         </Text>
-                        <Text
-                            style={{
-                                alignItems:'center',
-                                marginTop:2,
-                                fontSize:14,
-                                fontFamily: 'IRANYekanFaNum-Bold',
-                                textAlign:'justify',
-                                color:bg1,
 
-                            }}>
-                            {translate("registerPassword_decription2")}
-                        </Text>
                         <View
                             style={{
                                 flexDirection: 'row',
@@ -258,7 +296,7 @@ export default class change_username_password extends Component {
                                 onChangeText={ async (text) =>{
                                     const usernameReg =/^[a-zA-Z0-9_.]+$/;
                                     if(text && !usernameReg.test(text)){
-                                        showMassage(translate('registerPassword_username_rule'),'info');
+                                        showMassage(translate('registerPassword_username_rule'),'warning');
                                         this.setState({
                                             usernameValidation: false,
                                             username:this.state.username,
@@ -269,7 +307,7 @@ export default class change_username_password extends Component {
 
                                     const usernameReg2 =/^\d+$/;
                                     if(text && usernameReg2.test(text.substring(0,1))){
-                                        showMassage(translate('registerPassword_username_rule2'),'info');
+                                        showMassage(translate('registerPassword_username_rule2'),'warning');
                                         this.setState({
                                             usernameValidation: false,
                                             username:'',
@@ -356,7 +394,7 @@ export default class change_username_password extends Component {
                                     //this.checkValidation();
                                     const passReg =/^[a-zA-Z0-9~`!@#$%^&*()_-{\]\[}|\\?/<.>,+=-]+$/;
                                     if(text && !passReg.test(text)){
-                                        showMassage(translate('registerPassword_password_rule'),'info');
+                                        showMassage(translate('registerPassword_password_rule'),'warning');
                                         this.setState({
                                             passwordValidation: false,
                                             password:this.state.password,
@@ -420,7 +458,7 @@ export default class change_username_password extends Component {
                                 }}
                                 underlineColor={this.state.passwor2dValidation ? bg3 : primaryDark}
                                 isAccept={this.state.passwor2dValidation}
-                                underlineSize={1}
+                                underlineSize={3}
 
                                 style={{flex: 1}}
                                 onChangeText={text => {
@@ -449,19 +487,9 @@ export default class change_username_password extends Component {
                             </TouchableOpacity>
                         </View>
                         <View id='form' style={{width:'100%',maxWidth:500,marginTop:40}}   >
-                            <Text
-                                style={{
-                                    alignItems:'center',
-                                    marginTop:2,
-                                    fontSize:14,
-                                    fontFamily: 'IRANYekanFaNum-Bold',
-                                    textAlign:'justify',
 
-                                }}>
-                                {translate('حداقل یکی از موارد زیر را جهت یادآوری رمز عبور در زمان فراموشی و مالکیت کامل شبکه وارد نمایید. ')}
-                            </Text>
 
-                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:5,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
                                 <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                     fontSize: 16,
@@ -488,7 +516,7 @@ export default class change_username_password extends Component {
                                             text = mapNumbersToEnglish(text);
                                             this.setState({ mobile:text, mobileValidation:mobileReg.test(text)});
                                         }else{
-                                            showMassage(translate('fastRegister_onlyEnglish_number'),'info');
+                                            showMassage(translate('fastRegister_onlyEnglish_number'),'warning');
                                         }
                                         if(!text){
                                             this.setState({ mobile:'', mobileValidation:false});
@@ -533,7 +561,7 @@ export default class change_username_password extends Component {
                                         if(acceptReg.test(text)){
                                             this.setState({ email:text, emailValidation:emailReg.test(text)});
                                         }else{
-                                            showMassage(translate('fastRegister_only_english_number_special_charachter'),'info');
+                                            showMassage(translate('fastRegister_only_english_number_special_charachter'),'warning');
                                         }
                                         if(!text){
                                             this.setState({ email:'', emailValidation:false});
@@ -684,7 +712,7 @@ export default class change_username_password extends Component {
                                         if(acceptReg.test(text)){
                                             this.setState({ age:text, ageValidation:ageReg.test(text)});
                                         }else{
-                                            showMassage(translate('فقط اعداد انگلیسی'),'info');
+                                            showMassage(translate('فقط اعداد انگلیسی'),'warning');
                                         }
                                         if(!text){
                                             this.setState({ age:'', ageValidation:false});
@@ -705,19 +733,18 @@ export default class change_username_password extends Component {
                                 <View style={{flex:1,alignItems:'center',marginTop:30}}>
                                     <SwitchTextMulti
                                         style={{width:300}}
-                                        activeIndex={this.state.gender}
-                                        onActivate={val => {
-                                            this.setState({gender: Number(val)});
+                                        selectedIndex={this.state.gender}
+                                        onSelect={index => {
+                                            this.setState({gender: index});
                                             //this.checkValidation();
                                         }}
                                         data={[
-                                            translate('onselect'),
-                                            translate('man'),
                                             translate('woman'),
+                                            translate('man'),
                                         ]}
                                         backgroundActive={primaryDark}
                                         backgroundInactive={'#fff'}
-                                        itemWidth={getTabWidth(300, 3,1)}
+                                        itemWidth={getTabWidth(300, 2,1)}
                                         activeTextStyle={{
                                             paddingVertical: 6,
                                         }}

@@ -11,7 +11,7 @@ import "./Layout.scss";
 import "./index.scss";
 import Router from "next/router";
 import {getUserBalance} from "../../network/Queries";
-import {fetchStore, getWidth, deviceWide, height, showMassage} from "../../utils";
+import {fetchStore, getWidth, deviceWide, height, showMassage, setScreenSize} from "../../utils";
 import NavFooterButtons from "./footerButtons";
 import DrawerPanel from "./DrawerPanel";
 import ToastCard from "../ToastCard";
@@ -27,32 +27,20 @@ const BaseLayout = observer( props => {
     const [isWide, setIsWide] = useState(false);
     const ref = useRef(null);
 
-    const manageResizeScreen=()=> {
-        setIsWide(deviceWide());
-        setScreenwidth(width);
-        const width = ref.current ? ref.current.offsetWidth : 700;
-        const height = ref.current ? ref.current.offsetHeight : 700;
-        global.width=width;
-        global.height=height;
+    const onResizeScreen=()=> {
         document.body.onresize = () => {
-            if(ref.current){
-                setScreenwidth(ref.current.offsetWidth);
-                global.width=ref.current.offsetWidth;
-                global.height=ref.current.offsetHeight;
-                window.ss=ref.current
-                props.onResizeScreen && props.onResizeScreen(ref.current.offsetWidth,ref.current.offsetHeight);
-            }
+            setScreenSize()
         };
-        }
+    }
 
     useEffect(() => {
         document.title = props.title;
-        manageResizeScreen();
-    },  [ref.current]);
+        onResizeScreen();
+    },  []);
 
   return (
     <div dir={persistStore.isRtl || "rtl"}  style={{ display: 'flex',flex:1,  justifyContent:'center',  height: '100%'}}>
-        <View  ref={ref} dir={"rtl"} style={[{flex:1,maxWidth:props.maxWidth || 700 ,position:'relative', backgroundColor:screenwidth<700?bgScreen:bgScreen,flexDirection:'column',margin:  isWide?0:0 },props.style]}>
+        <View  ref={ref} dir={"rtl"} style={[{flex:1,maxWidth:props.maxWidth || 700 ,position:'relative', backgroundColor:globalState.width<700?bgScreen:bgScreen,flexDirection:'column', },props.style]}>
             {props.children}
             <ToastCard
                 visible={globalState.toastCard}

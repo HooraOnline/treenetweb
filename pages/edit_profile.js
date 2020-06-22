@@ -1,108 +1,174 @@
 import React, {Component} from 'react';
+import {userStore,persistStore } from "../src/stores";
+import {permissionId} from '../src/constants/values';
+import Router from "next/router";
 import PanelLayout from "../src/components/layouts/PanelLayout";
+import {DropDownList, Toolbar, CardUnitInfo, PopupBase, ImageSelector, SwitchTextMulti} from "../src/components";
 
-import {
-    doDelay,
-    navigation,
-    showMassage,
-    getTabWidth, mapNumbersToEnglish
-} from "../src/utils";
+import accountsStore from "../src/stores/Accounts";
+import {deviceWide, doDelay, getTabWidth, logger, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
+import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
+import {getUserBalance} from "../src/network/Queries";
 import {
+    bgItemRed,
+    bgScreen,
+    bgWhite,
+    textItemRed,
+    borderSeparate,
+    border,
+    primary,
+    primaryDark,
+    bg1,
+    bg3,
+    textItem,
+    bg5,
+    bg9,
+    textItemBlack,
     placeholderTextColor,
     lightRed,
-    bg10,
-    bg3,
+    bg2,
+    bg4,
+    grL5,
     bg8,
-    bg9,
-    bg5,
-    bg1, bg2,
-    primaryDark, bg4, bgWhite
+    bg10,
+    itemListText
 } from "../src/constants/colors";
-import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
-import {FloatingLabelTextInput, SwitchTextMulti, Toolbar} from "../src/components";
-import {getUserProfileApi, postQuery, saveEntity} from "../dataService/apiService";
+import accounting from "accounting";
+import NavFooterButtons from "../src/components/layouts/footerButtons";
+import NavBar from "../src/components/layouts/NavBar";
+import {View, TouchableOpacity, Text, Image, Platform, TextInput,} from "../src/react-native";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCogs, faCompass, faMapMarkerAlt, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
-import LoadingPopUp from "../src/components/LoadingPopUp";
-import {userStore} from "../src/stores";
+import {getUserProfileApi, logoutApi, postQuery} from "../dataService/apiService";
+import Api from "../dataService/apiCaller";
+import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
+import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
+import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 
+const HOME_TYPE = 1;
 export default class edit_profile extends Component {
     constructor() {
         super();
+        const contryCode='+'+userStore.countryCode
         this.state = {
-            focus:1,
-            invitationLink:'',
+            password:'',
+            showPassword:false,
+            passwordValidation:false,
+            passwor2dValidation:false,
+            usernameValidation:false,
+            countryCode:userStore.countryCode?'+'+userStore.countryCode : '+98',
+            username:userStore.username,
+            mobile:userStore.mobile?userStore.mobile.replace(contryCode,''):'',
+            email:userStore.email ||'',
+            firstName:userStore.firstName ||'',
+            lastName:userStore.lastName ||'',
+
+            gender:Number(userStore.gender ||0),
         };
+
+        this.state.age=userStore.age ,
+        this.state.gender=Number(userStore.gender ||0)
+
     }
-    componentDidMount() {
 
-        this.getProfile();
+    async componentDidMount() {
+
     }
-    getProfile(){
 
-        getUserProfileApi()
-            .then(user=>{
-                this.setState({
-                    username:user.username,
-                    firstName:user.firstName,
-                    lastName:user.lastName,
-                    biarthDate:user.biarthDate,
-                    profileImage:user.profileImage,
-                    gender:user.gender,
-                    age:user.biarthDate?new Date().getFullYear()-new Date(userStore.biarthDate).getFullYear():'',
+    checkValidation() {
 
-                });
+        if(!this.state.mobile){
+            this.setState({mobileValidation: false});
+            return translate('موبایل خود را وارد کنید.')
+        }
+        if (this.state.mobile && this.state.mobile.length < 10) {
+            this.setState({mobileValidation: false});
+            return translate('the_number_of_mobile_is_not_valid');
+        }
+
+        const mobileReg = /^9[0-9]{9}$/i;
+        if (this.state.mobile && !mobileReg.test(this.state.mobile)){
+            //this.setState({mobileValidation: false});
+            return translate('invalid_mobile_number'); ;
+        }
+
+        const emailReg = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
+        if (this.state.email && !emailReg.test(this.state.email)){
+            //this.setState({emailReg: false});
+            return translate('fastRegister_invalid_email_format');
+        }
+        if (!this.state.firstName){
+
+            return translate('نام خود را وارد کنید.');
+        }
+        if (!this.state.lastName){
+            //this.setState({emailReg: false});
+            return translate('نام خانوادگی خود را وارد کنید.');
+        }
+        if (!this.state.age){
+            return translate('سن را وارد کنید');
+        }
+        if (!this.state.gender){
+            return translate('جنسیت را وارد کنید');
+        }
+    }
+    updateUsernameAndPassword=()=>{
+
+        const msg=this.checkValidation();
+        if(msg){
+            showMassage(msg,'warning')
+            return;
+        }
+
+        const data={
+
+        };
+        if(this.state.mobile){
+            data.mobile=this.state.countryCode+this.state.mobile;
+        }
+        if(this.state.email){
+            data.email=this.state.email;
+        }
+        if(this.state.firstName){
+            data.firstName=this.state.firstName;
+        }
+        if(this.state.lastName){
+            data.lastName=this.state.lastName;
+        }
+        if(this.state.age){
+            data.age=this.state.age;
+        }
+        if(this.state.gender!==undefined){
+            data.gender=Number(this.state.gender);
+        }
+
+
+        this.setState({loading:true,loadingMessage:'در حال اجرا'});
+        postQuery('Members/me/editProfile',data)
+            .then(res=>{
+                console.log(res);
+                navigation.replace('profile');
+                this.setState({loading:false});
+                showMassage('پروفایل با موفقیت ویرایش شد.','success')
             })
             .catch(err=>{
                 this.setState({loading:false});
-            });
-    }
-    isValid() {
-        return mobileValidation;
-    }
-    checkValidation=()=> {
-        if(!this.state.firstName ){
-            this.setState({firsNameValidation: false});
-            return translate('enter_your_firstName');
-        }
-        if(!this.state.lastName ){
-            this.setState({firsNameValidation: false});
-            return translate('enter_your_lastName');
-        }
-        if(!this.state.age ){
-            this.setState({ageValidation: false});
-            return translate('enter_your_age');
-        }
-        if(!this.state.gender ){
-            this.setState({genderValidation: false});
-            return translate('select_your_gender');
-        }
+            })
 
     }
-    registerUserProps=()=>{
-        const msg=this.checkValidation();
-        if(msg){
-            showMassage(msg,'info')
-            return;
-        }
-        const data={
-            firstName:this.state.firstName,
-            lastName:this.state.lastName,
-            age:this.state.age,
-            gender:this.state.gender,
-        }
-        this.setState({loading:true});
-        postQuery('Members/me/initProfile',data)
-          .then(res=>{
-              navigation.navigate('profile');
-              this.setState({loading:false});
-          })
-          .catch(err=>{
-              console.log(err);
-              this.setState({loading:false});
-          })
+    setProfileImage=(fileName)=>{
+        const data={profileImage:fileName}
+        postQuery('Members/me/setProfileImage',data)
+            .then(res=>{
+                profileImage:res.profileImage;
+                this.setState({loading:false});
+            })
+            .catch(err=>{
+                this.setState({loading:false});
+            })
     }
-
 
     render() {
         const toolbarStyle = {
@@ -114,8 +180,14 @@ export default class edit_profile extends Component {
 
         };
         return (
-            <PanelLayout title={`Enter Confirm code`}   loading={this.state.loading} loadingMessage={this.state.loadingMessage}
-                         style={{margin:0}}
+            <PanelLayout
+                loading={this.state.loading}
+                loadingMessage={this.state.loadingMessage}
+                title={`Treenetgram`}
+                showMenu={this.state.showMenu}
+                         onRef={(initDrawer)=>this.initDrawer=initDrawer}
+                         onCloseMenu={()=>this.setState({showMenu:false})}
+                         style={{alignItems:'center'}}
                          header={
                              <Toolbar
                                  customStyle={toolbarStyle}
@@ -124,187 +196,306 @@ export default class edit_profile extends Component {
                          }
                          footer={
                              <TouchableOpacity
-                                 onPress={this.registerUserProps}
+                                 onPress={this.updateUsernameAndPassword}
                                  style={{alignItems:'center',justifyContent:'center',padding:15, backgroundColor:primaryDark}}>
                                  <Text style={{color:bgWhite}} >ذخیره</Text>
                              </TouchableOpacity>
                          }>
-            >
-                <View style={{flex:1,alignItems:'center',padding:16,paddingTop:'5%',}} >
+                <View style={{flex:1,alignItems:'center',padding:10,paddingTop:'5%',}} >
 
-                    <View id='form' >
-                        <Text
-                            style={{
-                                marginTop:20,
-                                fontSize:16,
-                                fontWeight:800,
-                                fontFamily: 'IRANYekanFaNum-Bold',
-                                color:bg3,
-                                alignSelf:'center'
-                            }}>
-                           { translate('ویرایش پروفایل')}
-                        </Text>
 
-                        <View  style={{marginTop:10,  padding:10}}  >
-                            <FloatingLabelTextInput
-                                ref={input => {
-                                    this.labelInput = input;
-                                }}
-                                placeholder={translate('firstName')}
-                                style={{flex:1, marginTop:40}}
-                                labelStyle={{color:bg3}}
-                                editable={true}
-                                multiline={false}
-                                maxLength={70}
-                                floatingLabelEnable={true}
-                                keyboardType="default"
-                                returnKeyType="done"
-                                numberOfLines={1}
-                                tintColor={
-                                    this.state.firstNameValidation ? placeholderTextColor : lightRed
-                                }
-                                textInputStyle={{
-                                    fontWeight: 'normal',
-                                    fontFamily:
-                                        Platform.OS === 'ios'
-                                            ? 'IRANYekan-ExtraBold'
-                                            : 'IRANYekanExtraBold',
-                                    color: bg2,
+                    <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,padding:16,}}   >
+
+
+                        <ImageSelector
+                            style={{borderWidth:2,borderColor:bg5,height:100,width:100,borderRadius:50,alignSelf:'center' }}
+                            canUpload={true}
+                            autoUpload={true}
+                            imageStyle={{height:100,width:100,borderRadius:50}}
+                            image={userStore.profileImage}
+                            noImage={images.default_ProPic}
+                            hideDeleteBtn={true}
+                            //onrender={(imageSelector)=>imageSelector.setState({image:this.state.userImage})}
+                            onUplodedFile={(fileName)=>{
+                                this.setState({image: fileName});
+                                this.setProfileImage(fileName);
+                            }}
+                            onRemoveImage={(fileName)=>{
+                                this.setState({image: null});
+                            }}
+
+                        />
+
+
+                        <View id='form' style={{width:'100%',maxWidth:500,marginTop:40}}   >
+
+
+                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                                <Text style={{
+                                    fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                     fontSize: 16,
-                                    paddingStart: 4,
-                                    paddingTop: 1,
-                                    paddingBottom: 3,
-                                    //textAlign: 'right',
-                                }}
-                                underlineSize={1}
+                                    color: border,
 
-                                onChangeText={text =>
-                                    this.setState({
-                                        firstName: text,
-                                        firstNameValidation: true,
-                                    })
-                                }
-                                highlightColor={primaryDark}
-                                value={this.state.firstName}
-                            />
-                            <FloatingLabelTextInput
-                                ref={input => {
-                                    this.labelInput = input;
-                                }}
-                                placeholder={translate('lastName')}
-                                style={{flex:1, marginTop:40}}
-                                labelStyle={{color:bg3}}
-                                editable={true}
-                                multiline={false}
-                                maxLength={70}
-                                floatingLabelEnable={true}
-                                keyboardType="default"
-                                returnKeyType="done"
-                                numberOfLines={1}
-                                tintColor={
-                                    this.state.lastNameValidation ? placeholderTextColor : lightRed
-                                }
-                                textInputStyle={{
-                                    fontWeight: 'normal',
-                                    fontFamily:
-                                        Platform.OS === 'ios'
-                                            ? 'IRANYekan-ExtraBold'
-                                            : 'IRANYekanExtraBold',
-                                    color: bg2,
-                                    fontSize: 16,
-                                    paddingStart: 4,
-                                    paddingTop: 1,
-                                    paddingBottom: 3,
-                                    //textAlign: 'right',
-                                }}
-                                underlineSize={1}
+                                    padding:5,
+                                    alignSelf: 'center',
+                                }}>{this.state.countryCode}</Text>
+                                <FloatingLabelTextInput
+                                    dir={'ltr'}
+                                    labelAlign={'left'}
+                                    reverse={persistStore.isRtl}
+                                    style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
+                                    placeholder={translate("fastRegister_mobile_number")}
+                                    value={this.state.mobile}
+                                    onChangeText={text => {
+                                        if(text.length>1 && text.indexOf(0)==0){
+                                            text=text.substring(1);
+                                        }
 
-                                onChangeText={text =>
-                                    this.setState({
-                                        lastName: text,
-                                        lastNameValidation: true,
-                                    })
-                                }
-                                highlightColor={primaryDark}
-                                value={this.state.lastName}
-                            />
-                            <FloatingLabelTextInput
-                                placeholder={translate('age')}
-                                style={{flex:1, marginTop:40}}
-                                labelStyle={{color:bg3}}
-                                editable={true}
-                                multiline={false}
-                                maxLength={2}
-                                floatingLabelEnable={true}
-                                keyboardType="number-pad"
-                                returnKeyType="done"
-                                numberOfLines={1}
-                                textInputStyle={{
-                                    fontWeight: 'normal',
-                                    fontFamily:'IRANYekanExtraBold',
-                                    color: bg2,
-                                    fontSize: 16,
-                                    paddingStart: 4,
-                                    paddingTop: 1,
-                                    paddingBottom: 3,
-                                    //textAlign: 'right',
-                                }}
-                                underlineSize={1}
-                                value={this.state.age}
-                                onChangeText={text =>{
-                                    const reg=/^\d+$/;
+                                        const acceptReg =/^[0-9~.]+$/;
+                                        const mobileReg = /^9[0-9]{9}$/i;
+                                        if(acceptReg.test(text)){
+                                            text = mapNumbersToEnglish(text);
+                                            this.setState({ mobile:text, mobileValidation:mobileReg.test(text)});
+                                        }else{
+                                            showMassage(translate('fastRegister_onlyEnglish_number'),'warning');
+                                        }
+                                        if(!text){
+                                            this.setState({ mobile:'', mobileValidation:false});
+                                        }
 
-                                    if(reg.test(text)){
-                                        text = mapNumbersToEnglish(text);
+                                    }}
+                                    numberOfLines={1}
+                                    isAccept={this.state.mobileValidation}
+                                    textInputStyle={{
+                                        fontFamily: 'IRANYekanFaNum-Bold',
+                                        fontSize: 16,
+                                        fontWeight:800,
+                                        color: textItemBlack,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 10,
+                                        //textAlign: 'left',
+                                    }}
+                                    underlineSize={0}
+
+                                    multiline={false}
+                                    maxLength={10}
+                                    //autoFocus={true}
+                                    keyboardType="number-pad"
+                                    returnKeyType="done"
+
+                                />
+
+                            </View>
+                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+
+                                <FloatingLabelTextInput
+                                    labelAlign={'left'}
+                                    dir={'ltr'}
+                                    reverse={persistStore.isRtl}
+                                    style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
+                                    placeholder={translate("fastRegister_email_address")}
+                                    value={this.state.email}
+                                    onChangeText={text => {
+                                        const acceptReg =/^[a-zA-Z0-9~@.]+$/;
+                                        const emailReg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                                        if(acceptReg.test(text)){
+                                            this.setState({ email:text, emailValidation:emailReg.test(text)});
+                                        }else{
+                                            showMassage(translate('fastRegister_only_english_number_special_charachter'),'warning');
+                                        }
+                                        if(!text){
+                                            this.setState({ email:'', emailValidation:false});
+                                        }
+                                    }}
+                                    numberOfLines={1}
+
+                                    isAccept={this.state.emailValidation}
+                                    textInputStyle={{
+                                        fontFamily: 'IRANYekanFaNum-Bold',
+                                        fontSize: 16,
+                                        fontWeight:800,
+                                        color: textItemBlack,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 10,
+                                        //textAlign: 'left',
+                                    }}
+                                    underlineSize={0}
+
+                                    multiline={false}
+                                    maxLength={100}
+                                    //autoFocus={true}
+                                    returnKeyType="done"
+
+                                />
+
+
+                            </View>
+                        </View>
+
+                        <View id='userProperty' >
+
+
+                            <View  style={{marginTop:0,  padding:10}}  >
+                                <FloatingLabelTextInput
+                                    ref={input => {
+                                        this.labelInput = input;
+                                    }}
+                                    labelAlign={'left'}
+                                    placeholder={translate('firstName')}
+                                    style={{flex:1, marginTop:20}}
+                                    labelStyle={{color:bg3}}
+                                    editable={true}
+                                    multiline={false}
+                                    maxLength={70}
+                                    floatingLabelEnable={true}
+                                    keyboardType="default"
+                                    returnKeyType="done"
+                                    numberOfLines={1}
+                                    tintColor={
+                                        this.state.firstNameValidation ? placeholderTextColor : lightRed
+                                    }
+                                    textInputStyle={{
+                                        fontWeight: 'normal',
+                                        fontFamily:
+                                            Platform.OS === 'ios'
+                                                ? 'IRANYekan-ExtraBold'
+                                                : 'IRANYekanExtraBold',
+                                        color: bg2,
+                                        fontSize: 16,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 3,
+                                        //textAlign: 'right',
+                                    }}
+                                    underlineSize={1}
+
+                                    onChangeText={text =>
                                         this.setState({
-                                            age: text,
-                                            ageValidation: true,
-                                        })
-                                    }else{
-
-                                        this.setState({
-                                            age: this.state.age?this.state.age:'',
+                                            firstName: text,
+                                            firstNameValidation: true,
                                         })
                                     }
-
-
-
-                                }
-
-                                }
-                                tintColor={
-                                    this.state.ageValidation ? placeholderTextColor : lightRed
-                                }
-                                highlightColor={primaryDark}
-                                unit={translate('year')}
-                                unitStyle={{color:bg4}}
-                                keyboardType="number-pad"
-                            />
-
-                            <View style={{flex:1,alignItems:'center',marginTop:30}}>
-                                <SwitchTextMulti
-                                    style={{width:300}}
-                                    activeIndex={this.state.gender}
-                                    onActivate={val => {
-                                        this.setState({gender: Number(val)});
-                                        //this.checkValidation();
-                                    }}
-                                    data={[
-                                        translate('onselect'),
-                                        translate('man'),
-                                        translate('woman'),
-                                    ]}
-                                    backgroundActive={primaryDark}
-                                    backgroundInactive={'#fff'}
-                                    itemWidth={getTabWidth(300, 3,1)}
-                                    activeTextStyle={{
-                                        paddingVertical: 6,
-                                    }}
-                                    inactiveTextStyle={{
-                                        paddingVertical: 6,
-                                    }}
+                                    highlightColor={primaryDark}
+                                    value={this.state.firstName}
                                 />
+                                <FloatingLabelTextInput
+                                    ref={input => {
+                                        this.labelInput = input;
+                                    }}
+                                    labelAlign={'left'}
+                                    placeholder={translate('lastName')}
+                                    style={{flex:1, marginTop:20}}
+                                    labelStyle={{color:bg3}}
+                                    editable={true}
+                                    multiline={false}
+                                    maxLength={70}
+                                    floatingLabelEnable={true}
+                                    keyboardType="default"
+                                    returnKeyType="done"
+                                    numberOfLines={1}
+                                    tintColor={
+                                        this.state.lastNameValidation ? placeholderTextColor : lightRed
+                                    }
+                                    textInputStyle={{
+                                        fontWeight: 'normal',
+                                        fontFamily:
+                                            Platform.OS === 'ios'
+                                                ? 'IRANYekan-ExtraBold'
+                                                : 'IRANYekanExtraBold',
+                                        color: bg2,
+                                        fontSize: 16,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 3,
+                                        //textAlign: 'right',
+                                    }}
+                                    underlineSize={1}
+
+                                    onChangeText={text =>
+                                        this.setState({
+                                            lastName: text,
+                                            lastNameValidation: true,
+                                        })
+                                    }
+                                    highlightColor={primaryDark}
+                                    value={this.state.lastName}
+                                />
+                                <FloatingLabelTextInput
+                                    labelAlign={'left'}
+                                    reverse={persistStore.isRtl}
+                                    placeholder={translate('age')}
+                                    style={{flex:1, marginTop:20}}
+                                    labelStyle={{color:bg3}}
+                                    editable={true}
+                                    multiline={false}
+                                    maxLength={2}
+                                    floatingLabelEnable={true}
+                                    keyboardType="number-pad"
+                                    returnKeyType="done"
+                                    numberOfLines={1}
+                                    textInputStyle={{
+                                        fontWeight: 'normal',
+                                        fontFamily:'IRANYekanExtraBold',
+                                        color: bg2,
+                                        fontSize: 16,
+                                        paddingRight: 10,
+                                        paddingTop: 1,
+                                        paddingBottom: 3,
+                                        //textAlign: 'right',
+                                    }}
+                                    underlineSize={1}
+                                    value={this.state.age}
+                                    onChangeText={text =>{
+                                        const acceptReg =/^\d+$/;;
+                                        const ageReg=/^\d+$/;
+                                        if(acceptReg.test(text)){
+                                            this.setState({ age:text, ageValidation:ageReg.test(text)});
+                                        }else{
+                                            showMassage(translate('فقط اعداد انگلیسی'),'warning');
+                                        }
+                                        if(!text){
+                                            this.setState({ age:'', ageValidation:false});
+                                        }
+
+                                    }
+
+                                    }
+                                    tintColor={
+                                        this.state.ageValidation ? placeholderTextColor : lightRed
+                                    }
+                                    highlightColor={primaryDark}
+                                    unit={translate('year')}
+                                    unitStyle={{color:bg4}}
+                                    keyboardType="number-pad"
+                                />
+
+                                <View style={{flex:1,alignItems:'center',marginTop:30}}>
+                                    <SwitchTextMulti
+                                        style={{width:300}}
+                                        selectedIndex={this.state.gender}
+                                        onSelect={index => {
+                                            this.setState({gender: index});
+                                            //this.checkValidation();
+                                        }}
+                                        data={[
+                                            translate('woman'),
+                                            translate('man'),
+                                        ]}
+                                        backgroundActive={primaryDark}
+                                        backgroundInactive={'#fff'}
+                                        itemWidth={getTabWidth(300, 2,1)}
+                                        activeTextStyle={{
+                                            paddingVertical: 6,
+                                        }}
+                                        inactiveTextStyle={{
+                                            paddingVertical: 6,
+                                        }}
+                                    />
+                                </View>
                             </View>
+
                         </View>
                     </View>
                 </View>

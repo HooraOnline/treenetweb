@@ -328,6 +328,7 @@ export const getUserProfileApi = function (fields, include) {
   return  Api.get('members/me/getProfile', params)
       .then(user=>{
         userStore.setUser(user);
+        persistStore.userChangedUserName=user.userChangedUserName;
         return user
       }).catch((error)=>{
           throw error
@@ -354,8 +355,8 @@ export const loginApi= function (username,password) {
       })
 }
 export const logoutApi=function (username,password) {
-    if(!userStore.isVerify){
-        showMassage('قبل از خروج با لمس نوار زرد رنگ، نام کاربری و پسورد خود را عوض کنید.','info')
+    if(!persistStore.userChangedUserName){
+        showMassage('قبل از خروج، نام کاربری و رمز عبور خود را از بخش پروفایل عوض کنید.','info')
         return;
     }
     navigation.navigate('home');
