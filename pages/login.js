@@ -28,7 +28,7 @@ import {
 import {globalState, persistStore,} from '../src/stores';
 import {
 
-    getWidth,
+    getWidth, showMassage,
 } from '../src/utils';
 import {FloatingLabelTextInput, LoadingPopUp} from '../src/components';
 import translate from "../src/language/translate";
@@ -100,6 +100,11 @@ export default class LoginPage extends PureComponent {
     }
 
     async onLogin() {
+        if(this.state.username.length <2  || this.state.password.length<6){
+
+            return ;
+        }
+
         this.setState({loading: true});
         const data={};
         this.setState({loading:true});

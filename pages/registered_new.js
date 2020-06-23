@@ -98,7 +98,7 @@ export default class registered_new extends Component {
                                 color: bg1,
 
                             }}>
-                            {translate(" شبکه درختی شما با مشخصات زیر ساخته شد. بعد از ورود می توانید، نام کاربری و رمز عبور شبکه خود را عوض کنید.")}
+                            {translate(" شبکه درختی شما با نام کاربری و رمز عبور موقتی زیر ساخته شد. لطفا بعد از ورود نام کاربری و رمز عبور موقت خود را تغییر دهید.")}
                         </Text>
                     <View style={{
                         width: '100%',
@@ -127,7 +127,7 @@ export default class registered_new extends Component {
                                     color: bg1,
 
                                 }}>
-                                {translate("نام کاربری شبکه:")}
+                                {translate("نام کاربری شما:")}
                             </Text>
                             <Text
                                 style={{
@@ -159,7 +159,7 @@ export default class registered_new extends Component {
                                     color: bg1,
 
                                 }}>
-                                {translate("رمز عبور شبکه:")}
+                                {translate("رمز عبور شما:")}
                             </Text>
                             <Text
                                 style={{

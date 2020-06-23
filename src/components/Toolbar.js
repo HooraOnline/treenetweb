@@ -116,7 +116,7 @@ export default class Toolbar extends PureComponent {
             expanderItem,
         } = this.props.customStyle;
         const titleAllowWidth = 280;// width - (start ? 56 : 0) - (end ? 56 : 0) - (search ? 56 : 0);
-        const titleAllowLength = Math.floor(titleAllowWidth / (search ? 14 : 11));
+        const titleAllowLength = Math.floor(titleAllowWidth / (search ? 14 : 5));
         let animateExpandRotate, animateSearchIcon, animateCloseSearchIcon;
         const {isExpand} = this.props;
 

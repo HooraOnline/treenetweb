@@ -35,12 +35,14 @@ const BaseLayout = observer( props => {
 
     useEffect(() => {
         document.title = props.title;
+        setScreenSize()
+        setScreenwidth(globalState.width);
         onResizeScreen();
     },  []);
 
   return (
     <div dir={persistStore.isRtl || "rtl"}  style={{ display: 'flex',flex:1,  justifyContent:'center',  height: '100%'}}>
-        <View  ref={ref} dir={"rtl"} style={[{flex:1,maxWidth:props.maxWidth || 700 ,position:'relative', backgroundColor:globalState.width<700?bgScreen:bgScreen,flexDirection:'column', },props.style]}>
+        <View  ref={ref} dir={"rtl"} style={[{flex:1,width:screenwidth, maxWidth:props.maxWidth || 700 ,position:'relative', backgroundColor:globalState.width<700?bgScreen:bgScreen,flexDirection:'column', },props.style]}>
             {props.children}
             <ToastCard
                 visible={globalState.toastCard}

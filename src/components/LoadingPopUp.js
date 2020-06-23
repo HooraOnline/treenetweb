@@ -18,6 +18,7 @@ export default class LoadingPopUp extends Component {
             >
                 <View style={{
                     flex: 1,
+                    width: '100%',
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: overlayColor,
@@ -48,7 +49,7 @@ function Content({message}) {
               {/*  <Progress.CircleSnail duration={700} spinDuration={3000}
                                       color={[primary, 'red', primaryDark]}/>*/}
                 {/*<LinearProgress variant="determinate" />*/}
-                <Text style={{color: primaryDark, fontSize: 14}}>
+                <Text style={{color: primaryDark, fontSize: 14,alignSelf:'center'}}>
                     {message}
                 </Text>
             </View>

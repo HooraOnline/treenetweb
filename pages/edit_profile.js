@@ -51,24 +51,24 @@ const HOME_TYPE = 1;
 export default class edit_profile extends Component {
     constructor() {
         super();
-        const contryCode='+'+userStore.countryCode
+
         this.state = {
+            image:userStore.profileImage,
             password:'',
             showPassword:false,
             passwordValidation:false,
             passwor2dValidation:false,
             usernameValidation:false,
-            countryCode:userStore.countryCode?'+'+userStore.countryCode : '+98',
+            countryCode:userStore.countryCode,
             username:userStore.username,
-            mobile:userStore.mobile?userStore.mobile.replace(contryCode,''):'',
+            shortMobile:userStore.shortMobile,
             email:userStore.email ||'',
             firstName:userStore.firstName ||'',
             lastName:userStore.lastName ||'',
-
             gender:Number(userStore.gender ||0),
         };
 
-        this.state.age=userStore.age ,
+        this.state.age=userStore.age;
         this.state.gender=Number(userStore.gender ||0)
 
     }
@@ -79,17 +79,17 @@ export default class edit_profile extends Component {
 
     checkValidation() {
 
-        if(!this.state.mobile){
+        if(!this.state.shortMobile){
             this.setState({mobileValidation: false});
             return translate('موبایل خود را وارد کنید.')
         }
-        if (this.state.mobile && this.state.mobile.length < 10) {
+        if (this.state.shortMobile && this.state.shortMobile.length < 10) {
             this.setState({mobileValidation: false});
             return translate('the_number_of_mobile_is_not_valid');
         }
 
         const mobileReg = /^9[0-9]{9}$/i;
-        if (this.state.mobile && !mobileReg.test(this.state.mobile)){
+        if (this.state.shortMobile && !mobileReg.test(this.state.shortMobile)){
             //this.setState({mobileValidation: false});
             return translate('invalid_mobile_number'); ;
         }
@@ -110,9 +110,11 @@ export default class edit_profile extends Component {
         if (!this.state.age){
             return translate('سن را وارد کنید');
         }
-        if (!this.state.gender){
-            return translate('جنسیت را وارد کنید');
+
+        if(this.state.image=='defaultProfileImage.png'){
+            return translate(' تصویر  پروفایل خود را انتخاب کنید.');
         }
+
     }
     updateUsernameAndPassword=()=>{
 
@@ -125,8 +127,8 @@ export default class edit_profile extends Component {
         const data={
 
         };
-        if(this.state.mobile){
-            data.mobile=this.state.countryCode+this.state.mobile;
+        if(this.state.shortMobile){
+            data.mobile=this.state.countryCode+'-'+this.state.shortMobile;
         }
         if(this.state.email){
             data.email=this.state.email;
@@ -245,8 +247,9 @@ export default class edit_profile extends Component {
                                     reverse={persistStore.isRtl}
                                     style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
                                     placeholder={translate("fastRegister_mobile_number")}
-                                    value={this.state.mobile}
+                                    value={this.state.shortMobile}
                                     onChangeText={text => {
+                                        text = mapNumbersToEnglish(text);
                                         if(text.length>1 && text.indexOf(0)==0){
                                             text=text.substring(1);
                                         }
@@ -255,12 +258,12 @@ export default class edit_profile extends Component {
                                         const mobileReg = /^9[0-9]{9}$/i;
                                         if(acceptReg.test(text)){
                                             text = mapNumbersToEnglish(text);
-                                            this.setState({ mobile:text, mobileValidation:mobileReg.test(text)});
+                                            this.setState({ shortMobile:text, mobileValidation:mobileReg.test(text)});
                                         }else{
-                                            showMassage(translate('fastRegister_onlyEnglish_number'),'warning');
+                                            //showMassage(translate('fastRegister_onlyEnglish_number'),'warning');
                                         }
                                         if(!text){
-                                            this.setState({ mobile:'', mobileValidation:false});
+                                            this.setState({ shortMobile:'', mobileValidation:false});
                                         }
 
                                     }}
@@ -302,7 +305,7 @@ export default class edit_profile extends Component {
                                         if(acceptReg.test(text)){
                                             this.setState({ email:text, emailValidation:emailReg.test(text)});
                                         }else{
-                                            showMassage(translate('fastRegister_only_english_number_special_charachter'),'warning');
+                                            //showMassage(translate('fastRegister_only_english_number_special_charachter'),'warning');
                                         }
                                         if(!text){
                                             this.setState({ email:'', emailValidation:false});
@@ -450,10 +453,11 @@ export default class edit_profile extends Component {
                                     onChangeText={text =>{
                                         const acceptReg =/^\d+$/;;
                                         const ageReg=/^\d+$/;
+                                        text = mapNumbersToEnglish(text);
                                         if(acceptReg.test(text)){
                                             this.setState({ age:text, ageValidation:ageReg.test(text)});
                                         }else{
-                                            showMassage(translate('فقط اعداد انگلیسی'),'warning');
+                                            //showMassage(translate('فقط اعداد انگلیسی'),'warning');
                                         }
                                         if(!text){
                                             this.setState({ age:'', ageValidation:false});

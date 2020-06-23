@@ -105,8 +105,6 @@ export default class index extends Component {
     }
 
     render() {
-
-
         /*  if(!global.isCheckedToken){
               return  <View style={{flex:1,alignItems:'center',padding:20,fontSize:30,paddingTop:50,color:bg8}} >Welcom to Treenetgram</View>;
           }*/
@@ -225,7 +223,7 @@ export default class index extends Component {
                             paddingBottom: 10,
 
                         }}>
-                           {!persistStore.userRegisterbefor && (
+                           {!persistStore.userRegisterbefor22 && (
                                 <TouchableOpacity
                                     style={{
                                         width: 200,
@@ -359,40 +357,18 @@ export default class index extends Component {
 
                 </View>
                 <View style={{
+                    flex: 1,
                     //flexDirection:'row',
-                    paddingHorizontal: 5,
+                    paddingHorizontal: 16,
                     alignItems: 'center',
-                    paddingBottom: 100,
-                    background: bg9
+                    paddingBottom: 10,
+
                 }}>
-
-
-                    <TouchableOpacity
-                        style={{
-                            width: 250,
-                            marginTop: 10,
-                            borderColor: bg2,
-                            borderWidth: 1,
-                            padding: 0,
-                            paddingTop: 0,
-                            borderRadius: 12,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                        onPress={() => this.loginPanel()}
-                    >
-                        <Text style={{
-                            fontSize: 16,
-                            color: bg2,
-                            fontWeight: 500,
-                            paddingVertical: 12,
-                            paddingHorizontal: 20,
-                        }}>{translate('login_my_tree')}</Text>
-                    </TouchableOpacity>
-                    {!persistStore.userRegisterbefor && (
+                    {!persistStore.userRegisterbefor22 && (
                         <TouchableOpacity
                             style={{
-                                width: 250,
+                                width: 200,
+                                maxWidth: 300,
                                 marginTop: 25,
                                 borderColor: primaryDark,
                                 borderWidth: 1,
@@ -402,6 +378,7 @@ export default class index extends Component {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 marginHorizontal: 10,
+
                             }}
                             onPress={() => this.registerUser()}
                         >
@@ -414,6 +391,32 @@ export default class index extends Component {
                             }}>{translate('create_network')}</Text>
                         </TouchableOpacity>
                     )}
+
+                    <TouchableOpacity
+                        style={{
+                            flex: 1,
+                            marginTop: 10,
+                            width: 200,
+                            maxWidth: 300,
+                            borderColor: '#FF8C00',
+                            backgroundColor:'#FF8C00',
+                            borderWidth: 1,
+                            padding: 0,
+                            paddingTop: 0,
+                            borderRadius: 12,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        onPress={() => this.loginPanel()}
+                    >
+                        <Text style={{
+                            fontSize: 16,
+                            color: bgWhite,
+                            fontWeight: 500,
+                            paddingVertical: 12,
+                            paddingHorizontal: 20,
+                        }}>{translate('login_my_tree')}</Text>
+                    </TouchableOpacity>
                 </View>
             </ResponsiveLayout>
         )

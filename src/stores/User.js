@@ -20,45 +20,54 @@ class UserStore {
     @observable email=null ;
     @observable emailVerified=null ;
     @observable permissionList=null ;
-    @observable isVerify=null ;
     @observable regentId=null ;
     @observable roleList=null ;
     @observable token=null ;
+    @observable cdate=null ;
     @observable udate=null ;
     @observable countryCode=null ;
     @observable birthYear=null ;
-    @observable profileImage=null ;
+    @observable fullName=null ;
+    @observable shortMobile=null ;
 
     @action
     setUser(user) {
-        const birthYear=user.birthDate?new Date(user.birthDate).getFullYear():'';
+        let contryCodeX=user.geoInfo?user.geoInfo.calling_code:'98';
+        let birthYear=user.birthDate?new Date(user.birthDate).getFullYear():'';
+        let shortMobile=user.mobile?user.mobile.replace(contryCodeX+'-',''):'';
+        let seperator=user.firstName && user.lastName?' ':''
+        let fullName=(user.firstName ||'') +seperator+ (user.lastName || '');
         this.user=user;
         this.userID= user.id ;
         this.username= user.username ;
         this.profileImage= user.profileImage ;
         this.beforloginDate=user.beforloginDate;
-        this.birthDate= user.birthDate ;
-        this.birthYear=birthYear ;
+        this.birthDate= user.birthDate || '' ;
+        this.birthYear=birthYear|| '' ;
         this.age=user.birthDate?(new Date()).getFullYear()-birthYear:'';
-        this.displayName= user.displayNme ;
-        this.firstName= user.firstName ;
-        this.gender= user.gender ;
-        this.invitationCode=user.invitationCode ;
+        this.displayName= user.displayNme|| '' ;
+        this.firstName= user.firstName|| '' ;
+        this.lastName=user.lastName|| '' ;
+        this.fullName=fullName;
+        this.gender= user.gender|| '' ;
+        this.invitationCode=user.invitationCode|| '' ;
         this.invitationLink=`https://treenetgram.com/?invitationCode=${user.invitationCode}`
-        this.lastName=user.lastName ;
         this.location=user.location ;
         this.loginDate=user.loginDate ;
-        this.mobile=user.mobile ;
+        this.countryCode=contryCodeX;
+        this.mobile=user.mobile|| '' ;
+        this.shortMobile=shortMobile|| '',
         this.mobileVerified=user.mobileVerified ;
-        this.email=user.email ;
+        this.email=user.email|| '' ;
         this.emailVerified=user.emailVerified ;
-        this.isVerify=user.isVerify ;
         this.permissionList=user.permissionList ;
         this.regentId=user.regentId ;
         this.roleList=user.roleList ;
-        this.token=user.user ;
+        this.token=user.token ;
+        this.cdate=user.cdate ;
         this.udate=user.udate ;
-        this.countryCode=user.geoInfo?user.geoInfo.calling_code:'98';
+
+
 
     }
 
@@ -92,7 +101,6 @@ class UserStore {
         this.mobileVerified=null ;
         this.email=null ;
         this.emailVerified=null ;
-        this.isVerify=null ;
         this.permissionList=null ;
         this.regentId=null ;
         this.roleList=null ;

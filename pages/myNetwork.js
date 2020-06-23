@@ -1,12 +1,12 @@
 import React, {Component, PureComponent} from 'react';
-import {userStore,persistStore } from "../src/stores";
+import {userStore, persistStore, globalState} from "../src/stores";
 import {permissionId} from '../src/constants/values';
 import Router from "next/router";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {DropDownList,Toolbar,CardUnitInfo,PopupBase,ImageSelector} from "../src/components";
 
 import accountsStore from "../src/stores/Accounts";
-import {deviceWide, doDelay, fetchStore, logger, showMassage} from "../src/utils";
+import {deviceWide, doDelay, fetchStore, logger, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
 import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
 import {getUserBalance} from "../src/network/Queries";
@@ -248,12 +248,34 @@ export default class MyNetwork extends Component {
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
                               onCloseMenu={()=>this.setState({showMenu:false})}
                               style={{paddingBottom:10}}
-                              notif={persistStore.userChangedUserName==false?"رمز موقت را تغییر دهید.":""}
+                              notif={persistStore.notChangePassword?"رمز موقت را تغییر دهید.":""}
                               header={
-                                  <Toolbar
-                                      customStyle={toolbarStyle}
-                                      isExpand={this.state.showAccountSelect }
-                                  />
+                                  <View>
+                                      <Toolbar
+                                          customStyle={toolbarStyle}
+                                          isExpand={this.state.showAccountSelect }
+                                      />
+                                      {persistStore.notChangePassword &&(
+                                          <div  style={{position:'fixed',top:50,width:globalState.width,zIndex:40}}>
+                                              <TouchableOpacity
+                                                  onPress={()=>{navigation.navigate('change_username_password')}}
+                                                  style={{flex:1,paddingBottom:40, flexDirection:'row',justifyContent:'space-between', padding:10,backgroundColor:'#F1C40F'}}>
+                                                  <Text style={{fontSize:14,color:textItem,padding:5}}>{'رمز موقت را تغییر دهید.'} </Text>
+                                                  <View style={{flexDirection:'row',height:40, backgroundColor:'#27AE60',borderRadius:8,alignItems:'cener',justifyContent:'center', padding:5,paddingHorizontal:15}}>
+                                                      <Image source={images.ic_edit} style={{
+                                                          width: 24,
+                                                          height: 24,
+                                                          paddingHorizontal:5,
+                                                          tintColor:bgWhite
+                                                      }}/>
+                                                      <Text style={{color:bgWhite,fontSize:14,paddingHorizontal:5}} >تغییر</Text>
+                                                  </View>
+                                              </TouchableOpacity>
+                                          </div>
+                                      )
+
+                                      }
+                                  </View>
                               }
                             footer={
                                 <NavBar navButtons={[
@@ -269,14 +291,14 @@ export default class MyNetwork extends Component {
                                     },
                                     {
                                         label: translate('لینک دعوت'),
-                                        path: persistStore.userChangedUserName ? "/myLink" : "/change_username_password",
+                                        path:  "/myLink",
                                         icon: <FontAwesomeIcon icon={faCompass}/>
                                     },
                                 ]}/>
                             }
 
                               >
-                <View style={{marginHorizontal: 10,marginTop: persistStore.userChangedUserName?10:100,paddingBottom:60}}>
+                <View style={{marginHorizontal: 10,marginTop: persistStore.notChangePassword?70:10,paddingBottom:60}}>
                     <View style={{width:'100%',
                         flexDirection:'row',
                         justifyContent:'space-between',

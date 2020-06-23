@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {userStore,persistStore } from "../src/stores";
+import {userStore, persistStore, globalState} from "../src/stores";
 import {permissionId} from '../src/constants/values';
 import Router from "next/router";
 import PanelLayout from "../src/components/layouts/PanelLayout";
@@ -10,7 +10,7 @@ import { navigation} from "../src/utils";
 import images from "../public/static/assets/images";
 import {
     bgWhite,
-    bg5, fab
+    bg5, fab, textItem
 } from "../src/constants/colors";
 import accounting from "accounting";
 import NavFooterButtons from "../src/components/layouts/footerButtons";
@@ -97,21 +97,45 @@ export default class Profile extends Component {
         };
 
 
-        //let {age='.........',firstName='.........',lastName='.........',birthDate='.........',profileImage='.........',gender=0,username='.........'}=this.state;
+        let {age='.........',fullName='.........',birthDate='.........',profileImage='.........',gender=0,username='.........'}=userStore;
         const birthYear=(userStore.birthYear && userStore.birthYear.length>3)?userStore.birthYear+' میلادی ':'.........'
         const genderText=(!userStore.gender)?'.........':(userStore.gender==1)?'مرد':'زن';
+        let shortMobile=userStore.shortMobile?'0'+userStore.shortMobile:'.........';
+        debugger
         return (
             //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
             <PanelLayout  title={`Treenetgram`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
                               onCloseMenu={()=>this.setState({showMenu:false})}
                               style={{alignItems:'center'}}
-                              notif={persistStore.userChangedUserName==false?"رمز موقت را تغییر دهید.":""}
                               header={
+                                  <View>
                                       <Toolbar
-                                       customStyle={toolbarStyle}
-                                       isExpand={this.state.showAccountSelect }
+                                          customStyle={toolbarStyle}
+                                          isExpand={this.state.showAccountSelect }
                                       />
+                                      {persistStore.notChangePassword &&(
+                                          <div  style={{position:'fixed',top:50,width:globalState.width,zIndex:40}}>
+                                              <TouchableOpacity
+                                                  onPress={()=>{navigation.navigate('change_username_password')}}
+                                                  style={{flex:1,paddingBottom:40, flexDirection:'row',justifyContent:'space-between', padding:10,backgroundColor:'#F1C40F'}}>
+                                                  <Text style={{fontSize:14,color:textItem,padding:5}}>{'رمز موقت را تغییر دهید.'} </Text>
+                                                  <View style={{flexDirection:'row',height:40, backgroundColor:'#27AE60',borderRadius:8,alignItems:'cener',justifyContent:'center', padding:5,paddingHorizontal:15}}>
+                                                      <Image source={images.ic_edit} style={{
+                                                          width: 24,
+                                                          height: 24,
+                                                          paddingHorizontal:5,
+                                                          tintColor:bgWhite
+                                                      }}/>
+                                                      <Text style={{color:bgWhite,fontSize:14,paddingHorizontal:5}} >تغییر</Text>
+                                                  </View>
+                                              </TouchableOpacity>
+                                          </div>
+                                      )
+
+                                      }
+                                  </View>
+
                               }
                               footer={
                                   <View style={{paddingHorizontal:20}}>
@@ -128,13 +152,13 @@ export default class Profile extends Component {
                                           },
                                           {
                                               label: translate('لینک دعوت'),
-                                              path: persistStore.userChangedUserName?"/myLink":"/change_username_password",
+                                              path: "/myLink",
                                               icon: <FontAwesomeIcon icon={faCompass} />
                                           },
                                       ]}/>
                                   </View>
                               }>
-                <View style={{  padding:0,marginTop:persistStore.userChangedUserName?0: 50,alignItems:'center'}}>
+                <View style={{  padding:0,marginTop:persistStore.notChangePassword?30: 0,alignItems:'center'}}>
                         <View style={{width:'100%',  padding:24,marginTop:0,alignItems:'center',maxWidth:300}}>
 
                             <Image
@@ -145,16 +169,18 @@ export default class Profile extends Component {
 
                             <View style={{width:'100%',  flexDirection:'row',marginVertical:4,marginTop:16,justifyContent:'space-between'}}>
                                 <Text style={{fontWeight:400}} > نام کاربری:</Text>
-                                <Text>{userStore.username}</Text>
+                                <Text>{username}</Text>
                             </View>
                             <View style={{width:'100%',  flexDirection:'row',marginVertical:4,justifyContent:'space-between'}}>
                                 <Text style={{fontWeight:400}} > نام:</Text>
-                                <Text>{userStore.firstName}</Text>
+                                <Text>{fullName || '.........'}</Text>
                             </View>
                             <View style={{width:'100%',  flexDirection:'row',marginVertical:4,justifyContent:'space-between'}}>
-                                <Text style={{fontWeight:400,width:100}} > نام خانوادگی:</Text>
-                                <Text>{userStore.lastName}</Text>
+                                <Text style={{fontWeight:400}} > موبایل:</Text>
+                                <Text>{shortMobile || '.........'}</Text>
                             </View>
+
+
                             <TouchableOpacity
                                 onPress={()=>{navigation.navigate('edit_profile')}}
                                 style={{

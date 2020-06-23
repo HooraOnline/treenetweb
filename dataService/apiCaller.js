@@ -5,7 +5,7 @@ import axios from 'axios';
 //for notification
 //import Toasted from 'vue-toasted'
 import { decipher,cipher } from './pdk/utils';
-import { showMassage} from "../src/utils";
+import {fetchStore, showMassage} from "../src/utils";
 import translate from "../src/language/translate";
 import {persistStore} from "../src/stores";
 import version from "../src/version";
@@ -51,6 +51,9 @@ class Api {
         // axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
     }
     static setToken=async ()=>{
+        if(!persistStore.apiToken){
+            await fetchStore();
+        }
         axios.defaults.headers.common['Authorization'] =  'Bearer ' + persistStore.apiToken;
     }
     static getFilePath(model) {
@@ -66,7 +69,38 @@ class Api {
       //return b64;
       return cipher("privatekey4673")(encodeURIComponent(str));
     }
+    static post=async (apiPath, model)=> {
+        await this.setToken();
+        let uri =  apiPath;
+        //model={value:Api.encrypt(model)};
+        return axios.post(uri, model)
+            .then(function (response) {
+               debugger
+                if (response.status === 200 && !response.data.errorMessage){
+                    return response.data;
+                }
+                if(response.status === 200 && response.data.errorMessage){
+                    showMassage(translate( response.data.errorKey),'warning');
+                    throw response.data;
+                }else{
+                    throw response;
+                }
+            })
+            .catch(function (error) {
+                debugger
+                if(error.response && error.response.status==401){
+                    showMassage(translate('عدم دسترسی'),'warning');
+                    throw error;
+                    return;
+                }
+                console.log(error);
+                if(error.response && error.response.data){
+                    console.log(error.response.data)
+                }
+                throw error;
 
+            });
+    }
     static get=async (apiPath, urlparams)=> {
         await this.setToken();
         let uri = Api.getUri(apiPath, '?');
@@ -74,13 +108,29 @@ class Api {
 
         return axios.get(uri, urlparameters)
             .then(function (response) {
-                if (response.status === 200)
+                if (response.status === 200 && !response.data.errorMessage){
                     return response.data;
-                throw response;
+                }
+                if(response.status === 200 && response.data.errorMessage){
+                    showMassage(translate( response.data.errorKey),'warning');
+                    throw response.data;
+                }else{
+                    throw response;
+                }
             })
             .catch(function (error) {
+                debugger
                 console.log(error);
-                throw error
+                if(error.response && error.response.status==401){
+                    showMassage(translate('عدم دسترسی'),'warning');
+                    throw error;
+                    return;
+                }
+                if(error.response && error.response.data){
+                    console.log(error.response.data)
+                }
+                throw error;
+
             });
     }
     static getCount=async (apiPath, params)=> {
@@ -88,61 +138,60 @@ class Api {
         let uri =  apiPath + "/count?params="+params;
         return axios.get(uri)
             .then(function (response) {
-                if (response.status === 200)
+                if (response.status === 200 && !response.data.errorMessage){
                     return response.data;
-                throw response;
+                }
+                if(response.status === 200 && response.data.errorMessage){
+                    showMassage(translate( response.data.errorKey),'warning');
+                    throw response.data;
+                }else{
+                    throw response;
+                }
             })
             .catch(function (error) {
-                console.log(error);
-                throw error
-            });
-    }
-    static post=async (apiPath, model)=> {
-        await this.setToken();
-        let uri =  apiPath;
-        //model={value:Api.encrypt(model)};
-        return axios.post(uri, model)
-            .then(function (response) {
-                if (response.status === 200)
-                    return response.data;
-                throw response;
-            })
-            .catch(function (error) {
+                debugger
                 console.log(error);
                 if(error.response && error.response.status==401){
-                    showMassage(translate('عدم دسترسی'),'info');
+                    showMassage(translate('عدم دسترسی'),'warning');
                     throw error;
                     return;
                 }
-
-                if(error.response && error.response.data && error.response.data.error && error.response.data.error.key){
-                    showMassage(translate( error.response.data.error.key),'info');
-                    throw error;
-                    return;
-                }
-                if(error.response.data){
+                if(error.response && error.response.data){
                     console.log(error.response.data)
                 }
                 throw error;
 
             });
     }
+
     static put(apiPath, item) {
         let uri = Api.getUri(apiPath + '/' + item.id);
         item.udate = new Date();
         item.updatebypost = true;
         return axios.put(uri, item)
-            .then((response) => {
-                if (response.status === 200) {
-                    response.msg = "عملیات با موفقیت انجام شد";
-                    return response;
+            .then(function (response) {
+                if (response.status === 200 && !response.data.errorMessage){
+                    return response.data;
                 }
-                return response;
+                if(response.status === 200 && response.data.errorMessage){
+                    showMassage(translate( response.data.errorKey),'warning');
+                    throw response.data;
+                }else{
+                    throw response;
+                }
             })
-            .catch(error => {
+            .catch(function (error) {
+                debugger
                 console.log(error);
-                error.msg = "خطا در انجام عملیات";
-                throw error
+                if(error.response && error.response.status==401){
+                    showMassage(translate('عدم دسترسی'),'warning');
+                    throw error;
+                    return;
+                }
+                if(error.response && error.response.data){
+                    console.log(error.response.data)
+                }
+                throw error;
 
             });
     }
@@ -151,44 +200,88 @@ class Api {
         let uri =  apiPath + "/removeList";
         return axios.post(uri, list)
             .then(function (response) {
-                if (response.status === 200)
+                if (response.status === 200 && !response.data.errorMessage){
                     return response.data;
-                throw response;
+                }
+                if(response.status === 200 && response.data.errorMessage){
+                    showMassage(translate( response.data.errorKey),'warning');
+                    throw response.data;
+                }else{
+                    throw response;
+                }
             })
             .catch(function (error) {
+                debugger
                 console.log(error);
-                throw error
+                if(error.response && error.response.status==401){
+                    showMassage(translate('عدم دسترسی'),'warning');
+                    throw error;
+                    return;
+                }
+                if(error.response && error.response.data){
+                    console.log(error.response.data)
+                }
+                throw error;
+
             });
     }
     static removeWhere(apiPath, condition) {
         let uri =  apiPath + "/removeWhere";
         return axios.post(uri, condition)
             .then(function (response) {
-                if (response.status === 200)
+                if (response.status === 200 && !response.data.errorMessage){
                     return response.data;
-                throw response;
+                }
+                if(response.status === 200 && response.data.errorMessage){
+                    showMassage(translate( response.data.errorKey),'warning');
+                    throw response.data;
+                }else{
+                    throw response;
+                }
             })
             .catch(function (error) {
+                debugger
                 console.log(error);
-                throw error
+                if(error.response && error.response.status==401){
+                    showMassage(translate('عدم دسترسی'),'warning');
+                    throw error;
+                    return;
+                }
+                if(error.response && error.response.data){
+                    console.log(error.response.data)
+                }
+                throw error;
+
             });
     }
 
     static delete(apiPath, id) {
         let uri = Api.getUri(apiPath + '/' + id);
         return axios.delete(uri)
-            .then((response) => {
-                if (response.status === 200) {
-                    response.msg = "عملیات با موفقیت انجام شد";
-                    return response;
-
+            .then(function (response) {
+                if (response.status === 200 && !response.data.errorMessage){
+                    return response.data;
                 }
-                throw response;
+                if(response.status === 200 && response.data.errorMessage){
+                    showMassage(translate( response.data.errorKey),'warning');
+                    throw response.data;
+                }else{
+                    throw response;
+                }
             })
-            .catch(error => {
+            .catch(function (error) {
+                debugger
                 console.log(error);
-                error.msg = "خطا در انجام عملیات";
-                throw error
+                if(error.response && error.response.status==401){
+                    showMassage(translate('عدم دسترسی'),'warning');
+                    throw error;
+                    return;
+                }
+                if(error.response && error.response.data){
+                    console.log(error.response.data)
+                }
+                throw error;
+
             });
     }
 
@@ -220,18 +313,30 @@ class Api {
                     uploadingFunc(persent, uploadedfiles);
                 }
             }
-        }).then(response => {
-            if (response.status === 200) {
-                response.msg = "آپلود فایل با موفقیت انجام شد";
-                response.uploadedfiles = uploadedfiles;
-                return response;
+        }).then(function (response) {
+            if (response.status === 200 && !response.data.errorMessage){
+                return response.data;
             }
-            throw response;
+            if(response.status === 200 && response.data.errorMessage){
+                showMassage(translate( response.data.errorKey),'warning');
+                throw response.data;
+            }else{
+                throw response;
+            }
         })
-            .catch(error => {
+            .catch(function (error) {
+                debugger
                 console.log(error);
-                error.msg = "خطا در آپلود فایل";
-                throw error
+                if(error.response && error.response.status==401){
+                    showMassage(translate('عدم دسترسی'),'warning');
+                    throw error;
+                    return;
+                }
+                if(error.response && error.response.data){
+                    console.log(error.response.data)
+                }
+                throw error;
+
             });
     }
 
@@ -262,18 +367,30 @@ class Api {
                     uploadingFunc(persent, uploadedfiles);
                 }
             }
-        }).then(response => {
-            if (response.status === 200) {
-                response.msg = "آپلود فایل با موفقیت انجام شد";
-                response.uploadedfiles = uploadedfiles;
-                return response;
+        }).then(function (response) {
+            if (response.status === 200 && !response.data.errorMessage){
+                return response.data;
             }
-            throw response;
+            if(response.status === 200 && response.data.errorMessage){
+                showMassage(translate( response.data.errorKey),'warning');
+                throw response.data;
+            }else{
+                throw response;
+            }
         })
-            .catch(error => {
+            .catch(function (error) {
+                debugger
                 console.log(error);
-                error.msg = "خطا در آپلود فایل";
-                throw error
+                if(error.response && error.response.status==401){
+                    showMassage(translate('عدم دسترسی'),'warning');
+                    throw error;
+                    return;
+                }
+                if(error.response && error.response.data){
+                    console.log(error.response.data)
+                }
+                throw error;
+
             });
     }
 

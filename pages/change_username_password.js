@@ -51,16 +51,15 @@ const HOME_TYPE = 1;
 export default class change_username_password extends Component {
     constructor() {
         super();
-        const contryCode='+'+userStore.countryCode
         this.state = {
             password:'',
             showPassword:false,
             passwordValidation:false,
             passwor2dValidation:false,
             usernameValidation:false,
-            countryCode:userStore.countryCode?'+'+userStore.countryCode : '+98',
+            countryCode:userStore.countryCode,
             username:'',
-            mobile:userStore.mobile?userStore.mobile.replace(contryCode,''):'',
+            shortMobile:userStore.shortMobile,
             email:userStore.email ||'',
             firstName:userStore.firstName ||'',
             lastName:userStore.lastName ||'',
@@ -75,7 +74,10 @@ export default class change_username_password extends Component {
     }
 
     checkValidation() {
-
+        if(this.state.usernameReserved){
+            this.setState({usernameValidation: false});
+            return translate('این نام کاربری قبلا گرفته شده است.');
+        }
         if (!this.state.username ) {
             this.setState({usernameValidation: false});
             return translate('registerPassword_enter_username');
@@ -108,19 +110,19 @@ export default class change_username_password extends Component {
         }
 
 
-        if(!this.state.mobile){
-            this.setState({mobileValidation: false});
+        if(!this.state.shortMobile){
+            this.setState({shortMobileValidation: false});
             return translate('موبایل خود را وارد کنید.')
         }
-        if (this.state.mobile && this.state.mobile.length < 10) {
-            this.setState({mobileValidation: false});
+        if (this.state.shortMobile && this.state.shortMobile.length < 10) {
+            this.setState({shortMobileValidation: false});
             return translate('the_number_of_mobile_is_not_valid');
         }
 
-        const mobileReg = /^9[0-9]{9}$/i;
-        if (this.state.mobile && !mobileReg.test(this.state.mobile)){
-            //this.setState({mobileValidation: false});
-            return translate('invalid_mobile_number'); ;
+        const shortMobileReg = /^9[0-9]{9}$/i;
+        if (this.state.shortMobile && !shortMobileReg.test(this.state.shortMobile)){
+            //this.setState({shortMobileValidation: false});
+            return translate('invalid_shortMobile_number'); ;
         }
 
         const emailReg = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
@@ -139,9 +141,7 @@ export default class change_username_password extends Component {
         if (!this.state.age){
             return translate('سن را وارد کنید');
         }
-        if (!this.state.gender){
-            return translate('جنسیت را وارد کنید');
-        }
+
     }
     updateUsernameAndPassword=()=>{
 
@@ -156,8 +156,8 @@ export default class change_username_password extends Component {
             password:this.state.password,
             showNotifAction:true,
         };
-        if(this.state.mobile){
-            data.mobile=this.state.countryCode+this.state.mobile;
+        if(this.state.shortMobile){
+            data.mobile=this.state.countryCode+'-'+this.state.shortMobile;
         }
         if(this.state.email){
             data.email=this.state.email;
@@ -180,7 +180,7 @@ export default class change_username_password extends Component {
         postQuery('Members/me/updateUsernameAndPassword',data)
             .then(res=>{
                 console.log(res);
-                navigation.replace('myLink');
+                navigation.replace('Profile');
                 this.setState({loading:false});
                 showMassage('مشخصات با موفقیت ویرایش شد.','success')
             })
@@ -207,7 +207,7 @@ export default class change_username_password extends Component {
                 content: images.ic_back,
                 onPress: ()=>navigation.goBack(),
             },
-            title: 'تغییر پسورد',
+            title: 'تغییر رمز موقت و مشخصات شبکه',
 
         };
 
@@ -236,14 +236,13 @@ export default class change_username_password extends Component {
                         <Text style={{color:bgWhite}} >ذخیره</Text>
                     </TouchableOpacity>
                 }>
-                <View style={{flex:1,alignItems:'center',paddingHorizontal:13,paddingTop:0,}} >
+                <View style={{flex:1,alignItems:'center',paddingHorizontal:13,paddingTop:10,}} >
 
 
                     <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,}}   >
 
                         <Text
                             style={{
-                                alignItems:'center',
                                 marginTop:2,
                                 fontSize:14,
                                 fontFamily: 'IRANYekanFaNum-Bold',
@@ -267,7 +266,7 @@ export default class change_username_password extends Component {
                                 dir={'ltr'}
                                 reverse={persistStore.isRtl}
                                 placeholder={translate('registerPassword_username_example')}
-                                style={{flex:1, marginTop:0}}
+                                style={{flex:1, marginTop:10}}
                                 labelStyle={{color:bg3,marginTop:-19}}
                                 editable={true}
                                 multiline={false}
@@ -295,6 +294,7 @@ export default class change_username_password extends Component {
                                 value={this.state.username}
                                 onChangeText={ async (text) =>{
                                     const usernameReg =/^[a-zA-Z0-9_.]+$/;
+                                    text = mapNumbersToEnglish(text);
                                     if(text && !usernameReg.test(text)){
                                         showMassage(translate('registerPassword_username_rule'),'warning');
                                         this.setState({
@@ -316,7 +316,7 @@ export default class change_username_password extends Component {
                                     }
                                     if(text.length>2){
                                         this.setState({checkingPassword:true});
-                                        postQuery('Members/me/checkUserNameExist',{username:text})
+                                        postQuery('Members/me/checkUserNameExist',{username:text,currentUsername:userStore.username})
                                             .then((usernameExist)=>{
                                                 this.setState({usernameReserved:usernameExist,usernameValidation:!usernameExist});
                                             })
@@ -393,6 +393,7 @@ export default class change_username_password extends Component {
                                 onChangeText={text => {
                                     //this.checkValidation();
                                     const passReg =/^[a-zA-Z0-9~`!@#$%^&*()_-{\]\[}|\\?/<.>,+=-]+$/;
+                                    text = mapNumbersToEnglish(text);
                                     if(text && !passReg.test(text)){
                                         showMassage(translate('registerPassword_password_rule'),'warning');
                                         this.setState({
@@ -504,27 +505,27 @@ export default class change_username_password extends Component {
                                     reverse={persistStore.isRtl}
                                     style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
                                     placeholder={translate("fastRegister_mobile_number")}
-                                    value={this.state.mobile}
+                                    value={this.state.shortMobile}
                                     onChangeText={text => {
                                         if(text.length>1 && text.indexOf(0)==0){
                                             text=text.substring(1);
                                         }
 
                                         const acceptReg =/^[0-9~.]+$/;
-                                        const mobileReg = /^9[0-9]{9}$/i;
+                                        const shortMobileReg = /^9[0-9]{9}$/i;
+                                        text = mapNumbersToEnglish(text);
                                         if(acceptReg.test(text)){
-                                            text = mapNumbersToEnglish(text);
-                                            this.setState({ mobile:text, mobileValidation:mobileReg.test(text)});
+                                            this.setState({ shortMobile:text, shortMobileValidation:shortMobileReg.test(text)});
                                         }else{
-                                            showMassage(translate('fastRegister_onlyEnglish_number'),'warning');
+                                            //showMassage(translate('fastRegister_onlyEnglish_number'),'warning');
                                         }
                                         if(!text){
-                                            this.setState({ mobile:'', mobileValidation:false});
+                                            this.setState({ shortMobile:'', shortMobileValidation:false});
                                         }
 
                                     }}
                                     numberOfLines={1}
-                                    isAccept={this.state.mobileValidation}
+                                    isAccept={this.state.shortMobileValidation}
                                     textInputStyle={{
                                         fontFamily: 'IRANYekanFaNum-Bold',
                                         fontSize: 16,
@@ -558,6 +559,7 @@ export default class change_username_password extends Component {
                                     onChangeText={text => {
                                         const acceptReg =/^[a-zA-Z0-9~@.]+$/;
                                         const emailReg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                                        text = mapNumbersToEnglish(text);
                                         if(acceptReg.test(text)){
                                             this.setState({ email:text, emailValidation:emailReg.test(text)});
                                         }else{
@@ -709,10 +711,11 @@ export default class change_username_password extends Component {
                                     onChangeText={text =>{
                                         const acceptReg =/^\d+$/;;
                                         const ageReg=/^\d+$/;
+                                        text = mapNumbersToEnglish(text);
                                         if(acceptReg.test(text)){
                                             this.setState({ age:text, ageValidation:ageReg.test(text)});
                                         }else{
-                                            showMassage(translate('فقط اعداد انگلیسی'),'warning');
+                                            //showMassage(translate('بصورت عددی وارد کنید '),'warning');
                                         }
                                         if(!text){
                                             this.setState({ age:'', ageValidation:false});
