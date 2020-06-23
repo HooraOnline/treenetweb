@@ -109,8 +109,9 @@ export default class Profile extends Component {
         return (
             //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
             <PanelLayout  title={`Treenetgram`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
-                              style22={{alignItems:'center'}}
-                              header22={
+
+                              style={{alignItems:'center'}}
+                              header={
                                   <View>
                                       <Toolbar
                                           customStyle={toolbarStyle}
