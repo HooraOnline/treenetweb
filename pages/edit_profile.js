@@ -153,7 +153,7 @@ export default class edit_profile extends Component {
                 console.log(res);
                 navigation.replace('profile');
                 this.setState({loading:false});
-                showMassage('پروفایل با موفقیت ویرایش شد.','success')
+                //showMassage('پروفایل با موفقیت ویرایش شد.','success')
             })
             .catch(err=>{
                 this.setState({loading:false});
@@ -199,14 +199,14 @@ export default class edit_profile extends Component {
                          footer={
                              <TouchableOpacity
                                  onPress={this.updateUsernameAndPassword}
-                                 style={{alignItems:'center',justifyContent:'center',padding:15, backgroundColor:primaryDark}}>
+                                 style={{alignItems:'center',justifyContent:'center',padding:10, backgroundColor:primaryDark}}>
                                  <Text style={{color:bgWhite}} >ذخیره</Text>
                              </TouchableOpacity>
                          }>
-                <View style={{flex:1,alignItems:'center',padding:10,paddingTop:'5%',}} >
+                <View style={{flex:1,alignItems:'center',paddingHorizontal:10,}} >
 
 
-                    <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,padding:16,}}   >
+                    <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,paddingHorizontal:16,}}   >
 
 
                         <ImageSelector
@@ -229,10 +229,10 @@ export default class edit_profile extends Component {
                         />
 
 
-                        <View id='form' style={{width:'100%',maxWidth:500,marginTop:40}}   >
+                        <View id='form' style={{width:'100%',maxWidth:500,marginTop:10}}   >
 
 
-                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:0,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
                                 <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                     fontSize: 16,

@@ -180,9 +180,9 @@ export default class change_username_password extends Component {
         postQuery('Members/me/updateUsernameAndPassword',data)
             .then(res=>{
                 console.log(res);
-                navigation.replace('Profile');
+                navigation.replace('profile');
                 this.setState({loading:false});
-                showMassage('مشخصات با موفقیت ویرایش شد.','success')
+                //showMassage('مشخصات با موفقیت ویرایش شد.','success')
             })
             .catch(err=>{
                 this.setState({loading:false});

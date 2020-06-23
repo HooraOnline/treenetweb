@@ -94,7 +94,7 @@ const PanelLayout = observer( props => {
                 <View style={[props.style,{width:'100%',}]}>
 
 
-                    <div id={"header"} style={{position:'fixed',top:0,width:globalState.width,zIndex:4,marginBottom:50}}>
+                    <div id={"header"} style={{position22:'fixed',top:0,width:globalState.width,zIndex:4,marginBottom:50}}>
                         {props.header}
                     </div>
 

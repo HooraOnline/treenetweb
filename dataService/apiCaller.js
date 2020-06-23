@@ -75,7 +75,6 @@ class Api {
         //model={value:Api.encrypt(model)};
         return axios.post(uri, model)
             .then(function (response) {
-               debugger
                 if (response.status === 200 && !response.data.errorMessage){
                     return response.data;
                 }

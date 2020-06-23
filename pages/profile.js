@@ -57,7 +57,12 @@ export default class Profile extends Component {
 
    async componentDidMount  () {
 
-        this.getProfile();
+       try{
+           this.getProfile();
+       }catch (e) {
+
+       }
+
 
 
     }
@@ -101,21 +106,18 @@ export default class Profile extends Component {
         const birthYear=(userStore.birthYear && userStore.birthYear.length>3)?userStore.birthYear+' میلادی ':'.........'
         const genderText=(!userStore.gender)?'.........':(userStore.gender==1)?'مرد':'زن';
         let shortMobile=userStore.shortMobile?'0'+userStore.shortMobile:'.........';
-        debugger
         return (
             //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
             <PanelLayout  title={`Treenetgram`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
-                              onRef={(initDrawer)=>this.initDrawer=initDrawer}
-                              onCloseMenu={()=>this.setState({showMenu:false})}
-                              style={{alignItems:'center'}}
-                              header={
+                              style22={{alignItems:'center'}}
+                              header22={
                                   <View>
                                       <Toolbar
                                           customStyle={toolbarStyle}
                                           isExpand={this.state.showAccountSelect }
                                       />
                                       {persistStore.notChangePassword &&(
-                                          <div  style={{position:'fixed',top:50,width:globalState.width,zIndex:40}}>
+                                          <div  style={{width:globalState.width,zIndex:4}}>
                                               <TouchableOpacity
                                                   onPress={()=>{navigation.navigate('change_username_password')}}
                                                   style={{flex:1,paddingBottom:40, flexDirection:'row',justifyContent:'space-between', padding:10,backgroundColor:'#F1C40F'}}>

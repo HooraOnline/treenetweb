@@ -42,7 +42,6 @@ export default class ImageSelector extends PureComponent {
       globalState.showBgLoading();
        upload(files, 'member', (r)=>{console.log(r)})
            .then(result => {
-               debugger
                console.log(result);
                window.s111=result
                if(result.result && result.result.fields && result.result.fields.name && result.result.fields.name[0]){

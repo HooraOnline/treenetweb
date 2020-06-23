@@ -228,7 +228,7 @@ export default class index extends Component {
                                     style={{
                                         width: 200,
                                         maxWidth: 300,
-                                        marginTop: 25,
+                                        marginTop: 40,
                                         borderColor: primaryDark,
                                         borderWidth: 1,
                                         padding: 0,
@@ -369,7 +369,7 @@ export default class index extends Component {
                             style={{
                                 width: 200,
                                 maxWidth: 300,
-                                marginTop: 25,
+                                marginTop: 40,
                                 borderColor: primaryDark,
                                 borderWidth: 1,
                                 padding: 0,
