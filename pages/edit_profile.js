@@ -66,6 +66,7 @@ export default class edit_profile extends Component {
             firstName:userStore.firstName ||'',
             lastName:userStore.lastName ||'',
             gender:Number(userStore.gender ||0),
+            profileImageValidation:userStore.profileImage!=='defaultProfileImage.png',
         };
 
         this.state.age=userStore.age;
@@ -111,7 +112,7 @@ export default class edit_profile extends Component {
             return translate('سن را وارد کنید');
         }
 
-        if(this.state.image=='defaultProfileImage.png'){
+        if(!this.state.profileImageValidation){
             return translate(' تصویر  پروفایل خود را انتخاب کنید.');
         }
 
@@ -219,11 +220,15 @@ export default class edit_profile extends Component {
                             hideDeleteBtn={true}
                             //onrender={(imageSelector)=>imageSelector.setState({image:this.state.userImage})}
                             onUplodedFile={(fileName)=>{
+
                                 this.setState({image: fileName});
                                 this.setProfileImage(fileName);
                             }}
                             onRemoveImage={(fileName)=>{
                                 this.setState({image: null});
+                            }}
+                            onSelectFile={()=>{
+                                this.setState({profileImageValidation:true})
                             }}
 
                         />
