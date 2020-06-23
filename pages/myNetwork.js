@@ -298,7 +298,7 @@ export default class MyNetwork extends Component {
                             }
 
                               >
-                <View style={{marginHorizontal: 10,marginTop: persistStore.notChangePassword?70:10,paddingBottom:60}}>
+                <View style={{marginHorizontal: 10,marginTop: persistStore.notChangePassword?80:10,paddingBottom:60}}>
                     <View style={{width:'100%',
                         flexDirection:'row',
                         justifyContent:'space-between',

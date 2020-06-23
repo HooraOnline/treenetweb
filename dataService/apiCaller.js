@@ -86,7 +86,6 @@ class Api {
                 }
             })
             .catch(function (error) {
-                debugger
                 if(error.response && error.response.status==401){
                     showMassage(translate('عدم دسترسی'),'warning');
                     throw error;
@@ -118,7 +117,6 @@ class Api {
                 }
             })
             .catch(function (error) {
-                debugger
                 console.log(error);
                 if(error.response && error.response.status==401){
                     showMassage(translate('عدم دسترسی'),'warning');
@@ -148,7 +146,6 @@ class Api {
                 }
             })
             .catch(function (error) {
-                debugger
                 console.log(error);
                 if(error.response && error.response.status==401){
                     showMassage(translate('عدم دسترسی'),'warning');
@@ -180,7 +177,6 @@ class Api {
                 }
             })
             .catch(function (error) {
-                debugger
                 console.log(error);
                 if(error.response && error.response.status==401){
                     showMassage(translate('عدم دسترسی'),'warning');
@@ -210,7 +206,6 @@ class Api {
                 }
             })
             .catch(function (error) {
-                debugger
                 console.log(error);
                 if(error.response && error.response.status==401){
                     showMassage(translate('عدم دسترسی'),'warning');
@@ -239,7 +234,6 @@ class Api {
                 }
             })
             .catch(function (error) {
-                debugger
                 console.log(error);
                 if(error.response && error.response.status==401){
                     showMassage(translate('عدم دسترسی'),'warning');
@@ -269,7 +263,6 @@ class Api {
                 }
             })
             .catch(function (error) {
-                debugger
                 console.log(error);
                 if(error.response && error.response.status==401){
                     showMassage(translate('عدم دسترسی'),'warning');
@@ -324,7 +317,6 @@ class Api {
             }
         })
             .catch(function (error) {
-                debugger
                 console.log(error);
                 if(error.response && error.response.status==401){
                     showMassage(translate('عدم دسترسی'),'warning');
@@ -378,7 +370,6 @@ class Api {
             }
         })
             .catch(function (error) {
-                debugger
                 console.log(error);
                 if(error.response && error.response.status==401){
                     showMassage(translate('عدم دسترسی'),'warning');

@@ -228,7 +228,7 @@ export default class index extends Component {
                                     style={{
                                         width: 200,
                                         maxWidth: 300,
-                                        marginTop: 40,
+                                        marginTop: 25,
                                         borderColor: primaryDark,
                                         borderWidth: 1,
                                         padding: 0,
@@ -254,7 +254,7 @@ export default class index extends Component {
                            <TouchableOpacity
                                 style={{
                                     flex: 1,
-                                    marginTop: 10,
+                                    marginTop: 30,
                                     width: 200,
                                     maxWidth: 300,
                                     borderColor: '#FF8C00',
@@ -369,7 +369,7 @@ export default class index extends Component {
                             style={{
                                 width: 200,
                                 maxWidth: 300,
-                                marginTop: 40,
+                                marginTop: 25,
                                 borderColor: primaryDark,
                                 borderWidth: 1,
                                 padding: 0,
@@ -395,7 +395,7 @@ export default class index extends Component {
                     <TouchableOpacity
                         style={{
                             flex: 1,
-                            marginTop: 10,
+                            marginTop: 30,
                             width: 200,
                             maxWidth: 300,
                             borderColor: '#FF8C00',

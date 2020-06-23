@@ -65,9 +65,10 @@ export default class index extends Component {
                     />
                     <Text
                         style={{
-                            marginTop: 5,
+                            marginTop: 20,
+                            alignSelf:'center',
                             marginBottom: 10,
-                            fontSize: 25,
+                            fontSize: 14,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
                             color: bg4

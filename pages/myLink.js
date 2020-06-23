@@ -104,9 +104,8 @@ export default class MyLink extends Component {
                                 style={{
                                     marginTop: 0,
                                     maxWidth:400,
-                                    fontSize: 16,
-                                    fontWeight: 400,
-                                    fontFamily: 'IRANYekanFaNum-Bold',
+                                    fontSize: 14,
+                                    fontFamily: 'IRANYekanFaNum',
                                     textAlign:'justify'
                                 }}>
                                 {translate(' برای دریافت لینک اختصاصی خود و شروع شبکه سازی، ابتدا نام کاربری و رمز عبور موقت خود را تغییر دهید.')}
@@ -117,7 +116,7 @@ export default class MyLink extends Component {
                             }}
                             >
                                 <View style={{
-                                    flexDirection:'row',height:40,marginTop:40,maxWidth:300,
+                                    flexDirection:'row',height:40,marginTop:30,maxWidth:300,
                                     alignSelf:'center',
                                     backgroundColor:'#27AE60',borderRadius:8,alignItems:'cener',
                                     justifyContent:'center', padding:5,paddingHorizontal:15}}>

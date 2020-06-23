@@ -109,7 +109,8 @@ export default class Profile extends Component {
         return (
             //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
             <PanelLayout  title={`Treenetgram`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
-
+                              onRef={(initDrawer)=>this.initDrawer=initDrawer}
+                              onCloseMenu={()=>this.setState({showMenu:false})}
                               style={{alignItems:'center'}}
                               header={
                                   <View>
