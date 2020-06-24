@@ -1,11 +1,11 @@
 {
-  "name": "Treenet",
-  "short_name": "Treenet",
+  "name": "Treenetgram",
+  "short_name": "Treenetgram",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f0f0f0",
   "theme_color": "#ff6600",
-  "description": "A simple PWA.",
+  "description": "Treenet marketing ",
   "icons": [{
     "src": "/static/icon.png",
     "sizes": "512x512",

@@ -61,7 +61,7 @@ export default class registered_new extends Component {
 
         return (
 
-            <ResponsiveLayout title={`Treenet`} loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin: 0}}>
+            <ResponsiveLayout title={`Treenetgram`} loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin: 0}}>
                 <View style={{flex: 1, backgroundColor: bg9, alignItems: 'center', padding: 10, paddingTop: '5%',}}>
                     <Image
                         source={images.tree}

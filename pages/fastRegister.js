@@ -123,7 +123,7 @@ export default class FastRegister extends Component {
 
         return (
 
-            <ResponsiveLayout title={`Treenet`}  style={{margin:0}}>
+            <ResponsiveLayout title={`Treenetgram`}  style={{margin:0}}>
                 <View style={{flex:1,backgroundColor:bg9,alignItems:'center',padding:10,paddingTop:'5%',}} >
                     <Image
                         source={images.tree}

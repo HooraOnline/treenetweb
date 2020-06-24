@@ -9,7 +9,7 @@ class MyDocument extends Document {
         <Head>
           <meta charSet="UTF-8"/>
           <link rel="icon" href="../static/logo.png"/>
-          <meta name="description" content={ 'Human network tree builder'}/>
+          <meta name="description" content={ 'Build Your big network rapidly.'}/>
           <meta name="viewport" content="width=device-width, initial-scale=1"/>
           <link rel="stylesheet" href="../static/assets/global.css"/>
           <link rel="shortcut icon" href="/static/icon.png"/>

@@ -13,6 +13,7 @@ import copy from "copy-to-clipboard";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import {userStore,persistStore } from "../src/stores";
 import {getUserProfileApi} from "../dataService/apiService";
+import ShareLink from "../src/sections/ShareLink";
 
 const HOME_TYPE = 1;
 export default class MyLink extends Component {
@@ -132,63 +133,8 @@ export default class MyLink extends Component {
 
                         </View>
                     ):(
-                        <View>
-                            <View style={{padding: 24, marginTop: 0}}>
-                                <Text
-                                    style={{
-                                        marginTop: 0,
-                                        fontSize: 16,
-                                        fontWeight: 800,
-                                        fontFamily: 'IRANYekanFaNum-Bold',
-                                        color: grL5,
-                                    }}>
-                                    {translate('finishRegister_your_invitation_link')}
-                                </Text>
-                                <View style={{
-                                    flexDirection: 'row',
-                                    marginTop: 10,
-                                    borderWidth: 1,
-                                    borderRadius: 8,
-                                    borderColor: bg8,
-                                    alignItems: 'center',
-                                }}>
-                                    <TouchableOpacity
-                                        style={{
-                                            borderWidth: 1,
-                                            borderRadius: 0,
-                                            borderColor: grL5,
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            color: bg10,
-                                            width: 80,
-                                            height: 60,
-                                            fontSize: 16,
-                                            marginHorizontal: 0,
-                                            backgroundColor: bg3,
-                                        }}
-                                        onPress={this.copyLink}>
-                                        <Text style={{padding: 5,}}>{translate('finishRegister_copy')}</Text>
-                                    </TouchableOpacity>
-                                    <TextInput
-                                        style={{
-                                            fontSize: 14,
-                                            fontFamily: 'IRANYekanRegular',
-                                            color: grL5,
-                                            //maxWidth:global.width-50,
-                                            textAlign: 'left',
-                                            paddingHorizontal: 5,
-                                            width: '100%',
-                                            height: 60,
-                                        }}
-                                        readonly
-                                        numberOfLines={5}
-                                        value={userStore.invitationLink}
-                                    >
-
-                                    </TextInput>
-                                </View>
-
-                            </View>
+                        <View style={{padding:16}}>
+                            <ShareLink/>
                             <Text style={{
                                 textAlign: 'justify',
                                 paddingHorizontal: 30,

@@ -47,7 +47,7 @@ export default class index extends Component {
         };
         return (
 
-            <ResponsiveLayout title={`Treenet`} loading={this.state.loading}
+            <ResponsiveLayout title={`Treenetgram`} loading={this.state.loading}
                               loadingMessage={this.state.loadingMessage}
                               style={{margin: 0}}
                               header={

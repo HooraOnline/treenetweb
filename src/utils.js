@@ -468,7 +468,7 @@ export function isMobile(){
      }*/
     let windowWidth = window.screen.width < window.outerWidth ?
         window.screen.width : window.outerWidth;
-    return  windowWidth < 500;
+    return  windowWidth < 650;
 }
 
 export function height(){
