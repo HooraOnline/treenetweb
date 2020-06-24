@@ -356,68 +356,7 @@ export default class index extends Component {
                     </View>
 
                 </View>
-                <View style={{
-                    flex: 1,
-                    //flexDirection:'row',
-                    paddingHorizontal: 16,
-                    alignItems: 'center',
-                    paddingBottom: 10,
 
-                }}>
-                    {!persistStore.userRegisterbefor22 && (
-                        <TouchableOpacity
-                            style={{
-                                width: 200,
-                                maxWidth: 300,
-                                marginTop: 25,
-                                borderColor: primaryDark,
-                                borderWidth: 1,
-                                padding: 0,
-                                paddingTop: 0,
-                                borderRadius: 12,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                marginHorizontal: 10,
-
-                            }}
-                            onPress={() => this.registerUser()}
-                        >
-                            <Text style={{
-                                fontSize: 16,
-                                color: primaryDark,
-                                fontWeight: 500,
-                                paddingVertical: 12,
-                                paddingHorizontal: 20,
-                            }}>{translate('create_network')}</Text>
-                        </TouchableOpacity>
-                    )}
-
-                    <TouchableOpacity
-                        style={{
-                            flex: 1,
-                            marginTop: 30,
-                            width: 200,
-                            maxWidth: 300,
-                            borderColor: '#FF8C00',
-                            backgroundColor:'#FF8C00',
-                            borderWidth: 1,
-                            padding: 0,
-                            paddingTop: 0,
-                            borderRadius: 12,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                        onPress={() => this.loginPanel()}
-                    >
-                        <Text style={{
-                            fontSize: 16,
-                            color: bgWhite,
-                            fontWeight: 500,
-                            paddingVertical: 12,
-                            paddingHorizontal: 20,
-                        }}>{translate('login_my_tree')}</Text>
-                    </TouchableOpacity>
-                </View>
             </ResponsiveLayout>
         )
     }
