@@ -1,57 +1,31 @@
 import React, {Component} from 'react';
 import {showMassage} from "../../src/utils";
-import {bg10, bg3, bg8, bgWhite, grL5, primaryDark, textItem} from "../../src/constants/colors";
+import {bg10, bg3, bg8, bgWhite, grL5} from "../../src/constants/colors";
 import {Text, TextInput, TouchableOpacity, View,} from "../../src/react-native";
 import translate from "../../src/language/translate";
 import copy from "copy-to-clipboard";
 import {userStore} from "../../src/stores";
 import {getUserProfileApi} from "../../dataService/apiService";
 import {
-    EmailShareButton,
-    FacebookShareButton,
-    InstapaperShareButton,
-    LineShareButton,
-    LinkedinShareButton,
-    LivejournalShareButton,
-    MailruShareButton,
-    OKShareButton,
-    PinterestShareButton,
-    PocketShareButton,
-    RedditShareButton,
-    TelegramShareButton,
-    TumblrShareButton,
-    TwitterShareButton,
-    ViberShareButton,
-    VKShareButton,
-    WhatsappShareButton,
-    WorkplaceShareButton,
-    FacebookShareCount
-} from "react-share";
-
-import {
     EmailIcon,
+    EmailShareButton,
     FacebookIcon,
-    FacebookMessengerIcon,
-    InstapaperIcon,
-    LineIcon,
+    FacebookShareButton,
     LinkedinIcon,
-    LivejournalIcon,
-    MailruIcon,
-    OKIcon,
+    LinkedinShareButton,
     PinterestIcon,
-    PocketIcon,
-    RedditIcon,
+    PinterestShareButton,
     TelegramIcon,
-    TumblrIcon,
+    TelegramShareButton,
     TwitterIcon,
+    TwitterShareButton,
     ViberIcon,
-    VKIcon,
-    WeiboIcon,
+    ViberShareButton,
     WhatsappIcon,
-    WorkplaceIcon,
-
+    WhatsappShareButton
 } from "react-share";
-import {bg4, bg5, bg6, bg9} from "../constants/colors";
+import {bg4} from "../constants/colors";
+
 export default class ShareLink extends Component {
     constructor() {
         super();
@@ -126,7 +100,7 @@ export default class ShareLink extends Component {
                                 fontFamily: 'IRANYekanRegular',
                                 color: bgWhite,
                                 //maxWidth:global.width-50,
-                                textAlign: 'left',
+                                textAlign: 'center',
                                 paddingHorizontal: 5,
                                 width: '100%',
                                 height: 50,
@@ -135,6 +109,7 @@ export default class ShareLink extends Component {
                                 borderRadius:1,
                                 borderColor:bg4,
                                 justifyContent:'center',
+
                             }}
                             readonly
                             numberOfLines={3}
@@ -192,7 +167,14 @@ export default class ShareLink extends Component {
                         >
                             <TelegramIcon size={40} round={false}/>
                         </TelegramShareButton>
-
+                        <WhatsappShareButton style={{}}
+                                             url={userStore.invitationLink}
+                                             quote={"تری نتگرام، شبکه سازی  با سرعت نور"}
+                                             className="share"
+                                             imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
+                        >
+                            <WhatsappIcon size={40} round={false}/>
+                        </WhatsappShareButton>
                         <FacebookShareButton style={{}}
                                              url={userStore.invitationLink}
                                              quote={"تری نتگرام، شبکه سازی با سرعت نور"}
@@ -227,14 +209,14 @@ export default class ShareLink extends Component {
                                           className="share">
                             <EmailIcon size={40} round={false}/>
                         </EmailShareButton>
-                        <PinterestShareButton style={{}}
+                       {/* <PinterestShareButton style={{}}
                                           url={userStore.invitationLink}
                                           quote={"تری نتگرام، شبکه سازی با سرعت نور"}
                                           className="share"
                                           imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                                         >
-                        <PinterestIcon size={40} round={false}/>
-                    </PinterestShareButton>
+                             <PinterestIcon size={40} round={false}/>
+                        </PinterestShareButton>*/}
                         <ViberShareButton style={{}}
                                           url={userStore.invitationLink}
                                           quote={"تری نتگرام، شبکه سازی با سرعت نور"}

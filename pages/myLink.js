@@ -98,7 +98,7 @@ export default class MyLink extends Component {
                                  ]}/>
                              </View>
                          }>
-                <View style={{flex:1}}>
+                <View style={{flex:1,paddingBottom:40}}>
                     {persistStore.notChangePassword?(
                         <View style={{padding: 24, marginTop: 10,alignItems:'center'}}>
                             <Text

@@ -223,7 +223,7 @@ export default class index extends Component {
                             paddingBottom: 10,
 
                         }}>
-                           {!persistStore.userRegisterbefor22 && (
+                           {!persistStore.userRegisterbefor && (
                                 <TouchableOpacity
                                     style={{
                                         width: 200,
