@@ -9,23 +9,7 @@ import {Image, Platform, Text, TouchableOpacity, View,} from "../src/react-nativ
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 import {postQuery} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
-import {
-    bgWhite,
-    border,
-    placeholderTextColor,
-    lightRed,
-    textItemBlack,
-    bg1,
-    bg2,
-    bg3,
-    bg5
-    bg6,
-    bg7,
-    bg8,
-    bgScreen,
-    bg10,
-    borderSeparate, grL5
-} from "../src/constants/colors";
+import {bg3, bg5, bgScreen, bgWhite, border, textItemBlack,} from "../src/constants/colors";
 //import Pagination from 'docs/src/modules/components/Pagination';
 //const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 

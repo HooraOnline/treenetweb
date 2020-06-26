@@ -8,27 +8,10 @@ import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 import {postQuery} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
+import {IoMdEye, IoMdEyeOff} from "react-icons/io";
+import {bg1, bg3, bg5, bgScreen, primaryDark, textItem} from "../src/constants/colors";
 //import Pagination from 'docs/src/modules/components/Pagination';
 //const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-
-import {IoMdEye, IoMdEyeOff} from "react-icons/io";
-import {
-    bgWhite,
-    border,
-
-    lightRed,
-    textItemBlack,
-    bg1,
-    bg2,
-    bg3,
-    bg5
-    bg6,
-    bg7,
-    bg8,
-    bgScreen,
-    bg10,
-    borderSeparate, primaryDark, textItem, grayVD7, grL5
-} from "../src/constants/colors";
 
 export default class RegisterPassword extends Component {
     constructor() {
