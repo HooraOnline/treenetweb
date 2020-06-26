@@ -51,7 +51,7 @@ export const lightGrey = '#c9c7c7';
 export const lightRed = '#f77';
 export const black = '#5d4a4a';
 export const gray = '#bfacac';
-export const bgScreen = '#F5F1F1';
+
 export const bgItem = '#FFF';
 export const borderLight = '#d5cbcd';
 export const border = '#8a7e7e';
@@ -91,13 +91,22 @@ export const borderRed = '#EA4A29';
 export const yellowmin = '#FFC107';
 export const greenDark = '#00A28C';
 export const textGray = '#CCD1D1';
+
+
+export const bgHeader ='rgb(195,195,195)';
+export const bg5 = '#FF7225';
+export const orange1 ='#F39C12';
+export const green1 ='#2ECC71';
+export const bgScreen = '#F5F1F1';
+
+
+
 export const bg10 = '#E8F6F3';
-export const bg9 = '#D0ECE7';
+
 export const bg8 = '#A2D9CE';
 export const bg7 = '#73C6B6';
 export const bg6 = '#45B39D';
-export const bg5 = '#1ABC9C';
-export const bg4 = '#17A589';
+
 export const bg3 = '#117A65';
 export const bg2 = '#117864';
 export const bg1 = '#0B5345';

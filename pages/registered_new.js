@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import translate from "../src/language/translate";
-import {doDelay, navigation, showMassage,} from "../src/utils";
+import {doDelay, navigation,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bgWhite, fabColor, bg1, bg3, bg4, bg5, bg9, lightRed, primaryDark} from "../src/constants/colors";
+import {bg1, bg5, bgScreen, bgWhite, primaryDark} from "../src/constants/colors";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
-import {loginApi, postQuery} from "../dataService/apiService";
+import {loginApi} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
 import Router from "next/router";
 //import Pagination from 'docs/src/modules/components/Pagination';
@@ -62,7 +62,8 @@ export default class registered_new extends Component {
         return (
 
             <ResponsiveLayout title={`Treenetgram`} loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin: 0}}>
-                <View style={{flex: 1, backgroundColor: bg9, alignItems: 'center', padding: 10, paddingTop: '5%',}}>
+                <View
+                    style={{flex: 1, backgroundColor: bgScreen, alignItems: 'center', padding: 10, paddingTop: '5%',}}>
                     <Image
                         source={images.tree}
                         style={{maxWidth: '25%', maxHeight: '25%',}}
@@ -74,7 +75,7 @@ export default class registered_new extends Component {
                             fontSize: 25,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: bg4
+                            color: bg5
                         }}>
                         Treenetgram
                     </Text>
@@ -102,14 +103,14 @@ export default class registered_new extends Component {
                         </Text>
                     <View style={{
                         width: '100%',
-                        alignItems:'center',
-                        borderWidth:1,
-                        borderColor:bg4,
-                        borderRadius:12,
-                        marginTop:30,
-                        padding:10,
+                        alignItems: 'center',
+                        borderWidth: 1,
+                        borderColor: bg5,
+                        borderRadius: 12,
+                        marginTop: 30,
+                        padding: 10,
                         borderStyle: 'dotted',
-                        paddingVertical:20,
+                        paddingVertical: 20,
                     }}>
                         <View
                             style={{
@@ -177,10 +178,10 @@ export default class registered_new extends Component {
                         <TouchableOpacity
                             style={{
                                 marginTop: 20,
-                                borderColor: bg4,
-                                backgroundColor:bg5,
+                                borderColor: bg5,
+                                backgroundColor: bg5,
                                 borderWidth: 1,
-                                width:200,
+                                width: 200,
                                 paddingTop: 0,
                                 borderRadius: 8,
                                 maxWidth: 300,
@@ -193,7 +194,7 @@ export default class registered_new extends Component {
                                 fontSize: 16,
                                 color: bgWhite,
                                 fontWeight: 500,
-                                paddingVertical: 12
+                                paddingVertical: 8
                             }}>{translate('ورود')}</Text>
                         </TouchableOpacity>
                     </View>

@@ -1,27 +1,18 @@
 import React, {Component} from 'react';
-import {userStore, persistStore, globalState} from "../src/stores";
-import {permissionId} from '../src/constants/values';
-import Router from "next/router";
+import {globalState, persistStore, userStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
-import {Toolbar,ImageSelector} from "../src/components";
+import {ImageSelector, Toolbar} from "../src/components";
 
 import accountsStore from "../src/stores/Accounts";
-import { navigation} from "../src/utils";
+import {navigation} from "../src/utils";
 import images from "../public/static/assets/images";
-import {
-    bgWhite,
-    bg5, fab, textItem
-} from "../src/constants/colors";
-import accounting from "accounting";
-import NavFooterButtons from "../src/components/layouts/footerButtons";
+import {bg5, bgWhite, textItem} from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
-import {View, TouchableOpacity, Text, Progress, BgImageChacheProgress,} from "../src/react-native";
+import {Text, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCogs, faCompass, faMapMarkerAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
-import {getFileUri, getUserProfileApi, logoutApi, postQuery} from "../dataService/apiService";
-import Api from "../dataService/apiCaller";
-import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
+import {getUserProfileApi, logoutApi, postQuery} from "../dataService/apiService";
 import {observer} from "mobx-react";
 import Image from "../src/react-native/Image";
 
@@ -81,12 +72,22 @@ export default class Profile extends Component {
 
                 });*/
             })
-            .catch(err=>{
-                this.setState({loading:false});
+            .catch(err => {
+                this.setState({loading: false});
             });
-    }
+     }
 
-
+    setProfileImage = (fileName) => {
+        const data = {profileImage: fileName};
+        postQuery('Members/me/setProfileImage', data)
+            .then(res => {
+                userStore.profileImage = res.profileImage;
+                this.setState({loading: false});
+            })
+            .catch(err => {
+                this.setState({loading: false});
+            })
+    };
 
     render() {
 
@@ -96,13 +97,13 @@ export default class Profile extends Component {
             },
             title: 'پروفایل',
             end: {
-                onPress: ()=>logoutApi(),
+                onPress: () => logoutApi(),
                 icon: images.ic_Period,
             },
         };
 
 
-        let {age='.........',fullName='.........',birthDate='.........',profileImage='.........',gender=0,username='.........'}=userStore;
+        let {avatar='عضو فعال تری نتگرام',age='.........',fullName='.........',birthDate='.........',profileImage='.........',gender=0,username='.........'}=userStore;
         const birthYear=(userStore.birthYear && userStore.birthYear.length>3)?userStore.birthYear+' میلادی ':'.........'
         const genderText=(!userStore.gender)?'.........':(userStore.gender==1)?'مرد':'زن';
         let shortMobile=userStore.shortMobile?'0'+userStore.shortMobile:'.........';
@@ -163,28 +164,77 @@ export default class Profile extends Component {
                                   </View>
                               }>
                 <View style={{  padding:0,marginTop:persistStore.notChangePassword?30: 0,alignItems:'center'}}>
-                        <View style={{width:'100%',  padding:24,marginTop:0,alignItems:'center',maxWidth:300}}>
+                    <View style={{width: '100%', padding: 24, marginTop: 0, alignItems: 'center', maxWidth: 300}}>
 
-                            <Image
+                        {/* <Image
                                 style={{height:100,width:100,borderRadius:50}}
                                 resizeMode="cover"
                                 source={getFileUri('member',userStore.profileImage)}
-                            />
+                            />*/}
+                        <ImageSelector
+                            style={{
+                                borderWidth: 2,
+                                borderColor: bg5,
+                                height: 100,
+                                width: 100,
+                                borderRadius: 50,
+                                alignSelf: 'center'
+                            }}
+                            canUpload={true}
+                            autoUpload={true}
+                            imageStyle={{height: 100, width: 100, borderRadius: 50}}
+                            image={userStore.profileImage}
+                            noImage={images.default_ProPic}
+                            hideDeleteBtn={true}
+                            //onrender={(imageSelector)=>imageSelector.setState({image:this.state.userImage})}
+                            onUplodedFile={(fileName) => {
 
-                            <View style={{width:'100%',  flexDirection:'row',marginVertical:4,marginTop:16,justifyContent:'space-between'}}>
-                                <Text style={{fontWeight:400}} > نام کاربری:</Text>
-                                <Text>{username}</Text>
-                            </View>
-                            <View style={{width:'100%',  flexDirection:'row',marginVertical:4,justifyContent:'space-between'}}>
-                                <Text style={{fontWeight:400}} > نام:</Text>
-                                <Text>{fullName || '.........'}</Text>
-                            </View>
+                                this.setState({image: fileName});
+                                this.setProfileImage(fileName);
+                            }}
+                            onRemoveImage={(fileName) => {
+                                this.setState({image: null});
+                            }}
+                            onSelectFile={() => {
+                                this.setState({profileImageValidation: true})
+                            }}
+                        />
+
+                        <View style={{
+                            width: '100%',
+                            flexDirection: 'row',
+                            marginVertical: 4,
+                            marginTop: 16,
+                            justifyContent: 'space-between'
+                        }}>
+                            <Text style={{fontWeight: 400}}> نام کاربری:</Text>
+                            <Text style={{fontSize:14}}>{username}</Text>
+                        </View>
+
+                        <View style={{
+                            width: '100%',
+                            flexDirection: 'row',
+                            marginVertical: 4,
+                            justifyContent: 'space-between'
+                        }}>
+                            <Text style={{fontWeight: 400}}> نام:</Text>
+                            <Text style={{fontSize:14}}>{fullName || '.........'}</Text>
+                        </View>
                             <View style={{width:'100%',  flexDirection:'row',marginVertical:4,justifyContent:'space-between'}}>
                                 <Text style={{fontWeight:400}} > موبایل:</Text>
-                                <Text>{shortMobile || '.........'}</Text>
+                                <Text style={{fontSize:14}}>{shortMobile || '.........'}</Text>
                             </View>
 
-
+                        <View style={{
+                            width: '100%',
+                            flexDirection: 'row',
+                            marginVertical: 4,
+                            marginTop: 16,
+                            justifyContent: 'space-between'
+                        }}>
+                            <Text style={{fontWeight: 400}}> آواتار:</Text>
+                            <Text style={{fontSize:14}} >{avatar}</Text>
+                        </View>
                             <TouchableOpacity
                                 onPress={()=>{navigation.navigate('edit_profile')}}
                                 style={{

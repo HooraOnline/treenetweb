@@ -1,53 +1,42 @@
 import React, {Component, PureComponent} from 'react';
-import {userStore, persistStore, globalState} from "../src/stores";
-import {permissionId} from '../src/constants/values';
-import Router from "next/router";
+import {globalState, persistStore, userStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
-import {DropDownList,Toolbar,CardUnitInfo,PopupBase,ImageSelector} from "../src/components";
-
-import accountsStore from "../src/stores/Accounts";
-import {deviceWide, doDelay, fetchStore, logger, navigation, showMassage} from "../src/utils";
+import {Toolbar,} from "../src/components";
+import {navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
-import {getUserBalance} from "../src/network/Queries";
 import {
     bgItemRed,
-    bgScreen,
     bgWhite,
-    textItemRed,
     borderSeparate,
-    border,
-    primary,
-    fab,
-    bg2, textItem, bg9, bg10, primaryDark, bg3, primaryDarkOld, grL5, bg8, itemListText
+    itemListText,
+    primaryDark,
+    primaryDarkOld,
+    textItem,
 } from "../src/constants/colors";
-import accounting from "accounting";
-import NavFooterButtons from "../src/components/layouts/footerButtons";
 import NavBar from "../src/components/layouts/NavBar";
-import {View, TouchableOpacity, Text, FlatList, Progress, BgImageChacheProgress, TextInput,} from "../src/react-native";
+import {FlatList, Text, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCogs, faCompass, faMapMarkerAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
-import {getFileUri, getUserProfileApi, getUserSubsetApi} from "../dataService/apiService";
+import {getFileUri, getUserSubsetApi} from "../dataService/apiService";
 import Image from "../src/react-native/Image";
 import DateTime from "../src/react-native/DateTime";
-import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
+import {IoMdEye, IoMdEyeOff} from "react-icons/io";
 import copy from "copy-to-clipboard";
-import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import {observer} from "mobx-react";
 
+class TreeView extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+        };
+    }
 
- class TreeView extends PureComponent {
-     constructor(props) {
-         super(props);
-         this.state = {
-             open:false,
-         };
-     }
-     open(item){
-         if(item.subsets.length>0)
-           this.setState({open:!this.state.open})
-         else{
+    open(item) {
+        if (item.subsets.length > 0)
+            this.setState({open: !this.state.open});
+        else {
              let name=item.username;
              let message=name+' فعلا زیر مجموعه ای ندارد.';
              showMassage(message,'warning');
@@ -209,7 +198,7 @@ export default class MyNetwork extends Component {
         getUserSubsetApi()
             .then(subsetList=>{
                 this.calculateTotalSubsetsCount(subsetList)
-                this.setState({subsetList,totalSubsetsCount:this.totalSebsetsCount, loading:false})
+                this.setState({subsetList,leavesCount:this.totalSebsetsCount, loading:false})
             })
             .catch(err=>{
                 this.setState({loading:false});
@@ -310,8 +299,8 @@ export default class MyNetwork extends Component {
                         backgroundColor:bgItemRed
                     }} >
                         <Text style={{fontSize:12}}> {this.state.subsetList.length } شاخه </Text>
-                        <Text  style={{fontSize:12}}> {this.state.totalSubsetsCount } برگ </Text>
-                        <Text  style={{fontSize:12}}>{this.state.totalSubsetsCount+this.state.subsetList.length+1 } عضو </Text>
+                        <Text  style={{fontSize:12}}> {this.state.leavesCount } برگ </Text>
+                        <Text  style={{fontSize:12}}>{this.state.leavesCount+this.state.subsetList.length+1 } عضو </Text>
                     </View>
                     <TreeView
                         style={{paddingBottom:60}}
@@ -323,61 +312,7 @@ export default class MyNetwork extends Component {
                             <Text
                                 style={{textAlign:'justify',paddingHorizontal:30,fontSize:14,color:itemListText}}
                             > شما هنوز هیچ فردی را به تری نتگرام دعوت نکرده و شاخه ای نساخته اید. برای ایجاد شاخه های درخت خود، کافی است لینک اختصاصی خود را برای چند نفر ارسال کنید یا آنرا در شبکه های اجتماعی مانند فیسبوک یا تلگرام به اشتراک بگذارید. </Text>
-                            <View style={{padding:24,marginTop:0}}>
-                                <Text
-                                    style={{
-                                        marginTop:0,
-                                        fontSize:14,
-                                        fontWeight:500,
-                                        fontFamily: 'IRANYekanFaNum-Bold',
-                                        color:grL5,
-                                    }}>
-                                    {translate('finishRegister_your_invitation_link')}
-                                </Text>
-                                <View style={{
-                                    flexDirection:'row',
-                                    marginTop:5,
-                                    borderWidth:1,
-                                    borderRadius:8,
-                                    borderColor:bg8,
-                                    alignItems:'center',
-                                }} >
-                                    <TouchableOpacity
-                                        style={{
-                                            borderWidth:1,
-                                            borderRadius:0,
-                                            borderColor:grL5,
-                                            alignItems:'center',
-                                            justifyContent:'center',
-                                            color:bg10,
-                                            width:80,
-                                            height:60,
-                                            fontSize:16,
-                                            marginHorizontal:0,
-                                            backgroundColor:bg3,
-                                        }}
-                                        onPress={this.copyLink}>
-                                        <Text style={{padding:5,}}>{translate('finishRegister_copy')}</Text>
-                                    </TouchableOpacity>
-                                    <TextInput
-                                        style={{
-                                            fontSize:14,
-                                            fontFamily: 'IRANYekanRegular',
-                                            color:grL5,
-                                            //maxWidth:global.width-50,
-                                            textAlign:'left',
-                                            paddingHorizontal:5,
-                                            width:'100%',
-                                            height:60,
-                                        }}
-                                        readonly
-                                        numberOfLines={5}
-                                        value={ userStore.invitationLink}
-                                    >
-                                    </TextInput>
-                                </View>
 
-                            </View>
                         </View>
                     )}
                 </View>

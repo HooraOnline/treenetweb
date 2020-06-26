@@ -30,7 +30,7 @@ export const getById = function (apiPath, id, filds, include) {
 
 
 export const postQuery = function (apiPath, entity) {
-  entity.udate = new Date();
+    entity.udate = new Date();
   if (!entity.id)
     entity.cdate = new Date();
   return Api.post(apiPath, entity);
@@ -177,8 +177,8 @@ export const multyUpload = function (selectors, successUploadAllFunc, fialUpload
   }
 
 };
-export const getFilePath = function (apiPath) {
-  return Api.getFilePath(apiPath);
+export const getServerFilePath = function (folder) {
+  return Api.getServerFilePath(folder);
 };
 export const getFileUri = function (folder, imageName) {
 
@@ -322,7 +322,7 @@ export const resetPasswordApi = function (email) {
 export const getUserProfileApi = function (fields, include) {
   let params = {};
   params.filter = {};
-  //params.userId = userId;
+  //params.userId22 = userId;
   params.filter.fields = fields;
   params.filter.include = include;
   return  Api.get('members/me/getProfile', params)
@@ -335,8 +335,9 @@ export const getUserProfileApi = function (fields, include) {
       })
 
 };
-export const getUserSubsetApi = (fields, include)=> {
+export const getUserSubsetApi = (userId)=> {
     let params = {};
+    if(userId) params.userId=userId;
     //params.filter = {};
     //params.filter.fields = fields;
     //params.filter.include = include;

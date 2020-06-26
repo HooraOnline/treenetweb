@@ -56,8 +56,8 @@ class Api {
         }
         axios.defaults.headers.common['Authorization'] =  'Bearer ' + persistStore.apiToken;
     }
-    static getFilePath(model) {
-        return apihost + "containers/" + model + "/download/"
+    static getServerFilePath(folder) {
+        return apihost + "containers/" + folder + "/download/"
     }
     static getUri= (apiPath)=> {
         let uri = apihost + apiPath;
@@ -70,9 +70,11 @@ class Api {
       return cipher("privatekey4673")(encodeURIComponent(str));
     }
     static post=async (apiPath, model)=> {
+
         await this.setToken();
         let uri =  apiPath;
         //model={value:Api.encrypt(model)};
+
         return axios.post(uri, model)
             .then(function (response) {
                 if (response.status === 200 && !response.data.errorMessage){

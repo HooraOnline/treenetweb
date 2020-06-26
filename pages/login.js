@@ -1,24 +1,11 @@
 import React, {PureComponent} from 'react';
-import {
-    Animated,
-    Easing,
-    Image,
-    Keyboard,
-    Platform,
-    Progress,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
-} from '../src/react-native';
-import {MenuItem, Select} from '@material-ui/core';
+import {Animated, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View} from '../src/react-native';
 import images from "../public/static/assets/images";
 import {
+    bg2,
+    bg3,
+    bgScreen,
     border,
-    bg2, bg3,
-    bg8,
-    bg9,
     lightRed,
     primaryDark,
     subTextItem,
@@ -26,19 +13,16 @@ import {
     textItemBlack
 } from '../src/constants/colors';
 import {globalState, persistStore,} from '../src/stores';
-import {
-
-    getWidth, showMassage,
-} from '../src/utils';
+import {getWidth,} from '../src/utils';
 import {FloatingLabelTextInput, LoadingPopUp} from '../src/components';
 import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
 import Router from 'next/router'
 import BaseLayout from "../src/components/layouts/BaseLayout";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
-import {loginApi, postQuery} from "../dataService/apiService";
-import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
+import {IoMdEye, IoMdEyeOff} from "react-icons/io";
+import {loginApi} from "../dataService/apiService";
+
 const loginInput = [];
 export default class LoginPage extends PureComponent {
     constructor(props) {
@@ -465,7 +449,7 @@ const styles = StyleSheet.create({
         shadowColor: bg2,
         shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.5,
-        backgroundColor:bg9
+        backgroundColor: bgScreen
     },
     logo: {
         height: 60,

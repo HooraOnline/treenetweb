@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
-import {fetchStore, navigation, showMassage,} from "../src/utils";
+import {fetchStore, navigation,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg5, bgWhite, borderSeparate, orange1} from "../src/constants/colors";
+import {bg10, bg3, bg5, bgHeader, bgWhite, borderSeparate, green1, orange1, primaryDark} from "../src/constants/colors";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
-import {postQuery} from "../dataService/apiService";
-import {persistStore} from "../src/stores";
+import {getServerFilePath, getUserSubsetApi} from "../dataService/apiService";
+import {persistStore, userStore} from "../src/stores";
 import {observer} from "mobx-react";
 
 @observer
-export default class index extends Component {
-     constructor() {
+export default class newInvite extends Component {
+    constructor() {
         super();
         this.state = {
             loading: false,
@@ -24,84 +24,30 @@ export default class index extends Component {
 
     async componentDidMount() {
         if (!persistStore.apiToken) {
-            await fetchStore()
+            await fetchStore();
         }
-        if (persistStore.apiToken) {
-            navigation.replace('/profile');
+        this.user = navigation.getParam('user');
+        if (this.user) {
+            this.setState({user: this.user, regent: this.user.regent});
         } else {
-            this.regentCode = navigation.getParam('regentCode');
-            this.getUserGeo()
+            navigation.replace('home');
         }
     }
 
-    checkValidation() {
-        if (!this.regentCode) {
-            this.setState({regentCodeCodeValidation: false});
-            return translate('required_invitationLink');
-        }
-    }
-    getUserGeo(){
-        let self=this;
-        $.getJSON('https://api.ipdata.co/?api-key=92c9cd9137ca4bd296e2a749b8cd3a7908cb960766c10013cd108f26', function(data) {
-            console.log(JSON.stringify(data, null, 2));
-            self.geoInfo=JSON.stringify(data, null, 2);
-        });
-
-        $.getJSON('https://ipapi.co/json/', function(data) {
-            self.geo=JSON.stringify(data, null, 2);
-        });
-        /*$.getJSON('https://geolocation-db.com/json/')
-            .done (function(location) {
-                this.usergeo_ipdata_co
-                console.log(location)
-            });
-
-        $.getJSON('http://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
-            console.log(JSON.stringify(data, null, 2));
-        });
-        $.getJSON('http://ip-api.com/json?callback=?', function(data) {
-            console.log(JSON.stringify(data, null, 2));
-        });*/
-    }
-    async registerUser () {
-        const msg = this.checkValidation();
-        if (msg) {
-            showMassage(msg, 'info');
-            return;
-        }
-        const user={regentCode:this.regentCode};
-        try{
-            user.geoInfo =JSON.parse( this.geoInfo);
-            user.geo =JSON.parse( this.geo);
-        }catch (e) {
-
-        }
-
-        this.setState({loading:true,loadingMessage:'در حال ساخت شبکه...'});
-        postQuery('members/me/register',user)
-            .then(res=>{
-                this.nextPage(res);
-                this.setState({loading:false});
-            })
-            .catch(err=>{
-                this.setState({loading:false});
-            })
-
-    }
-    nextPage(user){
-        navigation.navigate('registered_new', {user});
+    goToPanel() {
+        navigation.navigate('registered_new', {user: this.user});
     }
 
     loginPanel() {
-        if ( persistStore.apiToken)
+        if (persistStore.apiToken)
             navigation.navigate('/profile');
         else
             navigation.navigate('/login');
     }
 
     async onSelectLanguege(lng) {
-        persistStore.userLanguageKey= lng.key;
-        persistStore.userLanguageId=lng.index;
+        persistStore.userLanguageKey = lng.key;
+        persistStore.userLanguageId = lng.index;
         persistStore.isRtl = lng.rtl;
         this.setState({languageIndex: persistStore.userLanguageId});
     }
@@ -111,9 +57,17 @@ export default class index extends Component {
               return  <View style={{flex:1,alignItems:'center',padding:20,fontSize:30,paddingTop:50,color:bg8}} >Welcom to Treenetgram</View>;
           }*/
         return (
+            <ResponsiveLayout title={`Treenetgram`} loading={this.state.loading}
+                              loadingMessage={this.state.loadingMessage} style={{margin: 0}}>
+                <View dir='ltr'
+                      style={{flexDirection: 'row', width: '100%', backgroundColor: bgHeader, alignContent: 'center'}}>
+                    <Image
+                        source={images.logoTop}
+                        style={{padding: 5}}
+                    />
 
-            <ResponsiveLayout title={`Treenetgram`} loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin: 0}}>
-                <View style={{flex: 1,  alignItems: 'center', padding: 10, paddingTop: '5%',}}>
+                </View>
+                <View style={{flex: 1, alignItems: 'center', padding: 10, paddingTop: '5%',}}>
 
                     <Image
                         source={images.tree}
@@ -143,7 +97,7 @@ export default class index extends Component {
                                 minWidth: 150
                             }}
                             selectedItemStyle={{
-                                backgroundColor: bg5,
+                                backgroundColor: orange1,
                             }}
                             title={translate('Select_Your_Language')}
                             snake
@@ -155,7 +109,7 @@ export default class index extends Component {
                             selectedItemCustom={
                                 <View
                                     style={{
-                                        color: bgWhite,
+                                        color: bg10,
                                         flexDirection: 'row',
                                         alignItems: 'center',
                                         marginHorizontal: 8,
@@ -163,8 +117,8 @@ export default class index extends Component {
                                     }}>
                                     <Text
                                         style={{
-                                            fontSize: 14,
                                             fontFamily: 'IRANYekanFaNum-Bold',
+                                            fontSize: 14,
                                             paddingTop: 2,
                                         }}>
                                         {this.state.languageIndex !== undefined
@@ -193,29 +147,11 @@ export default class index extends Component {
                                 )
                             }}
                         />
-                        <TouchableOpacity
-                            style={{
-                                flex: 1,
-                                marginTop: 30,
-                                width: 200,
-                                maxWidth: 300,
-                                backgroundColor: orange1,
-                                padding: 0,
-                                paddingTop: 0,
-                                borderRadius: 12,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                            onPress={() => this.loginPanel()}
-                        >
-                            <Text style={{
-                                fontSize: 14,
-                                color: bgWhite,
-                                fontWeight: 500,
-                                paddingVertical: 10,
-                                paddingHorizontal: 20,
-                            }}>{translate('login_my_tree')}</Text>
-                        </TouchableOpacity>
+
+
+                        <RegentCard regent={this.state.regent}/>
+
+
                         <Text
                             style={{
                                 alignItems: 'center',
@@ -232,7 +168,8 @@ export default class index extends Component {
                             style={{
                                 alignItems: 'center',
                                 marginTop: 2,
-                                fontSize: 15,
+                                fontSize: 15
+                                ,
                                 fontWeight: 800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
 
@@ -248,14 +185,42 @@ export default class index extends Component {
                             paddingBottom: 10,
 
                         }}>
+
+                            <TouchableOpacity
+                                style={{
+                                    width: 200,
+                                    maxWidth: 300,
+                                    marginTop: 25,
+                                    borderColor: green1,
+                                    backgroundColor: green1,
+                                    borderWidth: 1,
+                                    padding: 0,
+                                    paddingTop: 0,
+                                    borderRadius: 12,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginHorizontal: 10,
+
+                                }}
+                                onPress={() => this.goToPanel()}
+                            >
+                                <Text style={{
+                                    fontSize: 16,
+                                    color: bgWhite,
+                                    fontWeight: 500,
+                                    paddingVertical: 12,
+                                    paddingHorizontal: 20,
+                                }}>{translate('login_my_tree')}</Text>
+                            </TouchableOpacity>
+
+
                         </View>
                         <View style={{padding: '4%', marginTop: 0,}}>
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontFamily: 'IRANYekanRegular',
-
                                     textAlign: 'justify',
                                     marginBottom: 5
                                 }}>
@@ -266,9 +231,8 @@ export default class index extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontFamily: 'IRANYekanRegular',
-
                                     textAlign: 'justify',
                                     marginBottom: 5
                                 }}>
@@ -278,9 +242,8 @@ export default class index extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontFamily: 'IRANYekanRegular',
-
                                     textAlign: 'justify',
                                     marginBottom: 5
                                 }}>
@@ -290,9 +253,8 @@ export default class index extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontFamily: 'IRANYekanRegular',
-
                                     textAlign: 'justify',
                                     marginBottom: 5
                                 }}>
@@ -302,7 +264,7 @@ export default class index extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontFamily: 'IRANYekanRegular',
 
                                     textAlign: 'justify',
@@ -316,7 +278,7 @@ export default class index extends Component {
                                 style={{
                                     alignItems: 'center',
                                     marginTop: 0,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontFamily: 'IRANYekanRegular',
                                     textAlign: 'justify',
 
@@ -334,5 +296,135 @@ export default class index extends Component {
     }
 
 }
+
+
+const RegentCard=observer(
+    (props)=> {
+        let {regent} = props;
+        if (!regent)
+            return null;
+
+
+        const getUserSubset=()=>{
+            getUserSubsetApi(regent.id)
+                .then(subsetList=>{
+                    debugger;
+                    calculateTotalSubsetsCount(subsetList);
+                    userStore.branchesCount=subsetList.length;
+                    userStore.leavesCount=leavesCount
+                })
+                .catch(err=>{
+                    debugger
+                    //this.setState({loading:false});
+                });
+        }
+        setTimeout( getUserSubset,30);
+
+        let leavesCount=0;
+        const calculateCount=(user)=>{
+            leavesCount=leavesCount+user.subsets.length;
+            for(let i=0;i<user.subsets.length;++i){
+                calculateCount(user.subsets[i]);
+            }
+        }
+        const calculateTotalSubsetsCount=(subsets)=>{
+            for(let p=0;p<subsets.length;++p){
+                calculateCount(subsets[p]);
+            }
+        }
+        const name = regent.name.trim() || regent.username;
+        const inviteProfileImage = getServerFilePath('member') + regent.inviteProfileImage;
+        return (
+            <View>
+                <View style={{flexDirection: 'row'}}>
+                    <Text
+                        style={{
+                            alignItems: 'center',
+                            marginTop: 25,
+                            fontSize: 14,
+                            color: primaryDark,
+                            fontWeight: 500,
+                            fontFamily: 'IRANYekanRegular',
+                            marginBottom: 5,
+                            paddingHorizontal: 5,
+                        }}>
+                        {name}
+                    </Text>
+                    <Text
+                        style={{
+                            alignItems: 'center',
+                            marginTop: 25,
+                            fontSize: 12,
+                            fontWeight: 500,
+                            fontFamily: 'IRANYekanRegular',
+                            marginBottom: 5
+                        }}>
+                        {' شما را به شبکه بین المللی ترینتگرام دعوت کرد.'}
+                    </Text>
+                </View>
+                <View style={{
+                    flexDirection: 'row',
+                    alignItems:'center',
+                    backgroundColor: bgWhite,
+                    borderRadius: 12,
+                    padding:10,
+                }}>
+                    <View style={{}}>
+                        <Image
+                            source={inviteProfileImage}
+                            style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 50,
+                            }}
+                        />
+                        {/* <Text
+                        style={{
+                            alignItems: 'center',
+                            marginTop: 0,
+                            fontSize: 12,
+                            fontWeight: 800,
+                            fontFamily: 'IRANYekanRegular',
+                            marginBottom: 5,
+                            paddingHorizontal: 5,
+                        }}>
+                        {name}
+                    </Text>*/}
+                    </View>
+                    <View style={{alignItems:'center'}}>
+                        <View style={{flexDirection: 'row', height:30,  maxWidth: 400,}}>
+                            <View style={{alignItems: 'center', paddingHorizontal: 10}}>
+                                <Text style={{fontSize: 12}}>شاخه</Text>
+                                <Text style={{fontSize: 12}}>{userStore.branchesCount}</Text>
+                            </View>
+                            <View style={{alignItems: 'center', paddingHorizontal: 10}}>
+                                <Text style={{fontSize: 12}}>برگ</Text>
+                                <Text style={{fontSize: 12}}>{userStore.leavesCount}</Text>
+                            </View>
+                            <View style={{alignItems: 'center', paddingHorizontal: 10}}>
+                                <Text style={{fontSize: 12}}>عضو</Text>
+                                <Text style={{fontSize: 12}}>{userStore.branchesCount+userStore.leavesCount+1}</Text>
+                            </View>
+                        </View>
+                        <Text
+                            style={{
+                                alignItems: 'center',
+                                marginTop: 25,
+                                fontSize: 12,
+                                fontWeight: 800,
+                                fontFamily: 'IRANYekanRegular',
+                                marginBottom: 5,
+
+                            }}>
+                            {regent.avatar ||'فعال در شبکه اجتماعی تری نتگرام'}
+                        </Text>
+                    </View>
+
+
+                </View>
+            </View>
+        )
+    }
+)
 
 

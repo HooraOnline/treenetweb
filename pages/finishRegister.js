@@ -1,27 +1,11 @@
 import React, {Component} from 'react';
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 
-import {
-    doDelay,
-    navigation,
-    showMassage,
-    getTabWidth, mapNumbersToEnglish
-} from "../src/utils";
+import {doDelay, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import {
-    placeholderTextColor,
-    lightRed,
-    bg10,
-    bg3,
-    bg8,
-    bg9,
-    bg5,
-    bg1, bg2,
-    primaryDark, bg4, grL5, grayVD7, bg6, primary
-} from "../src/constants/colors";
-import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
-import {FloatingLabelTextInput,SwitchTextMulti} from "../src/components";
-import {postQuery, saveEntity} from "../dataService/apiService";
+import {bg10, bg3, bg8, bgScreen, grL5, primary, primaryDark} from "../src/constants/colors";
+import {Text, TouchableOpacity, View,} from "../src/react-native";
+import {postQuery} from "../dataService/apiService";
 import translate from "../src/language/translate";
 import copy from "copy-to-clipboard";
 import ImageSelector from "../src/components/ImageSelector";
@@ -69,14 +53,15 @@ export default class FinishRegister extends Component {
     render() {
         return (
             <ResponsiveLayout title={`Enter Confirm code`}  style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:bg9,alignItems:'center',padding:16,paddingTop:'5%',}} >
+                <View
+                    style={{flex: 1, backgroundColor: bgScreen, alignItems: 'center', padding: 16, paddingTop: '5%',}}>
 
 
                     <ImageSelector
-                        style={{ }}
+                        style={{}}
                         canUpload={true}
                         autoUpload={true}
-                        imageStyle={{height:150,width:150,borderRadius:75}}
+                        imageStyle={{height: 150, width: 150, borderRadius: 75}}
                         image={this.state.userImage}
                         noImage={images.default_ProPic}
                         hideDeleteBtn={true}

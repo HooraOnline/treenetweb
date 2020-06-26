@@ -1,27 +1,10 @@
 import React, {Component} from 'react';
-import Router from "next/router";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
-import translate from "../src/language/translate";
-import {LNGList} from "../src/language/aaLngUtil";
-import {fetchStore, getUrlParameter, navigation, showMassage,} from "../src/utils";
+import {navigation,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {
-    borderSeparate,
-    bg10,
-    bg2,
-    bg3,
-    bg4,
-    bg5,
-    bg9,
-    primaryDark,
-    bg8,
-    bgWhite,
-    textItem
-} from "../src/constants/colors";
-import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
-import {ListDialogPopUp, Toolbar} from "../src/components";
-import { postQuery} from "../dataService/apiService";
-import {globalState, persistStore} from "../src/stores";
+import {bg5,} from "../src/constants/colors";
+import {Image, Text, View,} from "../src/react-native";
+import {Toolbar} from "../src/components";
 import {observer} from "mobx-react";
 
 @observer
@@ -71,7 +54,7 @@ export default class index extends Component {
                             fontSize: 14,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: bg4
+                            color: bg5
                         }}>
                         Treenetgram
                     </Text>

@@ -1,5 +1,5 @@
 
-import {bg4, bg6, bgScreen, bgWhite, border, primaryDark, textItem} from "../../constants/colors";
+import {bg5, bg6, bgScreen, bgWhite, border, primaryDark, textItem} from "../../constants/colors";
 import {observer} from 'mobx-react';
 import React, {useEffect, useState,useRef} from "react";
 import {

@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import {showMassage} from "../../src/utils";
-import {bg10, bg3, bg8, bgWhite, grL5} from "../../src/constants/colors";
-import {Text, TextInput, TouchableOpacity, View,} from "../../src/react-native";
+import {bg10, bg3, bg8, bgWhite, grL5, orange1, primaryDark, textItem} from "../../src/constants/colors";
+import {Image, Text, TextInput, TouchableOpacity, View,} from "../../src/react-native";
 import translate from "../../src/language/translate";
 import copy from "copy-to-clipboard";
 import {userStore} from "../../src/stores";
-import {getUserProfileApi} from "../../dataService/apiService";
+import {getServerFilePath, getUserProfileApi, getUserSubsetApi, postQuery} from "../../dataService/apiService";
 import {
     EmailIcon,
     EmailShareButton,
@@ -24,7 +24,11 @@ import {
     WhatsappIcon,
     WhatsappShareButton
 } from "react-share";
-import {bg4} from "../constants/colors";
+import {bg5} from "../constants/colors";
+import images from "../../public/static/assets/images";
+import {ImageSelector} from "../components";
+import Link from "next/link";
+import {observer} from "mobx-react";
 
 export default class ShareLink extends Component {
     constructor() {
@@ -58,17 +62,7 @@ export default class ShareLink extends Component {
 
     render() {
         return (
-            <View style={{padding: 0, marginTop: 0,}}>
-               {/* <Text
-                    style={{
-                        marginTop: 0,
-                        fontSize: 16,
-                        fontWeight: 800,
-                        fontFamily: 'IRANYekanFaNum-Bold',
-                        color: grL5,
-                    }}>
-                    {translate('finishRegister_your_invitation_link')}
-                </Text>*/}
+            <View style={[this.props.style,{}]}>
                 <Text
                     style={{
                         marginTop: 0,
@@ -76,11 +70,12 @@ export default class ShareLink extends Component {
                         fontWeight: 400,
                         fontFamily: 'IRANYekanFaNum-Bold',
                         color: bg3,
+                        marginHorizontal:10
                     }}>
-                    {translate('لینک دعوت اختصاصی خودتو تو شبکه های اجتماعی به اشتراک بزار و خیلی سریع رشد کن.')}
+                    {translate('لینک دعوت اختصاصی شما')}
                 </Text>
 
-                <View style={{ backgroundColor:'#979A9A',borderRadius:4,}}>
+                <View style={ { backgroundColor:'#979A9A',borderRadius:4,alignItems:'center',justifyContent:'center'}}>
                     <View style={{
                         flexDirection: 'row',
                         marginTop: 10,
@@ -88,11 +83,8 @@ export default class ShareLink extends Component {
                         borderRadius: 8,
                         borderColor: bg8,
                         alignItems: 'center',
-
-
                     }}>
-
-                        <TextInput
+                        <Text
                             style={{
                                 verticalAlign: 'middle',
                                 fontSize: 14,
@@ -107,61 +99,47 @@ export default class ShareLink extends Component {
                                 padding:5,
                                 borderWidth:0,
                                 borderRadius:1,
-                                borderColor:bg4,
+                                borderColor:bg5,
                                 justifyContent:'center',
-
                             }}
                             readonly
                             numberOfLines={3}
-                            value={userStore.invitationLink}
+                            //value= {userStore.invitationLink}
                         >
-                        </TextInput>
+                            {userStore.invitationLink}
+                        </Text>
                     </View>
-                    <View style={{flexDirection:'row',justifyContent:'center'}}>
+                    <InvitCard/>
+
+                    <View style={{flexDirection:'row',justifyContent:'center',marginTop:4}}>
                         {/*
-                   ,
-
                     LineShareButton,
-
                     LivejournalShareButton,
                     MailruShareButton,
                     OKShareButton,
-                    ,
                     PocketShareButton,
                     RedditShareButton,
-                    ,
                     TumblrShareButton,
-
                     ViberShareButton,
                     VKShareButton,
-
                     WorkplaceShareButton,
                     FacebookShareCount*/}
-
                         {/*
-                    ,
-
                     FacebookMessengerIcon,
-                    ,
                     LineIcon,
-                    ,
                     LivejournalIcon,
                     MailruIcon,
                     OKIcon,
-                    ,
                     PocketIcon,
                     RedditIcon,
-                    ,
                     TumblrIcon,
-
                     ViberIcon,
                     VKIcon,
                     WeiboIcon,
-                    ,
                     WorkplaceIcon,*/}
                         <TelegramShareButton style={{}}
                                              url={userStore.invitationLink}
-                                             quote={"تری نتگرام، شبکه سازی  با سرعت نور"}
+                                             quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و برگ بکیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                         >
@@ -169,7 +147,7 @@ export default class ShareLink extends Component {
                         </TelegramShareButton>
                         <WhatsappShareButton style={{}}
                                              url={userStore.invitationLink}
-                                             quote={"تری نتگرام، شبکه سازی  با سرعت نور"}
+                                             quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و برگ بکیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                         >
@@ -177,7 +155,7 @@ export default class ShareLink extends Component {
                         </WhatsappShareButton>
                         <FacebookShareButton style={{}}
                                              url={userStore.invitationLink}
-                                             quote={"تری نتگرام، شبکه سازی با سرعت نور"}
+                                             quote={"تری نتگرام، موفقیت با سرعت نور"}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
 
@@ -186,7 +164,7 @@ export default class ShareLink extends Component {
                         </FacebookShareButton>
                         <TwitterShareButton style={{}}
                                             url={userStore.invitationLink}
-                                            quote={"تری نتگرام، شبکه سازی با سرعت نور"}
+                                            quote={"تری نتگرام، موفقیت با سرعت نور"}
                                             className="share"
                                             imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
 
@@ -195,7 +173,7 @@ export default class ShareLink extends Component {
                         </TwitterShareButton>
                         <LinkedinShareButton style={{}}
                                              url={userStore.invitationLink}
-                                             quote={"تری نتگرام، شبکه سازی با سرعت نور"}
+                                             quote={"تری نتگرام، موفقیت با سرعت نور"}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                                              className="share">
@@ -203,7 +181,7 @@ export default class ShareLink extends Component {
                         </LinkedinShareButton>
                         <EmailShareButton style={{}}
                                           url={userStore.invitationLink}
-                                          quote={"تری نتگرام، شبکه سازی با سرعت نور"}
+                                          quote={"تری نتگرام، موفقیت با سرعت نور"}
                                           className="share"
                                           imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                                           className="share">
@@ -211,7 +189,7 @@ export default class ShareLink extends Component {
                         </EmailShareButton>
                        {/* <PinterestShareButton style={{}}
                                           url={userStore.invitationLink}
-                                          quote={"تری نتگرام، شبکه سازی با سرعت نور"}
+                                          quote={"تری نتگرام، موفقیت با سرعت نور"}
                                           className="share"
                                           imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                                         >
@@ -219,7 +197,7 @@ export default class ShareLink extends Component {
                         </PinterestShareButton>*/}
                         <ViberShareButton style={{}}
                                           url={userStore.invitationLink}
-                                          quote={"تری نتگرام، شبکه سازی با سرعت نور"}
+                                          quote={"تری نتگرام، موفقیت با سرعت نور"}
                                           className="share"
                                           imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                         >
@@ -237,7 +215,7 @@ export default class ShareLink extends Component {
                                 height: 40,
                                 fontSize: 16,
                                 marginHorizontal: 0,
-                                backgroundColor: bg4,
+                                backgroundColor: bg5,
                             }}
                             onPress={this.copyLink}>
                             <Text style={{padding: 5,}}>{translate('finishRegister_copy')}</Text>
@@ -251,5 +229,122 @@ export default class ShareLink extends Component {
     }
 
 }
+
+const InvitCard=observer(props=> {
+
+    let leavesCount=0;
+    const setProfileImage = (fileName) => {
+        const data = {profileImage: fileName};
+        postQuery('Members/me/setProfileImage', data)
+            .then(res => {
+                userStore.profileImage = res.profileImage;
+
+            })
+            .catch(err => {
+
+            })
+    };
+
+   const getUserSubset=()=>{
+        getUserSubsetApi()
+            .then(subsetList=>{
+                calculateTotalSubsetsCount(subsetList);
+                userStore.branchesCount=subsetList.length;
+                userStore.leavesCount=leavesCount
+
+            })
+            .catch(err=>{
+                //this.setState({loading:false});
+            });
+    }
+    setTimeout( getUserSubset,30);
+
+    const calculateCount=(user)=>{
+        leavesCount=leavesCount+user.subsets.length;
+        for(let i=0;i<user.subsets.length;++i){
+            calculateCount(user.subsets[i]);
+        }
+    }
+    const calculateTotalSubsetsCount=(subsets)=>{
+        for(let p=0;p<subsets.length;++p){
+            calculateCount(subsets[p]);
+        }
+    }
+
+    return (
+        <View>
+           {/* <Link style={{}}  href={'/profil'}>
+                <Text style={{alignItems:'center', fontSize:11,color:bgWhite,marginHorizontal:0,marginBottom:0,backgroundColor:'#F1C40F',width:100,borderRadius:4}}>
+                    ویرایش کارت
+                </Text>
+            </Link>*/}
+            <View style={{
+                flexDirection: 'row',
+                alignItems:'center',
+                backgroundColor: bgWhite,
+                borderRadius: 10,
+                padding:10,
+                //maxWidth:300,
+            }}>
+                <View style={{}}>
+
+
+                    <ImageSelector
+                        style={{
+                            borderWidth: 1,
+                            borderColor: bg8,
+                            height: 100,
+                            width: 100,
+                            borderRadius: 50,
+                            alignSelf: 'center'
+                        }}
+                        onUplodedFile={(fileName) => {
+                            setProfileImage(fileName);
+                        }}
+                        canUpload={true}
+                        autoUpload={true}
+                        imageStyle={{height: 100, width: 100, borderRadius: 50}}
+                        image={userStore.profileImage}
+                        noImage={images.default_ProPic}
+                        hideDeleteBtn={true}
+                    />
+
+                </View>
+                <View style={{alignItems:'center'}}>
+                    <View style={{flexDirection: 'row', height:30,  maxWidth: 400,}}>
+                        <View style={{alignItems: 'center', paddingHorizontal: 10}}>
+                            <Text style={{fontSize: 12}}>شاخه</Text>
+                            <Text style={{fontSize: 12}}>{userStore.branchesCount}</Text>
+                        </View>
+                        <View style={{alignItems: 'center', paddingHorizontal: 10}}>
+                            <Text style={{fontSize: 12}}>برگ</Text>
+                            <Text style={{fontSize: 12}}>{userStore.leavesCount}</Text>
+                        </View>
+                        <View style={{alignItems: 'center', paddingHorizontal: 10}}>
+                            <Text style={{fontSize: 12}}>عضو</Text>
+                            <Text style={{fontSize: 12}}>{userStore.branchesCount+userStore.leavesCount+1}</Text>
+                        </View>
+                    </View>
+                    <Text
+                        style={{
+                            alignItems: 'center',
+                            marginTop: 25,
+                            fontSize: 12,
+                            fontWeight: 800,
+                            fontFamily: 'IRANYekanRegular',
+
+
+                        }}>
+                        {userStore.avatar || 'عضو فعال  تری نتگرام'}
+                    </Text>
+
+                </View>
+
+
+            </View>
+        </View>
+
+    )
+});
 
 

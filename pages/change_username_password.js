@@ -1,53 +1,28 @@
 import React, {Component} from 'react';
-import {userStore,persistStore } from "../src/stores";
-import {permissionId} from '../src/constants/values';
-import Router from "next/router";
+import {persistStore, userStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
-import {DropDownList, Toolbar, CardUnitInfo, PopupBase, ImageSelector, SwitchTextMulti} from "../src/components";
-
-import accountsStore from "../src/stores/Accounts";
-import {deviceWide, doDelay, getTabWidth, logger, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
+import {SwitchTextMulti, Toolbar} from "../src/components";
+import {getTabWidth, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
-import {getUserBalance} from "../src/network/Queries";
 import {
-    bgItemRed,
-    bgScreen,
-    bgWhite,
-    textItemRed,
-    borderSeparate,
-    border,
-    primary,
-    primaryDark,
     bg1,
-    bg3,
-    textItem,
-    bg5,
-    bg9,
-    textItemBlack,
-    placeholderTextColor,
-    lightRed,
     bg2,
-    bg4,
-    grL5,
-    bg8,
-    bg10,
-    itemListText
+    bg3,
+    bg5,
+    bgWhite,
+    border,
+    lightRed,
+    placeholderTextColor,
+    primaryDark,
+    textItem,
+    textItemBlack,
 } from "../src/constants/colors";
-import accounting from "accounting";
-import NavFooterButtons from "../src/components/layouts/footerButtons";
-import NavBar from "../src/components/layouts/NavBar";
-import {View, TouchableOpacity, Text, Image, Platform, TextInput,} from "../src/react-native";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCogs, faCompass, faMapMarkerAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import {Image, Platform, Text, TouchableOpacity, View,} from "../src/react-native";
 import translate from "../src/language/translate";
-import {getUserProfileApi, logoutApi, postQuery} from "../dataService/apiService";
-import Api from "../dataService/apiCaller";
+import {postQuery} from "../dataService/apiService";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
-import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
-import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
+import {IoMdEye, IoMdEyeOff} from "react-icons/io";
 
-const HOME_TYPE = 1;
 export default class change_username_password extends Component {
     constructor() {
         super();
@@ -729,7 +704,7 @@ export default class change_username_password extends Component {
                                     }
                                     highlightColor={primaryDark}
                                     unit={translate('year')}
-                                    unitStyle={{color:bg4}}
+                                    unitStyle={{color: bg5}}
                                     keyboardType="number-pad"
                                 />
 

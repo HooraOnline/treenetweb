@@ -1,10 +1,4 @@
 import React,{PureComponent} from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import {
     FlatList,
     Image,
@@ -13,17 +7,10 @@ import {
     View,
     TextInput
 } from '../react-native';
-import Slide from '@material-ui/core/Slide';
 import {
     bgScreen, bgWhite, border,
     borderSeparate,
-    bg5,
-    bg9,
-    gray, lightGrey,
-    overlayColor,
     primaryDark,
-    subTextItem,
-    textItem
 } from '../constants/colors';
 import images from "../../public/static/assets/images";
 import PopupBase from "./PopupBase";
@@ -114,7 +101,7 @@ export default class ListDialogPopUp extends PureComponent {
                         borderWidth: 1,
                         // alignItems: 'center',
                         justifyContent: 'center',
-                        borderColor: validation ? bg9 : primaryColor,
+                        borderColor: validation ? bgScreen : primaryColor,
                         borderRadius: 10,
                         // marginVertical: 7
                     }]}

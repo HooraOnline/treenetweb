@@ -1,51 +1,24 @@
 import React, {Component} from 'react';
-import {userStore,persistStore } from "../src/stores";
-import {permissionId} from '../src/constants/values';
-import Router from "next/router";
+import {persistStore, userStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
-import {DropDownList, Toolbar, CardUnitInfo, PopupBase, ImageSelector, SwitchTextMulti} from "../src/components";
-
-import accountsStore from "../src/stores/Accounts";
-import {deviceWide, doDelay, getTabWidth, logger, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
+import {ImageSelector, SwitchTextMulti, Toolbar} from "../src/components";
+import {getTabWidth, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import PopupState, {bindTrigger, bindPopover} from 'material-ui-popup-state';
-import {getUserBalance} from "../src/network/Queries";
 import {
-    bgItemRed,
-    bgScreen,
-    bgWhite,
-    textItemRed,
-    borderSeparate,
-    border,
-    primary,
-    primaryDark,
-    bg1,
-    bg3,
-    textItem,
-    bg5,
-    bg9,
-    textItemBlack,
-    placeholderTextColor,
-    lightRed,
     bg2,
-    bg4,
-    grL5,
-    bg8,
-    bg10,
-    itemListText
+    bg3,
+    bg5,
+    bgWhite,
+    border,
+    lightRed,
+    placeholderTextColor,
+    primaryDark,
+    textItemBlack
 } from "../src/constants/colors";
-import accounting from "accounting";
-import NavFooterButtons from "../src/components/layouts/footerButtons";
-import NavBar from "../src/components/layouts/NavBar";
-import {View, TouchableOpacity, Text, Image, Platform, TextInput,} from "../src/react-native";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCogs, faCompass, faMapMarkerAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import {Platform, Text, TouchableOpacity, View,} from "../src/react-native";
 import translate from "../src/language/translate";
-import {getUserProfileApi, logoutApi, postQuery} from "../dataService/apiService";
-import Api from "../dataService/apiCaller";
+import {postQuery} from "../dataService/apiService";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
-import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
-import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 
 const HOME_TYPE = 1;
 export default class edit_profile extends Component {
@@ -59,12 +32,14 @@ export default class edit_profile extends Component {
             passwordValidation:false,
             passwor2dValidation:false,
             usernameValidation:false,
+            avatarValidation:false,
             countryCode:userStore.countryCode,
             username:userStore.username,
             shortMobile:userStore.shortMobile,
             email:userStore.email ||'',
             firstName:userStore.firstName ||'',
             lastName:userStore.lastName ||'',
+            avatar:userStore.avatar ||'',
             gender:Number(userStore.gender ||0),
             profileImageValidation:userStore.profileImage!=='defaultProfileImage.png',
         };
@@ -79,7 +54,6 @@ export default class edit_profile extends Component {
     }
 
     checkValidation() {
-
         if(!this.state.shortMobile){
             this.setState({mobileValidation: false});
             return translate('موبایل خود را وارد کنید.')
@@ -139,6 +113,9 @@ export default class edit_profile extends Component {
         }
         if(this.state.lastName){
             data.lastName=this.state.lastName;
+        }
+        if(this.state.avatar){
+            data.avatar=this.state.avatar;
         }
         if(this.state.age){
             data.age=this.state.age;
@@ -205,11 +182,7 @@ export default class edit_profile extends Component {
                              </TouchableOpacity>
                          }>
                 <View style={{flex:1,alignItems:'center',paddingHorizontal:10,}} >
-
-
                     <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,paddingHorizontal:16,}}   >
-
-
                         <ImageSelector
                             style={{borderWidth:2,borderColor:bg5,height:100,width:100,borderRadius:50,alignSelf:'center' }}
                             canUpload={true}
@@ -230,17 +203,13 @@ export default class edit_profile extends Component {
                             onSelectFile={()=>{
                                 this.setState({profileImageValidation:true})
                             }}
-
                         />
 
-
                         <View id='form' style={{width:'100%',maxWidth:500,marginTop:10}}   >
-
-
                             <View dir={"ltr"} style={{flexDirection:'row',marginTop:0,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
                                 <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     color: border,
 
                                     padding:5,
@@ -276,7 +245,7 @@ export default class edit_profile extends Component {
                                     isAccept={this.state.mobileValidation}
                                     textInputStyle={{
                                         fontFamily: 'IRANYekanFaNum-Bold',
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight:800,
                                         color: textItemBlack,
                                         paddingStart: 4,
@@ -296,7 +265,6 @@ export default class edit_profile extends Component {
 
                             </View>
                             <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
-
                                 <FloatingLabelTextInput
                                     labelAlign={'left'}
                                     dir={'ltr'}
@@ -317,11 +285,10 @@ export default class edit_profile extends Component {
                                         }
                                     }}
                                     numberOfLines={1}
-
                                     isAccept={this.state.emailValidation}
                                     textInputStyle={{
                                         fontFamily: 'IRANYekanFaNum-Bold',
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight:800,
                                         color: textItemBlack,
                                         paddingStart: 4,
@@ -330,21 +297,37 @@ export default class edit_profile extends Component {
                                         //textAlign: 'left',
                                     }}
                                     underlineSize={0}
-
                                     multiline={false}
                                     maxLength={100}
                                     //autoFocus={true}
                                     returnKeyType="done"
-
                                 />
-
-
                             </View>
                         </View>
-
                         <View id='userProperty' >
-
-
+                            <View style={{flex:1,alignItems:'center',marginTop:30}}>
+                                <SwitchTextMulti
+                                    style={{width:300}}
+                                    selectedIndex={this.state.gender}
+                                    onSelect={index => {
+                                        this.setState({gender: index});
+                                        //this.checkValidation();
+                                    }}
+                                    data={[
+                                        translate('woman'),
+                                        translate('man'),
+                                    ]}
+                                    backgroundActive={primaryDark}
+                                    backgroundInactive={'#fff'}
+                                    itemWidth={getTabWidth(300, 2,1)}
+                                    activeTextStyle={{
+                                        paddingVertical: 6,
+                                    }}
+                                    inactiveTextStyle={{
+                                        paddingVertical: 6,
+                                    }}
+                                />
+                            </View>
                             <View  style={{marginTop:0,  padding:10}}  >
                                 <FloatingLabelTextInput
                                     ref={input => {
@@ -365,13 +348,13 @@ export default class edit_profile extends Component {
                                         this.state.firstNameValidation ? placeholderTextColor : lightRed
                                     }
                                     textInputStyle={{
-                                        fontWeight: 'normal',
+
                                         fontFamily:
                                             Platform.OS === 'ios'
                                                 ? 'IRANYekan-ExtraBold'
                                                 : 'IRANYekanExtraBold',
-                                        color: bg2,
-                                        fontSize: 16,
+
+                                        fontSize: 14,
                                         paddingStart: 4,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -407,13 +390,13 @@ export default class edit_profile extends Component {
                                         this.state.lastNameValidation ? placeholderTextColor : lightRed
                                     }
                                     textInputStyle={{
-                                        fontWeight: 'normal',
+
                                         fontFamily:
                                             Platform.OS === 'ios'
                                                 ? 'IRANYekan-ExtraBold'
                                                 : 'IRANYekanExtraBold',
-                                        color: bg2,
-                                        fontSize: 16,
+
+                                        fontSize: 14,
                                         paddingStart: 4,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -444,10 +427,9 @@ export default class edit_profile extends Component {
                                     returnKeyType="done"
                                     numberOfLines={1}
                                     textInputStyle={{
-                                        fontWeight: 'normal',
                                         fontFamily:'IRANYekanExtraBold',
-                                        color: bg2,
-                                        fontSize: 16,
+
+                                        fontSize: 14,
                                         paddingRight: 10,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -476,33 +458,57 @@ export default class edit_profile extends Component {
                                     }
                                     highlightColor={primaryDark}
                                     unit={translate('year')}
-                                    unitStyle={{color:bg4}}
+                                    unitStyle={{color: bg5}}
                                     keyboardType="number-pad"
                                 />
+                                <FloatingLabelTextInput
 
-                                <View style={{flex:1,alignItems:'center',marginTop:30}}>
-                                    <SwitchTextMulti
-                                        style={{width:300}}
-                                        selectedIndex={this.state.gender}
-                                        onSelect={index => {
-                                            this.setState({gender: index});
-                                            //this.checkValidation();
-                                        }}
-                                        data={[
-                                            translate('woman'),
-                                            translate('man'),
-                                        ]}
-                                        backgroundActive={primaryDark}
-                                        backgroundInactive={'#fff'}
-                                        itemWidth={getTabWidth(300, 2,1)}
-                                        activeTextStyle={{
-                                            paddingVertical: 6,
-                                        }}
-                                        inactiveTextStyle={{
-                                            paddingVertical: 6,
-                                        }}
-                                    />
-                                </View>
+                                    labelAlign={'left'}
+                                    placeholder={translate('آواتار')}
+                                    style={{flex:1, marginTop:20}}
+                                    labelStyle={{color:bg3}}
+                                    editable={true}
+                                    multiline={false}
+                                    maxLength={50}
+                                    floatingLabelEnable={true}
+                                    keyboardType="default"
+                                    returnKeyType="done"
+                                    numberOfLines={1}
+                                    tintColor={
+                                        this.state.firstNameValidation ? placeholderTextColor : lightRed
+                                    }
+                                    textInputStyle={{
+
+                                        fontFamily:'IRANYekanExtraBold',
+
+                                        fontSize: 14,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 3,
+                                        //textAlign: 'right',
+                                    }}
+                                    underlineSize={1}
+
+                                    onChangeText={text =>
+                                        this.setState({
+                                            avatar: text,
+                                            avatarValidation: true,
+                                        })
+                                    }
+                                    highlightColor={primaryDark}
+                                    value={this.state.avatar}
+                                />
+                                <Text style={{fontSize:12,color:primaryDark,textAlign:'justify'}} > در بخش آواتار می توانید یک جمله کوتاه در مورد تخصص، کسب و کار یا هدفتان برای دیگران بنویسید</Text>
+                                <Text style={{fontSize:12}} >چند مثال </Text>
+                                <Text style={{fontSize:12}} >تبلیغ کالای شما در شبکه ۱۰۰ هزار نفری من </Text>
+                                <Text style={{fontSize:12}} >متخصص تعمیرات لوازم برقی</Text>
+                                <Text style={{fontSize:12}} >تبلیغ بین المللی در کشورهای اروپایی در یورونت</Text>
+                                <Text style={{fontSize:12}} > فروش بیمه عمر با شرایط خاص </Text>
+                                <Text style={{fontSize:12}} >بوتیک فرهاد، عرضه برترین پوشاک مردانه</Text>
+                                <Text style={{fontSize:12}} >هتل پنج ستاره حاتم</Text>
+                                <Text style={{fontSize:12}} >مشاوره روانشناس خانواده</Text>
+                                <Text style={{fontSize:12}} >فروشگاه اینترنتی کارنیکا</Text>
+
                             </View>
 
                         </View>

@@ -103,6 +103,7 @@ const images = {
   ic_ShowPassword: require('./images/theme/ic_ShowPassword.svg'),
   ic_timer: require('./images/theme/ic_timer.svg'),
   logo: require('./images/theme/logo.png'),
+  logoTop: require('./images/theme/logoTop.png'),
   ic_addbroadcast: require('./images/theme/ic_addbroadcast.svg'),
   ic_addpoll: require('./images/theme/ic_addpoll.svg'),
   ic_addrule: require('./images/theme/ic_addrule.png'),

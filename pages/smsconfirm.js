@@ -1,39 +1,12 @@
 import React, {Component} from 'react';
-
-import {userStore,persistStore } from "../src/stores";
-
-import Router from "next/router";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 
-import {
-    deviceWide,
-    mapNumbersToEnglish,
-    navigation,
-    showMassage,
-    doDelay
-} from "../src/utils";
+import {doDelay, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import {
-    bgItemRed,
-    bgScreen,
-    bgWhite,
-    textItemRed,
-    borderSeparate,
-    border,
-    primary,
-    placeholderTextColor,
-    lightRed,
-    textItem,
-    subTextItem,
-    textItemBlack,
-    borderLight,
-    lightGrey,
-    textGray,
-    bg10, bg3, bg8, bg9, bg5, bg1, bg2
-} from "../src/constants/colors";
-import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
+import {bg1, bg3, bg5, bgScreen, bgWhite, lightRed, placeholderTextColor, textItemBlack} from "../src/constants/colors";
+import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
-import {postQuery, saveEntity} from "../dataService/apiService";
+import {postQuery} from "../dataService/apiService";
 import translate from "../src/language/translate";
 
 export default class Smsconfirm extends Component {
@@ -106,17 +79,18 @@ export default class Smsconfirm extends Component {
 
         return (
             <ResponsiveLayout title={`Enter Confirm code`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage}  style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:bg9,alignItems:'center',padding:16,paddingTop:'5%',}} >
+                <View
+                    style={{flex: 1, backgroundColor: bgScreen, alignItems: 'center', padding: 16, paddingTop: '5%',}}>
                     <Image
                         source={images.tree}
                         style={{maxWidth: '50%', maxHeight: '50%',}}
                     />
                     <Text
                         style={{
-                            marginTop:20,
-                            marginBottom:30,
-                            fontSize:50,
-                            fontWeight:800,
+                            marginTop: 20,
+                            marginBottom: 30,
+                            fontSize: 50,
+                            fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
                             color:bg3
                         }}>

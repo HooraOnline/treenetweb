@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
-import {userStore,persistStore } from "../src/stores";
-import Router from "next/router";
+import {persistStore} from "../src/stores";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
-import {MenuItem, Select} from '@material-ui/core';
 import translate from "../src/language/translate";
-import {LNGList} from "../src/language/aaLngUtil";
-import {
-    doDelay,
-    navigation,
-    showMassage,
-
-} from "../src/utils";
+import {doDelay, navigation, showMassage,} from "../src/utils";
 import images from "../public/static/assets/images";
+import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
+import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
+import {postQuery} from "../dataService/apiService";
+import LoadingPopUp from "../src/components/LoadingPopUp";
+//import Pagination from 'docs/src/modules/components/Pagination';
+//const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
+import {IoMdEye, IoMdEyeOff} from "react-icons/io";
 import {
     bgWhite,
     border,
@@ -21,28 +21,15 @@ import {
     bg1,
     bg2,
     bg3,
-    bg4,
-    bg5,
+    bg5
     bg6,
     bg7,
     bg8,
-    bg9,
+    bgScreen,
     bg10,
     borderSeparate, primaryDark, textItem, grayVD7, grL5
 } from "../src/constants/colors";
-import {View, TouchableOpacity, Text, Image, Platform,} from "../src/react-native";
-import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
-import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
-import {postQuery, saveEntity} from "../dataService/apiService";
-import {ListDialogPopUp} from "../src/components";
-import LoadingPopUp from "../src/components/LoadingPopUp";
-import {fa} from "../src/language/fa";
-//import Pagination from 'docs/src/modules/components/Pagination';
-//const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-import { FaBeer } from 'react-icons/fa';
 
-import { IoMdEyeOff,IoMdEye,IoIosBulb } from "react-icons/io";
 export default class RegisterPassword extends Component {
     constructor() {
         super();
@@ -136,19 +123,20 @@ export default class RegisterPassword extends Component {
         return (
 
             <ResponsiveLayout title={`Treenetgram`}   loading={this.state.loading} loadingMessage={this.state.loadingMessage} style={{margin:0}}>
-                <View style={{flex:1,backgroundColor:bg9,alignItems:'center',padding:10,paddingTop:'5%',}} >
+                <View
+                    style={{flex: 1, backgroundColor: bgScreen, alignItems: 'center', padding: 10, paddingTop: '5%',}}>
                     <Image
                         source={images.tree}
                         style={{maxWidth: '25%', maxHeight: '25%',}}
                     />
                     <Text
                         style={{
-                            marginTop:5,
-                            marginBottom:10,
-                            fontSize:25,
-                            fontWeight:800,
+                            marginTop: 5,
+                            marginBottom: 10,
+                            fontSize: 25,
+                            fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color:bg4
+                            color: bg5
                         }}>
                         Treenetgram
                     </Text>

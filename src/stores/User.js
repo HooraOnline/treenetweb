@@ -7,6 +7,7 @@ class UserStore {
     @observable beforloginDate=null;
     @observable dateYear= null ;
     @observable birthDate= null ;
+    @observable avatar= null ;
     @observable displayName= null ;
     @observable firstName= null ;
     @observable gender= null ;
@@ -29,7 +30,8 @@ class UserStore {
     @observable birthYear=null ;
     @observable fullName=null ;
     @observable shortMobile=null ;
-
+    @observable branchesCount=0 ;
+    @observable leavesCount=0 ;
     @action
     setUser(user) {
         let contryCodeX=user.geoInfo?user.geoInfo.calling_code:'98';
@@ -41,6 +43,8 @@ class UserStore {
         this.userID= user.id ;
         this.username= user.username ;
         this.profileImage= user.profileImage ;
+        this.inviteProfileImage=user.inviteProfileImage;
+        this.avatar=user.avatar;
         this.beforloginDate=user.beforloginDate;
         this.birthDate= user.birthDate || '' ;
         this.birthYear=birthYear|| '' ;
@@ -68,7 +72,6 @@ class UserStore {
         this.udate=user.udate ;
 
 
-
     }
 
     @action
@@ -83,10 +86,10 @@ class UserStore {
     }
 
     clear() {
+        this.token=null ;
         this.cUser=null,
         this.userID= null ;
         this.username= null ;
-        this.beforloginDate=null;
         this.birthDate= null ;
         this.birthDate= null ;
         this.displayName= null ;
@@ -104,7 +107,6 @@ class UserStore {
         this.permissionList=null ;
         this.regentId=null ;
         this.roleList=null ;
-        this.token=null ;
         this.udate=null ;
     }
 }

@@ -3,16 +3,15 @@ import PanelLayout from "../src/components/layouts/PanelLayout";
 import {Toolbar} from "../src/components";
 import {navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg10, bg3, bg8, bgWhite, grL5, itemListText} from "../src/constants/colors";
+import {bgWhite, itemListText, primaryDark} from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
-import {Image, Text, TextInput, TouchableOpacity, View,} from "../src/react-native";
+import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
 import copy from "copy-to-clipboard";
-import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
-import {userStore,persistStore } from "../src/stores";
-import {getUserProfileApi} from "../dataService/apiService";
+import {persistStore, userStore} from "../src/stores";
+import {getServerFilePath, getUserProfileApi, postQuery} from "../dataService/apiService";
 import ShareLink from "../src/sections/ShareLink";
 
 const HOME_TYPE = 1;
@@ -47,8 +46,8 @@ export default class MyLink extends Component {
             .then(user=>{
                 this.setState({loading:false});
             })
-            .catch(err=>{
-                this.setState({loading:false});
+            .catch(err => {
+                this.setState({loading: false});
             });
     }
 
@@ -56,6 +55,7 @@ export default class MyLink extends Component {
         copy(userStore.invitationLink);
         showMassage(translate('finishRegister_its_copy'), 'success');
     };
+
 
     render() {
         const toolbarStyle = {
@@ -133,26 +133,37 @@ export default class MyLink extends Component {
 
                         </View>
                     ):(
-                        <View style={{padding:16}}>
-                            <ShareLink/>
+                        <View style={{padding: 16,}}>
+
+                            <Text
+                                style={{
+                                    marginTop: 0,
+                                    fontSize: 14,
+                                    fontWeight: 400,
+                                    fontFamily: 'IRANYekanFaNum-Bold',
+                                    marginHorizontal:10
+                                }}>
+                                {translate(' خیلی راحت از همینجا لینکتو به اشتراک بذار، شاخ و برگ بکیر و شبکه عظیم خودتو بساز')}
+                            </Text>
+                            <ShareLink style={{marginVertical:20}}/>
                             <Text style={{
                                 textAlign: 'justify',
                                 paddingHorizontal: 30,
                                 fontSize: 14,
                                 color: itemListText
-                            }}>{translate('با کپی کردن لینک اختصاصی خودت و ارسال آن برای دوستان و آشنایان یا اشتراک گذاری آن در شبکه های اجتماعی، خیلی سریع شبکه خودتو بزرگ کن.')}</Text>
+                            }}>{translate('با اشتراک گذاری لینک خودت در شبکه های اجتماعی یا کپی و ارسال اون برای دوستان و آشنایان، می تونی خیلی سریع شبکه خودتو رشد بدی. فقط کافیه مخاطب، روی لینک ارسالی شما بزنه و وارد سایت تری نتگرام بشه. به محض ورود، بصورت اتوماتیک ثبت نام و جز شبکه شما میشه. و تابلو اعلانات شما رو خواهد دید.')}</Text>
                             <Text style={{
                                 textAlign: 'justify',
                                 paddingHorizontal: 30,
                                 fontSize: 14,
                                 color: itemListText
-                            }}>{translate('کافیه لینک رو برای چند نفر بفرستی تا شبکه ات خودبخود شروع به رشد کنه و هر روز بتونی رشد درخت شبکه ات رو ببینی.')}</Text>
+                            }}>{translate('هر فردی هم که دوست شما لینک خودشو براش بفرسته، اون فرد هم جز شبکه شما میشه و الی آخر، و به همین علت اعضای صفحه شما به سرعت رشد می کنه.')}</Text>
                             <Text style={{
                                 textAlign: 'justify',
                                 paddingHorizontal: 30,
                                 fontSize: 14,
                                 color: itemListText
-                            }}>{translate('اگر در خارج از کشور آشنایی داری، یا در شبکه های اجتماعی بین المللی  مثل فیسبوک عضوی لینکتو برای خارجی ها به اشتراک بذار، تا شبکه ات در سطح بین الملل هم رشد کنه .')}</Text>
+                            }}>{translate('حتی می تونی لینک خودتو به دوستان و آشنایان خارجی خودت بفرستی یا در شبکه های اجتماعی و فرومهایی که افراد خارجی هستند ارسال کنی. به همین سادگی شاخه های بین المللی شبکه خودتو کم کم ایجاد می کنی. و حتما میدونی که شبکه بین المللی یعنی درآمد بین المللی. مثلا درآمد از سرویس تبلیغات اتوماتیک تری نتگرام')}</Text>
                             <Text style={{
                                 textAlign: 'justify',
                                 paddingHorizontal: 30,
@@ -176,5 +187,7 @@ export default class MyLink extends Component {
     }
 
 }
+
+
 
 
