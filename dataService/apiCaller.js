@@ -108,6 +108,7 @@ class Api {
 
         return axios.get(uri, urlparameters)
             .then(function (response) {
+               debugger
                 if (response.status === 200 && !response.data.errorMessage){
                     return response.data;
                 }
@@ -119,6 +120,7 @@ class Api {
                 }
             })
             .catch(function (error) {
+                debugger
                 console.log(error);
                 if(error.response && error.response.status==401){
                     showMassage(translate('عدم دسترسی'),'warning');

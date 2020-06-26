@@ -44,17 +44,14 @@ export default class autoRegister extends Component {
 
     async getLocationAndRegisterUser() {
         let self = this;
-        alert($.getJSON)
         await $.getJSON('https://api.ipdata.co/?api-key=92c9cd9137ca4bd296e2a749b8cd3a7908cb960766c10013cd108f26', function (data) {
             console.log(JSON.stringify(data, null, 2));
             self.geoInfo = JSON.stringify(data, null, 2);
-            alert(self.geoInfo)
         });
         await $.getJSON('https://ipapi.co/json/', function (data) {
             self.geo = JSON.stringify(data, null, 2);
 
         });
-        alert(3)
         this.registerUser();
     }
 

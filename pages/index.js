@@ -6,6 +6,7 @@ export default class Index extends Component {
 
 
     async componentDidMount() {
+        debugger
         setScreenSize();
         await fetchStore();
         const invitationCode = getUrlParameter('invitationCode');
