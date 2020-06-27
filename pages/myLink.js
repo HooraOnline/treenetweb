@@ -143,7 +143,7 @@ export default class MyLink extends Component {
                                     fontFamily: 'IRANYekanFaNum-Bold',
                                     marginHorizontal:10
                                 }}>
-                                {translate(' خیلی راحت از همینجا لینکتو به اشتراک بذار، شاخ و برگ بکیر و شبکه عظیم خودتو بساز')}
+                                {translate(' خیلی راحت از همینجا لینکتو به اشتراک بذار، شاخ و برگ بگیر و شبکه عظیم خودتو بساز')}
                             </Text>
                             <ShareLink style={{marginVertical:20}}/>
                             <Text style={{

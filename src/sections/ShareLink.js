@@ -139,7 +139,7 @@ export default class ShareLink extends Component {
                     WorkplaceIcon,*/}
                         <TelegramShareButton style={{}}
                                              url={userStore.invitationLink}
-                                             quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و برگ بکیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
+                                             quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و برگ بگیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                         >
@@ -147,7 +147,7 @@ export default class ShareLink extends Component {
                         </TelegramShareButton>
                         <WhatsappShareButton style={{}}
                                              url={userStore.invitationLink}
-                                             quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و برگ بکیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
+                                             quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و برگ بگیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                         >
