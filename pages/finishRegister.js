@@ -3,7 +3,7 @@ import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 
 import {doDelay, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg10, bg3, bg8, bgScreen, grL5, primary, primaryDark} from "../src/constants/colors";
+import {bg10, bg8, bgScreen, bgSuccess, grL5, primary, primaryDark} from "../src/constants/colors";
 import {Text, TouchableOpacity, View,} from "../src/react-native";
 import {postQuery} from "../dataService/apiService";
 import translate from "../src/language/translate";
@@ -129,17 +129,17 @@ export default class FinishRegister extends Component {
                                 }} >
                                     <TouchableOpacity
                                         style={{
-                                            borderWidth:1,
-                                            borderRadius:0,
-                                            borderColor:grL5,
-                                            alignItems:'center',
-                                            justifyContent:'center',
-                                            color:bg10,
-                                            width:60,
-                                            height:60,
-                                            fontSize:16,
-                                            marginHorizontal:0,
-                                            backgroundColor:bg3,
+                                            borderWidth: 1,
+                                            borderRadius: 0,
+                                            borderColor: grL5,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: bg10,
+                                            width: 60,
+                                            height: 60,
+                                            fontSize: 16,
+                                            marginHorizontal: 0,
+                                            backgroundColor: bgSuccess,
                                         }}
                                         onPress={this.copyLink}>
                                         <Text style={{padding:5,}}>{translate('finishRegister_copy')}</Text>
@@ -158,35 +158,35 @@ export default class FinishRegister extends Component {
                                 </View>
                                 <Text
                                     style={{
-                                        marginTop:20,
-                                        fontSize:16,
-                                        paddingHorizontal:5,
+                                        marginTop: 20,
+                                        fontSize: 16,
+                                        paddingHorizontal: 5,
                                         fontFamily: 'IRANYekanRegular',
-                                        color:bg3,
-                                        textAlign:'justify',
+                                        color: bgSuccess,
+                                        textAlign: 'justify',
                                     }}>
                                     { translate('finishRegister_decription1')}
                                 </Text>
                                 <Text
                                     style={{
-                                        marginTop:10,
-                                        fontSize:16,
-                                        fontWeight:800,
-                                        paddingHorizontal:5,
+                                        marginTop: 10,
+                                        fontSize: 16,
+                                        fontWeight: 800,
+                                        paddingHorizontal: 5,
                                         fontFamily: 'IRANYekanRegular',
-                                        color:bg3,
-                                        textAlign:'justify',
+                                        color: bgSuccess,
+                                        textAlign: 'justify',
                                     }}>
                                     { translate('finishRegister__decription2')}
                                 </Text>
                                 <ul
                                     style={{
-                                        margin:5,
-                                        fontSize:16,
+                                        margin: 5,
+                                        fontSize: 16,
                                         fontFamily: 'IRANYekanRegular',
-                                        color:bg3,
-                                        alignSelf:'center',
-                                        textAlign:'justify',
+                                        color: bgSuccess,
+                                        alignSelf: 'center',
+                                        textAlign: 'justify',
                                     }}
 
                                 >
@@ -202,24 +202,24 @@ export default class FinishRegister extends Component {
                                 </ul>
                                 <Text
                                     style={{
-                                        marginTop:10,
-                                        fontSize:16,
+                                        marginTop: 10,
+                                        fontSize: 16,
                                         fontFamily: 'IRANYekanFaNum',
-                                        color:bg3,
-                                        paddingHorizontal:5,
-                                        textAlign:'justify',
+                                        color: bgSuccess,
+                                        paddingHorizontal: 5,
+                                        textAlign: 'justify',
                                     }}>
                                     { translate('finishRegister__decription3')}
                                 </Text>
                                 <Text
                                     style={{
-                                        marginTop:0,
-                                        fontSize:16,
-                                        fontWeight:400,
+                                        marginTop: 0,
+                                        fontSize: 16,
+                                        fontWeight: 400,
                                         fontFamily: 'IRANYekanFaNum',
-                                        color:bg3,
-                                        paddingHorizontal:5,
-                                        alignSelf:'center'
+                                        color: bgSuccess,
+                                        paddingHorizontal: 5,
+                                        alignSelf: 'center'
                                     }}>
                                     { translate('finishRegister__decription4')}
                                 </Text>
@@ -246,17 +246,17 @@ export default class FinishRegister extends Component {
                         }} >
                             <TouchableOpacity
                                 style={{
-                                    borderWidth:1,
-                                    borderRadius:0,
-                                    borderColor:grL5,
-                                    alignItems:'center',
-                                    justifyContent:'center',
-                                    color:bg10,
-                                    width:60,
-                                    height:60,
-                                    fontSize:16,
-                                    marginHorizontal:0,
-                                    backgroundColor:bg3,
+                                    borderWidth: 1,
+                                    borderRadius: 0,
+                                    borderColor: grL5,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: bg10,
+                                    width: 60,
+                                    height: 60,
+                                    fontSize: 16,
+                                    marginHorizontal: 0,
+                                    backgroundColor: bgSuccess,
                                 }}
                                 onPress={this.copyLink}>
                                 <Text style={{padding:5,}}>{translate('finishRegister_copy')}</Text>
@@ -278,7 +278,7 @@ export default class FinishRegister extends Component {
                        {/* <TouchableOpacity
                             style={{
                                 marginTop:30,
-                                borderColor: bg5,
+                                borderColor: orange1,
                                 borderWidth:1,
                                 padding:10,
                                 paddingTop:10,

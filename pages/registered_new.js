@@ -3,13 +3,12 @@ import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import translate from "../src/language/translate";
 import {doDelay, navigation,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg1, bg5, bgScreen, bgWhite, primaryDark} from "../src/constants/colors";
+import {bg1, bgScreen, bgWhite, orange1, primaryDark} from "../src/constants/colors";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {loginApi} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
 import Router from "next/router";
-//import Pagination from 'docs/src/modules/components/Pagination';
-//const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
 
 export default class registered_new extends Component {
     constructor() {
@@ -75,7 +74,7 @@ export default class registered_new extends Component {
                             fontSize: 25,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: bg5
+                            color: orange1
                         }}>
                         Treenetgram
                     </Text>
@@ -105,7 +104,7 @@ export default class registered_new extends Component {
                         width: '100%',
                         alignItems: 'center',
                         borderWidth: 1,
-                        borderColor: bg5,
+                        borderColor: orange1,
                         borderRadius: 12,
                         marginTop: 30,
                         padding: 10,
@@ -178,8 +177,8 @@ export default class registered_new extends Component {
                         <TouchableOpacity
                             style={{
                                 marginTop: 20,
-                                borderColor: bg5,
-                                backgroundColor: bg5,
+                                borderColor: orange1,
+                                backgroundColor: orange1,
                                 borderWidth: 1,
                                 width: 200,
                                 paddingTop: 0,

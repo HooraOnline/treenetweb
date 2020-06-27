@@ -3,7 +3,16 @@ import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 
 import {doDelay, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg1, bg3, bg5, bgScreen, bgWhite, lightRed, placeholderTextColor, textItemBlack} from "../src/constants/colors";
+import {
+    bg1,
+    bgScreen,
+    bgWhite,
+    bgSuccess,
+    lightRed,
+    orange1,
+    placeholderTextColor,
+    textItemBlack
+} from "../src/constants/colors";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 import {postQuery} from "../dataService/apiService";
@@ -92,7 +101,7 @@ export default class Smsconfirm extends Component {
                             fontSize: 50,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color:bg3
+                            color: bgSuccess
                         }}>
                         Treenet
                     </Text>
@@ -100,12 +109,12 @@ export default class Smsconfirm extends Component {
                     <View id='form' >
                         <Text
                             style={{
-                                marginTop:10,
-                                fontSize:16,
-                                fontWeight:800,
+                                marginTop: 10,
+                                fontSize: 16,
+                                fontWeight: 800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                color:bg3,
-                                alignSelf:'center'
+                                color: bgSuccess,
+                                alignSelf: 'center'
                             }}>
                            { translate('enter_sms_confirm_code')}
                         </Text>
@@ -116,7 +125,13 @@ export default class Smsconfirm extends Component {
                                 <FloatingLabelTextInput
                                     dir={'rtl'}
                                     //autoFocus={this.state.focus==1}
-                                    style={{ borderColor: bg5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
+                                    style={{
+                                        borderColor: orange1,
+                                        borderWidth: 2,
+                                        paddingVertical: 5,
+                                        borderRadius: 8,
+                                        backgroundColor: bgWhite
+                                    }}
                                     //placeholder=""
                                     value={this.state.code1}
                                     onChangeText={text => {
@@ -153,12 +168,18 @@ export default class Smsconfirm extends Component {
                                 <FloatingLabelTextInput
                                     dir={'ltr'}
                                     autoFocus={this.state.focus==2}
-                                    refInput={input=>{
-                                        if(this.state.focus==2){
+                                    refInput={input => {
+                                        if (this.state.focus == 2) {
                                             input.focus();
                                         }
                                     }}
-                                    style={{ borderColor: bg5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
+                                    style={{
+                                        borderColor: orange1,
+                                        borderWidth: 2,
+                                        paddingVertical: 5,
+                                        borderRadius: 8,
+                                        backgroundColor: bgWhite
+                                    }}
                                     //placeholder=""
                                     value={this.state.code2}
                                     onChangeText={text => {
@@ -194,12 +215,18 @@ export default class Smsconfirm extends Component {
                                 <FloatingLabelTextInput
                                     dir={'ltr'}
                                     autoFocus={this.state.focus==3}
-                                    refInput={input=>{
-                                        if(this.state.focus==3){
+                                    refInput={input => {
+                                        if (this.state.focus == 3) {
                                             input.focus();
                                         }
                                     }}
-                                    style={{ borderColor: bg5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
+                                    style={{
+                                        borderColor: orange1,
+                                        borderWidth: 2,
+                                        paddingVertical: 5,
+                                        borderRadius: 8,
+                                        backgroundColor: bgWhite
+                                    }}
                                     //placeholder=""
                                     value={this.state.code3}
                                     onChangeText={text => {
@@ -235,12 +262,18 @@ export default class Smsconfirm extends Component {
                                 <FloatingLabelTextInput
                                     dir={'ltr'}
                                     autoFocus={this.state.focus==4}
-                                    refInput={input=>{
-                                        if(this.state.focus==4){
+                                    refInput={input => {
+                                        if (this.state.focus == 4) {
                                             input.focus();
                                         }
                                     }}
-                                    style={{ borderColor: bg5,borderWidth:2,paddingVertical:5, borderRadius:8,backgroundColor:bgWhite}}
+                                    style={{
+                                        borderColor: orange1,
+                                        borderWidth: 2,
+                                        paddingVertical: 5,
+                                        borderRadius: 8,
+                                        backgroundColor: bgWhite
+                                    }}
                                     //placeholder=""
                                     value={this.state.code4}
                                     onChangeText={text => {
@@ -274,15 +307,15 @@ export default class Smsconfirm extends Component {
                         </View>
                         <TouchableOpacity
                             style={{
-                                marginTop:15,
-                                borderColor: bg5,
-                                borderWidth:1,
-                                padding:10,
-                                paddingTop:10,
-                                paddingHorizontal:30,
-                                borderRadius:12,
-                                alignItems:'center',
-                                justifyContent:'center',
+                                marginTop: 15,
+                                borderColor: orange1,
+                                borderWidth: 1,
+                                padding: 10,
+                                paddingTop: 10,
+                                paddingHorizontal: 30,
+                                borderRadius: 12,
+                                alignItems: 'center',
+                                justifyContent: 'center',
 
                             }}
                             onPress={() =>this.onfirmMobile()}

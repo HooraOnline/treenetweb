@@ -32,6 +32,7 @@ class PersistStore {
         this.username = null;
         this.paymentId = null;
         this.locale = null;
+
     }
     @action
     setAuthToken(token) {

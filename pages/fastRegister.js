@@ -9,7 +9,7 @@ import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 
 import {postQuery,} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
-import {bg3, bg5, bgScreen, bgWhite, border, textItemBlack} from "../src/constants/colors";
+import {bgScreen, bgWhite, border, bgSuccess, orange1, textItemBlack} from "../src/constants/colors";
 //import SwipeableViews from 'react-swipeable-views';
 //import { autoPlay } from 'react-swipeable-views-utils';
 //import Pagination from 'docs/src/modules/components/Pagination';
@@ -111,7 +111,7 @@ export default class FastRegister extends Component {
                             fontSize: 25,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: bg5
+                            color: orange1
                         }}>
                         Treenetgram
                     </Text>
@@ -119,32 +119,39 @@ export default class FastRegister extends Component {
                     <View id='form' style={{width:'100%',maxWidth:500,marginTop:40}}   >
                         <Text
                             style={{
-                                alignItems:'center',
-                                marginTop:2,
-                                fontSize:14,
+                                alignItems: 'center',
+                                marginTop: 2,
+                                fontSize: 14,
                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                textAlign:'justify',
-                                color:bg3,
+                                textAlign: 'justify',
+                                color: bgSuccess,
                             }}>
                             {translate('fastRegister_desc')}
                         </Text>
                         <Text
                             style={{
-                                marginTop:10,
-                                fontSize:16,
-                                fontWight:800,
+                                marginTop: 10,
+                                fontSize: 16,
+                                fontWight: 800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                color:bg3,
+                                color: bgSuccess,
                             }}>
                             {translate('fastRegister_atleast_fill_one_down')}
                         </Text>
-                         <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                        <View dir={"ltr"} style={{
+                            flexDirection: 'row',
+                            marginTop: 10,
+                            borderColor: orange1,
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            backgroundColor: bgWhite,
+                        }}>
                             <Text style={{
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                 fontSize: 16,
                                 color: border,
 
-                                padding:5,
+                                padding: 5,
                                 alignSelf: 'center',
                             }}>{this.state.countryCode}</Text>
                             <FloatingLabelTextInput
@@ -194,17 +201,24 @@ export default class FastRegister extends Component {
                             />
 
                         </View>
-                        <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                        <View dir={"ltr"} style={{
+                            flexDirection: 'row',
+                            marginTop: 10,
+                            borderColor: orange1,
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            backgroundColor: bgWhite,
+                        }}>
 
                             <FloatingLabelTextInput
                                 dir={'ltr'}
                                 reverse={persistStore.isRtl}
-                                style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
+                                style={{flex: 1, paddingHorizontal: 5, paddingVertical: 5, paddingTop: 7}}
                                 placeholder={translate("fastRegister_email_address")}
                                 value={this.state.email}
                                 onChangeText={text => {
-                                    const acceptReg =/^[a-zA-Z0-9~@.]+$/;
-                                    const emailReg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                                    const acceptReg = /^[a-zA-Z0-9~@.]+$/;
+                                    const emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                                     if(acceptReg.test(text)){
                                         this.setState({ email:text, emailValidation:emailReg.test(text)});
                                     }else{
@@ -241,19 +255,24 @@ export default class FastRegister extends Component {
 
                         <TouchableOpacity
                             style={{
-                                flex:1,
-                                marginTop:15,
-                                borderColor: bg5,
-                                borderWidth:1,
-                                padding:0,
-                                paddingTop:0,
-                                borderRadius:12,
-                                alignItems:'center',
-                                justifyContent:'center',
+                                flex: 1,
+                                marginTop: 15,
+                                borderColor: orange1,
+                                borderWidth: 1,
+                                padding: 0,
+                                paddingTop: 0,
+                                borderRadius: 12,
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
                             onPress={() =>this.registerPhone()}
                         >
-                            <Text style={{fontSize:16,color:bg3,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
+                            <Text style={{
+                                fontSize: 16,
+                                color: bgSuccess,
+                                fontWeight: 500,
+                                paddingVertical: 12
+                            }}>{translate('confirm')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

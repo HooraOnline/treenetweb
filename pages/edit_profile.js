@@ -5,12 +5,11 @@ import {ImageSelector, SwitchTextMulti, Toolbar} from "../src/components";
 import {getTabWidth, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
 import {
-    bg2,
-    bg3,
-    bg5,
     bgWhite,
     border,
+    bgSuccess,
     lightRed,
+    orange1,
     placeholderTextColor,
     primaryDark,
     textItemBlack
@@ -184,7 +183,14 @@ export default class edit_profile extends Component {
                 <View style={{flex:1,alignItems:'center',paddingHorizontal:10,}} >
                     <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,paddingHorizontal:16,}}   >
                         <ImageSelector
-                            style={{borderWidth:2,borderColor:bg5,height:100,width:100,borderRadius:50,alignSelf:'center' }}
+                            style={{
+                                borderWidth: 2,
+                                borderColor: orange1,
+                                height: 100,
+                                width: 100,
+                                borderRadius: 50,
+                                alignSelf: 'center'
+                            }}
                             canUpload={true}
                             autoUpload={true}
                             imageStyle={{height:100,width:100,borderRadius:50}}
@@ -206,13 +212,20 @@ export default class edit_profile extends Component {
                         />
 
                         <View id='form' style={{width:'100%',maxWidth:500,marginTop:10}}   >
-                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:0,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                            <View dir={"ltr"} style={{
+                                flexDirection: 'row',
+                                marginTop: 0,
+                                borderColor: orange1,
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                backgroundColor: bgWhite,
+                            }}>
                                 <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                     fontSize: 14,
                                     color: border,
 
-                                    padding:5,
+                                    padding: 5,
                                     alignSelf: 'center',
                                 }}>{this.state.countryCode}</Text>
                                 <FloatingLabelTextInput
@@ -264,17 +277,24 @@ export default class edit_profile extends Component {
                                 />
 
                             </View>
-                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                            <View dir={"ltr"} style={{
+                                flexDirection: 'row',
+                                marginTop: 10,
+                                borderColor: orange1,
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                backgroundColor: bgWhite,
+                            }}>
                                 <FloatingLabelTextInput
                                     labelAlign={'left'}
                                     dir={'ltr'}
                                     reverse={persistStore.isRtl}
-                                    style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
+                                    style={{flex: 1, paddingHorizontal: 5, paddingVertical: 5, paddingTop: 7}}
                                     placeholder={translate("fastRegister_email_address")}
                                     value={this.state.email}
                                     onChangeText={text => {
-                                        const acceptReg =/^[a-zA-Z0-9~@.]+$/;
-                                        const emailReg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                                        const acceptReg = /^[a-zA-Z0-9~@.]+$/;
+                                        const emailReg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                                         if(acceptReg.test(text)){
                                             this.setState({ email:text, emailValidation:emailReg.test(text)});
                                         }else{
@@ -335,8 +355,8 @@ export default class edit_profile extends Component {
                                     }}
                                     labelAlign={'left'}
                                     placeholder={translate('firstName')}
-                                    style={{flex:1, marginTop:20}}
-                                    labelStyle={{color:bg3}}
+                                    style={{flex: 1, marginTop: 20}}
+                                    labelStyle={{color: bgSuccess}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={70}
@@ -377,8 +397,8 @@ export default class edit_profile extends Component {
                                     }}
                                     labelAlign={'left'}
                                     placeholder={translate('lastName')}
-                                    style={{flex:1, marginTop:20}}
-                                    labelStyle={{color:bg3}}
+                                    style={{flex: 1, marginTop: 20}}
+                                    labelStyle={{color: bgSuccess}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={70}
@@ -417,8 +437,8 @@ export default class edit_profile extends Component {
                                     labelAlign={'left'}
                                     reverse={persistStore.isRtl}
                                     placeholder={translate('age')}
-                                    style={{flex:1, marginTop:20}}
-                                    labelStyle={{color:bg3}}
+                                    style={{flex: 1, marginTop: 20}}
+                                    labelStyle={{color: bgSuccess}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={2}
@@ -458,15 +478,15 @@ export default class edit_profile extends Component {
                                     }
                                     highlightColor={primaryDark}
                                     unit={translate('year')}
-                                    unitStyle={{color: bg5}}
+                                    unitStyle={{color: orange1}}
                                     keyboardType="number-pad"
                                 />
                                 <FloatingLabelTextInput
 
                                     labelAlign={'left'}
                                     placeholder={translate('آواتار')}
-                                    style={{flex:1, marginTop:20}}
-                                    labelStyle={{color:bg3}}
+                                    style={{flex: 1, marginTop: 20}}
+                                    labelStyle={{color: bgSuccess}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={50}

@@ -9,7 +9,7 @@ import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 import {postQuery} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
 import {IoMdEye, IoMdEyeOff} from "react-icons/io";
-import {bg1, bg3, bg5, bgScreen, primaryDark, textItem} from "../src/constants/colors";
+import {bg1, bgScreen, bgSuccess, orange1, primaryDark, textItem} from "../src/constants/colors";
 //import Pagination from 'docs/src/modules/components/Pagination';
 //const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -119,7 +119,7 @@ export default class RegisterPassword extends Component {
                             fontSize: 25,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: bg5
+                            color: orange1
                         }}>
                         Treenetgram
                     </Text>
@@ -165,8 +165,8 @@ export default class RegisterPassword extends Component {
                                 dir={'ltr'}
                                 reverse={persistStore.isRtl}
                                 placeholder={translate('registerPassword_username_example')}
-                                style={{flex:1, marginTop:0}}
-                                labelStyle={{color:bg3,marginTop:-19}}
+                                style={{flex: 1, marginTop: 0}}
+                                labelStyle={{color: bgSuccess, marginTop: -19}}
                                 editable={true}
                                 multiline={false}
                                 maxLength={50}
@@ -176,7 +176,7 @@ export default class RegisterPassword extends Component {
                                 returnKeyType="done"
                                 numberOfLines={1}
                                 underlineSize={4}
-                                underlineColor={this.state.usernameValidation ? bg3 : primaryDark}
+                                underlineColor={this.state.usernameValidation ? bgSuccess : primaryDark}
                                 isAccept={this.state.usernameValidation}
                                 textInputStyle={{
                                     fontWeight: 'normal',
@@ -273,11 +273,11 @@ export default class RegisterPassword extends Component {
                                 keyboardType="default"
                                 returnKeyType="done"
                                 numberOfLines={1}
-                                labelStyle={{color:bg3,marginTop:-17}}
+                                labelStyle={{color: bgSuccess, marginTop: -17}}
                                 textInputStyle={{
                                     fontWeight: 'normal',
-                                    fontFamily:'IRANYekanRegular',
-                                    color:bg1,
+                                    fontFamily: 'IRANYekanRegular',
+                                    color: bg1,
                                     fontSize: 14,
                                     paddingStart: 4,
                                     paddingTop: 1,
@@ -285,7 +285,7 @@ export default class RegisterPassword extends Component {
                                     //paddingLeft:35,
                                 }}
                                 underlineSize={4}
-                                underlineColor={this.state.passwordValidation ? bg3 : primaryDark}
+                                underlineColor={this.state.passwordValidation ? bgSuccess : primaryDark}
                                 isAccept={this.state.passwordValidation}
                                 style={{flex: 1,marginTop:0}}
                                 onChangeText={text => {
@@ -314,9 +314,9 @@ export default class RegisterPassword extends Component {
                                 style={{position: 'absolute', start: 30, bottom:4}}
                             >
                                 {
-                                    this.state.showPassword?
-                                        <IoMdEye color={bg3}  size={24} />
-                                        :<IoMdEyeOff color={bg3}  size={24}/>
+                                    this.state.showPassword ?
+                                        <IoMdEye color={bgSuccess} size={24}/>
+                                        : <IoMdEyeOff color={bgSuccess} size={24}/>
                                 }
                             </TouchableOpacity>
                         </View>
@@ -340,21 +340,21 @@ export default class RegisterPassword extends Component {
                                 maxLength={100}
                                 floatingLabelEnable={true}
                                 labelAlign={'left'}
-                                labelStyle={{color:bg3,marginTop:-17}}
+                                labelStyle={{color: bgSuccess, marginTop: -17}}
                                 keyboardType="default"
                                 returnKeyType="done"
                                 numberOfLines={1}
                                 textInputStyle={{
                                     fontWeight: 'normal',
-                                    fontFamily:'IRANYekanRegular',
-                                    color:bg1,
+                                    fontFamily: 'IRANYekanRegular',
+                                    color: bg1,
                                     fontSize: 14,
                                     paddingStart: 4,
                                     paddingTop: 1,
                                     //textAlign: 'left',
                                     //paddingLeft:35,
                                 }}
-                                underlineColor={this.state.passwor2dValidation ? bg3 : primaryDark}
+                                underlineColor={this.state.passwor2dValidation ? bgSuccess : primaryDark}
                                 isAccept={this.state.passwor2dValidation}
                                 underlineSize={1}
 
@@ -377,9 +377,9 @@ export default class RegisterPassword extends Component {
                                 style={{position: 'absolute', start: 30, bottom:4}}
                             >
                                 {
-                                    this.state.showPassword?
-                                        <IoMdEye color={bg3}  size={24} />
-                                        :<IoMdEyeOff color={bg3}  size={24} />
+                                    this.state.showPassword ?
+                                        <IoMdEye color={bgSuccess} size={24}/>
+                                        : <IoMdEyeOff color={bgSuccess} size={24}/>
                                 }
                             </TouchableOpacity>
                         </View>
@@ -389,19 +389,24 @@ export default class RegisterPassword extends Component {
 
                         <TouchableOpacity
                             style={{
-                                flex:1,
-                                marginTop:40,
-                                borderColor: bg5,
-                                borderWidth:1,
-                                padding:0,
-                                paddingTop:0,
-                                borderRadius:12,
-                                alignItems:'center',
-                                justifyContent:'center',
+                                flex: 1,
+                                marginTop: 40,
+                                borderColor: orange1,
+                                borderWidth: 1,
+                                padding: 0,
+                                paddingTop: 0,
+                                borderRadius: 12,
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
                             onPress={() =>this.updateUsernameAndPassword()}
                         >
-                            <Text style={{fontSize:16,color:bg3,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
+                            <Text style={{
+                                fontSize: 16,
+                                color: bgSuccess,
+                                fontWeight: 500,
+                                paddingVertical: 12
+                            }}>{translate('confirm')}</Text>
                         </TouchableOpacity>
 
 

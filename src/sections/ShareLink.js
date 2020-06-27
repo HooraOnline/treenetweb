@@ -1,6 +1,6 @@
 import React, {Component, useEffect} from 'react';
 import {showMassage} from "../../src/utils";
-import {bg10, bg3, bg8, bgWhite, grL5, orange1, primaryDark, textItem} from "../../src/constants/colors";
+
 import {Image, Text, TextInput, TouchableOpacity, View,} from "../../src/react-native";
 import translate from "../../src/language/translate";
 import copy from "copy-to-clipboard";
@@ -24,7 +24,7 @@ import {
     WhatsappIcon,
     WhatsappShareButton
 } from "react-share";
-import {bg5} from "../constants/colors";
+import {bg10, bgSuccess, bg8, bgWhite, grL5, orange1,} from "../constants/colors";
 import images from "../../public/static/assets/images";
 import {ImageSelector} from "../components";
 import Link from "next/link";
@@ -69,7 +69,7 @@ export default class ShareLink extends Component {
                         fontSize: 14,
                         fontWeight: 400,
                         fontFamily: 'IRANYekanFaNum-Bold',
-                        color: bg3,
+                        color: bgSuccess,
                         marginHorizontal:10
                     }}>
                     {translate('لینک دعوت اختصاصی شما')}
@@ -99,7 +99,7 @@ export default class ShareLink extends Component {
                                 padding:5,
                                 borderWidth:0,
                                 borderRadius:1,
-                                borderColor:bg5,
+                                borderColor:orange1,
                                 justifyContent:'center',
                             }}
                             readonly
@@ -215,7 +215,7 @@ export default class ShareLink extends Component {
                                 height: 40,
                                 fontSize: 16,
                                 marginHorizontal: 0,
-                                backgroundColor: bg5,
+                                backgroundColor: orange1,
                             }}
                             onPress={this.copyLink}>
                             <Text style={{padding: 5,}}>{translate('finishRegister_copy')}</Text>

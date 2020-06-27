@@ -4,7 +4,7 @@ import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
 import {fetchStore, navigation, showMassage,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg5, bgWhite, borderSeparate, orange1} from "../src/constants/colors";
+import {bgWhite, borderSeparate, orange1} from "../src/constants/colors";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
 import {postQuery} from "../dataService/apiService";
@@ -126,7 +126,7 @@ export default class index extends Component {
                             fontSize: 25,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: bg5
+                            color: orange1
                         }}>
                         Treenetgram
                     </Text>
@@ -143,7 +143,7 @@ export default class index extends Component {
                                 minWidth: 150
                             }}
                             selectedItemStyle={{
-                                backgroundColor: bg5,
+                                backgroundColor: orange1,
                             }}
                             title={translate('Select_Your_Language')}
                             snake

@@ -6,7 +6,7 @@ import {ImageSelector, Toolbar} from "../src/components";
 import accountsStore from "../src/stores/Accounts";
 import {navigation} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg5, bgWhite, textItem} from "../src/constants/colors";
+import {bgWhite, orange1, textItem} from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
 import {Text, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -174,7 +174,7 @@ export default class Profile extends Component {
                         <ImageSelector
                             style={{
                                 borderWidth: 2,
-                                borderColor: bg5,
+                                borderColor: orange1,
                                 height: 100,
                                 width: 100,
                                 borderRadius: 50,
@@ -246,7 +246,7 @@ export default class Profile extends Component {
                                     flexDirection:'row',
                                     justifyContent:'center',
                                     padding:10,
-                                    backgroundColor:bg5
+                                    backgroundColor: orange1
                                 }}>
                                 <Image source={images.ic_edit} style={{
                                     width: 24,

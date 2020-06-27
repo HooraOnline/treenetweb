@@ -1,10 +1,10 @@
-import React, {Component, useEffect} from 'react';
+import React, {Component} from 'react';
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
 import {fetchStore, navigation,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg10, bg3, bg5, bgHeader, bgWhite, borderSeparate, green1, orange1, primaryDark} from "../src/constants/colors";
+import {bg10, bgHeader, bgWhite, borderSeparate, bgSuccess, orange1, primaryDark} from "../src/constants/colors";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
 import {getServerFilePath, getUserSubsetApi} from "../dataService/apiService";
@@ -80,7 +80,7 @@ export default class newInvite extends Component {
                             fontSize: 25,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: bg5
+                            color: orange1
                         }}>
                         Treenetgram
                     </Text>
@@ -191,8 +191,8 @@ export default class newInvite extends Component {
                                     width: 200,
                                     maxWidth: 300,
                                     marginTop: 25,
-                                    borderColor: green1,
-                                    backgroundColor: green1,
+                                    borderColor: bgSuccess,
+                                    backgroundColor: bgSuccess,
                                     borderWidth: 1,
                                     padding: 0,
                                     paddingTop: 0,

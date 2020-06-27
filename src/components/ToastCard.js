@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {Animated, Image, StyleSheet, Text, TouchableWithoutFeedback, View} from '../react-native';
-import {bg5, bgWhite, grL5, primary, primaryDark} from "../constants/colors";
+import {orange1, bgWhite, grL5, primary, primaryDark} from "../constants/colors";
 import images from 'public/static/assets/images';
 class Content extends PureComponent {
 

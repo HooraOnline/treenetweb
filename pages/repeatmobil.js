@@ -9,7 +9,7 @@ import {Image, Platform, Text, TouchableOpacity, View,} from "../src/react-nativ
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 import {postQuery} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
-import {bg3, bg5, bgScreen, bgWhite, border, textItemBlack,} from "../src/constants/colors";
+import {bgScreen, bgWhite, border, bgSuccess, orange1, textItemBlack,} from "../src/constants/colors";
 //import Pagination from 'docs/src/modules/components/Pagination';
 //const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -117,7 +117,7 @@ export default class Repeatmobil extends Component {
                             fontSize: 25,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: bg5
+                            color: orange1
                         }}>
                         Treenetgram
                     </Text>
@@ -126,12 +126,12 @@ export default class Repeatmobil extends Component {
                          {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:14,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
                         <Text
                             style={{
-                                alignItems:'center',
-                                marginTop:2,
-                                fontSize:14,
+                                alignItems: 'center',
+                                marginTop: 2,
+                                fontSize: 14,
                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                textAlign:'justify',
-                                color:bg3,
+                                textAlign: 'justify',
+                                color: bgSuccess,
 
                             }}>
                             {translate("جهت اطمینان از صحت ورود اطلاعات در مرحله قبل، اطلاعات تماس خود را مجددا وارد کنید. ")}
@@ -139,13 +139,20 @@ export default class Repeatmobil extends Component {
 
 
                         {this.user.mobile &&(
-                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                            <View dir={"ltr"} style={{
+                                flexDirection: 'row',
+                                marginTop: 10,
+                                borderColor: orange1,
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                backgroundColor: bgWhite,
+                            }}>
                                 <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                     fontSize: 16,
                                     color: border,
 
-                                    padding:5,
+                                    padding: 5,
                                     alignSelf: 'center',
                                 }}>{this.state.countryCode}</Text>
                                 <FloatingLabelTextInput
@@ -186,16 +193,23 @@ export default class Repeatmobil extends Component {
                         )}
 
                         {this.user.email &&(
-                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                            <View dir={"ltr"} style={{
+                                flexDirection: 'row',
+                                marginTop: 10,
+                                borderColor: orange1,
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                backgroundColor: bgWhite,
+                            }}>
                                 <FloatingLabelTextInput
                                     dir={'ltr'}
-                                    style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
+                                    style={{flex: 1, paddingHorizontal: 5, paddingVertical: 5, paddingTop: 7}}
                                     placeholder={translate("ایمیل خود را مجددا وارد کنید.")}
                                     value={this.state.email}
                                     onChangeText={text => {
-                                        this.setState({ email:text, repeateEmailValidation: this.user.email==text ,});
+                                        this.setState({email: text, repeateEmailValidation: this.user.email == text,});
                                     }}
-                                    onFocus={()=>this.setState({repeateEmailValidation:true})}
+                                    onFocus={() => this.setState({repeateEmailValidation: true})}
                                     numberOfLines={1}
                                     isAccept={this.state.repeateEmailValidation}
                                     textInputStyle={{
@@ -222,36 +236,46 @@ export default class Repeatmobil extends Component {
 
                         <TouchableOpacity
                             style={{
-                                flex:1,
-                                marginTop:15,
-                                borderColor: bg5,
-                                borderWidth:1,
-                                padding:0,
-                                paddingTop:0,
-                                borderRadius:12,
-                                alignItems:'center',
-                                justifyContent:'center',
+                                flex: 1,
+                                marginTop: 15,
+                                borderColor: orange1,
+                                borderWidth: 1,
+                                padding: 0,
+                                paddingTop: 0,
+                                borderRadius: 12,
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
                             onPress={() =>this.registerPhone()}
                         >
-                            <Text style={{fontSize:16,color:bg3,fontWeight:500,paddingVertical:12}}>{translate('confirm')}</Text>
+                            <Text style={{
+                                fontSize: 16,
+                                color: bgSuccess,
+                                fontWeight: 500,
+                                paddingVertical: 12
+                            }}>{translate('confirm')}</Text>
                         </TouchableOpacity>
                         {(!this.state.repeateMobileValidation2 || !this.state.repeateEmailValidation2 || this.state.registerBefore) &&(
                             <TouchableOpacity
                                 style={{
-                                    flex:1,
-                                    marginTop:15,
-                                    borderColor: bg5,
-                                    borderWidth:1,
-                                    padding:0,
-                                    paddingTop:0,
-                                    borderRadius:12,
-                                    alignItems:'center',
-                                    justifyContent:'center',
+                                    flex: 1,
+                                    marginTop: 15,
+                                    borderColor: orange1,
+                                    borderWidth: 1,
+                                    padding: 0,
+                                    paddingTop: 0,
+                                    borderRadius: 12,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
                                 }}
                                 onPress={() =>this.perevius()}
                             >
-                                <Text style={{fontSize:16,color:bg3,fontWeight:500,paddingVertical:12}}>{translate('اصلاح اطلاعات مرحله قبل')}</Text>
+                                <Text style={{
+                                    fontSize: 16,
+                                    color: bgSuccess,
+                                    fontWeight: 500,
+                                    paddingVertical: 12
+                                }}>{translate('اصلاح اطلاعات مرحله قبل')}</Text>
                             </TouchableOpacity>
                         )
                         }

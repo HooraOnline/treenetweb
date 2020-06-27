@@ -331,9 +331,14 @@ export const getUserProfileApi = function (fields, include) {
         persistStore.notChangePassword=user.notChangePassword;
         return user
       }).catch((error)=>{
+          debugger
+          if(error.errorKey=='fa_server_member_user_notExist'){
+              persistStore.notChangePassword=false;
+              persistStore.userRegisterbefor=false;
+              persistStore.clearStore();
+          }
           throw error
       })
-
 };
 export const getUserSubsetApi = (userId)=> {
     let params = {};

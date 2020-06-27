@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import {navigation,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg5,} from "../src/constants/colors";
+import {orange1,} from "../src/constants/colors";
 import {Image, Text, View,} from "../src/react-native";
 import {Toolbar} from "../src/components";
 import {observer} from "mobx-react";
@@ -54,7 +54,7 @@ export default class index extends Component {
                             fontSize: 14,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            color: bg5
+                            color: orange1
                         }}>
                         Treenetgram
                     </Text>

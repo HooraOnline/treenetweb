@@ -61,16 +61,13 @@ export const toolbarItem = '#fff';
 export const bgItemRed = '#ffe9e9';
 export const textItemRedLight = '#802917';
 export const textItemRed = '#8f2e1a';
-export const textItem = '#5D4A4A';
-export const textItemBlack = '#262020';
-export const subTextItem = '#BFACAC';
+
 export const textDisabled = '#D5CBCB';
 export const fab = '#ffc107';
 export const goldDark = '#B28600';
 export const goldLight = '#FFF2C9';
 export const success = '#0CB59F';
 export const successLight = '#89E6DA';
-export const bgSuccess = '#1CC4AD';
 export const bgSuccessLight = '#DFFFFB';
 export const progressDefault = 'rgba(166, 214, 208, .4)';
 export const drawerHeaderTitle = '#FFF';
@@ -93,25 +90,22 @@ export const greenDark = '#00A28C';
 export const textGray = '#CCD1D1';
 
 
+
 export const bgHeader ='rgb(195,195,195)';
-export const bg5 = '#FF7225';
-export const orange1 ='#F39C12';
-export const green1 ='#2ECC71';
+export const orange1 = '#FF7225';
+export const bgSuccess ='#2ECC71';
 export const bgScreen = '#F5F1F1';
+export const textItem = '#5D4A4A';
+export const subTextItem = '#BFACAC';
+export const textItemBlack = '#262020';
 
 
 
 export const bg10 = '#E8F6F3';
-
 export const bg8 = '#A2D9CE';
 export const bg7 = '#73C6B6';
 export const bg6 = '#45B39D';
-
-export const bg3 = '#117A65';
-export const bg2 = '#117864';
 export const bg1 = '#0B5345';
-
-
 export const grL5  = '#28B463';
 export const grayVD7 = '#85929E';
 

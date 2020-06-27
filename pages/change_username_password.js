@@ -6,16 +6,13 @@ import {getTabWidth, mapNumbersToEnglish, navigation, showMassage} from "../src/
 import images from "../public/static/assets/images";
 import {
     bg1,
-    bg2,
-    bg3,
-    bg5,
+    textItemBlack,
     bgWhite,
     border,
-    lightRed,
-    placeholderTextColor,
+    bgSuccess,
+    orange1,
     primaryDark,
     textItem,
-    textItemBlack,
 } from "../src/constants/colors";
 import {Image, Platform, Text, TouchableOpacity, View,} from "../src/react-native";
 import translate from "../src/language/translate";
@@ -241,8 +238,8 @@ export default class change_username_password extends Component {
                                 dir={'ltr'}
                                 reverse={persistStore.isRtl}
                                 placeholder={translate('registerPassword_username_example')}
-                                style={{flex:1, marginTop:10}}
-                                labelStyle={{color:bg3,marginTop:-19}}
+                                style={{flex: 1, marginTop: 10}}
+                                labelStyle={{color: textItem, marginTop: -19}}
                                 editable={true}
                                 multiline={false}
                                 maxLength={50}
@@ -252,7 +249,7 @@ export default class change_username_password extends Component {
                                 returnKeyType="done"
                                 numberOfLines={1}
                                 underlineSize={4}
-                                underlineColor={this.state.usernameValidation ? bg3 : primaryDark}
+                                underlineColor={this.state.usernameValidation ? bgSuccess : primaryDark}
                                 isAccept={this.state.usernameValidation}
                                 textInputStyle={{
                                     fontWeight: 'normal',
@@ -350,11 +347,11 @@ export default class change_username_password extends Component {
                                 keyboardType="default"
                                 returnKeyType="done"
                                 numberOfLines={1}
-                                labelStyle={{color:bg3,marginTop:-17}}
+                                labelStyle={{color: textItem, marginTop: -17}}
                                 textInputStyle={{
                                     fontWeight: 'normal',
-                                    fontFamily:'IRANYekanRegular',
-                                    color:bg1,
+                                    fontFamily: 'IRANYekanRegular',
+                                    color: bg1,
                                     fontSize: 14,
                                     paddingStart: 4,
                                     paddingTop: 1,
@@ -362,7 +359,7 @@ export default class change_username_password extends Component {
                                     //paddingLeft:35,
                                 }}
                                 underlineSize={4}
-                                underlineColor={this.state.passwordValidation ? bg3 : primaryDark}
+                                underlineColor={this.state.passwordValidation ? bgSuccess : primaryDark}
                                 isAccept={this.state.passwordValidation}
                                 style={{flex: 1,marginTop:0}}
                                 onChangeText={text => {
@@ -392,9 +389,9 @@ export default class change_username_password extends Component {
                                 style={{position: 'absolute', start: 30, bottom:4}}
                             >
                                 {
-                                    this.state.showPassword?
-                                        <IoMdEye color={bg3}  size={24} />
-                                        :<IoMdEyeOff color={bg3}  size={24}/>
+                                    this.state.showPassword ?
+                                        <IoMdEye color={bgSuccess} size={24}/>
+                                        : <IoMdEyeOff color={bgSuccess} size={24}/>
                                 }
                             </TouchableOpacity>
                         </View>
@@ -418,21 +415,21 @@ export default class change_username_password extends Component {
                                 maxLength={100}
                                 floatingLabelEnable={true}
                                 labelAlign={'left'}
-                                labelStyle={{color:bg3,marginTop:-17}}
+                                labelStyle={{color: textItem, marginTop: -17}}
                                 keyboardType="default"
                                 returnKeyType="done"
                                 numberOfLines={1}
                                 textInputStyle={{
                                     fontWeight: 'normal',
-                                    fontFamily:'IRANYekanRegular',
-                                    color:bg1,
+                                    fontFamily: 'IRANYekanRegular',
+                                    color: bg1,
                                     fontSize: 14,
                                     paddingStart: 4,
                                     paddingTop: 1,
                                     //textAlign: 'left',
                                     //paddingLeft:35,
                                 }}
-                                underlineColor={this.state.passwor2dValidation ? bg3 : primaryDark}
+                                underlineColor={this.state.passwor2dValidation ? bgSuccess : primaryDark}
                                 isAccept={this.state.passwor2dValidation}
                                 underlineSize={3}
 
@@ -453,25 +450,30 @@ export default class change_username_password extends Component {
                                 onPress={() => {
                                     this.setState({showPassword: !this.state.showPassword});
                                 }}
-                                style={{position: 'absolute', start: 30, bottom:4}}
+                                style={{position: 'absolute', start: 30, bottom: 4}}
                             >
                                 {
-                                    this.state.showPassword?
-                                        <IoMdEye color={bg3}  size={24} />
-                                        :<IoMdEyeOff color={bg3}  size={24} />
+                                    this.state.showPassword ?
+                                        <IoMdEye color={bgSuccess} size={24}/>
+                                        : <IoMdEyeOff color={bgSuccess} size={24}/>
                                 }
                             </TouchableOpacity>
                         </View>
-                        <View id='form' style={{width:'100%',maxWidth:500,marginTop:40}}   >
-
-
-                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:5,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                        <View id='form' style={{width: '100%', maxWidth: 500, marginTop: 40}}>
+                            <View dir={"ltr"} style={{
+                                flexDirection: 'row',
+                                marginTop: 5,
+                                borderColor: this.state.shortMobileValidation ? bgSuccess : orange1,
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                backgroundColor: bgWhite,
+                            }}>
                                 <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                     fontSize: 16,
                                     color: border,
 
-                                    padding:5,
+                                    padding: 5,
                                     alignSelf: 'center',
                                 }}>{this.state.countryCode}</Text>
                                 <FloatingLabelTextInput
@@ -522,17 +524,24 @@ export default class change_username_password extends Component {
                                 />
 
                             </View>
-                            <View dir={"ltr"} style={{flexDirection:'row',marginTop:10,borderColor: bg5,borderWidth:2, borderRadius:8,backgroundColor:bgWhite,}}>
+                            <View dir={"ltr"} style={{
+                                flexDirection: 'row',
+                                marginTop: 10,
+                                borderColor: this.state.emailValidation ? bgSuccess : orange1,
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                backgroundColor: bgWhite,
+                            }}>
 
                                 <FloatingLabelTextInput
                                     labelAlign={'left'}
                                     dir={'ltr'}
                                     reverse={persistStore.isRtl}
-                                    style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
+                                    style={{flex: 1, paddingHorizontal: 5, paddingVertical: 5, paddingTop: 7}}
                                     placeholder={translate("fastRegister_email_address")}
                                     value={this.state.email}
                                     onChangeText={text => {
-                                        const acceptReg =/^[a-zA-Z0-9~@.]+$/;
+                                        const acceptReg = /^[a-zA-Z0-9~@.]+$/;
                                         const emailReg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                                         text = mapNumbersToEnglish(text);
                                         if(acceptReg.test(text)){
@@ -580,8 +589,8 @@ export default class change_username_password extends Component {
                                     }}
                                     labelAlign={'left'}
                                     placeholder={translate('firstName')}
-                                    style={{flex:1, marginTop:20}}
-                                    labelStyle={{color:bg3}}
+                                    style={{flex: 1, marginTop: 20}}
+                                    labelStyle={{color: textItem}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={70}
@@ -590,7 +599,7 @@ export default class change_username_password extends Component {
                                     returnKeyType="done"
                                     numberOfLines={1}
                                     tintColor={
-                                        this.state.firstNameValidation ? placeholderTextColor : lightRed
+                                        this.state.firstNameValidation ? bgSuccess : primaryDark
                                     }
                                     textInputStyle={{
                                         fontWeight: 'normal',
@@ -598,7 +607,7 @@ export default class change_username_password extends Component {
                                             Platform.OS === 'ios'
                                                 ? 'IRANYekan-ExtraBold'
                                                 : 'IRANYekanExtraBold',
-                                        color: bg2,
+                                        color: textItemBlack,
                                         fontSize: 16,
                                         paddingStart: 4,
                                         paddingTop: 1,
@@ -622,8 +631,8 @@ export default class change_username_password extends Component {
                                     }}
                                     labelAlign={'left'}
                                     placeholder={translate('lastName')}
-                                    style={{flex:1, marginTop:20}}
-                                    labelStyle={{color:bg3}}
+                                    style={{flex: 1, marginTop: 20}}
+                                    labelStyle={{color: textItem}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={70}
@@ -632,7 +641,7 @@ export default class change_username_password extends Component {
                                     returnKeyType="done"
                                     numberOfLines={1}
                                     tintColor={
-                                        this.state.lastNameValidation ? placeholderTextColor : lightRed
+                                        this.state.lastNameValidation ? bgSuccess : primaryDark
                                     }
                                     textInputStyle={{
                                         fontWeight: 'normal',
@@ -640,7 +649,7 @@ export default class change_username_password extends Component {
                                             Platform.OS === 'ios'
                                                 ? 'IRANYekan-ExtraBold'
                                                 : 'IRANYekanExtraBold',
-                                        color: bg2,
+                                        color: textItemBlack,
                                         fontSize: 16,
                                         paddingStart: 4,
                                         paddingTop: 1,
@@ -662,8 +671,8 @@ export default class change_username_password extends Component {
                                     labelAlign={'left'}
                                     reverse={persistStore.isRtl}
                                     placeholder={translate('age')}
-                                    style={{flex:1, marginTop:20}}
-                                    labelStyle={{color:bg3}}
+                                    style={{flex: 1, marginTop: 20}}
+                                    labelStyle={{color: textItem}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={2}
@@ -674,7 +683,7 @@ export default class change_username_password extends Component {
                                     textInputStyle={{
                                         fontWeight: 'normal',
                                         fontFamily:'IRANYekanExtraBold',
-                                        color: bg2,
+                                        color: textItemBlack,
                                         fontSize: 16,
                                         paddingRight: 10,
                                         paddingTop: 1,
@@ -700,11 +709,11 @@ export default class change_username_password extends Component {
 
                                     }
                                     tintColor={
-                                        this.state.ageValidation ? placeholderTextColor : lightRed
+                                        this.state.ageValidation ? bgSuccess : primaryDark
                                     }
                                     highlightColor={primaryDark}
                                     unit={translate('year')}
-                                    unitStyle={{color: bg5}}
+                                    unitStyle={{color: orange1}}
                                     keyboardType="number-pad"
                                 />
 

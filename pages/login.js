@@ -2,15 +2,14 @@ import React, {PureComponent} from 'react';
 import {Animated, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View} from '../src/react-native';
 import images from "../public/static/assets/images";
 import {
-    bg2,
-    bg3,
+    textItemBlack,
     bgScreen,
     border,
+    bgSuccess,
     lightRed,
     primaryDark,
     subTextItem,
     textItem,
-    textItemBlack
 } from '../src/constants/colors';
 import {globalState, persistStore,} from '../src/stores';
 import {getWidth,} from '../src/utils';
@@ -156,7 +155,7 @@ export default class LoginPage extends PureComponent {
                                     fontWeight: 1000,
                                     fontSize: 25,
                                     alignSelf: 'center',
-                                    color:bg3,
+                                    color: bgSuccess,
                                     fontFamily: 'IRANYekan-ExtraBold'
                                 }}>Treenetgram</Text>
                                 <View
@@ -250,7 +249,7 @@ export default class LoginPage extends PureComponent {
                                     fontSize: 20,
                                     fontFamily: 'IRANYekanExtraBold',
                                     textAlign: 'center',
-                                    color:bg2,
+                                    color:textItemBlack,
                                 }}>
                                     {translate('login_top')}
                                 </Text>
@@ -368,9 +367,9 @@ export default class LoginPage extends PureComponent {
                                         style={{position: 'absolute', start: 5, bottom:4}}
                                     >
                                         {
-                                            this.state.showPassword?
-                                                <IoMdEye color={bg3}  size={24} />
-                                                :<IoMdEyeOff color={bg3}  size={24}/>
+                                            this.state.showPassword ?
+                                                <IoMdEye color={bgSuccess} size={24}/>
+                                                : <IoMdEyeOff color={bgSuccess} size={24}/>
                                         }
                                     </TouchableOpacity>
                                 </View>
@@ -446,7 +445,7 @@ const styles = StyleSheet.create({
         padding:5,
         alignSelf: 'center',
         elevation: 7,
-        shadowColor: bg2,
+        shadowColor: textItemBlack,
         shadowOffset: {width: 0, height: 1},
         shadowOpacity: 0.5,
         backgroundColor: bgScreen
