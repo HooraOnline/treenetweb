@@ -127,7 +127,7 @@ export default class Profile extends Component {
                                           },
                                           {
                                               label: translate('شبکه من'),
-                                              path: "/myNetwork",
+                                              path: "/myetwork",
                                               icon: <FontAwesomeIcon icon={faCogs} />
                                           },
                                           {

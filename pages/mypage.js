@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {globalState, persistStore, userStore} from "../src/stores";
+import {globalState, persistStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {ImageSelector, Toolbar} from "../src/components";
 
@@ -55,7 +55,7 @@ export default class mypage extends Component {
         const data = {profileImage: fileName};
         postQuery('Members/me/setProfileImage', data)
             .then(res => {
-                userStore.profileImage = res.profileImage;
+                pStore.cUser.profileImage = res.profileImage;
                 this.setState({loading: false});
             })
             .catch(err => {
@@ -69,7 +69,7 @@ export default class mypage extends Component {
             start22: {
                 content: images.ic_back,
             },
-            title: 'پستها',
+            title: pStore.cUser.username,
             end: {
                 onPress: () => logoutApi(),
                 icon: images.ic_Period,
@@ -168,10 +168,10 @@ export default class mypage extends Component {
                             width: '100%',
                             flexDirection: 'row',
                             marginVertical: 4,
-                            marginTop: 16,
+                            marginTop: 8,
                             justifyContent: 'space-between'
                         }}>
-                            <Text style={{fontSize: 14, textAlign: 'justify',color:textItem}}>{story}</Text>
+                            <Text style={{fontSize: 12, textAlign: 'justify',color:textItem}}>{story}</Text>
                         </View>
                         <View style={{flexDirection:'row'}}>
                             <TouchableOpacity
@@ -193,7 +193,7 @@ export default class mypage extends Component {
                                     height: 24,
                                     tintColor:bgWhite
                                 }}/>
-                                <Text style={{fontSize:14,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
+                                <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={()=>{navigation.navigate('myLink')}}
@@ -217,12 +217,8 @@ export default class mypage extends Component {
                                         tintColor:bgWhite
                                     }}
                                 />
-                               {/* <Image source={images.ic_edit} style={{
-                                    width: 24,
-                                    height: 24,
-                                    tintColor:bgWhite
-                                }}/>*/}
-                                <Text style={{fontSize:14,color:bgWhite,paddingHorizontal:5}}>لینک دعوت اختصاصی</Text>
+
+                                <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>شبکه سازی</Text>
                             </TouchableOpacity>
                         </View>
 
@@ -276,15 +272,6 @@ export const UserCard = observer(props => {
                         noImage={images.default_ProPic}
                         hideDeleteBtn={true}
                     />
-                    <Text style={{
-                        fontSize: 14,
-                        fontFamily: 'IRANYekanRegular',
-                        fontWeight: 800,
-                        alignSelf: 'center',
-                        color: textItem,
-                        marginTop:10,
-
-                    }}>{userStore.username}</Text>
                 </View>
                 <View style={{width: 30}}/>
                 <View style={{alignItems: 'center'}}>
@@ -312,7 +299,7 @@ export const UserCard = observer(props => {
 
 
                         }}>
-                        {userStore.avatar || 'عضو فعال  تری نتگرام'}
+                        {pStore.cUser.avatar || 'عضو فعال  تری نتگرام'}
                     </Text>
                 </View>
             </View>

@@ -375,7 +375,7 @@ export const getUserProfileApi = function (fields, include) {
                 .then(subsetList=>{
                     debugger
                     leavesCount=0;
-                    pStore.sebsetList=subsetList;
+                    pStore.subsetList=subsetList;
                     calculateTotalSubsetsCount(subsetList);
                     pStore.branchesCount=subsetList.length;
                     pStore.leavesCount=leavesCount;

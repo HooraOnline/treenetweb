@@ -4,7 +4,7 @@ import {PersistStore} from "./PersistStore";
 class PublicStore {
 
     @observable cUser={};
-    @observable sebsetList=[];
+    @observable subsetList=[];
     @observable leavesCount=0;
     @observable branchesCount=0;
 

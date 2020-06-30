@@ -1,5 +1,5 @@
 import React, {Component, PureComponent} from 'react';
-import {globalState, persistStore, userStore} from "../src/stores";
+import {globalState, persistStore, pStore,} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {Toolbar,} from "../src/components";
 import {navigation, showMassage} from "../src/utils";
@@ -8,7 +8,7 @@ import {
     bgItemRed,
     bgWhite,
     borderSeparate,
-    itemListText,
+    itemListText, orange1,
     primaryDark,
     primaryDarkOld,
     textItem,
@@ -123,6 +123,7 @@ class TreeView extends PureComponent {
                                         source={getFileUri('member',profileImage)}
                                     />
 
+
                                     <View style={{ padding:5,margin:5,}}>
                                         <Text style={{}}>{fullName}</Text>
                                         <Text style={{fontSize:12}}>{username}</Text>
@@ -132,6 +133,7 @@ class TreeView extends PureComponent {
                                         </View>
                                     </View>
                                 </TouchableOpacity>
+                                <Text style={{fontSize:12,fontWeight:800, color:textItem,paddingHorizontal:16,padding:10}} >{item.avatar}</Text>
 
                             </View>
                             <View
@@ -209,7 +211,7 @@ export default class MyNetwork extends Component {
         }
     }
     copyLink=()=> {
-        copy(userStore.invitationLink);
+        copy(pStore.cUser.invitationLink);
         showMassage(translate('finishRegister_its_copy'),'success');
     }
     render() {
@@ -264,7 +266,7 @@ export default class MyNetwork extends Component {
                                     },
                                     {
                                         label: translate('شبکه من'),
-                                        path: "/followboard",
+                                        path: "/myNetwork",
                                         icon: <FontAwesomeIcon icon={faCogs}/>
                                     },
                                     {
@@ -285,18 +287,19 @@ export default class MyNetwork extends Component {
                         paddingHorizontal:16,
                         borderWidth:1,
                         borderRadius:12,
+                        borderColor:orange1,
                         backgroundColor:bgItemRed
                     }} >
-                        <Text style={{fontSize:12}}> {userStore.subsetList.length } شاخه </Text>
-                        <Text  style={{fontSize:12}}> {userStore.leavesCount } برگ </Text>
-                        <Text  style={{fontSize:12}}>{userStore.leavesCount+userStore.subsetList.length+1 } عضو </Text>
+                        <Text style={{fontSize:12}}> {pStore.subsetList.length } شاخه </Text>
+                        <Text  style={{fontSize:12}}> {pStore.leavesCount } برگ </Text>
+                        <Text  style={{fontSize:12}}>{pStore.leavesCount+pStore.subsetList.length+1 } عضو </Text>
                     </View>
                     <TreeView
                         style={{paddingBottom:60}}
-                        subsetList={userStore.subsetList}
+                        subsetList={pStore.subsetList}
                         level={1}
                     />
-                    {userStore.subsetList.length==0 &&(
+                    {pStore.subsetList.length==0 &&(
                         <View style={{marginTop:10}}>
                             <Text
                                 style={{textAlign:'justify',paddingHorizontal:30,fontSize:14,color:itemListText}}
