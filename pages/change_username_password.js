@@ -33,8 +33,7 @@ export default class change_username_password extends Component {
             username:'',
             shortMobile:userStore.shortMobile,
             email:userStore.email ||'',
-            firstName:userStore.firstName ||'',
-            lastName:userStore.lastName ||'',
+            fullName:userStore.fullName ||'',
             age:userStore.age ,
             gender:Number(userStore.gender ||0),
         };
@@ -102,13 +101,9 @@ export default class change_username_password extends Component {
             //this.setState({emailReg: false});
             return translate('fastRegister_invalid_email_format');
         }
-        if (!this.state.firstName){
+        if (!this.state.fullName){
 
             return translate('نام خود را وارد کنید.');
-        }
-        if (!this.state.lastName){
-            //this.setState({emailReg: false});
-            return translate('نام خانوادگی خود را وارد کنید.');
         }
         if (!this.state.age){
             return translate('سن را وارد کنید');
@@ -134,11 +129,8 @@ export default class change_username_password extends Component {
         if(this.state.email){
             data.email=this.state.email;
         }
-        if(this.state.firstName){
-            data.firstName=this.state.firstName;
-        }
-        if(this.state.lastName){
-            data.lastName=this.state.lastName;
+        if(this.state.fullName){
+            data.fullName=this.state.fullName;
         }
         if(this.state.age){
             data.age=this.state.age;
@@ -588,7 +580,7 @@ export default class change_username_password extends Component {
                                         this.labelInput = input;
                                     }}
                                     labelAlign={'left'}
-                                    placeholder={translate('firstName')}
+                                    placeholder={translate('fullName')}
                                     style={{flex: 1, marginTop: 20}}
                                     labelStyle={{color: textItem}}
                                     editable={true}
@@ -599,7 +591,7 @@ export default class change_username_password extends Component {
                                     returnKeyType="done"
                                     numberOfLines={1}
                                     tintColor={
-                                        this.state.firstNameValidation ? bgSuccess : primaryDark
+                                        this.state.fullNameValidation ? bgSuccess : primaryDark
                                     }
                                     textInputStyle={{
                                         fontWeight: 'normal',
@@ -618,55 +610,14 @@ export default class change_username_password extends Component {
 
                                     onChangeText={text =>
                                         this.setState({
-                                            firstName: text,
-                                            firstNameValidation: true,
+                                            fullName: text,
+                                            fullNameValidation: true,
                                         })
                                     }
                                     highlightColor={primaryDark}
-                                    value={this.state.firstName}
+                                    value={this.state.fullName}
                                 />
-                                <FloatingLabelTextInput
-                                    ref={input => {
-                                        this.labelInput = input;
-                                    }}
-                                    labelAlign={'left'}
-                                    placeholder={translate('lastName')}
-                                    style={{flex: 1, marginTop: 20}}
-                                    labelStyle={{color: textItem}}
-                                    editable={true}
-                                    multiline={false}
-                                    maxLength={70}
-                                    floatingLabelEnable={true}
-                                    keyboardType="default"
-                                    returnKeyType="done"
-                                    numberOfLines={1}
-                                    tintColor={
-                                        this.state.lastNameValidation ? bgSuccess : primaryDark
-                                    }
-                                    textInputStyle={{
-                                        fontWeight: 'normal',
-                                        fontFamily:
-                                            Platform.OS === 'ios'
-                                                ? 'IRANYekan-ExtraBold'
-                                                : 'IRANYekanExtraBold',
-                                        color: textItemBlack,
-                                        fontSize: 16,
-                                        paddingStart: 4,
-                                        paddingTop: 1,
-                                        paddingBottom: 3,
-                                        //textAlign: 'right',
-                                    }}
-                                    underlineSize={1}
 
-                                    onChangeText={text =>
-                                        this.setState({
-                                            lastName: text,
-                                            lastNameValidation: true,
-                                        })
-                                    }
-                                    highlightColor={primaryDark}
-                                    value={this.state.lastName}
-                                />
                                 <FloatingLabelTextInput
                                     labelAlign={'left'}
                                     reverse={persistStore.isRtl}

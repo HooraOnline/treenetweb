@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {persistStore, userStore} from "../src/stores";
+import {Platform, Text, TouchableOpacity, View,StyleSheet} from "../src/react-native";
+import {persistStore,pStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
-import {ImageSelector, SwitchTextMulti, Toolbar} from "../src/components";
+import {ImageSelector, SwitchTextMulti, Toolbar,} from "../src/components";
 import {getTabWidth, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
 import {
@@ -12,39 +13,42 @@ import {
     orange1,
     placeholderTextColor,
     primaryDark,
-    textItemBlack
+    textItemBlack, subTextItem, textItem
 } from "../src/constants/colors";
-import {Platform, Text, TouchableOpacity, View,} from "../src/react-native";
 import translate from "../src/language/translate";
 import {postQuery} from "../dataService/apiService";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
+import TextInput from "../src/react-native/TextInput";
 
-const HOME_TYPE = 1;
+
 export default class edit_profile extends Component {
     constructor() {
         super();
 
         this.state = {
-            image:userStore.profileImage,
+            image:pStore.cUser.profileImage,
             password:'',
             showPassword:false,
-            passwordValidation:false,
-            passwor2dValidation:false,
-            usernameValidation:false,
-            avatarValidation:false,
-            countryCode:userStore.countryCode,
-            username:userStore.username,
-            shortMobile:userStore.shortMobile,
-            email:userStore.email ||'',
-            firstName:userStore.firstName ||'',
-            lastName:userStore.lastName ||'',
-            avatar:userStore.avatar ||'',
-            gender:Number(userStore.gender ||0),
-            profileImageValidation:userStore.profileImage!=='defaultProfileImage.png',
+            mobileValidation:pStore.cUser.mobile?true:false,
+            emailValidation:pStore.cUser.email?true:false,
+            usernameValidation:pStore.cUser.username?true:false,
+            avatarValidation:pStore.cUser.avatar?true:false,
+            storyValidation:pStore.cUser.story?true:false,
+            fullNameValidation:pStore.cUser.fullName?true:false,
+            ageValidation:pStore.cUser.age?true:false,
+            countryCode:pStore.cUser.countryCode,
+            username:pStore.cUser.username,
+            shortMobile:pStore.cUser.shortMobile,
+            email:pStore.cUser.email,
+            fullName:pStore.cUser.fullName ,
+            avatar:pStore.cUser.avatar ,
+            story:pStore.cUser.story ,
+            gender:Number(pStore.cUser.gender ||0),
+            profileImageValidation:pStore.cUser.profileImage!=='defaultProfileImage.png',
         };
 
-        this.state.age=userStore.age;
-        this.state.gender=Number(userStore.gender ||0)
+        this.state.age=pStore.cUser.age;
+        this.state.gender=Number(pStore.cUser.gender ||0)
 
     }
 
@@ -73,13 +77,9 @@ export default class edit_profile extends Component {
             //this.setState({emailReg: false});
             return translate('fastRegister_invalid_email_format');
         }
-        if (!this.state.firstName){
+        if (!this.state.fullName){
 
             return translate('نام خود را وارد کنید.');
-        }
-        if (!this.state.lastName){
-            //this.setState({emailReg: false});
-            return translate('نام خانوادگی خود را وارد کنید.');
         }
         if (!this.state.age){
             return translate('سن را وارد کنید');
@@ -88,10 +88,8 @@ export default class edit_profile extends Component {
         if(!this.state.profileImageValidation){
             return translate(' تصویر  پروفایل خود را انتخاب کنید.');
         }
-
     }
     updateUsernameAndPassword=()=>{
-
         const msg=this.checkValidation();
         if(msg){
             showMassage(msg,'warning')
@@ -107,14 +105,14 @@ export default class edit_profile extends Component {
         if(this.state.email){
             data.email=this.state.email;
         }
-        if(this.state.firstName){
-            data.firstName=this.state.firstName;
-        }
-        if(this.state.lastName){
-            data.lastName=this.state.lastName;
+        if(this.state.fullName){
+            data.fullName=this.state.fullName;
         }
         if(this.state.avatar){
             data.avatar=this.state.avatar;
+        }
+        if(this.state.story){
+            data.story=this.state.story;
         }
         if(this.state.age){
             data.age=this.state.age;
@@ -123,12 +121,12 @@ export default class edit_profile extends Component {
             data.gender=Number(this.state.gender);
         }
 
-
         this.setState({loading:true,loadingMessage:'در حال اجرا'});
-        postQuery('Members/me/editProfile',data)
+        postQuery('Members/me/editProfile',data,'cUser')
             .then(res=>{
                 console.log(res);
-                navigation.replace('profile');
+                //pStore.cUser=res;
+                navigation.replace('mypage');
                 this.setState({loading:false});
                 //showMassage('پروفایل با موفقیت ویرایش شد.','success')
             })
@@ -184,7 +182,7 @@ export default class edit_profile extends Component {
                     <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,paddingHorizontal:16,}}   >
                         <ImageSelector
                             style={{
-                                borderWidth: 2,
+                                borderWidth: 1,
                                 borderColor: orange1,
                                 height: 100,
                                 width: 100,
@@ -194,7 +192,7 @@ export default class edit_profile extends Component {
                             canUpload={true}
                             autoUpload={true}
                             imageStyle={{height:100,width:100,borderRadius:50}}
-                            image={userStore.profileImage}
+                            image={pStore.cUser.profileImage}
                             noImage={images.default_ProPic}
                             hideDeleteBtn={true}
                             //onrender={(imageSelector)=>imageSelector.setState({image:this.state.userImage})}
@@ -215,8 +213,8 @@ export default class edit_profile extends Component {
                             <View dir={"ltr"} style={{
                                 flexDirection: 'row',
                                 marginTop: 0,
-                                borderColor: orange1,
-                                borderWidth: 2,
+                                borderColor: this.state.mobileValidation?bgSuccess :orange1,
+                                borderWidth: 1,
                                 borderRadius: 8,
                                 backgroundColor: bgWhite,
                             }}>
@@ -235,6 +233,7 @@ export default class edit_profile extends Component {
                                     style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
                                     placeholder={translate("fastRegister_mobile_number")}
                                     value={this.state.shortMobile}
+
                                     onChangeText={text => {
                                         text = mapNumbersToEnglish(text);
                                         if(text.length>1 && text.indexOf(0)==0){
@@ -255,6 +254,7 @@ export default class edit_profile extends Component {
 
                                     }}
                                     numberOfLines={1}
+                                    underlineColor={this.state.mobileValidation ? bgSuccess : primaryDark}
                                     isAccept={this.state.mobileValidation}
                                     textInputStyle={{
                                         fontFamily: 'IRANYekanFaNum-Bold',
@@ -280,8 +280,8 @@ export default class edit_profile extends Component {
                             <View dir={"ltr"} style={{
                                 flexDirection: 'row',
                                 marginTop: 10,
-                                borderColor: orange1,
-                                borderWidth: 2,
+                                borderColor: this.state.emailValidation?bgSuccess :orange1,
+                                borderWidth: 1,
                                 borderRadius: 8,
                                 backgroundColor: bgWhite,
                             }}>
@@ -353,10 +353,10 @@ export default class edit_profile extends Component {
                                     ref={input => {
                                         this.labelInput = input;
                                     }}
-                                    labelAlign={'left'}
-                                    placeholder={translate('firstName')}
+                                    //labelAlign={'left'}
+                                    placeholder={translate('fullName')}
                                     style={{flex: 1, marginTop: 20}}
-                                    labelStyle={{color: bgSuccess}}
+                                    labelStyle={{color: textItem}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={70}
@@ -365,8 +365,9 @@ export default class edit_profile extends Component {
                                     returnKeyType="done"
                                     numberOfLines={1}
                                     tintColor={
-                                        this.state.firstNameValidation ? placeholderTextColor : lightRed
+                                        this.state.fullNameValidation ? bgSuccess : lightRed
                                     }
+                                    isAccept={this.state.fullNameValidation}
                                     textInputStyle={{
 
                                         fontFamily:
@@ -384,61 +385,20 @@ export default class edit_profile extends Component {
 
                                     onChangeText={text =>
                                         this.setState({
-                                            firstName: text,
-                                            firstNameValidation: true,
+                                            fullName: text,
+                                            fullNameValidation: true,
                                         })
                                     }
                                     highlightColor={primaryDark}
-                                    value={this.state.firstName}
+                                    value={this.state.fullName}
                                 />
+
                                 <FloatingLabelTextInput
-                                    ref={input => {
-                                        this.labelInput = input;
-                                    }}
-                                    labelAlign={'left'}
-                                    placeholder={translate('lastName')}
-                                    style={{flex: 1, marginTop: 20}}
-                                    labelStyle={{color: bgSuccess}}
-                                    editable={true}
-                                    multiline={false}
-                                    maxLength={70}
-                                    floatingLabelEnable={true}
-                                    keyboardType="default"
-                                    returnKeyType="done"
-                                    numberOfLines={1}
-                                    tintColor={
-                                        this.state.lastNameValidation ? placeholderTextColor : lightRed
-                                    }
-                                    textInputStyle={{
-
-                                        fontFamily:
-                                            Platform.OS === 'ios'
-                                                ? 'IRANYekan-ExtraBold'
-                                                : 'IRANYekanExtraBold',
-
-                                        fontSize: 14,
-                                        paddingStart: 4,
-                                        paddingTop: 1,
-                                        paddingBottom: 3,
-                                        //textAlign: 'right',
-                                    }}
-                                    underlineSize={1}
-
-                                    onChangeText={text =>
-                                        this.setState({
-                                            lastName: text,
-                                            lastNameValidation: true,
-                                        })
-                                    }
-                                    highlightColor={primaryDark}
-                                    value={this.state.lastName}
-                                />
-                                <FloatingLabelTextInput
-                                    labelAlign={'left'}
-                                    reverse={persistStore.isRtl}
+                                    //labelAlign={'left'}
+                                    //reverse={persistStore.isRtl}
                                     placeholder={translate('age')}
                                     style={{flex: 1, marginTop: 20}}
-                                    labelStyle={{color: bgSuccess}}
+                                    labelStyle={{color: textItem}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={2}
@@ -474,19 +434,43 @@ export default class edit_profile extends Component {
 
                                     }
                                     tintColor={
-                                        this.state.ageValidation ? placeholderTextColor : lightRed
+                                        this.state.ageValidation ? bgSuccess : lightRed
                                     }
+                                    isAccept={this.state.ageValidation}
                                     highlightColor={primaryDark}
                                     unit={translate('year')}
                                     unitStyle={{color: orange1}}
                                     keyboardType="number-pad"
                                 />
-                                <FloatingLabelTextInput
 
+                                <TextInput
+                                    placeholder="داستان کوتاه شما یا داستان تخصص یا کسب و کار(اختیاری)"
+                                    bgSuccess={subTextItem}
+                                    style={{
+                                        flex: 1,
+                                        marginTop:20,
+                                        paddingHorizontal: 4,
+                                        borderColor:this.state.storyValidation?bgSuccess: lightRed,
+                                        borderWidth: 1,
+                                        borderRadius: 10,
+                                        fontSize: 13,
+                                        textAlignVertical: 'top',
+                                        textAlign: 'right',
+                                        padding: 8,
+                                        height: 110,
+                                    }}
+                                    multiline={true}
+                                    onChangeText={text => {this.setState({story: text,storyValidation:text?true:false})}}
+                                    returnKeyType="done"
+                                    value={this.state.story}
+                                    numberOfLines={4}
+                                    maxLength={300}
+                                />
+                                <FloatingLabelTextInput
                                     labelAlign={'left'}
                                     placeholder={translate('آواتار')}
                                     style={{flex: 1, marginTop: 20}}
-                                    labelStyle={{color: bgSuccess}}
+                                    labelStyle={{color: textItem}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={50}
@@ -495,7 +479,7 @@ export default class edit_profile extends Component {
                                     returnKeyType="done"
                                     numberOfLines={1}
                                     tintColor={
-                                        this.state.firstNameValidation ? placeholderTextColor : lightRed
+                                        this.state.fullNameValidation ? bgSuccess : lightRed
                                     }
                                     textInputStyle={{
 
@@ -518,7 +502,7 @@ export default class edit_profile extends Component {
                                     highlightColor={primaryDark}
                                     value={this.state.avatar}
                                 />
-                                <Text style={{fontSize:12,color:primaryDark,textAlign:'justify'}} > در بخش آواتار می توانید یک جمله کوتاه در مورد تخصص، کسب و کار یا هدفتان برای دیگران بنویسید</Text>
+                                <Text style={{marginTop:10, fontSize:12,color:textItemBlack,textAlign:'justify',fontWeight:800}} > در بخش آواتار می توانید یک جمله کوتاه در مورد تخصص، کسب و کار یا هدفتان در ترینتگرام برای دیگران بنویسید</Text>
                                 <Text style={{fontSize:12}} >چند مثال </Text>
                                 <Text style={{fontSize:12}} >تبلیغ کالای شما در شبکه ۱۰۰ هزار نفری من </Text>
                                 <Text style={{fontSize:12}} >متخصص تعمیرات لوازم برقی</Text>
@@ -531,13 +515,54 @@ export default class edit_profile extends Component {
 
                             </View>
 
+
                         </View>
                     </View>
                 </View>
             </PanelLayout>
+
+
         )
     }
 
 }
+
+const styles = StyleSheet.create({
+    textInput: {
+        flex: 1,
+        paddingHorizontal: 4,
+        borderColor: subTextItem,
+        borderWidth: 1,
+        borderRadius: 10,
+        fontSize: 14,
+        textAlignVertical: 'top',
+        textAlign: 'right',
+        padding: 8,
+        height: 110,
+    },
+    buttonIn: {
+        flex: 1,
+        borderWidth: 0.5,
+        alignItems: 'center',
+        borderRadius: 4,
+        height: 33,
+        justifyContent: 'center',
+        marginLeft: 7,
+        marginRight: 7,
+    },
+
+    multiSwitchItem: {
+        flex: 1,
+        fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
+        fontSize: 14,
+        paddingHorizontal: 7,
+        paddingVertical: 2,
+    },
+    multiSwitchItemActive: {
+        fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
+        fontSize: 16,
+    },
+
+});
 
 

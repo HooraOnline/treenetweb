@@ -27,12 +27,6 @@ import {fetchStore, getCookie, navigation, setScreenSize} from "../src/utils";
 //import PageChange from "components_creative/PageChange/PageChange.js";
 
 import "assets/scss/nextjs-material-kit.scss?v=1.0.0";
-//import "assets/css/apamanGlobal.css";
-//import persistStore from "../src/stores/PersistStore";
-import { globalState, userStore } from "../src/stores";
-import { loginQuery } from "../src/network/Queries";
-import {getUserProfileApi, postQuery} from "../dataService/apiService";
-import Api from "../dataService/apiCaller";
 
 Router.events.on("routeChangeStart", url => {
   console.log(`Loading: ${url}`);
@@ -77,43 +71,6 @@ class MyApp extends App {
     document.insertBefore(comment, document.documentElement);
 
   }
-/*  refechInitData=async ()=>{
-    if(!persistStore.apiToken){
-      await fetchStore();
-      if( persistStore.apiToken ){
-         Api.setToken();
-         this.getProfile();
-      }
-    }
-  }*/
-
-  async getProfile(){
-    if(userStore.username){
-      return;
-    }
-    this.setState({loading:true});
-     getUserProfileApi()
-        .then(res=>{
-          console.log(res);
-          this.setState({loading:false});
-          return res;
-        })
-        .catch(err=>{
-          this.setState({loading:false});
-        });
-  }
-
-  /*  async getInitialProps({ Component, router, ctx }) {
-      let pageProps = {};
-      console.warn("@@@@@@@@@@ App nextJs INIT");
-      if (Component.getInitialProps) {
-        pageProps = await Component.getInitialProps(ctx);
-      }
-
-      return { pageProps };
-    }*/
-
-
 
   render() {
     const { Component, pageProps } = this.props

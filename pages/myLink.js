@@ -10,11 +10,10 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
 import copy from "copy-to-clipboard";
-import {persistStore, userStore} from "../src/stores";
-import {getServerFilePath, getUserProfileApi, postQuery} from "../dataService/apiService";
-import ShareLink from "../src/sections/ShareLink";
+import {persistStore,} from "../src/stores";
+import ShareLink from "./sections/ShareLink";
 
-const HOME_TYPE = 1;
+
 export default class MyLink extends Component {
     constructor() {
         super();
@@ -22,7 +21,6 @@ export default class MyLink extends Component {
         //StatusBar.setTranslucent(false);
 
         this.state = {
-            selected: HOME_TYPE,
             showAccountSelect: false,
             loadingBalance: false,
             showPasswordChangePopUp: false,
@@ -36,34 +34,16 @@ export default class MyLink extends Component {
 
     async componentDidMount  () {
 
-        this.getProfile();
-
-
     }
-    getProfile(){
-        this.setState({loading:true});
-        getUserProfileApi()
-            .then(user=>{
-                this.setState({loading:false});
-            })
-            .catch(err => {
-                this.setState({loading: false});
-            });
-    }
-
-    copyLink = () => {
-        copy(userStore.invitationLink);
-        showMassage(translate('finishRegister_its_copy'), 'success');
-    };
 
 
     render() {
         const toolbarStyle = {
-            start22: {
+            start: {
                 content: images.ic_back,
+                onPress: ()=>navigation.goBack(),
             },
-            title: 'لینک من',
-
+            title: 'لینک شبکه سازی',
         };
 
         return (
@@ -76,27 +56,6 @@ export default class MyLink extends Component {
                                  customStyle={toolbarStyle}
                                  isExpand={this.state.showAccountSelect}
                              />
-                         }
-                         footer={
-                             <View style={{paddingHorizontal: 20}}>
-                                 <NavBar navButtons={[
-                                     {
-                                         label: translate('پروفایل'),
-                                         path: "/profile",
-                                         icon: <FontAwesomeIcon icon={faUser}/>
-                                     },
-                                     {
-                                         label: translate('شبکه من'),
-                                         path: "/myNetwork",
-                                         icon: <FontAwesomeIcon icon={faCogs}/>
-                                     },
-                                     {
-                                         label: translate('لینک دعوت'),
-                                         path: "/myLink",
-                                         icon: <FontAwesomeIcon icon={faCompass}/>
-                                     },
-                                 ]}/>
-                             </View>
                          }>
                 <View style={{flex:1,paddingBottom:40}}>
                     {persistStore.notChangePassword?(
@@ -134,7 +93,6 @@ export default class MyLink extends Component {
                         </View>
                     ):(
                         <View style={{padding: 16,}}>
-
                             <Text
                                 style={{
                                     marginTop: 0,
@@ -151,7 +109,7 @@ export default class MyLink extends Component {
                                 paddingHorizontal: 30,
                                 fontSize: 14,
                                 color: itemListText
-                            }}>{translate('با اشتراک گذاری لینک خودت در شبکه های اجتماعی یا کپی و ارسال اون برای دوستان و آشنایان، می تونی خیلی سریع شبکه خودتو رشد بدی. فقط کافیه مخاطب، روی لینک ارسالی شما بزنه و وارد سایت تری نتگرام بشه. به محض ورود، بصورت اتوماتیک ثبت نام و جز شبکه شما میشه. و تابلو اعلانات شما رو خواهد دید.')}</Text>
+                            }}>{translate('با اشتراک گذاری لینک خودت در شبکه های اجتماعی یا کپی و ارسال اون برای دوستان و آشنایان، می تونی خیلی سریع شبکه خودتو رشد بدی. فقط کافیه مخاطب، روی لینک ارسالی شما بزنه و وارد سایت تری نتگرام بشه. به محض ورود، بصورت اتوماتیک ثبت نام و جز شبکه شما میشه. و فالوبورد اعلانات شما رو خواهد دید.')}</Text>
                             <Text style={{
                                 textAlign: 'justify',
                                 paddingHorizontal: 30,

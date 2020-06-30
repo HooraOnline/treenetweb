@@ -6,7 +6,7 @@ import images from "../public/static/assets/images";
 import {bgHeader, orange1} from "../src/constants/colors";
 import {Image, Text, View,} from "../src/react-native";
 import {postQuery} from "../dataService/apiService";
-import {persistStore, userStore} from "../src/stores";
+import {persistStore, pStore, userStore} from "../src/stores";
 import {observer} from "mobx-react";
 import Api from "../dataService/apiCaller";
 import version from "../src/version";
@@ -25,7 +25,7 @@ export default class autoRegister extends Component {
 
     async componentDidMount() {
         if (persistStore.apiToken) {
-            navigation.replace('/profile');
+            navigation.replace('/mypage');
         }
         this.regentCode = navigation.getParam('regentCode');
         if (!persistStore.userRegisterbefor || version.release == false) {
@@ -105,10 +105,10 @@ export default class autoRegister extends Component {
                 //this.nextPage(res);
                 persistStore.apiToken = member.token;
                 Api.setToken(member.token);
-                userStore.setUser(member);
+                pStore.cUser=member
+
                 persistStore.userRegisterbefor = true;
                 this.setState({loading: false});
-                debugger
                 navigation.replace('newInvite', {user: member});
             })
             .catch(err => {

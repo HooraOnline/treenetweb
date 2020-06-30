@@ -30,9 +30,9 @@ export default class FinishRegister extends Component {
             });
     }
     checkValidation() {
-        if(!this.state.firstName ){
+        if(!this.state.fullName ){
             this.setState({firsNameValidation: false});
-            return translate('enter_your_firstName');
+            return translate('enter_your_fullName');
         }
     }
     copyLink=()=> {

@@ -94,7 +94,7 @@ class TreeView extends PureComponent {
                 }
                 renderItem={({item}) =>{
 
-                    let {subsets,cdate,firstName='',lastName='',birthDate='',profileImage='',gender=0,username=''}=item;
+                    let {subsets,cdate,fullName='',birthDate='',profileImage='',gender=0,username=''}=item;
                     return(
                         <View style={{
                             borderBottomWidth: 1,
@@ -124,7 +124,7 @@ class TreeView extends PureComponent {
                                     />
 
                                     <View style={{ padding:5,margin:5,}}>
-                                        <Text style={{}}>{firstName+' '+lastName}</Text>
+                                        <Text style={{}}>{fullName}</Text>
                                         <Text style={{fontSize:12}}>{username}</Text>
                                         <View style={{flexDirection:'row',fontSize:12}}>
                                             <Text style={{}}>{'عضویت' }</Text>
@@ -169,27 +169,18 @@ class TreeView extends PureComponent {
         );
     }
 }
-const HOME_TYPE = 1;
+
 @observer
 export default class MyNetwork extends Component {
     constructor() {
         super();
-        //globalState.changeStatusBarColor(primaryDark);
-        //StatusBar.setTranslucent(false);
+        this.state={
 
-        this.state = {
-            subsetList:[]
-        };
-        this.totalSebsetsCount=0;
+        }
     }
 
    async componentDidMount  () {
-       try{
-           this.getUserSubset();
-       }
-       catch (e) {
-          //showMassage('')
-       }
+
 
     }
 
@@ -229,9 +220,7 @@ export default class MyNetwork extends Component {
             title: 'شبکه من',
 
         };
-        const open = Boolean(this.state.anchorEl);
-        const PopperId = open ? 'simple-popper' : undefined;
-        const {children}=this.props;
+
         return (
               <PanelLayout title={`Treenetgram`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
@@ -269,18 +258,18 @@ export default class MyNetwork extends Component {
                             footer={
                                 <NavBar navButtons={[
                                     {
-                                        label: translate('پروفایل'),
-                                        path: "/profile",
+                                        label: translate('پستها'),
+                                        path: "/mypage",
                                         icon: <FontAwesomeIcon icon={faUser}/>
                                     },
                                     {
                                         label: translate('شبکه من'),
-                                        path: "/myNetwork",
+                                        path: "/followboard",
                                         icon: <FontAwesomeIcon icon={faCogs}/>
                                     },
                                     {
-                                        label: translate('لینک دعوت'),
-                                        path:  "/myLink",
+                                        label: translate('فالوبورد'),
+                                        path:  "/followboard",
                                         icon: <FontAwesomeIcon icon={faCompass}/>
                                     },
                                 ]}/>
@@ -298,16 +287,16 @@ export default class MyNetwork extends Component {
                         borderRadius:12,
                         backgroundColor:bgItemRed
                     }} >
-                        <Text style={{fontSize:12}}> {this.state.subsetList.length } شاخه </Text>
-                        <Text  style={{fontSize:12}}> {this.state.leavesCount } برگ </Text>
-                        <Text  style={{fontSize:12}}>{this.state.leavesCount+this.state.subsetList.length+1 } عضو </Text>
+                        <Text style={{fontSize:12}}> {userStore.subsetList.length } شاخه </Text>
+                        <Text  style={{fontSize:12}}> {userStore.leavesCount } برگ </Text>
+                        <Text  style={{fontSize:12}}>{userStore.leavesCount+userStore.subsetList.length+1 } عضو </Text>
                     </View>
                     <TreeView
                         style={{paddingBottom:60}}
-                        subsetList={this.state.subsetList}
+                        subsetList={userStore.subsetList}
                         level={1}
                     />
-                    {this.state.subsetList.length==0 &&(
+                    {userStore.subsetList.length==0 &&(
                         <View style={{marginTop:10}}>
                             <Text
                                 style={{textAlign:'justify',paddingHorizontal:30,fontSize:14,color:itemListText}}

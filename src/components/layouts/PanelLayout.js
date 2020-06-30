@@ -14,10 +14,7 @@ import images from "../../../public/static/assets/images";
 import persistStore from "../../stores/PersistStore";
 import {getUserProfileApi} from "../../../dataService/apiService";
 import LoadingPopUp from "../LoadingPopUp";
-import TouchableOpacity from "../../react-native/TouchableOpacity";
-import LinearProgress from '@material-ui/core/LinearProgress';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import BaseLayout from "./BaseLayout";
+
 
 const  screenMaxWidth=700;
 const PanelLayout = observer( props => {
@@ -31,8 +28,9 @@ const PanelLayout = observer( props => {
     const init=async()=> {
         if(!userStore.username) {
             await fetchStore();
+            checkToken();
         }
-        checkToken();
+
         setIsRtl(persistStore.isRtl);
 
     }

@@ -40,7 +40,7 @@ export default class newInvite extends Component {
 
     loginPanel() {
         if (persistStore.apiToken)
-            navigation.navigate('/profile');
+            navigation.navigate('/mypage');
         else
             navigation.navigate('/login');
     }
@@ -314,7 +314,6 @@ const RegentCard=observer(
                     userStore.leavesCount=leavesCount
                 })
                 .catch(err=>{
-                    debugger
                     //this.setState({loading:false});
                 });
         }

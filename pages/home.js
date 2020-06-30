@@ -27,7 +27,7 @@ export default class index extends Component {
             await fetchStore()
         }
         if (persistStore.apiToken) {
-            navigation.replace('/profile');
+            navigation.replace('/mypage');
         } else {
             this.regentCode = navigation.getParam('regentCode');
             this.getUserGeo()
@@ -94,7 +94,7 @@ export default class index extends Component {
 
     loginPanel() {
         if ( persistStore.apiToken)
-            navigation.navigate('/profile');
+            navigation.navigate('/mypage');
         else
             navigation.navigate('/login');
     }

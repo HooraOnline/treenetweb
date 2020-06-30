@@ -9,7 +9,7 @@ import {
     lightRed,
     primaryDark,
     subTextItem,
-    textItem,
+    textItem, textGray,
 } from '../src/constants/colors';
 import {globalState, persistStore,} from '../src/stores';
 import {getWidth,} from '../src/utils';
@@ -79,15 +79,13 @@ export default class LoginPage extends PureComponent {
 
     onSuccessLogin=(user)=>{
         global.width=null;//reset new panel width
-        Router.replace('/profile');
+        Router.replace('/mypage');
     }
 
     async onLogin() {
         if(this.state.username.length <2  || this.state.password.length<6){
-
             return ;
         }
-
         this.setState({loading: true});
         const data={};
         this.setState({loading:true});
@@ -369,7 +367,7 @@ export default class LoginPage extends PureComponent {
                                         {
                                             this.state.showPassword ?
                                                 <IoMdEye color={bgSuccess} size={24}/>
-                                                : <IoMdEyeOff color={bgSuccess} size={24}/>
+                                                : <IoMdEyeOff color={textItemBlack} size={24}/>
                                         }
                                     </TouchableOpacity>
                                 </View>

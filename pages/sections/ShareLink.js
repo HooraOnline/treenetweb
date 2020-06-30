@@ -1,11 +1,11 @@
-import React, {Component, useEffect} from 'react';
-import {showMassage} from "../../src/utils";
+import React, {Component} from 'react';
+import {showMassage} from "../../src//utils";
 
-import {Image, Text, TextInput, TouchableOpacity, View,} from "../../src/react-native";
-import translate from "../../src/language/translate";
+import {Text, TouchableOpacity, View,} from "../../src//react-native";
+import translate from "../../src//language/translate";
 import copy from "copy-to-clipboard";
-import {userStore} from "../../src/stores";
-import {getServerFilePath, getUserProfileApi, getUserSubsetApi, postQuery} from "../../dataService/apiService";
+import {pStore} from "../../src/stores";
+import {postQuery} from "../../dataService/apiService";
 import {
     EmailIcon,
     EmailShareButton,
@@ -13,8 +13,6 @@ import {
     FacebookShareButton,
     LinkedinIcon,
     LinkedinShareButton,
-    PinterestIcon,
-    PinterestShareButton,
     TelegramIcon,
     TelegramShareButton,
     TwitterIcon,
@@ -24,11 +22,12 @@ import {
     WhatsappIcon,
     WhatsappShareButton
 } from "react-share";
-import {bg10, bgSuccess, bg8, bgWhite, grL5, orange1,} from "../constants/colors";
+import {bg10, bg8, bgSuccess, bgWhite, grL5,} from "../../src/constants/colors";
 import images from "../../public/static/assets/images";
-import {ImageSelector} from "../components";
-import Link from "next/link";
+
 import {observer} from "mobx-react";
+import {ImageSelector} from "../../src/components";
+import {orange1} from "../../src/constants/colors";
 
 export default class ShareLink extends Component {
     constructor() {
@@ -39,30 +38,14 @@ export default class ShareLink extends Component {
         this.state = {};
     }
 
-
-    async componentDidMount() {
-        // this.getProfile();
-    }
-
-    getProfile() {
-        this.setState({loading: true});
-        getUserProfileApi()
-            .then(user => {
-                this.setState({loading: false});
-            })
-            .catch(err => {
-                this.setState({loading: false});
-            });
-    }
-
     copyLink = () => {
-        copy(userStore.invitationLink);
+        copy(pStore.cUser.invitationLink);
         showMassage(translate('finishRegister_its_copy'), 'success');
     };
 
     render() {
         return (
-            <View style={[this.props.style,{}]}>
+            <View style={[this.props.style, {}]}>
                 <Text
                     style={{
                         marginTop: 0,
@@ -70,12 +53,17 @@ export default class ShareLink extends Component {
                         fontWeight: 400,
                         fontFamily: 'IRANYekanFaNum-Bold',
                         color: bgSuccess,
-                        marginHorizontal:10
+                        marginHorizontal: 10
                     }}>
                     {translate('لینک دعوت اختصاصی شما')}
                 </Text>
 
-                <View style={ { backgroundColor:'#979A9A',borderRadius:4,alignItems:'center',justifyContent:'center'}}>
+                <View style={{
+                    backgroundColor: '#979A9A',
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
                     <View style={{
                         flexDirection: 'row',
                         marginTop: 10,
@@ -88,7 +76,7 @@ export default class ShareLink extends Component {
                             style={{
                                 verticalAlign: 'middle',
                                 fontSize: 14,
-                                backgroundColor:'#979A9A',
+                                backgroundColor: '#979A9A',
                                 fontFamily: 'IRANYekanRegular',
                                 color: bgWhite,
                                 //maxWidth:global.width-50,
@@ -96,22 +84,22 @@ export default class ShareLink extends Component {
                                 paddingHorizontal: 5,
                                 width: '100%',
                                 height: 50,
-                                padding:5,
-                                borderWidth:0,
-                                borderRadius:1,
-                                borderColor:orange1,
-                                justifyContent:'center',
+                                padding: 5,
+                                borderWidth: 0,
+                                borderRadius: 1,
+                                borderColor: orange1,
+                                justifyContent: 'center',
                             }}
                             readonly
                             numberOfLines={3}
-                            //value= {userStore.invitationLink}
+                            //value= {pStore.cUser.invitationLink}
                         >
-                            {userStore.invitationLink}
+                            {pStore.cUser.invitationLink}
                         </Text>
                     </View>
                     <InvitCard/>
 
-                    <View style={{flexDirection:'row',justifyContent:'center',marginTop:4}}>
+                    <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 4}}>
                         {/*
                     LineShareButton,
                     LivejournalShareButton,
@@ -138,7 +126,7 @@ export default class ShareLink extends Component {
                     WeiboIcon,
                     WorkplaceIcon,*/}
                         <TelegramShareButton style={{}}
-                                             url={userStore.invitationLink}
+                                             url={pStore.cUser.invitationLink}
                                              quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و برگ بگیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
@@ -146,7 +134,7 @@ export default class ShareLink extends Component {
                             <TelegramIcon size={40} round={false}/>
                         </TelegramShareButton>
                         <WhatsappShareButton style={{}}
-                                             url={userStore.invitationLink}
+                                             url={pStore.cUser.invitationLink}
                                              quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و برگ بگیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
@@ -154,7 +142,7 @@ export default class ShareLink extends Component {
                             <WhatsappIcon size={40} round={false}/>
                         </WhatsappShareButton>
                         <FacebookShareButton style={{}}
-                                             url={userStore.invitationLink}
+                                             url={pStore.cUser.invitationLink}
                                              quote={"تری نتگرام، موفقیت با سرعت نور"}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
@@ -163,7 +151,7 @@ export default class ShareLink extends Component {
                             <FacebookIcon size={40} round={false}/>
                         </FacebookShareButton>
                         <TwitterShareButton style={{}}
-                                            url={userStore.invitationLink}
+                                            url={pStore.cUser.invitationLink}
                                             quote={"تری نتگرام، موفقیت با سرعت نور"}
                                             className="share"
                                             imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
@@ -172,7 +160,7 @@ export default class ShareLink extends Component {
                             <TwitterIcon size={40} round={false}/>
                         </TwitterShareButton>
                         <LinkedinShareButton style={{}}
-                                             url={userStore.invitationLink}
+                                             url={pStore.cUser.invitationLink}
                                              quote={"تری نتگرام، موفقیت با سرعت نور"}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
@@ -180,15 +168,15 @@ export default class ShareLink extends Component {
                             <LinkedinIcon size={40} round={false}/>
                         </LinkedinShareButton>
                         <EmailShareButton style={{}}
-                                          url={userStore.invitationLink}
+                                          url={pStore.cUser.invitationLink}
                                           quote={"تری نتگرام، موفقیت با سرعت نور"}
                                           className="share"
                                           imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                                           className="share">
                             <EmailIcon size={40} round={false}/>
                         </EmailShareButton>
-                       {/* <PinterestShareButton style={{}}
-                                          url={userStore.invitationLink}
+                        {/* <PinterestShareButton style={{}}
+                                          url={pStore.cUser.invitationLink}
                                           quote={"تری نتگرام، موفقیت با سرعت نور"}
                                           className="share"
                                           imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
@@ -196,7 +184,7 @@ export default class ShareLink extends Component {
                              <PinterestIcon size={40} round={false}/>
                         </PinterestShareButton>*/}
                         <ViberShareButton style={{}}
-                                          url={userStore.invitationLink}
+                                          url={pStore.cUser.invitationLink}
                                           quote={"تری نتگرام، موفقیت با سرعت نور"}
                                           className="share"
                                           imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
@@ -230,65 +218,30 @@ export default class ShareLink extends Component {
 
 }
 
-const InvitCard=observer(props=> {
-
-    let leavesCount=0;
+export const InvitCard = observer(props => {
+    let leavesCount = 0;
     const setProfileImage = (fileName) => {
         const data = {profileImage: fileName};
         postQuery('Members/me/setProfileImage', data)
             .then(res => {
-                userStore.profileImage = res.profileImage;
-
+                pStore.cUser.profileImage = res.profileImage;
             })
             .catch(err => {
 
             })
     };
 
-   const getUserSubset=()=>{
-        getUserSubsetApi()
-            .then(subsetList=>{
-                calculateTotalSubsetsCount(subsetList);
-                userStore.branchesCount=subsetList.length;
-                userStore.leavesCount=leavesCount
-
-            })
-            .catch(err=>{
-                //this.setState({loading:false});
-            });
-    }
-    setTimeout( getUserSubset,30);
-
-    const calculateCount=(user)=>{
-        leavesCount=leavesCount+user.subsets.length;
-        for(let i=0;i<user.subsets.length;++i){
-            calculateCount(user.subsets[i]);
-        }
-    }
-    const calculateTotalSubsetsCount=(subsets)=>{
-        for(let p=0;p<subsets.length;++p){
-            calculateCount(subsets[p]);
-        }
-    }
-
     return (
         <View>
-           {/* <Link style={{}}  href={'/profil'}>
-                <Text style={{alignItems:'center', fontSize:11,color:bgWhite,marginHorizontal:0,marginBottom:0,backgroundColor:'#F1C40F',width:100,borderRadius:4}}>
-                    ویرایش کارت
-                </Text>
-            </Link>*/}
             <View style={{
                 flexDirection: 'row',
-                alignItems:'center',
+                alignItems: 'center',
                 backgroundColor: bgWhite,
                 borderRadius: 10,
-                padding:10,
+                padding: 10,
                 //maxWidth:300,
             }}>
                 <View style={{}}>
-
-
                     <ImageSelector
                         style={{
                             borderWidth: 1,
@@ -304,25 +257,25 @@ const InvitCard=observer(props=> {
                         canUpload={true}
                         autoUpload={true}
                         imageStyle={{height: 100, width: 100, borderRadius: 50}}
-                        image={userStore.profileImage}
+                        image={pStore.cUser.profileImage}
                         noImage={images.default_ProPic}
                         hideDeleteBtn={true}
                     />
 
                 </View>
-                <View style={{alignItems:'center'}}>
-                    <View style={{flexDirection: 'row', height:30,  maxWidth: 400,}}>
+                <View style={{alignItems: 'center'}}>
+                    <View style={{flexDirection: 'row', height: 30, maxWidth: 400,}}>
                         <View style={{alignItems: 'center', paddingHorizontal: 10}}>
                             <Text style={{fontSize: 12}}>شاخه</Text>
-                            <Text style={{fontSize: 12}}>{userStore.branchesCount}</Text>
+                            <Text style={{fontSize: 12}}>{pStore.branchesCount}</Text>
                         </View>
                         <View style={{alignItems: 'center', paddingHorizontal: 10}}>
                             <Text style={{fontSize: 12}}>برگ</Text>
-                            <Text style={{fontSize: 12}}>{userStore.leavesCount}</Text>
+                            <Text style={{fontSize: 12}}>{pStore.leavesCount}</Text>
                         </View>
                         <View style={{alignItems: 'center', paddingHorizontal: 10}}>
                             <Text style={{fontSize: 12}}>عضو</Text>
-                            <Text style={{fontSize: 12}}>{userStore.branchesCount+userStore.leavesCount+1}</Text>
+                            <Text style={{fontSize: 12}}>{pStore.branchesCount + pStore.leavesCount + 1}</Text>
                         </View>
                     </View>
                     <Text
@@ -335,7 +288,7 @@ const InvitCard=observer(props=> {
 
 
                         }}>
-                        {userStore.avatar || 'عضو فعال  تری نتگرام'}
+                        {pStore.cUser.avatar || 'عضو فعال  تری نتگرام'}
                     </Text>
 
                 </View>

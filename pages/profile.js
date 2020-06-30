@@ -12,12 +12,12 @@ import {Text, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
-import {getUserProfileApi, logoutApi, postQuery} from "../dataService/apiService";
+import { logoutApi, postQuery} from "../dataService/apiService";
 import {observer} from "mobx-react";
 import Image from "../src/react-native/Image";
 
 
-const HOME_TYPE = 1;
+
 @observer
 export default class Profile extends Component {
     constructor() {
@@ -48,34 +48,9 @@ export default class Profile extends Component {
 
    async componentDidMount  () {
 
-       try{
-           this.getProfile();
-       }catch (e) {
-
-       }
-
-
 
     }
-     getProfile(){
 
-        getUserProfileApi()
-            .then(user=>{
-                /*this.setState({
-                    userId:user.id,
-                    username:user.username,
-                    firstName:user.firstName,
-                    lastName:user.lastName,
-                    birthDate:user.birthDate,
-                    profileImage:user.profileImage,
-                    gender:user.gender,
-
-                });*/
-            })
-            .catch(err => {
-                this.setState({loading: false});
-            });
-     }
 
     setProfileImage = (fileName) => {
         const data = {profileImage: fileName};
@@ -146,9 +121,9 @@ export default class Profile extends Component {
                                   <View style={{paddingHorizontal:20}}>
                                       <NavBar navButtons={[
                                           {
-                                              label: translate('پروفایل'),
-                                              path: "/profile",
-                                              icon: <FontAwesomeIcon icon={faUser} />
+                                              label: translate('پستها'),
+                                              path: "/mypage",
+                                              icon: <FontAwesomeIcon icon={faUser}/>
                                           },
                                           {
                                               label: translate('شبکه من'),
@@ -156,8 +131,8 @@ export default class Profile extends Component {
                                               icon: <FontAwesomeIcon icon={faCogs} />
                                           },
                                           {
-                                              label: translate('لینک دعوت'),
-                                              path: "/myLink",
+                                              label: translate('فالوبورد'),
+                                               path: "/followboard",
                                               icon: <FontAwesomeIcon icon={faCompass} />
                                           },
                                       ]}/>

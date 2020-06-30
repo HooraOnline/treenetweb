@@ -33,7 +33,7 @@ export default class registered_new extends Component {
     }
     onSuccessLogin=(user)=>{
         global.width=null;
-        Router.replace('/profile');
+        Router.replace('/mypage');
     }
     login() {
         this.setState({loading: true});

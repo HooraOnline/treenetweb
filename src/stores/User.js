@@ -1,44 +1,42 @@
 import {action, observable} from 'mobx';
 
 class UserStore {
-    @observable cUser=null;
-    @observable userID= null ;
-    @observable username= null ;
-    @observable beforloginDate=null;
-    @observable dateYear= null ;
-    @observable birthDate= null ;
-    @observable avatar= null ;
-    @observable displayName= null ;
-    @observable firstName= null ;
-    @observable gender= null ;
-    @observable invitationCode=null ;
-    @observable invitationLink=null ;
-    @observable lastName=null ;
-    @observable location=null ;
-    @observable loginDate=null ;
-    @observable mobile=null ;
-    @observable mobileVerified=null ;
-    @observable email=null ;
-    @observable emailVerified=null ;
-    @observable permissionList=null ;
-    @observable regentId=null ;
-    @observable roleList=null ;
-    @observable token=null ;
-    @observable cdate=null ;
-    @observable udate=null ;
-    @observable countryCode=null ;
-    @observable birthYear=null ;
-    @observable fullName=null ;
-    @observable shortMobile=null ;
+
+    @observable cUser='';
+    @observable userID= '' ;
+    @observable username= '' ;
+    @observable beforloginDate='';
+    @observable dateYear= '' ;
+    @observable birthDate= '' ;
+    @observable avatar= '' ;
+    @observable displayName= '' ;
+    @observable fullName= '' ;
+    @observable gender= '' ;
+    @observable invitationCode='' ;
+    @observable invitationLink='' ;
+    @observable location='' ;
+    @observable loginDate='' ;
+    @observable mobile='' ;
+    @observable mobileVerified='' ;
+    @observable email='' ;
+    @observable emailVerified='' ;
+    @observable permissionList='' ;
+    @observable regentId='' ;
+    @observable roleList='' ;
+    @observable token='' ;
+    @observable cdate='' ;
+    @observable udate='' ;
+    @observable countryCode='' ;
+    @observable birthYear='' ;
+    @observable fullName='' ;
+    @observable shortMobile='' ;
     @observable branchesCount=0 ;
     @observable leavesCount=0 ;
+    @observable subsetList=[];
+    @observable story='';
     @action
     setUser(user) {
-        let contryCodeX=user.geoInfo?user.geoInfo.calling_code:'98';
-        let birthYear=user.birthDate?new Date(user.birthDate).getFullYear():'';
-        let shortMobile=user.mobile?user.mobile.replace(contryCodeX+'-',''):'';
-        let seperator=user.firstName && user.lastName?' ':''
-        let fullName=(user.firstName ||'') +seperator+ (user.lastName || '');
+
         this.user=user;
         this.userID= user.id ;
         this.username= user.username ;
@@ -46,16 +44,15 @@ class UserStore {
         this.inviteProfileImage=user.inviteProfileImage;
         this.avatar=user.avatar;
         this.beforloginDate=user.beforloginDate;
-        this.birthDate= user.birthDate || '' ;
-        this.birthYear=birthYear|| '' ;
+        this.birthDate= user.birthDate ;
+        this.birthYear=user.birthYear ;
         this.age=user.birthDate?(new Date()).getFullYear()-birthYear:'';
         this.displayName= user.displayNme|| '' ;
-        this.firstName= user.firstName|| '' ;
-        this.lastName=user.lastName|| '' ;
-        this.fullName=fullName;
+        this.fullName= user.fullName|| '' ;
+        this.fullName=user.fullName;
         this.gender= user.gender|| '' ;
         this.invitationCode=user.invitationCode|| '' ;
-        this.invitationLink=`https://treenetgram.com/?invitationCode=${user.invitationCode}`
+        this.invitationLink=user.invitationLink
         this.location=user.location ;
         this.loginDate=user.loginDate ;
         this.countryCode=contryCodeX;
@@ -70,8 +67,7 @@ class UserStore {
         this.token=user.token ;
         this.cdate=user.cdate ;
         this.udate=user.udate ;
-
-
+        this.story=user.story ;
     }
 
     @action
@@ -82,32 +78,32 @@ class UserStore {
 
     @action
     setUnitBalance(unitBalance) {
-        this.UnitBalance = unitBalance ? parseFloat(unitBalance) : null;
+        this.UnitBalance = unitBalance ? parseFloat(unitBalance) : 0;
     }
 
     clear() {
-        this.token=null ;
-        this.cUser=null,
-        this.userID= null ;
-        this.username= null ;
-        this.birthDate= null ;
-        this.birthDate= null ;
-        this.displayName= null ;
-        this.firstName= null ;
-        this.gender= null ;
-        this.invitationCode=null ;
-        this.invitationLink=null ;
-        this.lastName=null ;
-        this.location=null ;
-        this.loginDate=null ;
-        this.mobile=null ;
-        this.mobileVerified=null ;
-        this.email=null ;
-        this.emailVerified=null ;
-        this.permissionList=null ;
-        this.regentId=null ;
-        this.roleList=null ;
-        this.udate=null ;
+        this.token='' ;
+        this.cUser='',
+        this.userID= '' ;
+        this.username= '' ;
+        this.birthDate= '' ;
+        this.birthDate= '' ;
+        this.displayName= '' ;
+        this.fullName= '' ;
+        this.gender= '' ;
+        this.invitationCode='' ;
+        this.invitationLink='' ;
+        this.location='' ;
+        this.loginDate='' ;
+        this.mobile='' ;
+        this.mobileVerified='' ;
+        this.email='' ;
+        this.emailVerified='' ;
+        this.permissionList='' ;
+        this.regentId='' ;
+        this.roleList='' ;
+        this.udate='' ;
+        this.subsetList='';
     }
 }
 

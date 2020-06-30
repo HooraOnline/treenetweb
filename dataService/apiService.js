@@ -6,6 +6,7 @@ import { persistStore, userStore} from "../src/stores";
 import {deleteCookie, fetchStore, navigation, showMassage,} from "../src/utils";
 import fetch from "isomorphic-unfetch";
 import axios from 'axios';
+import pStore, {Store} from "../src/stores/PublicStore";
 
 export let currentUser = {};
 //urlparams={username:1232}
@@ -29,11 +30,16 @@ export const getById = function (apiPath, id, filds, include) {
 
 
 
-export const postQuery = function (apiPath, entity) {
+export const postQuery = function (apiPath, entity,storKey) {
     entity.udate = new Date();
   if (!entity.id)
     entity.cdate = new Date();
-  return Api.post(apiPath, entity);
+
+  return Api.post(apiPath, entity)
+      .then(res=>{
+          if(storKey) pStore[storKey]=res;
+         return res
+      });
 };
 
 
@@ -318,27 +324,79 @@ export const resetPasswordApi = function (email) {
 
 //**************************************user******************************************
 
+
+let leavesCount=0
+const calculateCount=(user)=>{
+    leavesCount=leavesCount+user.subsets.length;
+    for(let i=0;i<user.subsets.length;++i){
+        calculateCount(user.subsets[i]);
+    }
+}
+const calculateTotalSubsetsCount=(subsets)=>{
+    for(let p=0;p<subsets.length;++p){
+        calculateCount(subsets[p]);
+    }
+}
+
 //for get current user
-export const getUserProfileApi = function (fields, include) {
-  let params = {};
-  params.filter = {};
-  //params.userId22 = userId;
-  params.filter.fields = fields;
-  params.filter.include = include;
-  return  Api.get('members/me/getProfile', params)
+
+
+
+export const loginApi= function (username,password) {
+  return  postQuery('Members/me/login',{username,password})
       .then(user=>{
-        userStore.setUser(user);
-        persistStore.notChangePassword=user.notChangePassword;
-        return user
-      }).catch((error)=>{
-          debugger
-          if(error.errorKey=='fa_server_member_user_notExist'){
-              persistStore.notChangePassword=false;
-              persistStore.userRegisterbefor=false;
-              persistStore.clearStore();
-          }
-          throw error
+          persistStore.apiToken=user.token;
+          Api.setToken(user.token);
+          return user;
       })
+}
+export const logoutApi=function (username,password) {
+    if(persistStore.notChangePassword){
+        showMassage('قبل از خروج، نام کاربری و رمز عبور خود را با لمس نوار زرد رنگ بالا عوض کنید.','info')
+        return;
+    }
+    navigation.navigate('home');
+    persistStore.clearStore();
+    userStore.clear();
+
+}
+
+export const getUserProfileApi = function (fields, include) {
+    let params = {};
+    params.filter = {};
+    //params.userId22 = userId;
+    params.filter.fields = fields;
+    params.filter.include = include;
+    return  Api.get('members/me/getProfile', params)
+        .then(user=>{
+            pStore.cUser=user;
+            persistStore.notChangePassword=user.notChangePassword;
+            getUserSubsetApi()
+                .then(subsetList=>{
+                    debugger
+                    leavesCount=0;
+                    pStore.sebsetList=subsetList;
+                    calculateTotalSubsetsCount(subsetList);
+                    pStore.branchesCount=subsetList.length;
+                    pStore.leavesCount=leavesCount;
+
+                })
+                .catch(err=>{
+                    //this.setState({loading:false});
+                });
+            return user
+        }).catch((error)=>{
+            debugger
+            if(error.errorKey=='fa_server_member_user_notExist'){
+                persistStore.notChangePassword=true;
+                persistStore.userRegisterbefor=false;
+
+            }
+            persistStore.clearStore();
+            navigation.navigate('login');
+
+        })
+
 };
 export const getUserSubsetApi = (userId)=> {
     let params = {};
@@ -352,25 +410,7 @@ export const getUserSubsetApi = (userId)=> {
         });
 };
 
-export const loginApi= function (username,password) {
-  return  postQuery('Members/me/login',{username,password})
-      .then(user=>{
-          persistStore.apiToken=user.token;
-          Api.setToken(user.token);
-          userStore.setUser(user);
-      })
-}
-export const logoutApi=function (username,password) {
-    if(persistStore.notChangePassword){
-        showMassage('قبل از خروج، نام کاربری و رمز عبور خود را با لمس نوار زرد رنگ بالا عوض کنید.','info')
-        return;
-    }
-    navigation.navigate('home');
-    deleteCookie('token');
-    persistStore.clearStore();
-    userStore.clear();
 
-}
 
 
 
