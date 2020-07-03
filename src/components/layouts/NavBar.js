@@ -4,7 +4,7 @@ import "./NavBar.scss";
 import NavButton from "./NavButton";
 
 const NavBar = props => (
-  <div className="NavBar" style={{marginTop:10,marginBottom:10}}>
+  <div className="NavBar" style={{}}>
     {props.navButtons.map(button => (
       <NavButton
         key={button.path}

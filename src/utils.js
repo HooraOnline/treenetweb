@@ -481,9 +481,9 @@ export function width(){
 
 export function getHeight(){
 
-    let windowHeght = window.screen.height < window.outerHeight ?
+    let windowHeight = window.screen.height < window.outerHeight ?
         window.screen.height : window.outerHeight;
-    return  windowHeght;
+    return  windowHeight;
 }
 export function getWidth(){
 

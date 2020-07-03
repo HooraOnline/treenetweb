@@ -89,18 +89,18 @@ const PanelLayout = observer( props => {
                 flexDirection:'column',
                 position:'relative'
             }}>
-                <View style={[props.style,{width:'100%',}]}>
+                <View style={[props.style,{width:'100%',height:'100%'}]}>
 
 
                     <div id={"header"} style={{position22:'fixed',maxHeight:50, top:0,width:globalState.width,zIndex:4,marginBottom:0}}>
                         {props.header}
                     </div>
 
-                    <View id={'body'} style={{flex:1,width:globalState.width,marginTop:props.header?0:0,marginBottom:props.footer?60:0}}>
+                    <View id={'body'} style={{flex:1,width:globalState.width,height:'100%', marginTop:props.header?0:0,marginBottom:props.footer?60:0}}>
 
                         {props.children}
                     </View>
-                    <div style={{position:'fixed',bottom:0,width:globalState.width,zIndex:40,backgroundColor:bgScreen,paddingTop:10, }}>
+                    <div style={{position:'fixed',bottom:0,width:globalState.width,zIndex:40,backgroundColor:bgScreen,paddingTop:5,paddingBottom:5 }}>
                         {props.footer}
                     </div>
 

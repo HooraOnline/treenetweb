@@ -36,7 +36,6 @@ export default class BgImageChacheProgress extends PureComponent{
             } );
     }
     setImag=()=>{
-
         let source=this.props.source;
         if(!source){
             this.setState({source:undefined});
@@ -64,7 +63,9 @@ export default class BgImageChacheProgress extends PureComponent{
         this.setImag();
        let {props,style={}} = this.props;
         return (
-            <ImageBackground  source={this.state.source} {...props} style={style}  />
+            <ImageBackground  source={this.state.source} {...props} style={style}  >
+                {this.props.children}
+            </ImageBackground>
         )
     }
 

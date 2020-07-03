@@ -2,11 +2,14 @@ import {action, observable} from 'mobx';
 import {PersistStore} from "./PersistStore";
 
 class PublicStore {
-
+    @observable param1=null;
+    @observable param2=null;
     @observable cUser={};
     @observable subsetList=[];
     @observable leavesCount=0;
     @observable branchesCount=0;
+    @observable userPosts=[];
+
 
     @action
     setUser(user) {

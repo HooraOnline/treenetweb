@@ -1,23 +1,37 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {globalState, persistStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {ImageSelector, Toolbar} from "../src/components";
 
 import accountsStore from "../src/stores/Accounts";
-import {navigation} from "../src/utils";
+import {navigation, setScreenSize, waitForData} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg8, bgSuccess, bgWhite, orange1, success, textItem} from "../src/constants/colors";
+import {
+    bg8,
+    bgEmpty,
+    bgScreen,
+    bgSuccess,
+    bgWhite, border, borderLight,
+    orange1, primary, primaryDark,
+    success,
+    textGray,
+    textItem, yellowmin
+} from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
-import {Text, TouchableOpacity, View,} from "../src/react-native";
+import {FlatList, Text, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
-import {logoutApi, postQuery} from "../dataService/apiService";
+import {getFileUri, logoutApi, postQuery} from "../dataService/apiService";
 import {observer} from "mobx-react";
 import Image from "../src/react-native/Image";
 import pStore from "../src/stores/PublicStore";
 import { IoIosLink } from "react-icons/io";
-
+import {set} from "mobx";
+import Api from "../dataService/apiCaller";
+import { FaStar,FaWindowClose } from "react-icons/fa";
+import { IoMdHeartEmpty ,IoMdShare,} from "react-icons/io";
+import { FaRegCommentDots } from "react-icons/fa";
 
 @observer
 export default class mypage extends Component {
@@ -51,18 +65,6 @@ export default class mypage extends Component {
     }
 
 
-    setProfileImage = (fileName) => {
-        const data = {profileImage: fileName};
-        postQuery('Members/me/setProfileImage', data)
-            .then(res => {
-                pStore.cUser.profileImage = res.profileImage;
-                this.setState({loading: false});
-            })
-            .catch(err => {
-                this.setState({loading: false});
-            })
-    };
-
     render() {
 
         const toolbarStyle = {
@@ -77,7 +79,7 @@ export default class mypage extends Component {
         };
 
 
-        let {story} = pStore.cUser;
+
 
         return (
             //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
@@ -161,69 +163,11 @@ export default class mypage extends Component {
                                  ]}/>
                              </View>
                          }>
-                <View style={{padding: 0, marginTop: persistStore.notChangePassword ? 30 : 0, alignItems: 'center'}}>
-                    <View style={{width: '100%', padding: 24, marginTop: 0, maxWidth: 500}}>
-                        <UserCard/>
-                        <View style={{
-                            width: '100%',
-                            flexDirection: 'row',
-                            marginVertical: 4,
-                            marginTop: 8,
-                            justifyContent: 'space-between'
-                        }}>
-                            <Text style={{fontSize: 12, textAlign: 'justify',color:textItem}}>{story}</Text>
-                        </View>
-                        <View style={{flexDirection:'row'}}>
-                            <TouchableOpacity
-                                onPress={()=>{navigation.navigate('edit_profile')}}
-                                style={{
-                                    flex:1,
-                                    marginTop:10,
-                                    margin:10,
-                                    width:'100%',
-                                    maxWidth:300,
-                                    borderRadius:8,
-                                    flexDirection:'row',
-                                    justifyContent:'center',
-                                    padding:10,
-                                    backgroundColor: orange1
-                                }}>
-                                <Image source={images.ic_edit} style={{
-                                    width: 24,
-                                    height: 24,
-                                    tintColor:bgWhite
-                                }}/>
-                                <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={()=>{navigation.navigate('myLink')}}
-                                style={{
-                                    flex:1,
-                                    marginTop:10,
-                                    margin:10,
-                                    width:'100%',
-                                    maxWidth:300,
-                                    borderRadius:8,
-                                    flexDirection:'row',
-                                    justifyContent:'center',
-                                    padding:10,
-                                    backgroundColor: bgSuccess
-                                }}>
-                                <IoIosLink
-                                    color={bgWhite}
-                                    style={{
-                                        width: 24,
-                                        height: 24,
-                                        tintColor:bgWhite
-                                    }}
-                                />
-
-                                <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>شبکه سازی</Text>
-                            </TouchableOpacity>
-                        </View>
-
+                <View style={{flex:1, marginTop: persistStore.notChangePassword ? 30 : 0, alignItems: 'center'}}>
+                    <UserCard style={{maxWidth: 500,paddingTop: 25,paddingHorizontal:16}}/>
+                    <View style={{flex:1,width:'100%',backgroundColor:bgWhite,minHeight:600}}>
+                        <MyPosts/>
                     </View>
-
                 </View>
             </PanelLayout>
         )
@@ -233,6 +177,7 @@ export default class mypage extends Component {
 
 export const UserCard = observer(props => {
     let leavesCount = 0;
+    let {story} = pStore.cUser;
     const setProfileImage = (fileName) => {
         const data = {profileImage: fileName};
         postQuery('Members/me/setProfileImage', data)
@@ -245,23 +190,24 @@ export const UserCard = observer(props => {
     };
 
     return (
-        <View>
+        <View style={props.style}>
             <View style={{
                 width: '100%',
                 flexDirection: 'row',
                 //backgroundColor: bgWhite,
                 borderRadius: 10,
+                alignItems: 'center',
             }}>
-                <View style={{alignItems: 'center'}}>
+
                     <ImageSelector
                         style={{
-                            borderWidth: 1,
                             borderColor: bg8,
-                            height: 100,
-                            width: 100,
-                            borderRadius: 50,
+                            height: 90,
+                            width: 90,
+                            borderRadius: 45,
                             alignSelf: 'center'
                         }}
+                        folderName={'member'}
                         onUplodedFile={(fileName) => {
                             setProfileImage(fileName);
                         }}
@@ -272,8 +218,8 @@ export const UserCard = observer(props => {
                         noImage={images.default_ProPic}
                         hideDeleteBtn={true}
                     />
-                </View>
-                <View style={{width: 30}}/>
+
+                <View style={{width: 20}}/>
                 <View style={{alignItems: 'center'}}>
                     <View style={{flexDirection: 'row', height: 30, maxWidth: 500, justifyContent: 'space-around'}}>
                         <View style={{alignItems: 'center', paddingHorizontal: 15}}>
@@ -303,6 +249,257 @@ export const UserCard = observer(props => {
                     </Text>
                 </View>
             </View>
+            <View style={{
+                width: '100%',
+                flexDirection: 'row',
+                marginVertical: 4,
+                marginTop: 5,
+                justifyContent: 'space-between'
+            }}>
+                <Text style={{fontSize: 12, textAlign: 'justify',color:textItem}}>{story}</Text>
+            </View>
+            <View style={{flexDirection:'row'}}>
+                <TouchableOpacity
+                    onPress={()=>{navigation.navigate('edit_profile')}}
+                    style={{
+                        flex:1,
+                        margin:10,
+                        width:'100%',
+                        maxWidth:300,
+                        borderRadius:8,
+                        flexDirection:'row',
+                        justifyContent:'center',
+                        padding:10,
+                        backgroundColor: orange1
+                    }}>
+                    <Image source={images.ic_edit} style={{
+                        width: 24,
+                        height: 24,
+                        tintColor:bgWhite
+                    }}/>
+                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=>{navigation.navigate('myLink')}}
+                    style={{
+                        flex:1,
+                        margin:10,
+                        width:'100%',
+                        maxWidth:300,
+                        borderRadius:8,
+                        flexDirection:'row',
+                        justifyContent:'center',
+                        padding:10,
+                        backgroundColor: bgSuccess
+                    }}>
+                    <IoIosLink
+                        color={bgWhite}
+                        style={{
+                            width: 24,
+                            height: 24,
+                            tintColor:bgWhite
+                        }}
+                    />
+
+                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>شبکه سازی</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+
+    )
+});
+
+export const MyPosts = observer(props => {
+    const [loading, setLoading] = useState(false);
+    const [itemWidth, setItemWidth] = useState(100);
+    const [posts, setPosts] = useState([{image:images.ic_Social_Telegram}]);
+    const [postList, setPostList] = useState([]);
+    const [selectedItem, setSelectedItem] = useState(null);
+    useEffect(() => {
+
+        onResizeScreen();
+        getUserPost();
+    },  [postList]);
+    const onResizeScreen=()=> {
+        setItemWidth(global.width/3-4)
+        document.body.onresize = () => {
+            setItemWidth(global.width/3-4)
+        };
+    }
+
+
+
+    const getUserPost =(fields, include)=> {
+        return  Api.post('posts/me/getPosts')
+            .then(posts=>{
+                let userPosts=[{file:images.ic_add}].concat(posts);
+                waitForData(()=>setPostList(userPosts));
+                pStore.userPosts=userPosts;
+            }).catch((error)=>{
+                setloading(false)
+            });
+    };
+
+    const renderSelected=(item)=>{
+        if(!selectedItem || selectedItem.id!==item.id)
+            return null;
+        return(
+            <View style={{flex:1,
+                width:global.width-2,
+                alignItems:'center',
+                borderWidth:1,
+                borderColor:primaryDark,
+                padding:10,
+                borderRadius:12,
+            }}>
+                <View
+                    style={{
+                        flex:1,
+                        alignItems:'center',
+                        justifyContent:'center',
+                        width:'100%',
+                        margin:1,
+                        position:'relative',
+                    }}>
+                    {selectedItem.isSpecial &&(
+                        <FaStar
+                            size={30}
+                            color={yellowmin}
+                            style={{
+                                position:'absolute',
+                                top:5,
+                                left:5
+                            }}
+                        />
+
+                    )}
+                    <TouchableOpacity
+                        onPress={()=>setSelectedItem(null)}
+                    >
+                        <FaWindowClose
+                            size={30}
+                            color={primary}
+                            style={{
+                                position:'absolute',
+                                top:5,
+                                right:5
+                            }}
+                        />
+                    </TouchableOpacity>
+                    <img
+                        src={getFileUri('post',selectedItem.file)}
+                        style={{
+                            maxWidth:global.width-10,
+                            height:'100%',
+                        }}
+                    />
+                </View>
+                <View style={{flex:1,padding:10,paddingBottom:30}}>
+                    <Text style={{ fontSize:12,}}>{selectedItem.text}</Text>
+                    <View style={{flex:1,flexDirection:'row'}}>
+                        <IoMdHeartEmpty size={25} style={{margin:10}}/>
+                        <IoMdShare size={25} style={{margin:10}}/>
+                        <FaRegCommentDots size={25} style={{margin:10}}/>
+
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
+    return (
+        <View style={{flex:1,marginTop:2}}>
+            <FlatList
+                loading={loading}
+                style={{justifyContent:'center'}}
+                keyExtractor={(item, index) => index.toString()}
+                data={postList}
+                flexWrap
+                ListEmptyComponent={null}
+
+                renderItem={({item, index}) =>{
+                    if(index==0)
+                        return(
+                            <ImageSelector
+                                style={{
+                                    alignItems:'center',
+                                    justifyContent:'center',
+                                    width:itemWidth,
+                                    height:itemWidth,
+                                    borderRadius:4,
+                                    margin:2,
+                                    backgroundColor:textGray
+                                }}
+                                folderName={'post'}
+                                onUplodedFile={(fileName) => {
+                                    pStore.param1=fileName;
+                                    navigation.navigate('addpost');
+
+                                }}
+                                onSelectFile={(files,formData,file0,filebase64)=>{
+                                    pStore.param1=files;
+                                    pStore.param2=filebase64;
+                                    //navigation.navigate('addpost')
+                                }}
+
+                                canUpload={true}
+                                autoUpload={true}
+                                imageStyle={{height: 100, width: 100, borderRadius: 50}}
+                                image={item.file}
+                                noImage={images.default_ProPic}
+                                hideDeleteBtn={true}
+                            >
+                                <View style={{flex:1,width:'100%', height:'100%',justifyContent:'center',alignItems:'center'}}>
+                                    <Text style={{fontWeight:800,fontSize:14,}} >New Post</Text>
+                                </View>
+                            </ImageSelector>
+                        )
+
+                    return (
+                        <View>
+                            {(!selectedItem || selectedItem.id!==item.id) &&(
+                                <TouchableOpacity
+                                    onPress={()=>setSelectedItem(item)}
+                                    style={{
+                                        alignItems:'center',
+                                        justifyContent:'center',
+                                        width:itemWidth,
+                                        height:itemWidth,
+                                        borderRadius:4,
+                                        borderWidth:0.4,
+                                        borderColor:borderLight,
+                                        margin:1,
+                                        position:'relative'
+                                    }}>
+                                    {item.isSpecial &&(
+                                        <FaStar
+                                            size={30}
+                                            color={yellowmin}
+                                            style={{
+                                                position:'absolute',
+                                                top:5,
+                                                left:5
+                                            }}
+                                        />
+                                    )}
+                                    <Image
+                                        source={getFileUri('post',item.file)}
+                                        style={{
+                                            width:'100%',
+                                            height:'100%',
+
+                                        }}
+                                    />
+                                </TouchableOpacity>
+                            )
+                            }
+
+                            {renderSelected(item)}
+                        </View>
+
+                    )
+                } }
+            />
         </View>
 
     )

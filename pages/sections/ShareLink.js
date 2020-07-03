@@ -251,6 +251,7 @@ export const InvitCard = observer(props => {
                             borderRadius: 50,
                             alignSelf: 'center'
                         }}
+                        folderName={'member'}
                         onUplodedFile={(fileName) => {
                             setProfileImage(fileName);
                         }}

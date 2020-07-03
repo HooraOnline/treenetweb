@@ -103,6 +103,7 @@ export default class index extends Component {
         persistStore.userLanguageKey= lng.key;
         persistStore.userLanguageId=lng.index;
         persistStore.isRtl = lng.rtl;
+        persistStore.direction = lng.rtl?'rtl':'ltr';
         this.setState({languageIndex: persistStore.userLanguageId});
     }
 

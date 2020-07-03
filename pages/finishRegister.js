@@ -59,6 +59,7 @@ export default class FinishRegister extends Component {
 
                     <ImageSelector
                         style={{}}
+                        folderName={'member'}
                         canUpload={true}
                         autoUpload={true}
                         imageStyle={{height: 150, width: 150, borderRadius: 75}}

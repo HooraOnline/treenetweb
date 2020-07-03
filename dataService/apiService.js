@@ -373,7 +373,6 @@ export const getUserProfileApi = function (fields, include) {
             persistStore.notChangePassword=user.notChangePassword;
             getUserSubsetApi()
                 .then(subsetList=>{
-                    debugger
                     leavesCount=0;
                     pStore.subsetList=subsetList;
                     calculateTotalSubsetsCount(subsetList);
@@ -386,7 +385,6 @@ export const getUserProfileApi = function (fields, include) {
                 });
             return user
         }).catch((error)=>{
-            debugger
             if(error.errorKey=='fa_server_member_user_notExist'){
                 persistStore.notChangePassword=true;
                 persistStore.userRegisterbefor=false;

@@ -308,7 +308,6 @@ const RegentCard=observer(
         const getUserSubset=()=>{
             getUserSubsetApi(regent.id)
                 .then(subsetList=>{
-                    debugger;
                     calculateTotalSubsetsCount(subsetList);
                     userStore.branchesCount=subsetList.length;
                     userStore.leavesCount=leavesCount

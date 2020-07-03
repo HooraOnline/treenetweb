@@ -38,12 +38,11 @@ export default class ImageSelector extends PureComponent {
         this.props.onRemoveImage && this.props.onRemoveImage(this.state.selectedImage || this.state.image);
     }
 
-   uploadFile(files,fileData){
+   uploadFile(files){
       globalState.showBgLoading();
-       upload(files, 'member', (r)=>{console.log(r)})
+       upload(files, this.props.folderName, (r)=>{console.log(r)})
            .then(result => {
                console.log(result);
-               window.s111=result
                if(result.result && result.result.fields && result.result.fields.name && result.result.fields.name[0]){
                    const fileName=result.result.fields.name[0];
                    this.setState({image: fileName,});
@@ -98,7 +97,7 @@ export default class ImageSelector extends PureComponent {
                             this.props.onSelectFile && this.props.onSelectFile(formData,file0,url,filebase64);
                             this.setState({selectedImage:url});
                             if(this.props.autoUpload){
-                               this.uploadFile(files,formData)
+                               this.uploadFile(files)
 
                             }
 

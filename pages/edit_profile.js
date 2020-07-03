@@ -189,6 +189,7 @@ export default class edit_profile extends Component {
                                 borderRadius: 50,
                                 alignSelf: 'center'
                             }}
+                            folderName={'member'}
                             canUpload={true}
                             autoUpload={true}
                             imageStyle={{height:100,width:100,borderRadius:50}}
@@ -233,7 +234,6 @@ export default class edit_profile extends Component {
                                     style={{flex:1,paddingHorizontal:5,paddingVertical:5,paddingTop:7}}
                                     placeholder={translate("fastRegister_mobile_number")}
                                     value={this.state.shortMobile}
-
                                     onChangeText={text => {
                                         text = mapNumbersToEnglish(text);
                                         if(text.length>1 && text.indexOf(0)==0){

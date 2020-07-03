@@ -155,6 +155,7 @@ export default class Profile extends Component {
                                 borderRadius: 50,
                                 alignSelf: 'center'
                             }}
+                            folderName={'member'}
                             canUpload={true}
                             autoUpload={true}
                             imageStyle={{height: 100, width: 100, borderRadius: 50}}
