@@ -340,73 +340,6 @@ export const MyPosts = observer(props => {
             });
     };
 
-    const renderSelected=(item)=>{
-        if(!selectedItem || selectedItem.id!==item.id)
-            return null;
-        return(
-            <View style={{flex:1,
-                width:global.width-2,
-                alignItems:'center',
-                borderWidth:1,
-                borderColor:primaryDark,
-                padding:10,
-                borderRadius:12,
-            }}>
-                <View
-                    style={{
-                        flex:1,
-                        alignItems:'center',
-                        justifyContent:'center',
-                        width:'100%',
-                        margin:1,
-                        position:'relative',
-                    }}>
-                    {selectedItem.isSpecial &&(
-                        <FaStar
-                            size={30}
-                            color={yellowmin}
-                            style={{
-                                position:'absolute',
-                                top:5,
-                                left:5
-                            }}
-                        />
-
-                    )}
-                    <TouchableOpacity
-                        onPress={()=>setSelectedItem(null)}
-                    >
-                        <FaWindowClose
-                            size={30}
-                            color={primary}
-                            style={{
-                                position:'absolute',
-                                top:5,
-                                right:5
-                            }}
-                        />
-                    </TouchableOpacity>
-                    <img
-                        src={getFileUri('post',selectedItem.file)}
-                        style={{
-                            maxWidth:global.width-10,
-                            height:'100%',
-                        }}
-                    />
-                </View>
-                <View style={{flex:1,padding:10,paddingBottom:30}}>
-                    <Text style={{ fontSize:12,}}>{selectedItem.text}</Text>
-                    <View style={{flex:1,flexDirection:'row'}}>
-                        <IoMdHeartEmpty size={25} style={{margin:10}}/>
-                        <IoMdShare size={25} style={{margin:10}}/>
-                        <FaRegCommentDots size={25} style={{margin:10}}/>
-
-                    </View>
-                </View>
-            </View>
-        )
-    }
-
     return (
         <View style={{flex:1,marginTop:2}}>
             <FlatList
@@ -456,46 +389,46 @@ export const MyPosts = observer(props => {
                         )
 
                     return (
-                        <View>
-                            {(!selectedItem || selectedItem.id!==item.id) &&(
-                                <TouchableOpacity
-                                    onPress={()=>setSelectedItem(item)}
+                        <TouchableOpacity
+                            onPress={()=>{
+                                item.member={
+                                    profileImage:pStore.cUser.profileImage,
+                                    username:pStore.cUser.username,
+                                    avatar:pStore.cUser.avatar,
+                                };
+                                navigation.navigate('edit_post',{post:item});
+                            }}
+                            style={{
+                                alignItems:'center',
+                                justifyContent:'center',
+                                width:itemWidth,
+                                height:itemWidth,
+                                borderRadius:4,
+                                borderWidth:0.4,
+                                borderColor:borderLight,
+                                margin:1,
+                                position:'relative'
+                            }}>
+                            {item.isSpecial &&(
+                                <FaStar
+                                    size={30}
+                                    color={yellowmin}
                                     style={{
-                                        alignItems:'center',
-                                        justifyContent:'center',
-                                        width:itemWidth,
-                                        height:itemWidth,
-                                        borderRadius:4,
-                                        borderWidth:0.4,
-                                        borderColor:borderLight,
-                                        margin:1,
-                                        position:'relative'
-                                    }}>
-                                    {item.isSpecial &&(
-                                        <FaStar
-                                            size={30}
-                                            color={yellowmin}
-                                            style={{
-                                                position:'absolute',
-                                                top:5,
-                                                left:5
-                                            }}
-                                        />
-                                    )}
-                                    <Image
-                                        source={getFileUri('post',item.file)}
-                                        style={{
-                                            width:'100%',
-                                            height:'100%',
+                                        position:'absolute',
+                                        top:5,
+                                        left:5
+                                    }}
+                                />
+                            )}
+                            <Image
+                                source={getFileUri('post',item.file)}
+                                style={{
+                                    width:'100%',
+                                    height:'100%',
 
-                                        }}
-                                    />
-                                </TouchableOpacity>
-                            )
-                            }
-
-                            {renderSelected(item)}
-                        </View>
+                                }}
+                            />
+                        </TouchableOpacity>
 
                     )
                 } }

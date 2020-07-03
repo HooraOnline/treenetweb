@@ -10,7 +10,7 @@ export default class Index extends Component {
         await fetchStore();
         const invitationCode = getUrlParameter('invitationCode');
         if (persistStore.apiToken) {
-            navigation.replace('profile');
+            navigation.replace('mypage');
 
         }else if(persistStore.userRegisterbefor){
             navigation.replace('login');

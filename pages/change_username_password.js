@@ -144,7 +144,7 @@ export default class change_username_password extends Component {
         postQuery('Members/me/updateUsernameAndPassword',data)
             .then(res=>{
                 console.log(res);
-                navigation.replace('profile');
+                navigation.replace('mypage');
                 this.setState({loading:false});
                 //showMassage('مشخصات با موفقیت ویرایش شد.','success')
             })
