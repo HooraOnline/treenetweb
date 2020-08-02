@@ -24,7 +24,7 @@ import DateTime from "../src/react-native/DateTime";
 import {IoMdEye, IoMdEyeOff} from "react-icons/io";
 import copy from "copy-to-clipboard";
 import {observer} from "mobx-react";
-
+import { RiProfileLine } from "react-icons/ri";
 class TreeView extends PureComponent {
     constructor(props) {
         super(props);
@@ -133,8 +133,14 @@ class TreeView extends PureComponent {
                                         </View>
                                     </View>
                                 </TouchableOpacity>
-                                <Text style={{fontSize:12,fontWeight:800, color:textItem,paddingHorizontal:16,padding:10}} >{item.avatar}</Text>
 
+                                <Text style={{fontSize:12,fontWeight:800, color:textItem,paddingHorizontal:16,padding:10}} >{item.avatar}</Text>
+                                <TouchableOpacity
+                                    onPress={()=>navigation.navigate('userpage',{user:item})}
+                                    style={{alignItems:'center',padding:5}} >
+                                    <RiProfileLine size={24} style={{}}/>
+                                    <Text style={{fontSize:11}}>{'پستها' }</Text>
+                                </TouchableOpacity>
                             </View>
                             <View
                                 style={{flexDirection:'row', justifyContent:'space-between', padding:10,fontSize:12,color:textItem,}}>

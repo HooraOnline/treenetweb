@@ -342,8 +342,8 @@ const calculateTotalSubsetsCount=(subsets)=>{
 
 
 
-export const loginApi= function (username,password) {
-  return  postQuery('Members/me/login',{username,password})
+export const loginApi= function (username,password,mobile) {
+  return  postQuery('Members/me/login',{username,password,mobile})
       .then(user=>{
           persistStore.apiToken=user.token;
           Api.setToken(user.token);

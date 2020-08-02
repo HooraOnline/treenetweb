@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {persistStore} from "../src/stores";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import translate from "../src/language/translate";
-import {doDelay, navigation, showMassage,} from "../src/utils";
+import {doDelay, mapNumbersToEnglish, navigation, showMassage,} from "../src/utils";
 import images from "../public/static/assets/images";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
@@ -40,7 +40,7 @@ export default class RegisterPassword extends Component {
 
     }
     nextPage(){
-        navigation.navigate('registerUserProperty', {
+        navigation.navigate('mypage', {
             user: this.user,
         });
     }
@@ -50,14 +50,14 @@ export default class RegisterPassword extends Component {
         return mobileValidation;
     }
     checkValidation() {
-        if (!this.state.username) {
+       /* if (!this.state.username) {
             this.setState({usernameValidation: false});
             return translate('registerPassword_enter_username');
         }
         if (this.state.username.length<3) {
             this.setState({usernameValidation: false});
             return translate('registerPassword_username_can_not_be_les_than');
-        }
+        }*/
 
         if (!this.state.password) {
             this.setState({passwordValidation: false});
@@ -77,19 +77,18 @@ export default class RegisterPassword extends Component {
             return translate('registerPassword_password_and_repeat_not_equal');
         }
     }
-    updateUsernameAndPassword(){
-
+    updatePassword(){
         const msg=this.checkValidation();
         if(msg){
             showMassage(msg,'info')
             return;
         }
-
-        const data={id:this.user.id,username:this.state.username,password:this.state.password};
-
+        const data={password:this.state.password};
         this.setState({loading:true});
-        postQuery('Members/me/updateUsernameAndPassword',data)
+        debugger
+        postQuery('Members/me/updatePassword',data)
             .then(res=>{
+
                 console.log(res);
                 this.nextPage();
                 this.setState({loading:false});
@@ -136,21 +135,10 @@ export default class RegisterPassword extends Component {
                                 color:bg1,
 
                             }}>
-                            {translate("registerPassword_decription1")}
+                            {translate("یک رمز عبور برای شبکه خود وارد کنید.")}
                         </Text>
-                        <Text
-                            style={{
-                                alignItems:'center',
-                                marginTop:2,
-                                fontSize:14,
-                                fontFamily: 'IRANYekanFaNum-Bold',
-                                textAlign:'justify',
-                                color:bg1,
 
-                            }}>
-                            {translate("registerPassword_decription2")}
-                        </Text>
-                        <View
+                        {/*<View
                             style={{
                                 flexDirection: 'row',
                                 marginTop: 34,
@@ -243,11 +231,11 @@ export default class RegisterPassword extends Component {
                                         />
                                     )}
                             </View>
-                        </View>
-                        {this.state.username.length>3 && this.state.usernameValidation==false &&(
+                        </View>*/}
+                       {/* {this.state.username.length>3 && this.state.usernameValidation==false &&(
                                 <Text style={{marginTop:4, color:primaryDark,fontSize:12}} >{translate('registerPassword_username_is_reserved')}</Text>
                             )
-                        }
+                        }*/}
 
                         <View
                             style={{
@@ -261,7 +249,7 @@ export default class RegisterPassword extends Component {
                                 dir={'ltr'}
                                 reverse={persistStore.isRtl}
                                 type={this.state.showPassword ? 'text' : 'password'}
-                                placeholder={translate('registerPassword_password_example')}
+                                placeholder={translate('رمز عبور')}
                                 floatingLabelEnabled={true}
                                 floatingOffsetX={0}
                                 floatingLabelFont={{color: textItem}}
@@ -290,6 +278,7 @@ export default class RegisterPassword extends Component {
                                 style={{flex: 1,marginTop:0}}
                                 onChangeText={text => {
                                     //this.checkValidation();
+                                    text = mapNumbersToEnglish(text);
                                     const passReg =/^[a-zA-Z0-9~`!@#$%^&*()_-{\]\[}|\\?/<.>,+=-]+$/;
                                     if(text && !passReg.test(text)){
                                         showMassage(translate('registerPassword_password_rule'),'info');
@@ -361,6 +350,7 @@ export default class RegisterPassword extends Component {
                                 style={{flex: 1}}
                                 onChangeText={text => {
                                     //this.checkValidation();
+                                    text = mapNumbersToEnglish(text);
                                     this.setState({
                                         password2: text,
                                         passwor2dValidation:text==this.state.password?true:false,
@@ -399,7 +389,7 @@ export default class RegisterPassword extends Component {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}
-                            onPress={() =>this.updateUsernameAndPassword()}
+                            onPress={() =>this.updatePassword()}
                         >
                             <Text style={{
                                 fontSize: 16,

@@ -1,21 +1,32 @@
 import React, {Component} from 'react';
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import translate from "../src/language/translate";
-import {doDelay, navigation,} from "../src/utils";
+import {doDelay, mapNumbersToEnglish, navigation, showMassage,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bg1, bgScreen, bgWhite, orange1, primaryDark} from "../src/constants/colors";
-import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
+import {
+    bg1,
+    bgScreen,
+    bgWhite,
+    border,
+    lightGrey,
+    orange1,
+    primaryDark,
+    textItem,
+    textItemBlack
+} from "../src/constants/colors";
+import {Image, Platform, Text, TouchableOpacity, View,} from "../src/react-native";
 import {loginApi} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
 import Router from "next/router";
+import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
+import {persistStore} from "../src/stores";
 
 
 export default class registered_new extends Component {
     constructor() {
         super();
         this.state = {
-
-
+            countryCode:'+94',
         };
     }
 
@@ -23,9 +34,11 @@ export default class registered_new extends Component {
         doDelay(100)
             .then(() => {
                 this.user = navigation.getParam('user');
+                debugger;
                 console.log('new user',this.user);
                 if(this.user){
-                    this.setState({username:this.user.username,password:this.user.tempPassword})
+                    debugger
+                    this.setState({countryCode:this.user.geoInfo.calling_code,username:this.user.username,password:this.user.tempPassword})
                 }
 
             })
@@ -33,15 +46,19 @@ export default class registered_new extends Component {
     }
     onSuccessLogin=(user)=>{
         global.width=null;
-        Router.replace('/mypage');
+
+        //Router.replace('/mypage');
+       navigation.navigate('/registerPassword');
     }
     login() {
         this.setState({loading: true});
         this.setState({loading:true});
-        loginApi(this.state.username,this.state.password)
+        debugger
+        loginApi(this.state.username,this.state.password,this.state.mobile)
             .then(res=>{
                 console.log(res);
                 this.onSuccessLogin(res);
+
                 this.setState({loading:false});
             })
             .catch(err=>{
@@ -50,7 +67,7 @@ export default class registered_new extends Component {
     }
 
     nextPage() {
-        navigation.navigate('registerUserProperty', {
+        navigation.navigate('registerPassword', {
             user: this.user,
         });
     }
@@ -98,11 +115,13 @@ export default class registered_new extends Component {
                                 color: bg1,
 
                             }}>
-                            {translate(" شبکه درختی شما با نام کاربری و رمز عبور موقتی زیر ساخته شد. لطفا بعد از ورود نام کاربری و رمز عبور موقت خود را تغییر دهید.")}
+                            {/*{translate(" شبکه درختی شما با نام کاربری و رمز عبور موقتی زیر ساخته شد. لطفا بعد از ورود نام کاربری و رمز عبور موقت خود را تغییر دهید.")}*/}
+                            {translate("شماره موبایل خود را وارد کنید.")}
                         </Text>
                     <View style={{
                         width: '100%',
-                        alignItems: 'center',
+                        maxWidth:350,
+                        alignSelf:'center',
                         borderWidth: 1,
                         borderColor: orange1,
                         borderRadius: 12,
@@ -111,7 +130,7 @@ export default class registered_new extends Component {
                         borderStyle: 'dotted',
                         paddingVertical: 20,
                     }}>
-                        <View
+                        {/*<View
                             style={{
                                 flexDirection: 'row',
 
@@ -173,20 +192,125 @@ export default class registered_new extends Component {
                                 }}>
                                 {this.state.password}
                             </Text>
+                        </View>*/}
+                        <View dir={"ltr"} style={{
+                            flexDirection: 'row',
+                            marginTop: 10,
+                            borderColor: orange1,
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            backgroundColor: bgWhite,
+                            alignItems:'center'
+                        }}>
+                            <Text style={{
+                                fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
+                                fontSize: 16,
+                                padding: 5,
+                                alignSelf: 'center',
+                                marginHorizontal:5,
+                            }}>+</Text>
+                            <FloatingLabelTextInput
+                                dir={'ltr'}
+                                reverse={persistStore.isRtl}
+                                style={{width:15,paddingHorizontal:3,paddingVertical:5,paddingTop:7}}
+                                placeholder={translate("کد")}
+                                value={this.state.countryCode}
+
+                                onChangeText={text => {
+                                    text = mapNumbersToEnglish(text);
+                                    debugger
+                                    if(isNaN(Number(text))){
+                                        this.setState({ countryCode:''});
+                                    }else{
+                                        this.setState({ countryCode:text});
+                                    }
+
+                                }}
+                                numberOfLines={1}
+                                //isAccept={this.state.countryCode}
+                                textInputStyle={{
+                                    fontFamily: 'IRANYekanFaNum-Bold',
+                                    fontSize: 14,
+                                    fontWeight:800,
+                                    color: textItemBlack,
+                                    paddingStart: 4,
+                                    paddingTop: 1,
+                                    paddingBottom: 10,
+                                    //textAlign: 'left',
+                                }}
+                                underlineSize={0}
+
+                                multiline={false}
+                                maxLength={2}
+                                //autoFocus={true}
+                                keyboardType="number-pad"
+                                returnKeyType="done"
+
+                            />
+                           <View style={{width:1,height:20,backgroundColor:lightGrey}}/>
+                            <FloatingLabelTextInput
+                                dir={'ltr'}
+                                autoFocus={true}
+                                reverse={persistStore.isRtl}
+                                style={{flex:1,width:'100%',paddingHorizontal:5,paddingEnd:6, paddingVertical:5,paddingTop:7}}
+                                placeholder={translate("fastRegister_mobile_number")}
+                                value={this.state.mobile}
+                                onChangeText={text => {
+                                    if(text.length>1 && text.indexOf(0)==0){
+                                        text=text.substring(1);
+                                    }
+
+                                    const acceptReg =/^[0-9~.]+$/;
+                                    const mobileReg = /^9[0-9]{9}$/i;
+                                    if(acceptReg.test(text)){
+                                        text = mapNumbersToEnglish(text);
+                                        this.setState({ mobile:text, mobileValidation:mobileReg.test(text)});
+                                    }else if(text){
+                                        showMassage(translate('fastRegister_onlyEnglish_number'),'info');
+                                    }
+                                    if(!text){
+                                        this.setState({ mobile:'', mobileValidation:false});
+                                    }
+
+                                }}
+                                numberOfLines={1}
+                                isAccept={this.state.mobileValidation}
+                                textInputStyle={{
+                                    fontFamily: 'IRANYekanFaNum-Bold',
+                                    fontSize: 16,
+                                    fontWeight:800,
+                                    color: textItemBlack,
+                                    paddingStart: 4,
+                                    paddingTop: 1,
+                                    paddingBottom: 10,
+                                    //textAlign: 'left',
+                                }}
+                                underlineSize={0}
+
+                                multiline={false}
+                                maxLength={10}
+                                //autoFocus={true}
+                                keyboardType="number-pad"
+                                returnKeyType="done"
+
+                            />
+
                         </View>
                         <TouchableOpacity
                             style={{
                                 marginTop: 20,
-                                borderColor: orange1,
+                                //borderColor: orange1,
                                 backgroundColor: orange1,
-                                borderWidth: 1,
+                                //borderWidth: 1,
                                 width: 200,
                                 paddingTop: 0,
                                 borderRadius: 8,
                                 maxWidth: 300,
+                                alignSelf:'center',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}
+                            disabled={!this.state.mobileValidation}
                             onPress={() => this.login()}
                         >
                             <Text style={{
@@ -194,7 +318,7 @@ export default class registered_new extends Component {
                                 color: bgWhite,
                                 fontWeight: 500,
                                 paddingVertical: 8
-                            }}>{translate('ورود')}</Text>
+                            }}>{translate('تایید')}</Text>
                         </TouchableOpacity>
                     </View>
 

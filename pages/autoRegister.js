@@ -50,7 +50,6 @@ export default class autoRegister extends Component {
         });
         await $.getJSON('https://ipapi.co/json/', function (data) {
             self.geo = JSON.stringify(data, null, 2);
-
         });
         this.registerUser();
     }

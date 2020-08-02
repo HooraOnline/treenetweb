@@ -36,7 +36,6 @@ class UserStore {
     @observable story='';
     @action
     setUser(user) {
-
         this.user=user;
         this.userID= user.id ;
         this.username= user.username ;

@@ -4,7 +4,7 @@ import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
 import {fetchStore, navigation, showMassage,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bgWhite, borderSeparate, orange1} from "../src/constants/colors";
+import {bgSuccess, bgWhite, borderSeparate, orange1} from "../src/constants/colors";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
 import {postQuery} from "../dataService/apiService";
@@ -200,7 +200,7 @@ export default class index extends Component {
                                 marginTop: 30,
                                 width: 200,
                                 maxWidth: 300,
-                                backgroundColor: orange1,
+                                backgroundColor: bgSuccess,
                                 padding: 0,
                                 paddingTop: 0,
                                 borderRadius: 12,

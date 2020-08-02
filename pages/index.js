@@ -8,6 +8,7 @@ export default class Index extends Component {
     async componentDidMount() {
         setScreenSize();
         await fetchStore();
+        persistStore.userRegisterbefor=false
         const invitationCode = getUrlParameter('invitationCode');
         if (persistStore.apiToken) {
             navigation.replace('mypage');

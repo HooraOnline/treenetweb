@@ -34,139 +34,47 @@ import { IoMdHeartEmpty ,IoMdShare,} from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa";
 
 @observer
-export default class mypage extends Component {
+export default class userpage extends Component {
     constructor() {
         super();
         this.state = {};
     }
 
-    hasChangedPassword(accounts) {
-        accounts.forEach((account) => {
-            if (account.hasChangedPassword) {
-                return true;
-            }
-        });
-        return false;
-    }
 
-    hidePasswordChangePopUp() {
-        this.setState({
-            showPasswordChangePopUp: false,
-        }, () => {
-            if (accountsStore.accounts.length && persistStore.selected === 0) {
-                this.selecetRole(true);
-            }
-        });
-    }
 
-    async componentDidMount() {
-
+    componentDidMount() {
+       this.user=navigation.getParam('user');
 
     }
-
 
     render() {
 
         const toolbarStyle = {
-            start22: {
+            start: {
                 content: images.ic_back,
+                onPress: ()=>navigation.goBack(),
             },
-            title: pStore.cUser.username,
-            end: {
-                onPress: () => logoutApi(),
-                icon: images.ic_Period,
-            },
+            title: 'پستهای کاربر',
+
         };
 
-
-
-
         return (
-            //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
             <PanelLayout title={`Treenetgram`} loading={this.state.loading} loadingMessage={this.state.loadingMessage}
                          showMenu={this.state.showMenu}
                          onRef={(initDrawer) => this.initDrawer = initDrawer}
                          onCloseMenu={() => this.setState({showMenu: false})}
                          style={{alignItems: 'center'}}
                          header={
-                             <View>
-                                 <Toolbar
-                                     customStyle={toolbarStyle}
-                                     isExpand={this.state.showAccountSelect}
-                                 />
-                                 {persistStore.notChangePassword && (
-                                     <div style={{width: globalState.width, zIndex: 4}}>
-                                         <TouchableOpacity
-                                             onPress={() => {
-                                                 navigation.navigate('change_username_password')
-                                             }}
-                                             style={{
-                                                 flex: 1,
-                                                 paddingBottom: 40,
-                                                 flexDirection: 'row',
-                                                 justifyContent: 'space-between',
-                                                 padding: 10,
-                                                 backgroundColor: '#F1C40F'
-                                             }}>
-                                             <Text style={{
-                                                 fontSize: 14,
-                                                 color: textItem,
-                                                 padding: 5
-                                             }}>{'رمز موقت را تغییر دهید.'} </Text>
-                                             <View style={{
-                                                 flexDirection: 'row',
-                                                 height: 40,
-                                                 backgroundColor: '#27AE60',
-                                                 borderRadius: 8,
-                                                 alignItems: 'cener',
-                                                 justifyContent: 'center',
-                                                 padding: 5,
-                                                 paddingHorizontal: 15
-                                             }}>
-                                                 <Image source={images.ic_edit} style={{
-                                                     width: 24,
-                                                     height: 24,
-                                                     paddingHorizontal: 5,
-                                                     tintColor: bgWhite
-                                                 }}/>
-                                                 <Text style={{
-                                                     color: bgWhite,
-                                                     fontSize: 14,
-                                                     paddingHorizontal: 5
-                                                 }}>تغییر</Text>
-                                             </View>
-                                         </TouchableOpacity>
-                                     </div>
-                                 )
-
-                                 }
-                             </View>
+                             <Toolbar
+                                 customStyle={toolbarStyle}
+                                 isExpand={this.state.showAccountSelect }
+                             />
                          }
-                         footer={
-                             <View style={{paddingHorizontal: 20}}>
-                                 <NavBar navButtons={[
-                                     {
-                                         label: translate('پستها'),
-                                         path: "/mypage",
-                                         icon: <FontAwesomeIcon icon={faUser}/>
-                                     },
-                                     {
-                                         label: translate('شبکه من'),
-                                         path: "/myNetwork",
-                                         icon: <FontAwesomeIcon icon={faCogs}/>
-                                     },
-                                     {
-                                         label: translate('فالوبورد'),
-                                        path: "/followboard",
-                                         icon: <FontAwesomeIcon icon={faCompass}/>
-                                     },
-                                 ]}/>
-                             </View>
-                         }>
+                         >
                 <View style={{flex:1, marginTop: persistStore.notChangePassword ? 30 : 0, alignItems: 'center'}}>
-                    <UserCard style={{maxWidth: 500,paddingTop: 25,paddingHorizontal:16}}/>
+                    <UserCard style={{maxWidth: 500,paddingTop: 25,paddingHorizontal:16}} user={this.user}/>
                     <View style={{flex:1,width:'100%',backgroundColor:bgWhite,minHeight:600}}>
-                        <MyPosts/>
+                        <MyPosts user={this.user}/>
                     </View>
                 </View>
             </PanelLayout>
@@ -177,17 +85,8 @@ export default class mypage extends Component {
 
 export const UserCard = observer(props => {
     let leavesCount = 0;
-    let {story} = pStore.cUser;
-    const setProfileImage = (fileName) => {
-        const data = {profileImage: fileName};
-        postQuery('Members/me/setProfileImage', data)
-            .then(res => {
-                pStore.cUser.profileImage = res.profileImage;
-            })
-            .catch(err => {
+    let {user} = props;
 
-            })
-    };
 
     return (
         <View style={props.style}>
@@ -208,13 +107,11 @@ export const UserCard = observer(props => {
                             alignSelf: 'center'
                         }}
                         folderName={'member'}
-                        onUplodedFile={(fileName) => {
-                            setProfileImage(fileName);
-                        }}
-                        canUpload={true}
-                        autoUpload={true}
+
+                        canUpload={false}
+                        autoUpload={false}
                         imageStyle={{height: 100, width: 100, borderRadius: 50}}
-                        image={pStore.cUser.profileImage}
+                        image={user.profileImage}
                         noImage={images.default_ProPic}
                         hideDeleteBtn={true}
                     />
@@ -245,7 +142,7 @@ export const UserCard = observer(props => {
 
 
                         }}>
-                        {pStore.cUser.avatar || 'عضو فعال  تری نتگرام'}
+                        {user.avatar || 'عضو فعال  تری نتگرام'}
                     </Text>
                 </View>
             </View>
@@ -256,7 +153,7 @@ export const UserCard = observer(props => {
                 marginTop: 5,
                 justifyContent: 'space-between'
             }}>
-                <Text style={{fontSize: 12, textAlign: 'justify',color:textItem}}>{story}</Text>
+                <Text style={{fontSize: 12, textAlign: 'justify',color:textItem}}>{user.story}</Text>
             </View>
             <View style={{flexDirection:'row'}}>
                 <TouchableOpacity
@@ -277,7 +174,7 @@ export const UserCard = observer(props => {
                         height: 24,
                         tintColor:bgWhite
                     }}/>
-                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
+                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>تماس</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={()=>{navigation.navigate('myLink')}}
@@ -301,7 +198,7 @@ export const UserCard = observer(props => {
                         }}
                     />
 
-                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>لینک دعوت</Text>
+                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>مشاهده شبکه</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -330,9 +227,9 @@ export const MyPosts = observer(props => {
 
 
     const getUserPost =(fields, include)=> {
-        return  Api.post('posts/me/getPosts')
+        return  Api.post('posts/getUserPosts')
             .then(posts=>{
-                let userPosts=[{file:images.ic_add}].concat(posts);
+                let userPosts=posts;
                 waitForData(()=>setPostList(userPosts));
                 pStore.userPosts=userPosts;
             }).catch((error)=>{
