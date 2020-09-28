@@ -1,15 +1,27 @@
 import React, {Component} from 'react';
-import {persistStore} from "../src/stores";
+import {persistStore, pStore} from "../src/stores";
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import translate from "../src/language/translate";
 import {doDelay, mapNumbersToEnglish, navigation, showMassage,} from "../src/utils";
 import images from "../public/static/assets/images";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
-import {postQuery} from "../dataService/apiService";
+import {loginApi, postQuery} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
 import {IoMdEye, IoMdEyeOff} from "react-icons/io";
-import {bg1, bgScreen, bgSuccess, orange1, primaryDark, textItem} from "../src/constants/colors";
+import {
+    bg1,
+    bgScreen,
+    bgSuccess,
+    bgWhite,
+    border,
+    orange1,
+    primaryDark, success,
+    textDisabled,
+    textItem
+} from "../src/constants/colors";
+import Api from "../dataService/apiCaller";
+import Router from "next/router";
 //import Pagination from 'docs/src/modules/components/Pagination';
 //const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -35,20 +47,43 @@ export default class RegisterPassword extends Component {
     componentDidMount() {
         doDelay(30)
             .then(()=>{
+
+
                 this.user= navigation.getParam('user');
+                if (persistStore.apiToken) {
+                    navigation.replace('/mypage');
+                }
+               /* else if (persistStore.userRegisterbefor) {
+                    navigation.replace('/login');
+                } */
+                else if(!this.user){
+                    navigation.replace('/home');
+                    return translate('required_invitationLink');
+                }
             })
+        let self=this;
+        $.getJSON('https://api.ipdata.co/?api-key=92c9cd9137ca4bd296e2a749b8cd3a7908cb960766c10013cd108f26', function (data) {
+            console.log(JSON.stringify(data, null, 2));
+            self.geoInfo = JSON.stringify(data, null, 2);
+        });
+        $.getJSON('https://ipapi.co/json/', function (data) {
+            self.geo = JSON.stringify(data, null, 2);
+        });
 
     }
     nextPage(){
-        navigation.navigate('mypage', {
+        navigation.navigate('edit_profile', {
             user: this.user,
         });
     }
 
 
     isValid() {
-        return mobileValidation;
+        return this.state.passwordValidation &&  this.state.passwor2dValidation ;
     }
+
+
+
     checkValidation() {
        /* if (!this.state.username) {
             this.setState({usernameValidation: false});
@@ -77,27 +112,62 @@ export default class RegisterPassword extends Component {
             return translate('registerPassword_password_and_repeat_not_equal');
         }
     }
-    updatePassword(){
-        const msg=this.checkValidation();
-        if(msg){
-            showMassage(msg,'info')
+
+
+
+    registerUser() {
+        const msg = this.checkValidation();
+        if (msg) {
+            showMassage(msg, 'info');
             return;
         }
-        const data={password:this.state.password};
-        this.setState({loading:true});
-        debugger
-        postQuery('Members/me/updatePassword',data)
-            .then(res=>{
+        try {
+            this.user.geoInfo = JSON.parse(this.geoInfo);
+            this.user.geo = JSON.parse(this.geo);
+            this.user.password=this.state.password;
 
-                console.log(res);
-                this.nextPage();
-                this.setState({loading:false});
+        } catch (e) {
+
+        }
+
+        this.setState({loading: true, loadingMessage: 'در حال ساخت شبکه تری نت شما...'});
+        postQuery('members/me/register', this.user)
+            .then(member => {
+                /*self.user = member;
+                persistStore.apiToken = member.token;
+                Api.setToken(member.token);
+                pStore.cUser=member
+                persistStore.userRegisterbefor = true;
+                this.setState({loading: false});
+                this.user=member;
+                this.nextPage()*/
+                this.onLogin()
             })
-            .catch(err=>{
-                this.setState({loading:false});
+            .catch(err => {
+                this.setState({loading: false, buldingMsg: 'خطا در ساخت شبکه تری نت شما'});
             })
 
     }
+
+
+    async onLogin() {
+        this.setState({loading: true});
+        const data={};
+        loginApi(this.user.mobile,this.user.password)
+            .then(res=>{
+                this.onSuccessLogin(res);
+                this.setState({loading:false});
+            })
+            .catch(err=>{
+
+                this.setState({loading:false});
+            })
+    }
+    onSuccessLogin=(user)=>{
+       global.width=null;//reset new panel width
+       navigation.replace('/registerYourName');
+    }
+
 
     render() {
         //const { height, width } = useWindowDimensions();
@@ -382,18 +452,19 @@ export default class RegisterPassword extends Component {
                                 flex: 1,
                                 marginTop: 40,
                                 borderColor: orange1,
-                                borderWidth: 1,
+                                borderWidth: 0,
                                 padding: 0,
                                 paddingTop: 0,
                                 borderRadius: 12,
                                 alignItems: 'center',
                                 justifyContent: 'center',
+                                backgroundColor:this.isValid()?orange1:textDisabled,
                             }}
-                            onPress={() =>this.updatePassword()}
+                            onPress={() =>this.registerUser()}
                         >
                             <Text style={{
                                 fontSize: 16,
-                                color: bgSuccess,
+                                color: bgWhite,
                                 fontWeight: 500,
                                 paddingVertical: 12
                             }}>{translate('confirm')}</Text>

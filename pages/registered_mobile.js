@@ -15,42 +15,87 @@ import {
     textItemBlack
 } from "../src/constants/colors";
 import {Image, Platform, Text, TouchableOpacity, View,} from "../src/react-native";
-import {loginApi} from "../dataService/apiService";
+import {loginApi, postQuery} from "../dataService/apiService";
 import LoadingPopUp from "../src/components/LoadingPopUp";
 import Router from "next/router";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
-import {persistStore} from "../src/stores";
+import {persistStore, pStore} from "../src/stores";
+import Api from "../dataService/apiCaller";
+import version from "../src/version";
 
 
-export default class registered_new extends Component {
+export default class registered_mobile extends Component {
     constructor() {
         super();
         this.state = {
-            countryCode:'+94',
+            countryCode:'98',
         };
     }
 
-    componentDidMount() {
 
-        doDelay(100)
-            .then(() => {
-                this.user = navigation.getParam('user');
-                console.log('new user',this.user);
-                if(this.user){
-                    this.setState({countryCode:this.user.geoInfo.calling_code,username:this.user.username,password:this.user.tempPassword})
-                }
+
+    async componentDidMount() {
+        this.regentCode = navigation.getParam('regentCode');
+        const countryCode = navigation.getParam('countryCode');
+        if(!this.regentCode){
+            this.setState({countryCode:countryCode,regentCodeCodeValidation: false});
+            return translate('required_invitationLink');
+        }
+    }
+
+
+    checkValidation() {
+        if (!this.regentCode) {
+            this.setState({regentCodeCodeValidation: false});
+            return translate('required_invitationLink');
+        }
+    }
+
+
+
+
+    async checkMobileExist() {
+        const msg = this.checkValidation();
+        if(msg){
+            showMassage('msg');
+            return ;
+        }
+        this.setState({loading: true, loadingMessage: 'در حال اجرا...'});
+        postQuery('members/checkMobileExist', {mobile:this.state.mobile})
+            .then(mobileIsRegister => {
+                  if(mobileIsRegister){
+                   this.setState({mobileIsRegister,loading: false,})
+                  }else{
+                      this.user={};
+                      this.user.mobile=this.state.mobile;
+                      this.user.regentCode=this.regentCode;
+                      this.user.countryCode=this.countryCode;
+                      this.setState({mobileIsRegister,loading: false,});
+                      this.nextPage();
+                  }
+            })
+            .catch(err => {
+                this.setState({loading: false, buldingMsg: 'خطا در ساخت تری نت'});
 
             })
-
+            .finally()
     }
+
+    nextPage() {
+        navigation.navigate('registerPassword', {
+            user: this.user,
+        });
+    }
+
     onSuccessLogin=(user)=>{
         global.width=null;
 
         //Router.replace('/mypage');
-       navigation.navigate('/registerPassword');
+        navigation.navigate('/registerPassword');
     }
     login() {
         this.setState({loading: true});
+
         loginApi(this.state.username,this.state.password,this.state.mobile)
             .then(res=>{
                 console.log(res);
@@ -63,11 +108,6 @@ export default class registered_new extends Component {
             })
     }
 
-    nextPage() {
-        navigation.navigate('registerPassword', {
-            user: this.user,
-        });
-    }
 
     render() {
         //const { height, width } = useWindowDimensions();
@@ -115,6 +155,7 @@ export default class registered_new extends Component {
                             {/*{translate(" شبکه درختی شما با نام کاربری و رمز عبور موقتی زیر ساخته شد. لطفا بعد از ورود نام کاربری و رمز عبور موقت خود را تغییر دهید.")}*/}
                             {translate("شماره موبایل خود را وارد کنید.")}
                         </Text>
+
                     <View style={{
                         width: '100%',
                         maxWidth:350,
@@ -127,6 +168,21 @@ export default class registered_new extends Component {
                         borderStyle: 'dotted',
                         paddingVertical: 20,
                     }}>
+                        { this.state.countryCode!=="98" &&
+                            <Text
+                                style={{
+                                    alignItems: 'center',
+                                    marginTop: 2,
+                                    fontSize: 11,
+                                    fontFamily: 'IRANYekanFaNum-Bold',
+                                    textAlign: 'justify',
+                                    color: orange1,
+
+                                }}>
+                                {/*{translate(" شبکه درختی شما با نام کاربری و رمز عبور موقتی زیر ساخته شد. لطفا بعد از ورود نام کاربری و رمز عبور موقت خود را تغییر دهید.")}*/}
+                                {translate("مهم:اگر فیلتر شکن شما روشن است کد کشور را اصلاح کنید.")}
+                            </Text>
+                        }
                         {/*<View
                             style={{
                                 flexDirection: 'row',
@@ -197,8 +253,10 @@ export default class registered_new extends Component {
                             borderWidth: 2,
                             borderRadius: 8,
                             backgroundColor: bgWhite,
-                            alignItems:'center'
+                            alignItems:'center',
+                            paddingHorizontal:10
                         }}>
+
                             <Text style={{
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                 fontSize: 16,
@@ -209,7 +267,7 @@ export default class registered_new extends Component {
                             <FloatingLabelTextInput
                                 dir={'ltr'}
                                 reverse={persistStore.isRtl}
-                                style={{width:15,paddingHorizontal:3,paddingVertical:5,paddingTop:7}}
+                                style={{width:30,paddingVertical:5,paddingTop:7}}
                                 placeholder={translate("کد")}
                                 value={this.state.countryCode}
 
@@ -259,15 +317,16 @@ export default class registered_new extends Component {
 
                                     const acceptReg =/^[0-9~.]+$/;
                                     const mobileReg = /^9[0-9]{9}$/i;
+                                    text = mapNumbersToEnglish(text);
                                     if(acceptReg.test(text)){
-                                        text = mapNumbersToEnglish(text);
-                                        this.setState({ mobile:text, mobileValidation:mobileReg.test(text)});
+                                        this.setState({ mobile:text,mobileIsRegister:false, mobileValidation:mobileReg.test(text)});
                                     }else if(text){
                                         showMassage(translate('fastRegister_onlyEnglish_number'),'info');
                                     }
                                     if(!text){
-                                        this.setState({ mobile:'', mobileValidation:false});
+                                        this.setState({mobileIsRegister:false, mobile:'', mobileValidation:false});
                                     }
+
 
                                 }}
                                 numberOfLines={1}
@@ -293,39 +352,67 @@ export default class registered_new extends Component {
                             />
 
                         </View>
-                        <TouchableOpacity
+                        {this.state.mobileIsRegister?(
+                            <View>
+                                <Text style={{fontSize:12,color:primaryDark}}>این شماره قبلا در سیستم ثبت شده است. در صورتی که قبلا ثبت نام کرده اید وارد شوید. در صورتی که رمز خود را فراموش کرده اید یا شمار شما اشتباها توسط فرد دیگری در سیستم وارد شده.عدد 100 را به شمار 09196421264 پیامک کنید تا رمز عبور موقت برای شما ارسال شود.</Text>
+                                <TouchableOpacity
+                                    style={{
+                                        marginTop: 20,
+                                        //borderColor: orange1,
+                                        backgroundColor: orange1,
+                                        //borderWidth: 1,
+                                        width: 200,
+                                        paddingTop: 0,
+                                        borderRadius: 8,
+                                        maxWidth: 300,
+                                        alignSelf:'center',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                    disabled={!this.state.mobileValidation}
+                                    onPress={() => navigation.navigate('login')}
+                                >
+                                    <Text style={{
+                                        fontSize: 16,
+                                        color: bgWhite,
+                                        fontWeight: 500,
+                                        paddingVertical: 8
+                                    }}>{translate('ورود')}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ):(
+                            <TouchableOpacity
                             style={{
-                                marginTop: 20,
-                                //borderColor: orange1,
-                                backgroundColor: orange1,
-                                //borderWidth: 1,
-                                width: 200,
-                                paddingTop: 0,
-                                borderRadius: 8,
-                                maxWidth: 300,
-                                alignSelf:'center',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
+                            marginTop: 20,
+                            //borderColor: orange1,
+                            backgroundColor: orange1,
+                            //borderWidth: 1,
+                            width: 200,
+                            paddingTop: 0,
+                            borderRadius: 8,
+                            maxWidth: 300,
+                            alignSelf:'center',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
                             disabled={!this.state.mobileValidation}
-                            onPress={() => this.login()}
-                        >
+                            onPress={() => this.checkMobileExist()}
+                            >
                             <Text style={{
-                                fontSize: 16,
-                                color: bgWhite,
-                                fontWeight: 500,
-                                paddingVertical: 8
-                            }}>{translate('تایید')}</Text>
-                        </TouchableOpacity>
+                            fontSize: 16,
+                            color: bgWhite,
+                            fontWeight: 500,
+                            paddingVertical: 8
+                        }}>{translate('تایید')}</Text>
+                            </TouchableOpacity>
+                            )
+
+                        }
+
                     </View>
 
                 </View>
-
-
-
-
                 </View>
-
                 <LoadingPopUp
                     visible={this.state.loading}
                     message={this.state.loadingMessage}

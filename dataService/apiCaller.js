@@ -28,7 +28,7 @@ import version from "../src/version";
 
 
 
-export const apihost = version.release ? "https://treenetserver.herokuapp.com/api/" : 'http://192.168.1.161:3000/api/';
+export const apihost = version.release ? "https://treenetserver.herokuapp.com/api/" : 'http://192.168.18.61:3000/api/';
 let isSetToken=false;
 class Api {
     constructor() {
@@ -50,7 +50,8 @@ class Api {
         // axios.defaults.headers.common['dataType'] = 'json';
         // axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
     }
-    static setToken=async ()=>{
+    static setToken=async (token)=>{
+
         if(!persistStore.apiToken){
             await fetchStore();
         }

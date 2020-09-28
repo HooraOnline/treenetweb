@@ -37,7 +37,7 @@ export default class edit_post extends Component {
     }
 
      componentDidMount() {
-          debugger
+
          let post=navigation.getParam('post')
          this.setState({post})
     }

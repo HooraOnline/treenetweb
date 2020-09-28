@@ -349,6 +349,7 @@ export const loginApi= function (username,password,mobile) {
           Api.setToken(user.token);
           return user;
       })
+
 }
 export const logoutApi=function (username,password) {
     if(persistStore.notChangePassword){
@@ -385,6 +386,7 @@ export const getUserProfileApi = function (fields, include) {
                 });
             return user
         }).catch((error)=>{
+            debugger
             if(error.errorKey=='fa_server_member_user_notExist'){
                 persistStore.notChangePassword=true;
                 persistStore.userRegisterbefor=false;

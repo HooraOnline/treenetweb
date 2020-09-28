@@ -41,8 +41,10 @@ export default class newInvite extends Component {
     loginPanel() {
         if (persistStore.apiToken)
             navigation.navigate('/mypage');
-        else
+        else{
             navigation.navigate('/login');
+        }
+
     }
 
     async onSelectLanguege(lng) {

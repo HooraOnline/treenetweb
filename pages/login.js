@@ -89,12 +89,14 @@ export default class LoginPage extends PureComponent {
         this.setState({loading: true});
         const data={};
         this.setState({loading:true});
+
         loginApi(this.state.username,this.state.password)
             .then(res=>{
                 this.onSuccessLogin(res);
                 this.setState({loading:false});
             })
             .catch(err=>{
+
                 this.setState({loading:false});
             })
     }

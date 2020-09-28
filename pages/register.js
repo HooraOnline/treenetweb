@@ -4,15 +4,24 @@ import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
 import {fetchStore, navigation, showMassage,} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bgSuccess, bgWhite, borderSeparate, orange1, primaryDark} from "../src/constants/colors";
+import {
+    accentLight,
+    bgSuccess,
+    bgWhite,
+    borderRed,
+    borderSeparate,
+    orange1,
+    primaryDark,
+    textRed
+} from "../src/constants/colors";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
 import {postQuery} from "../dataService/apiService";
-import {persistStore} from "../src/stores";
+import {persistStore, userStore} from "../src/stores";
 import {observer} from "mobx-react";
 
 @observer
-export default class index extends Component {
+export default class register extends Component {
      constructor() {
         super();
         this.state = {
@@ -23,12 +32,17 @@ export default class index extends Component {
     }
 
     async componentDidMount() {
+        persistStore.apiToken=null;
         if (!persistStore.apiToken) {
             await fetchStore()
         }
         if (persistStore.apiToken) {
             navigation.replace('/mypage');
-        } else {
+        }/*if(!persistStore.userRegisterbefor){
+            navigation.replace('/login');
+            return;
+        }*/
+        else {
             this.regentCode = navigation.getParam('regentCode');
             this.getUserGeo()
         }
@@ -46,24 +60,8 @@ export default class index extends Component {
             console.log(JSON.stringify(data, null, 2));
             self.geoInfo=JSON.stringify(data, null, 2);
         });
-
-        $.getJSON('https://ipapi.co/json/', function(data) {
-            self.geo=JSON.stringify(data, null, 2);
-        });
-        /*$.getJSON('https://geolocation-db.com/json/')
-            .done (function(location) {
-                this.usergeo_ipdata_co
-                console.log(location)
-            });
-
-        $.getJSON('http://www.geoplugin.net/json.gp?jsoncallback=?', function(data) {
-            console.log(JSON.stringify(data, null, 2));
-        });
-        $.getJSON('http://ip-api.com/json?callback=?', function(data) {
-            console.log(JSON.stringify(data, null, 2));
-        });*/
     }
-    async registerUser () {
+    async initUser () {
         const msg = this.checkValidation();
         if (msg) {
             showMassage(msg, 'info');
@@ -77,28 +75,12 @@ export default class index extends Component {
 
         }
 
-        this.setState({loading:true,loadingMessage:'در حال ساخت شبکه...'});
-        postQuery('members/me/register',user)
-            .then(res=>{
-                this.nextPage(res);
-                this.setState({loading:false});
-            })
-            .catch(err=>{
-                this.setState({loading:false});
-            })
+        this.nextPage(user);
 
     }
     nextPage(user){
-        navigation.navigate('registered_new', {user});
-    }
 
-    loginPanel() {
-        if ( persistStore.apiToken)
-            navigation.navigate('/mypage');
-        else{
-            navigation.navigate('/login');
-        }
-
+        navigation.navigate('registered_mobile', {regentCode:this.regentCode,countryCode:user.geoInfo.calling_code});
     }
 
     async onSelectLanguege(lng) {
@@ -134,10 +116,99 @@ export default class index extends Component {
                         Treenetgram
                     </Text>
 
+                    <View>
+                        <View style={{flexDirection: 'row'}}>
+                            <Text
+                                style={{
+                                    alignItems: 'center',
+
+                                    fontSize: 14,
+                                    color: accentLight,
+                                    fontWeight: 500,
+                                    fontFamily: 'IRANYekanRegular',
+                                    marginBottom: 5,
+                                    paddingHorizontal: 5,
+                                }}>
+                                علی موسوی
+                            </Text>
+                            <Text
+                                style={{
+                                    alignItems: 'center',
+
+                                    fontSize: 12,
+                                    fontWeight: 500,
+                                    fontFamily: 'IRANYekanRegular',
+                                    marginBottom: 5
+                                }}>
+                                {' شما را به شبکه بین المللی ترینتگرام دعوت کرد.'}
+                            </Text>
+                        </View>
+                        <View style={{
+                            flexDirection: 'row',
+                            alignItems:'center',
+                            backgroundColor: bgWhite,
+                            borderRadius: 12,
+                            padding:10,
+                        }}>
+                            <View style={{}}>
+                                <Image
+                                    source={'https://beard-style.com/image/1/51589-latest-awesome-beard-styles-for-men-in-india-cinthol-awesome-men.jpg'}
+                                    style={{
+                                        width: 100,
+                                        height: 100,
+                                        borderRadius: 50,
+                                    }}
+                                />
+                                {/* <Text
+                        style={{
+                            alignItems: 'center',
+                            marginTop: 0,
+                            fontSize: 12,
+                            fontWeight: 800,
+                            fontFamily: 'IRANYekanRegular',
+                            marginBottom: 5,
+                            paddingHorizontal: 5,
+                        }}>
+                        {name}
+                    </Text>*/}
+                            </View>
+                            <View style={{alignItems:'center'}}>
+                                <View style={{flexDirection: 'row', height:30,  maxWidth: 400,}}>
+                                    <View style={{alignItems: 'center', paddingHorizontal: 10}}>
+                                        <Text style={{fontSize: 12}}>شاخه</Text>
+                                        <Text style={{fontSize: 12}}>443</Text>
+                                    </View>
+                                    <View style={{alignItems: 'center', paddingHorizontal: 10}}>
+                                        <Text style={{fontSize: 12}}>برگ</Text>
+                                        <Text style={{fontSize: 12}}>45k</Text>
+                                    </View>
+                                    <View style={{alignItems: 'center', paddingHorizontal: 10}}>
+                                        <Text style={{fontSize: 12}}>فالور</Text>
+                                        <Text style={{fontSize: 12}}>569k</Text>
+                                    </View>
+                                </View>
+                                <Text
+                                    style={{
+                                        alignItems: 'center',
+                                        marginTop: 25,
+                                        fontSize: 12,
+                                        fontWeight: 800,
+                                        fontFamily: 'IRANYekanRegular',
+                                        marginBottom: 5,
+
+                                    }}>
+                                    {'فروشنده لوازم ارایشی در ترینتگرام'}
+                                </Text>
+                            </View>
+
+
+                        </View>
+                    </View>
+
                     <View id='form' style={{
                         width: '100%',
                         paddingHorizontal: 5,
-                        marginTop: 10,
+                        marginTop: 5,
                         paddingBottom: 20,
                         alignItems: 'center'
                     }}>
@@ -199,7 +270,7 @@ export default class index extends Component {
                         <TouchableOpacity
                             style={{
                                 flex: 1,
-                                marginTop: 30,
+                                marginTop: 10,
                                 width: 200,
                                 maxWidth: 300,
                                 backgroundColor: bgSuccess,
@@ -209,7 +280,7 @@ export default class index extends Component {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}
-                            onPress={() => this.loginPanel()}
+                            onPress={() => this.initUser()}
                         >
                             <Text style={{
                                 fontSize: 14,
@@ -217,51 +288,31 @@ export default class index extends Component {
                                 fontWeight: 500,
                                 paddingVertical: 10,
                                 paddingHorizontal: 20,
-                            }}>{translate('login_my_tree')}</Text>
+                            }}>
+                                شروع شبکه سازی
+                            </Text>
                         </TouchableOpacity>
                         <Text
                             style={{
                                 alignItems: 'center',
                                 marginTop: 25,
-                                fontSize: 12,
+                                fontSize: 11,
                                 fontWeight: 800,
                                 fontFamily: 'IRANYekanRegular',
                                 color:orange1,
                                 marginBottom: 5,
-                                textAlign: 'center',
-                                maxWidth:366,
-
+                                textAlign:'center',
+                                maxWidth:360,
 
                             }}>
                             {/*{translate("from_local_power_to_global_power")}*/}
-                            با تری نت گرام لینک دعوت اختصاصی خودت را به اشتراک بزار، به صورت ویروسی رشد کن و شبکه عظیم تبلیغاتی و درآمدزایی خودت رو بساز.
+                           با تری نت گرام لینک دعوت اختصاصی خودت را به اشتراک بزار، به صورت ویروسی رشد کن و شبکه عظیم تبلیغاتی و درآمدزایی خودت رو بساز.
                         </Text>
 
 
-                        <View style={{
-                            flex: 1,
-                            //flexDirection:'row',
-                            paddingHorizontal: 16,
-                            alignItems: 'center',
-                            paddingBottom: 10,
 
-
-                        }}>
-                        </View>
                         <View style={{padding: '4%', marginTop: 0,}}>
-                           {/* <Text
-                                style={{
-                                    alignItems: 'center',
-                                    fontSize: 16,
-                                    fontFamily: 'IRANYekanRegular',
 
-                                    textAlign: 'justify',
-                                    marginBottom: 5
-                                }}>
-                                {
-                                    translate('treenetDesl')
-                                }
-                            </Text>*/}
                             <Text
                                 style={{
                                     alignItems: 'center',
@@ -272,21 +323,10 @@ export default class index extends Component {
                                     marginBottom: 5
                                 }}>
                                 {/*{translate('treenetDes2')}*/}
-                                 تری نتگرام برای کسانی ساخته شده است که می خواهند در زمانی کوتاه یک شبکه تبلیغاتی بزرگ با قابلیت رشد ویروسی داشته و از راه فروش شبکه خود و یا تبلیغات در آن برای خود  کسب و کار و درآمد ایجاد کنند.
+                                 تری نتگرام برای کسانی ساخته شده است که می خواهند در زمانی کوتاه یک شبکه تبلیغاتی بزرگ با قابلیت رشد ویروسی داشته و از راه فروش شبکه خود و یا تبلیغات در آن برای خود درآمد و کسب و کار ایجاد کنند.
 
                             </Text>
-                           {/* <Text
-                                style={{
-                                    alignItems: 'center',
-                                    fontSize: 13,
-                                    fontFamily: 'IRANYekanRegular',
 
-                                    textAlign: 'justify',
-                                    marginBottom: 5
-                                }}>
-                                {translate('treenetDes2')}
-                               ترینتگرام یک فالوبرد به شما میدهد که تمام اعضای شبکه شما این فالوبرد و پیامهای آنرا را و به این ترتیب شما یک رسانه در حال رشد خواهید داشت.
-                            </Text>*/}
                             <Text
                                 style={{
                                     alignItems: 'center',
@@ -301,43 +341,7 @@ export default class index extends Component {
 
                             </Text>
 
-                            {/*<Text
-                                style={{
-                                    alignItems: 'center',
-                                    fontSize: 16,
-                                    fontFamily: 'IRANYekanRegular',
 
-                                    textAlign: 'justify',
-                                    marginBottom: 5
-                                }}>
-                                {translate('treenetDes4')}
-                            </Text>
-
-                            <Text
-                                style={{
-                                    alignItems: 'center',
-                                    fontSize: 16,
-                                    fontFamily: 'IRANYekanRegular',
-
-                                    textAlign: 'justify',
-
-                                }}>
-                                {translate('treenetDes5')}
-
-                            </Text>
-
-                            <Text
-                                style={{
-                                    alignItems: 'center',
-                                    marginTop: 0,
-                                    fontSize: 16,
-                                    fontFamily: 'IRANYekanRegular',
-                                    textAlign: 'justify',
-
-
-                                }}>
-                                {translate('treenetDes6')}
-                            </Text>*/}
                         </View>
                     </View>
 

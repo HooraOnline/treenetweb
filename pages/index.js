@@ -13,11 +13,13 @@ export default class Index extends Component {
         if (persistStore.apiToken) {
             navigation.replace('mypage');
 
-        }else if(persistStore.userRegisterbefor){
-            navigation.replace('login');
         }
+       /* else if(persistStore.userRegisterbefor){
+            navigation.replace('login');
+        }*/
         else if (invitationCode) {
-            navigation.replace('autoRegister', {regentCode: invitationCode})
+            //navigation.replace('autoRegister', {regentCode: invitationCode});
+            navigation.replace('home', {regentCode: invitationCode});
         } else {
             navigation.replace('home',)
         }
