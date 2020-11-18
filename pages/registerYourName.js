@@ -222,10 +222,9 @@ export default class registerYourName extends Component {
                                 style={{
                                     alignItems: 'center',
                                     marginTop: 0,
-                                    fontSize: 12,
-                                    fontWeight: 800,
+                                    fontSize: 11,
+                                    //fontWeight: 800,
                                     fontFamily: 'IRANYekanRegular',
-                                    marginBottom: 5,
                                     paddingHorizontal: 5,
                                 }}>
                                 {this.state.aliasName || this.state.fullName}
@@ -251,9 +250,10 @@ export default class registerYourName extends Component {
                                     alignItems: 'center',
                                     marginTop: 25,
                                     fontSize: 12,
-                                    fontWeight: 800,
+                                    //fontWeight: 800,
                                     fontFamily: 'IRANYekanRegular',
                                     marginBottom: 5,
+                                    color:subTextItem,
 
                                 }}>
                                 {this.state.avatar}
