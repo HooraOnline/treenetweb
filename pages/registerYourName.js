@@ -57,20 +57,20 @@ export default class registerYourName extends Component {
     }
 
     checkValidation() {
-        if(!this.state.shortMobile){
-            this.setState({mobileValidation: false});
-            return translate('موبایل خود را وارد کنید.')
-        }
-        if (this.state.shortMobile && this.state.shortMobile.length < 10) {
-            this.setState({mobileValidation: false});
-            return translate('the_number_of_mobile_is_not_valid');
-        }
+        // if(!this.state.shortMobile){
+        //     this.setState({mobileValidation: false});
+        //     return translate('موبایل خود را وارد کنید.')
+        // }
+        // if (this.state.shortMobile && this.state.shortMobile.length < 10) {
+        //     this.setState({mobileValidation: false});
+        //     return translate('the_number_of_mobile_is_not_valid');
+        // }
 
-        const mobileReg = /^9[0-9]{9}$/i;
-        if (this.state.shortMobile && !mobileReg.test(this.state.shortMobile)){
-            //this.setState({mobileValidation: false});
-            return translate('invalid_mobile_number'); ;
-        }
+        // const mobileReg = /^9[0-9]{9}$/i;
+        // if (this.state.shortMobile && !mobileReg.test(this.state.shortMobile)){
+        //     //this.setState({mobileValidation: false});
+        //     return translate('invalid_mobile_number'); ;
+        // }
 
         const emailReg = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
         if (this.state.email && !emailReg.test(this.state.email)){

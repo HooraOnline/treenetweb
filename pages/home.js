@@ -125,7 +125,7 @@ export default class index extends Component {
                     <Text
                         style={{
                             marginTop: 5,
-                            marginBottom: 10,
+                            marginBottom: 0,
                             fontSize: 18,
                             fontWeight: 800,
                             fontFamily: 'IRANYekanFaNum-Bold',
@@ -133,7 +133,17 @@ export default class index extends Component {
                         }}>
                         Treenetgram
                     </Text>
-
+                    <Text
+                        style={{
+                            marginTop: 0,
+                            marginBottom: 10,
+                            fontSize: 13,
+                            fontWeight: 800,
+                            fontFamily: 'IRANYekanFaNum-Bold',
+                            color: orange1
+                        }}>
+                        پلتفرم شبکه سازی
+                    </Text>
                     <View id='form' style={{
                         width: '100%',
                         paddingHorizontal: 5,
@@ -219,11 +229,12 @@ export default class index extends Component {
                                 paddingHorizontal: 20,
                             }}>{translate('login_my_tree')}</Text>
                         </TouchableOpacity>
+                       
                         <Text
                             style={{
                                 alignItems: 'center',
                                 marginTop: 25,
-                                fontSize: 12,
+                                fontSize: 11,
                                 fontWeight: 800,
                                 fontFamily: 'IRANYekanRegular',
                                 color:orange1,

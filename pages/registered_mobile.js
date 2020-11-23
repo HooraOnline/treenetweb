@@ -33,7 +33,6 @@ export default class registered_mobile extends Component {
     }
 
 
-
     async componentDidMount() {
         this.regentCode = navigation.getParam('regentCode');
         const countryCode = navigation.getParam('countryCode');
@@ -52,12 +51,11 @@ export default class registered_mobile extends Component {
     }
 
 
-
-
     async checkMobileExist() {
+    
         const msg = this.checkValidation();
         if(msg){
-            showMassage('msg');
+            showMassage(msg);
             return ;
         }
         this.setState({loading: true, loadingMessage: 'در حال اجرا...'});

@@ -19,7 +19,7 @@ export default class Index extends Component {
         }*/
         else if (invitationCode) {
             //navigation.replace('autoRegister', {regentCode: invitationCode});
-            navigation.replace('home', {regentCode: invitationCode});
+            navigation.replace('register', {regentCode: invitationCode});
         } else {
             navigation.replace('home',)
         }
