@@ -10,15 +10,17 @@ import {
     bgWhite,
     borderRed,
     borderSeparate,
+    fab,
     orange1,
     primaryDark,
     textRed
 } from "../src/constants/colors";
-import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
+import {BgImageChacheProgress, Image, Text, TouchableOpacity, View,Progress} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
-import {postQuery} from "../dataService/apiService";
+import {getFileUri, postQuery} from "../dataService/apiService";
 import {persistStore, userStore} from "../src/stores";
 import {observer} from "mobx-react";
+import { Avatar } from '@material-ui/core';
 
 @observer
 export default class register extends Component {
@@ -43,8 +45,18 @@ export default class register extends Component {
             return;
         }*/
         else {
+        
             this.regentCode = navigation.getParam('regentCode');
-            this.getUserGeo()
+            postQuery('Members/getRegentInfo',{invitationCode:this.regentCode})
+            .then((regent)=>{
+                this.setState({regent:regent});
+            })
+            .catch((e)=>{
+                console.log(e);
+            })
+            .finally(()=>{})
+
+            this.getUserGeo();
         }
     }
 
@@ -69,8 +81,9 @@ export default class register extends Component {
         }
         const user={regentCode:this.regentCode};
         try{
-            user.geoInfo =JSON.parse( this.geoInfo);
-            user.geo =JSON.parse( this.geo);
+            user.geoInfo =this.geoInfo?JSON.parse( this.geoInfo):{};
+            user.geo =this.geo?JSON.parse( this.geo):{};
+            user.countryCode=geoInfo.calling_code || "98";
         }catch (e) {
 
         }
@@ -80,7 +93,7 @@ export default class register extends Component {
     }
     nextPage(user){
 
-        navigation.navigate('registered_mobile', {regentCode:this.regentCode,countryCode:user.geoInfo.calling_code});
+        navigation.navigate('registered_mobile', {regentCode:this.regentCode,countryCode:user.countryCode});
     }
 
     async onSelectLanguege(lng) {
@@ -116,7 +129,8 @@ export default class register extends Component {
                         Treenetgram
                     </Text>
 
-                    <View>
+                    {this.state.regent &&(
+                        <View>
                         <View style={{flexDirection: 'row'}}>
                             <Text
                                 style={{
@@ -129,7 +143,7 @@ export default class register extends Component {
                                     marginBottom: 5,
                                     paddingHorizontal: 5,
                                 }}>
-                                علی موسوی
+                               {this.state.regent.fullName}
                             </Text>
                             <Text
                                 style={{
@@ -151,14 +165,47 @@ export default class register extends Component {
                             padding:10,
                         }}>
                             <View style={{}}>
-                                <Image
+                                {/* <Image
                                     source={'https://beard-style.com/image/1/51589-latest-awesome-beard-styles-for-men-in-india-cinthol-awesome-men.jpg'}
                                     style={{
                                         width: 100,
                                         height: 100,
                                         borderRadius: 50,
                                     }}
-                                />
+                                /> */}
+                                <BgImageChacheProgress
+                                    style={[{width:100,height:100, borderRadius: 50,}]}
+                                    //resizeMode="cover"
+                                    source={this.state.regent.profileImage?getFileUri('member',this.state.regent.profileImage):"noImage"}
+                                    indicator={() => <Progress.Circle
+                                        progress={this.state.imageProgress}
+                                        indeterminate={this.state.imageIndeterminate}
+                                    />}
+                                    indicatorProps={{
+                                        borderWidth: 3,
+                                        color: fab,
+                                        // unfilledColor: primaryDark,
+                                    }}
+
+                                    onError={e=>{
+                                        this.setState({imageIndeterminate: true});
+                                        this.props.onErrorImage && this.props.onErrorImage();
+                                    }}
+                                    onLoadStart={() => console.warn('!!!!!!!!!!!!!!!!!! onLoadStart Image ')}
+                                    onProgress={e => {
+                                        console.warn('%%%%%%%%%%% onProgress loaded:', e.nativeEvent.loaded);
+                                        console.warn('%%%%%%%%%%% onProgress total:', e.nativeEvent.total);
+                                        const progress = e.nativeEvent.loaded / e.nativeEvent.total;
+                                        this.setState({imageProgress: progress});
+                                        console.warn('!!!!!!!!!!!!!!!!!!!! onProgress p:', progress);
+                                    }}
+                                    onLoad={e => console.warn('!!!!!!!!!!!!!!!!!!!! onLoad Success', e.nativeEvent.width, e.nativeEvent.height)}
+                                    onLoadEnd={() => {
+                                        this.setState({loadImageCompelete: true})
+                                    }}
+                                >
+                                   
+                        </BgImageChacheProgress>
                                 {/* <Text
                         style={{
                             alignItems: 'center',
@@ -197,13 +244,16 @@ export default class register extends Component {
                                         marginBottom: 5,
 
                                     }}>
-                                    {'فروشنده لوازم ارایشی در ترینتگرام'}
+                                    {this.state.regent.avatar}
                                 </Text>
                             </View>
 
 
                         </View>
                     </View>
+                    )}
+
+                    
 
                     <View id='form' style={{
                         width: '100%',

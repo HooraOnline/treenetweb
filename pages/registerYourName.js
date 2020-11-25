@@ -485,7 +485,7 @@ export default class registerYourName extends Component {
                                         returnKeyType="done"
                                         numberOfLines={1}
                                         tintColor={
-                                            this.state.fullNameValidation ? bgSuccess : lightRed
+                                            this.state.avatarValidation ? bgSuccess : lightRed
                                         }
                                         textInputStyle={{
 
@@ -508,7 +508,7 @@ export default class registerYourName extends Component {
                                         highlightColor={primaryDark}
                                         value={this.state.avatar}
                                     />
-                                    <Text style={{marginTop:10, fontSize:10,color:textItemBlack,textAlign:'justify',}} > در بخش آواتار می توانید یک جمله کوتاه در مورد تخصص، کسب و کار یا هدفتان در ترینتگرام برای دیگران بنویسید</Text>
+                                    <Text style={{marginTop:10, fontSize:10,color:textItemBlack,textAlign:'justify',}} > در تکست باکس بالا  می توانید بجای "عضو فعال ترینتگرام" یک جمله کوتاه در مورد تخصص، کسب و کار یا هدفتان در ترینتگرام برای دیگران بنویسید. مثال:عضو فعال ترینتگرام یا فروشنده لوازم آرایشی یا مثلا خدمات بازاریابی ایران تبلیغ</Text>
                                    {/* <Text style={{fontSize:12}} >چند مثال </Text>
                                     <Text style={{fontSize:12}} >تبلیغ کالای شما در شبکه ۱۰۰ هزار نفری من </Text>
                                     <Text style={{fontSize:12}} >متخصص تعمیرات لوازم برقی</Text>

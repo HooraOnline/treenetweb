@@ -71,7 +71,7 @@ export default class userpage extends Component {
                              />
                          }
                          >
-                <View style={{flex:1, marginTop: persistStore.notChangePassword ? 30 : 0, alignItems: 'center'}}>
+                <View style={{flex:1, marginTop: 0, alignItems: 'center'}}>
                     <UserCard style={{maxWidth: 500,paddingTop: 25,paddingHorizontal:16}} user={this.user}/>
                     <View style={{flex:1,width:'100%',backgroundColor:bgWhite,minHeight:600}}>
                         <MyPosts user={this.user}/>

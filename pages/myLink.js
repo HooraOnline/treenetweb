@@ -58,7 +58,7 @@ export default class MyLink extends Component {
                              />
                          }>
                 <View style={{flex:1,paddingBottom:40}}>
-                    {persistStore.notChangePassword?(
+                    {/* {persistStore.notChangePassword?(
                         <View style={{padding: 24, marginTop: 10,alignItems:'center'}}>
                             <Text
                                 style={{
@@ -91,7 +91,7 @@ export default class MyLink extends Component {
                             </TouchableOpacity>
 
                         </View>
-                    ):(
+                    ):( */}
                         <View style={{padding: 16,}}>
                             <Text
                                 style={{
@@ -101,7 +101,7 @@ export default class MyLink extends Component {
                                     fontFamily: 'IRANYekanFaNum-Bold',
                                     marginHorizontal:10
                                 }}>
-                                {translate(' خیلی راحت از همینجا لینکتو به اشتراک بذار، شاخ و برگ بگیر و شبکه عظیم خودتو بساز')}
+                                {translate(' خیلی راحت از همینجا لینکتو به اشتراک بذار، شاخ و برگ بگیر و شبکه عظیم تبلیغاتی خودتو بساز')}
                             </Text>
                             <ShareLink style={{marginVertical:20}}/>
                             <Text style={{
@@ -109,7 +109,7 @@ export default class MyLink extends Component {
                                 paddingHorizontal: 30,
                                 fontSize: 14,
                                 color: itemListText
-                            }}>{translate('با اشتراک گذاری لینک خودت در شبکه های اجتماعی یا کپی و ارسال اون برای دوستان و آشنایان، می تونی خیلی سریع شبکه خودتو رشد بدی. فقط کافیه مخاطب، روی لینک ارسالی شما بزنه و وارد سایت تری نتگرام بشه. به محض ورود، بصورت اتوماتیک ثبت نام و جز شبکه شما میشه. و فالوبورد اعلانات شما رو خواهد دید.')}</Text>
+                            }}>{translate('با اشتراک گذاری لینک خودت در شبکه های اجتماعی یا کپی و ارسال اون برای دوستان و آشنایان، می تونی خیلی سریع شبکه خودتو رشد بدی. فقط کافیه مخاطب، روی لینک ارسالی شما بزنه و وارد سایت تری نتگرام بشه. به محض ورود شماره موبایل، بصورت اتوماتیک ثبت نام و جز شبکه شما میشه. و فالوبورد اعلانات شما رو خواهد دید.')}</Text>
                             <Text style={{
                                 textAlign: 'justify',
                                 paddingHorizontal: 30,
@@ -121,22 +121,10 @@ export default class MyLink extends Component {
                                 paddingHorizontal: 30,
                                 fontSize: 14,
                                 color: itemListText
-                            }}>{translate('حتی می تونی لینک خودتو به دوستان و آشنایان خارجی خودت بفرستی یا در شبکه های اجتماعی و فرومهایی که افراد خارجی هستند ارسال کنی. به همین سادگی شاخه های بین المللی شبکه خودتو کم کم ایجاد می کنی. و حتما میدونی که شبکه بین المللی یعنی درآمد بین المللی. مثلا درآمد از سرویس تبلیغات اتوماتیک تری نتگرام')}</Text>
-                            <Text style={{
-                                textAlign: 'justify',
-                                paddingHorizontal: 30,
-                                fontSize: 14,
-                                color: itemListText
-                            }}>{translate('برای معرفی بهتر می تونی لینک خودت رو به همراه یه پیام برای دوستات ارسال کنی تا تاثیر بهتری داشته باشه.')}</Text>
-                            <Text style={{
-                                textAlign: 'justify',
-                                paddingHorizontal: 30,
-                                fontSize: 14,
-                                color: itemListText
-                            }}>{translate('شبکه خودتو توسعه بده و منتظر  اپلیکیشن ترینتگرام باش. این اپلیکیشن با امکاناتی که داره، بصورت اتوماتیک به تو قدرت تبلیغاتی، رسانه ای و ثروت آفرینی میده. پس از همین الان شروع کن و شبکه خودتو سریعتر از دیگران توسعه بده.')}</Text>
-
+                            }}>{translate('حتی می تونی لینک خودتو به دوستان و آشنایان خارجی خودت بفرستی یا در شبکه های اجتماعی و فرومهایی که افراد خارجی هستند ارسال کنی. به همین سادگی شاخه های بین المللی شبکه خودتو کم کم ایجاد می کنی. و حتما میدونی که شبکه بین المللی یعنی درآمد بین المللی. مثلا درآمد از سرویس تبلیغات تری نتگرام و سایر سروسهای درآمدزایی که به تدریج به ترینتگرام اضابه خواهند شد.')}</Text>
+                                                      
                         </View>
-                    )}
+                    {/* )} */}
                 </View>
             </PanelLayout>
             //</PanelLayout>

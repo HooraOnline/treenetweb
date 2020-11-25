@@ -24,7 +24,7 @@ import TextInput from "../src/react-native/TextInput";
 export default class edit_profile extends Component {
     constructor() {
         super();
-
+      
         this.state = {
             image:pStore.cUser.profileImage,
             password:'',
@@ -38,7 +38,7 @@ export default class edit_profile extends Component {
             ageValidation:pStore.cUser.age?true:false,
             countryCode:pStore.cUser.countryCode,
             username:pStore.cUser.username,
-            shortMobile:pStore.cUser.shortMobile,
+            shortMobile:pStore.cUser.mobile,
             email:pStore.cUser.email,
             fullName:pStore.cUser.fullName ,
             avatar:pStore.cUser.avatar ,
@@ -57,21 +57,7 @@ export default class edit_profile extends Component {
     }
 
     checkValidation() {
-        if(!this.state.shortMobile){
-            this.setState({mobileValidation: false});
-            return translate('موبایل خود را وارد کنید.')
-        }
-        if (this.state.shortMobile && this.state.shortMobile.length < 10) {
-            this.setState({mobileValidation: false});
-            return translate('the_number_of_mobile_is_not_valid');
-        }
-
-        const mobileReg = /^9[0-9]{9}$/i;
-        if (this.state.shortMobile && !mobileReg.test(this.state.shortMobile)){
-            //this.setState({mobileValidation: false});
-            return translate('invalid_mobile_number'); ;
-        }
-
+       
         const emailReg = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/
         if (this.state.email && !emailReg.test(this.state.email)){
             //this.setState({emailReg: false});
@@ -89,7 +75,7 @@ export default class edit_profile extends Component {
             return translate(' تصویر  پروفایل خود را انتخاب کنید.');
         }
     }
-    updateUsernameAndPassword=()=>{
+    updateProfile=()=>{
         const msg=this.checkValidation();
         if(msg){
             showMassage(msg,'warning')
@@ -99,9 +85,7 @@ export default class edit_profile extends Component {
         const data={
 
         };
-        if(this.state.shortMobile){
-            data.mobile=this.state.countryCode+'-'+this.state.shortMobile;
-        }
+       
         if(this.state.email){
             data.email=this.state.email;
         }
@@ -173,7 +157,7 @@ export default class edit_profile extends Component {
                          }
                          footer={
                              <TouchableOpacity
-                                 onPress={this.updateUsernameAndPassword}
+                                 onPress={this.updateProfile}
                                  style={{alignItems:'center',justifyContent:'center',padding:10, backgroundColor:primaryDark}}>
                                  <Text style={{color:bgWhite}} >ذخیره</Text>
                              </TouchableOpacity>
@@ -219,15 +203,16 @@ export default class edit_profile extends Component {
                                 borderRadius: 8,
                                 backgroundColor: bgWhite,
                             }}>
-                                <Text style={{
+                               
+                                 <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                     fontSize: 14,
                                     color: border,
 
                                     padding: 5,
                                     alignSelf: 'center',
-                                }}>{this.state.countryCode}</Text>
-                                <FloatingLabelTextInput
+                                }}>+{this.state.username}</Text>
+                                {/* <FloatingLabelTextInput
                                     dir={'ltr'}
                                     labelAlign={'left'}
                                     reverse={persistStore.isRtl}
@@ -274,8 +259,8 @@ export default class edit_profile extends Component {
                                     keyboardType="number-pad"
                                     returnKeyType="done"
 
-                                />
-
+                                /> */}
+                              
                             </View>
                             <View dir={"ltr"} style={{
                                 flexDirection: 'row',
@@ -306,10 +291,8 @@ export default class edit_profile extends Component {
                                     }}
                                     numberOfLines={1}
                                     isAccept={this.state.emailValidation}
-                                    textInputStyle={{
-                                        fontFamily: 'IRANYekanFaNum-Bold',
+                                    textInputStyle={{   
                                         fontSize: 14,
-                                        fontWeight:800,
                                         color: textItemBlack,
                                         paddingStart: 4,
                                         paddingTop: 1,
@@ -504,10 +487,10 @@ export default class edit_profile extends Component {
                                 />
                                 <Text style={{marginTop:10, fontSize:12,color:textItemBlack,textAlign:'justify',fontWeight:800}} > در بخش آواتار می توانید یک جمله کوتاه در مورد تخصص، کسب و کار یا هدفتان در ترینتگرام برای دیگران بنویسید</Text>
                                 <Text style={{fontSize:12}} >چند مثال </Text>
-                                <Text style={{fontSize:12}} >تبلیغ کالای شما در شبکه ۱۰۰ هزار نفری من </Text>
+                                <Text style={{fontSize:12}} >بازاریاب کالای شما در سراسر ایران</Text>
                                 <Text style={{fontSize:12}} >متخصص تعمیرات لوازم برقی</Text>
-                                <Text style={{fontSize:12}} >تبلیغ بین المللی در کشورهای اروپایی در یورونت</Text>
-                                <Text style={{fontSize:12}} > فروش بیمه عمر با شرایط خاص </Text>
+                                <Text style={{fontSize:12}} >تبلیغ بین المللی یورونت</Text>
+                                <Text style={{fontSize:12}} > فروش بیمه عمر با شرایط ویژه </Text>
                                 <Text style={{fontSize:12}} >بوتیک فرهاد، عرضه برترین پوشاک مردانه</Text>
                                 <Text style={{fontSize:12}} >هتل پنج ستاره حاتم</Text>
                                 <Text style={{fontSize:12}} >مشاوره روانشناس خانواده</Text>

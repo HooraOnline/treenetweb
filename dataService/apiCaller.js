@@ -28,7 +28,7 @@ import version from "../src/version";
 
 
 
-export const apihost = version.release ? "https://treenetserver.herokuapp.com/api/" : 'http://192.168.18.61:3000/api/';
+export const apihost = version.release ? "https://treenetserver.herokuapp.com/api/" : 'http://192.168.100.8:3000/api/';
 let isSetToken=false;
 class Api {
     constructor() {
@@ -71,7 +71,6 @@ class Api {
       return cipher("privatekey4673")(encodeURIComponent(str));
     }
     static post=async (apiPath, model)=> {
-
         await this.setToken();
         let uri =  apiPath;
         //model={value:Api.encrypt(model)};

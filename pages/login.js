@@ -9,10 +9,10 @@ import {
     lightRed,
     primaryDark,
     subTextItem,
-    textItem, textGray,
+    textItem, textGray, orange1, bgWhite, lightGrey,
 } from '../src/constants/colors';
 import {globalState, persistStore,} from '../src/stores';
-import {getWidth,} from '../src/utils';
+import {getWidth, mapNumbersToEnglish, showMassage,} from '../src/utils';
 import {FloatingLabelTextInput, LoadingPopUp} from '../src/components';
 import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
@@ -50,6 +50,8 @@ export default class LoginPage extends PureComponent {
             language: LNGList[0],
             languageIndex: LNGList[0].index,
             loading:false,
+            vpn:true,
+            countryCode:"98",
         };
     }
     async componentDidMount() {
@@ -58,9 +60,24 @@ export default class LoginPage extends PureComponent {
             boxWidth: getWidth() > 500 ? 400 : getWidth() - 50,
             bgImage: getWidth() > 600 ? images.bg_loginweb : images.bg_login
         });
+        this.getUserGeo();
         this.showLogin();
     }
 
+    getUserGeo(){
+        let self=this;
+    
+        $.getJSON('https://api.ipdata.co/?api-key=92c9cd9137ca4bd296e2a749b8cd3a7908cb960766c10013cd108f26', function(data) {
+            self.geoInfo=data
+            let vpn=false;
+            let countryCode=self.geoInfo.calling_code;
+            if( countryCode!=='980'){
+                vpn=true;
+            }
+            self.setState({countryCode: countryCode ,vpn:true});
+        });
+ 
+    }
     showLogin() {
         setTimeout(() => {
             //this.animatedSplash();
@@ -83,14 +100,14 @@ export default class LoginPage extends PureComponent {
     }
 
     async onLogin() {
-        if(this.state.username.length <2  || this.state.password.length<6){
+        if(this.state.countryCode.length <1  || this.state.password.length<6){
             return ;
         }
         this.setState({loading: true});
         const data={};
         this.setState({loading:true});
-
-        loginApi(this.state.username,this.state.password)
+        const userName=this.state.countryCode+this.state.username;
+        loginApi(userName,this.state.password)
             .then(res=>{
                 this.onSuccessLogin(res);
                 this.setState({loading:false});
@@ -255,7 +272,7 @@ export default class LoginPage extends PureComponent {
                                 </Text>
                                 <Text style={{
                                     marginTop: 6,
-                                    marginBottom: 35,
+                                    marginBottom: 20,
                                     fontSize: 16,
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Light' : 'IRANYekanLight(FaNum)',
                                     textAlign: 'center',
@@ -264,7 +281,76 @@ export default class LoginPage extends PureComponent {
                                        /* translate('login_enter_your_user_name')*/
                                     }
                                 </Text>
-                                <FloatingLabelTextInput
+                                { this.state.vpn &&
+                                    <Text
+                                        style={{
+                                            alignItems: 'center',
+                                            marginBottom: 15,
+                                            fontSize: 11,
+                                            fontFamily: 'IRANYekanFaNum-Bold',
+                                            textAlign: 'justify',
+                                            color: orange1,
+
+                                        }}>
+                                        {/*{translate(" شبکه درختی شما با نام کاربری و رمز عبور موقتی زیر ساخته شد. لطفا بعد از ورود نام کاربری و رمز عبور موقت خود را تغییر دهید.")}*/}
+                                        {translate(`اگر فیلتر شکن شما روشن است کد کشور(${this.state.countryCode}+) را اصلاح کنید.`)}
+                                    </Text>
+                                }
+
+                          <View dir={"ltr"} 
+                            style={{
+                                flexDirection: 'row',
+                                marginTop: 0, 
+                            }}>
+
+                            <Text style={{
+                                fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
+                                fontSize: 16,
+                               
+                                alignSelf: 'center',
+                                marginHorizontal:5,
+                                marginBottom:0,
+                            }}>+</Text>
+                            <FloatingLabelTextInput
+                                dir={'ltr'}
+                                reverse={persistStore.isRtl}
+                                style={{width:20,marginTop:4}}
+                                placeholder={translate("کد")}
+                                value={this.state.countryCode}
+
+                                onChangeText={text => {
+                                    text = mapNumbersToEnglish(text);
+
+                                    if(isNaN(Number(text))){
+                                        this.setState({ countryCode:''});
+                                    }else{
+                                        this.setState({ countryCode:text});
+                                    }
+
+                                }}
+                                numberOfLines={1}
+                                //isAccept={this.state.countryCode}
+                                textInputStyle={{
+                                    fontFamily: 'IRANYekanFaNum-Bold',
+                                    fontSize: 12,
+                                    fontWeight:800,
+                                    color: textItemBlack,
+                                    paddingStart: 4,
+                                    paddingTop: 1,
+                                    paddingBottom: 10,
+                                    //textAlign: 'left',
+                                }}
+                                underlineSize={0}
+
+                                multiline={false}
+                                maxLength={3}
+                                //autoFocus={true}
+                                keyboardType="number-pad"
+                                returnKeyType="done"
+
+                            />
+                           
+                               <FloatingLabelTextInput
                                     refInput={input => loginInput[0] = input}
                                     dir={'ltr'}
                                     reverse={persistStore.isRtl}
@@ -279,6 +365,7 @@ export default class LoginPage extends PureComponent {
                                     onSubmitEditing={() => loginInput[1].focus()}
                                     style={{textAlign: persistStore.isRtl ? 'right' : 'left',}}
                                     numberOfLines={1}
+                                    maxLength={10}
                                     tintColor={
                                         this.state.usernameValidation ? textItem : lightRed
                                     }
@@ -293,22 +380,38 @@ export default class LoginPage extends PureComponent {
                                         textAlign:  'left',
                                     }}
                                     underlineSize={1}
-                                    placeholder={translate('نام کاربری')}
+                                    placeholder={translate('شماره موبایل')}
 
-                                    // style={{flex: 1}}
+                                    style={{flex: 1}}
                                     onChangeText={text => {
-                                        //this.checkValidation();
-                                        this.setState({
-                                            username:text, //inputNumberValidation(text, this.state.username, /[\d]+$/),
-                                            usernameValidation: true,
-                                        }, () => {
-                                            //this.state.username.length === 11 ? loginInput[1].focus() : null;
-                                        });
+                                       
+
+                                        if(text.length>1 && text.indexOf(0)==0){
+                                            text=text.substring(1);
+                                        }
+    
+                                        const acceptReg =/^[0-9~.]+$/;
+                                        const mobileReg = /^9[0-9]{9}$/i;
+                                        text = mapNumbersToEnglish(text);
+                                        if(acceptReg.test(text)){
+                                            this.setState({ username:text,mobileIsRegister:false, usernameValidation:mobileReg.test(text)});
+                                        }else if(text){
+                                            showMassage(translate('fastRegister_onlyEnglish_number'),'info');
+                                        }
+                                        if(!text){
+                                            this.setState({ username:'', usernameValidation:false});
+                                        }
 
                                     }}
                                     highlightColor={primaryDark}
                                     value={this.state.username}
                                 />
+
+                           
+
+                        </View>
+                           
+                                
 
                                 <View
                                     style={{
@@ -373,6 +476,7 @@ export default class LoginPage extends PureComponent {
                                         }
                                     </TouchableOpacity>
                                 </View>
+                                
                             </View>
 
                             {this.state.loading &&
@@ -404,6 +508,7 @@ export default class LoginPage extends PureComponent {
                                     }
                                 </Text>
                             </TouchableOpacity>
+                           
                         </View>
                     </View>
                 </ScrollView>

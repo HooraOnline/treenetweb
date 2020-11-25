@@ -1,5 +1,5 @@
 import React, {Component, useEffect, useState} from 'react';
-import {globalState, persistStore} from "../src/stores";
+import {globalState, persistStore, userStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {ImageSelector, Toolbar} from "../src/components";
 
@@ -67,18 +67,17 @@ export default class mypage extends Component {
 
     render() {
 
+        debugger
         const toolbarStyle = {
             start22: {
                 content: images.ic_back,
             },
-            title: pStore.cUser.username,
+            title: userStore.fullName,
             end: {
                 onPress: () => logoutApi(),
                 icon: images.ic_Period,
             },
         };
-
-
 
 
         return (
@@ -94,7 +93,7 @@ export default class mypage extends Component {
                                      customStyle={toolbarStyle}
                                      isExpand={this.state.showAccountSelect}
                                  />
-                                 {persistStore.notChangePassword && (
+                                 {/* {persistStore.notChangePassword && (
                                      <div style={{width: globalState.width, zIndex: 4}}>
                                          <TouchableOpacity
                                              onPress={() => {
@@ -139,7 +138,7 @@ export default class mypage extends Component {
                                      </div>
                                  )
 
-                                 }
+                                 } */}
                              </View>
                          }
                          footer={
@@ -151,8 +150,8 @@ export default class mypage extends Component {
                                          icon: <FontAwesomeIcon icon={faUser}/>
                                      },
                                      {
-                                         label: translate('شبکه من'),
-                                         path: "/myNetwork",
+                                         label: translate('سرویسها'),
+                                         path: "/myServices",
                                          icon: <FontAwesomeIcon icon={faCogs}/>
                                      },
                                      {
@@ -163,7 +162,7 @@ export default class mypage extends Component {
                                  ]}/>
                              </View>
                          }>
-                <View style={{flex:1, marginTop: persistStore.notChangePassword ? 30 : 0, alignItems: 'center'}}>
+                <View style={{flex:1, marginTop:0, alignItems: 'center'}}>
                     <UserCard style={{maxWidth: 500,paddingTop: 25,paddingHorizontal:16}}/>
                     <View style={{flex:1,width:'100%',backgroundColor:bgWhite,minHeight:600}}>
                         <MyPosts/>
@@ -220,7 +219,7 @@ export const UserCard = observer(props => {
                     />
 
                 <View style={{width: 20}}/>
-                <View style={{alignItems: 'center'}}>
+                <View style={{}}>
                     <View style={{flexDirection: 'row', height: 30, maxWidth: 500, justifyContent: 'space-around'}}>
                         <View style={{alignItems: 'center', paddingHorizontal: 15}}>
                             <Text style={{fontSize: 12}}>شاخه</Text>
@@ -265,7 +264,7 @@ export const UserCard = observer(props => {
                         flex:1,
                         margin:10,
                         width:'100%',
-                        maxWidth:300,
+                        width:140,
                         borderRadius:8,
                         flexDirection:'row',
                         justifyContent:'center',
@@ -280,12 +279,13 @@ export const UserCard = observer(props => {
                     <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={()=>{navigation.navigate('myLink')}}
+                    onPress={()=>{navigation.navigate('myNetwork')}}
                     style={{
                         flex:1,
                         margin:10,
                         width:'100%',
                         maxWidth:300,
+                        width:140,
                         borderRadius:8,
                         flexDirection:'row',
                         justifyContent:'center',
@@ -301,7 +301,7 @@ export const UserCard = observer(props => {
                         }}
                     />
 
-                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>لینک دعوت</Text>
+                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>شبکه من</Text>
                 </TouchableOpacity>
             </View>
         </View>

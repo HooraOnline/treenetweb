@@ -21,9 +21,9 @@ export default {
     lightRed: '#f77',
 
 };
-let _primaryDark='#ea4523'
-let _primaryLight = '#ea4523';
-let _primary = '#ea4523';
+let _primaryDark='#839192'
+let _primaryLight = '#5F6A6A';
+let _primary = '#5F6A6A';
 
 
 

@@ -100,7 +100,7 @@ const PanelLayout = observer( props => {
 
                         {props.children}
                     </View>
-                    <div style={{position:'fixed',bottom:0,width:globalState.width,zIndex:40,backgroundColor:bgScreen,paddingTop:5,paddingBottom:5 }}>
+                    <div style={{position:'fixed',bottom:0,width:globalState.width,zIndex:40,backgroundColor:bgScreen,paddingTop:5,paddingBottom:0 }}>
                         {props.footer}
                     </div>
 
@@ -131,7 +131,7 @@ const PanelLayout = observer( props => {
                                 background-color: #CDDC39;
                             }
                     `}</style>
-        </div>
+            </div>
     );
 });
 

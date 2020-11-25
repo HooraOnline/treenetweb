@@ -131,6 +131,7 @@ export default class RegisterPassword extends Component {
         }
 
         this.setState({loading: true, loadingMessage: 'در حال ساخت شبکه تری نت شما...'});
+        debugger
         postQuery('members/me/register', this.user)
             .then(member => {
                 /*self.user = member;
@@ -144,7 +145,10 @@ export default class RegisterPassword extends Component {
                 this.onLogin()
             })
             .catch(err => {
-                this.setState({loading: false, buldingMsg: 'خطا در ساخت شبکه تری نت شما'});
+                showMassage("خطا در ساخت شبکه تری نت شما.",'error');
+            })
+            .finally(()=>{
+                this.setState({loading: false})
             })
 
     }

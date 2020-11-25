@@ -6,6 +6,7 @@ import {navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
 import {
     bgItemRed,
+    bgSuccess,
     bgWhite,
     borderSeparate,
     itemListText, orange1,
@@ -21,7 +22,7 @@ import translate from "../src/language/translate";
 import {getFileUri, getUserSubsetApi} from "../dataService/apiService";
 import Image from "../src/react-native/Image";
 import DateTime from "../src/react-native/DateTime";
-import {IoMdEye, IoMdEyeOff} from "react-icons/io";
+import {IoIosLink, IoMdEye, IoMdEyeOff} from "react-icons/io";
 import copy from "copy-to-clipboard";
 import {observer} from "mobx-react";
 import { RiProfileLine } from "react-icons/ri";
@@ -222,8 +223,9 @@ export default class MyNetwork extends Component {
     }
     render() {
         const toolbarStyle = {
-            start22: {
+            start: {
                 content: images.ic_back,
+                onPress: ()=>navigation.goBack(),
             },
             title: 'شبکه من',
 
@@ -234,14 +236,14 @@ export default class MyNetwork extends Component {
                               onRef={(initDrawer)=>this.initDrawer=initDrawer}
                               onCloseMenu={()=>this.setState({showMenu:false})}
                               style={{paddingBottom:10}}
-                              notif={persistStore.notChangePassword?"رمز موقت را تغییر دهید.":""}
+                              //notif={persistStore.notChangePassword?"رمز موقت را تغییر دهید.":""}
                               header={
                                   <View>
                                       <Toolbar
                                           customStyle={toolbarStyle}
                                           isExpand={this.state.showAccountSelect }
                                       />
-                                      {persistStore.notChangePassword &&(
+                                      {/* {persistStore.notChangePassword &&(
                                           <div  style={{position:'fixed',top:50,width:globalState.width,zIndex:40}}>
                                               <TouchableOpacity
                                                   onPress={()=>{navigation.navigate('change_username_password')}}
@@ -259,8 +261,7 @@ export default class MyNetwork extends Component {
                                               </TouchableOpacity>
                                           </div>
                                       )
-
-                                      }
+                                      } */}
                                   </View>
                               }
                             footer={
@@ -271,8 +272,8 @@ export default class MyNetwork extends Component {
                                         icon: <FontAwesomeIcon icon={faUser}/>
                                     },
                                     {
-                                        label: translate('شبکه من'),
-                                        path: "/myNetwork",
+                                        label: translate('سرویسها'),
+                                        path: "/myServices",
                                         icon: <FontAwesomeIcon icon={faCogs}/>
                                     },
                                     {
@@ -284,7 +285,7 @@ export default class MyNetwork extends Component {
                             }
 
                               >
-                <View style={{marginHorizontal: 10,marginTop: persistStore.notChangePassword?80:10,paddingBottom:60}}>
+                <View style={{marginHorizontal: 10,marginTop: 10,paddingBottom:60}}>
                     <View style={{width:'100%',
                         flexDirection:'row',
                         justifyContent:'space-between',
@@ -306,11 +307,38 @@ export default class MyNetwork extends Component {
                         level={1}
                     />
                     {pStore.subsetList.length==0 &&(
-                        <View style={{marginTop:10}}>
+                        <View style={{marginTop:10,alignItems:'center'}}>
                             <Text
                                 style={{textAlign:'justify',paddingHorizontal:30,fontSize:14,color:itemListText}}
                             > شما هنوز هیچ فردی را به تری نتگرام دعوت نکرده و شاخه ای نساخته اید. برای ایجاد شاخه های درخت خود، کافی است لینک اختصاصی خود را برای چند نفر ارسال کنید یا آنرا در شبکه های اجتماعی مانند فیسبوک یا تلگرام به اشتراک بگذارید. </Text>
 
+                            <TouchableOpacity
+                                onPress={()=>{navigation.navigate('myLink')}}
+                                style={{
+                                    flex:1,
+                                    margin:10,
+                                    width:'100%',
+                                    maxWidth:300,
+                                    width:140,
+                                    borderRadius:8,
+                                    flexDirection:'row',
+                                    justifyContent:'center',
+                                    padding:10,
+                                    backgroundColor: bgSuccess,
+                                    
+                                }}>
+                                <IoIosLink
+                                    color={bgWhite}
+                                    style={{
+                                        width: 24,
+                                        height: 24,
+                                        tintColor:bgWhite
+                                    }}
+                                />
+
+                                <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}> شبکه سازی</Text>
+                            </TouchableOpacity>
+                        
                         </View>
                     )}
                 </View>

@@ -81,7 +81,7 @@ export default class followboard extends Component {
                                          icon: <FontAwesomeIcon icon={faUser}/>
                                      },
                                      {
-                                         label: translate('شبکه من'),
+                                         label: translate('سروسها'),
                                          path: "/myNetwork",
                                          icon: <FontAwesomeIcon icon={faCogs}/>
                                      },

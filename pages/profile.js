@@ -94,7 +94,7 @@ export default class Profile extends Component {
                                           customStyle={toolbarStyle}
                                           isExpand={this.state.showAccountSelect }
                                       />
-                                      {persistStore.notChangePassword &&(
+                                      {/* {persistStore.notChangePassword &&(
                                           <div  style={{width:globalState.width,zIndex:4}}>
                                               <TouchableOpacity
                                                   onPress={()=>{navigation.navigate('change_username_password')}}
@@ -113,7 +113,7 @@ export default class Profile extends Component {
                                           </div>
                                       )
 
-                                      }
+                                      } */}
                                   </View>
 
                               }
@@ -126,8 +126,8 @@ export default class Profile extends Component {
                                               icon: <FontAwesomeIcon icon={faUser}/>
                                           },
                                           {
-                                              label: translate('شبکه من'),
-                                              path: "/myetwork",
+                                              label: translate('سرویسها'),
+                                              path: "/myServices",
                                               icon: <FontAwesomeIcon icon={faCogs} />
                                           },
                                           {
@@ -138,7 +138,7 @@ export default class Profile extends Component {
                                       ]}/>
                                   </View>
                               }>
-                <View style={{  padding:0,marginTop:persistStore.notChangePassword?30: 0,alignItems:'center'}}>
+                <View style={{  padding:0,marginTop:0,alignItems:'center'}}>
                     <View style={{width: '100%', padding: 24, marginTop: 0, alignItems: 'center', maxWidth: 300}}>
 
                         {/* <Image
