@@ -20,7 +20,7 @@ import {ListDialogPopUp} from "../src/components";
 import {getFileUri, postQuery} from "../dataService/apiService";
 import {persistStore, userStore} from "../src/stores";
 import {observer} from "mobx-react";
-import { Avatar } from '@material-ui/core';
+
 
 @observer
 export default class register extends Component {
@@ -68,12 +68,18 @@ export default class register extends Component {
     }
     getUserGeo(){
         let self=this;
+
+        this.setState({loadingGeo:true})
         $.getJSON('https://api.ipdata.co/?api-key=92c9cd9137ca4bd296e2a749b8cd3a7908cb960766c10013cd108f26', function(data) {
             console.log(JSON.stringify(data, null, 2));
             self.geoInfo=JSON.stringify(data, null, 2);
-        });
+        })
+        .done(function(res) { console.log(res)})
+        .fail(function(e) { showMassage('اگر فیلتر شکن شما روشن است، فیلتر شکن را خاموش کنید.')})
+        .always(function() {self.setState({loadingGeo:false}) });
     }
     async initUser () {
+        
         const msg = this.checkValidation();
         if (msg) {
             showMassage(msg, 'info');
@@ -81,11 +87,12 @@ export default class register extends Component {
         }
         const user={regentCode:this.regentCode};
         try{
+            
             user.geoInfo =this.geoInfo?JSON.parse( this.geoInfo):{};
             user.geo =this.geo?JSON.parse( this.geo):{};
-            user.countryCode=geoInfo.calling_code || "98";
+            user.countryCode=user.geoInfo.calling_code || "98";
         }catch (e) {
-
+             console.log('error');
         }
 
         this.nextPage(user);
@@ -317,31 +324,36 @@ export default class register extends Component {
                                 )
                             }}
                         />*/}
-                        <TouchableOpacity
-                            style={{
-                                flex: 1,
-                                marginTop: 10,
-                                width: 200,
-                                maxWidth: 300,
-                                backgroundColor: bgSuccess,
-                                padding: 0,
-                                paddingTop: 0,
-                                borderRadius: 12,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                            onPress={() => this.initUser()}
-                        >
-                            <Text style={{
-                                fontSize: 14,
-                                color: bgWhite,
-                                fontWeight: 500,
-                                paddingVertical: 10,
-                                paddingHorizontal: 20,
-                            }}>
-                                شروع شبکه سازی
-                            </Text>
+
+                     
+                            <TouchableOpacity
+                                disabled={this.state.loadingGeo}
+                                style={{
+                                    flex: 1,
+                                    marginTop: 10,
+                                    width: 200,
+                                    maxWidth: 300,
+                                    backgroundColor: bgSuccess,
+                                    padding: 0,
+                                    paddingTop: 0,
+                                    borderRadius: 12,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                                onPress={() => this.initUser()}
+                            >
+                                <Text style={{
+                                    fontSize: 14,
+                                    color: bgWhite,
+                                    fontWeight: 500,
+                                    paddingVertical: 10,
+                                    paddingHorizontal: 20,
+                                }}>
+                                    شروع شبکه سازی
+                                </Text>
                         </TouchableOpacity>
+                       
+                        
                         <Text
                             style={{
                                 alignItems: 'center',

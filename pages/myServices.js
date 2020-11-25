@@ -49,7 +49,7 @@ export default class MyServices extends Component {
                 content: images.ic_back,
                 onPress: ()=>navigation.goBack(),
             },
-            title: 'سرویسهای فعال من',
+            title: 'سرویسهای من',
 
         };
 

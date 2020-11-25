@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ResponsiveLayout from "../src/components/layouts/ResponsiveLayout";
 import translate from "../src/language/translate";
-import {doDelay, mapNumbersToEnglish, navigation, showMassage,} from "../src/utils";
+import {doDelay, mapNumbersToEnglish, navigation, showMassage, waitForData,} from "../src/utils";
 import images from "../public/static/assets/images";
 import {
     bg1,
@@ -34,13 +34,16 @@ export default class registered_mobile extends Component {
 
 
     async componentDidMount() {
-        this.regentCode = navigation.getParam('regentCode');
-        const countryCode = navigation.getParam('countryCode');
-        if(!this.regentCode){
-            this.setState({countryCode:countryCode,regentCodeCodeValidation: false});
-            return translate('required_invitationLink');
-        }
-
+        waitForData(()=>{
+            debugger
+            this.regentCode = navigation.getParam('regentCode');
+            const countryCode = navigation.getParam('countryCode');
+            this.setState({countryCode:countryCode,});
+            if(!this.regentCode){
+                this.state.regentCodeCodeValidation= false;
+                return translate('required_invitationLink');
+            }
+        })
         
     }
 
@@ -54,29 +57,29 @@ export default class registered_mobile extends Component {
 
 
     async checkMobileExist() {
-    
         const msg = this.checkValidation();
         if(msg){
             showMassage(msg);
             return ;
         }
         this.setState({loading: true, loadingMessage: 'در حال اجرا...'});
-        postQuery('members/checkMobileExist', {mobile:this.state.mobile})
-            .then(mobileIsRegister => {
-                  if(mobileIsRegister){
-                   this.setState({mobileIsRegister,loading: false,})
+        let username=this.state.countryCode|| "98";
+        username=username+this.state.mobile
+        postQuery('members/me/checkUserNameExist', {username})
+            .then(mobileIsRegisterBefore => {
+                  if(mobileIsRegisterBefore){
+                      this.setState({mobileIsRegisterBefore,loading: false,})
                   }else{
                       this.user={};
                       this.user.mobile=this.state.mobile;
                       this.user.regentCode=this.regentCode;
-                      this.user.countryCode=this.countryCode;
-                      this.setState({mobileIsRegister,loading: false,});
+                      this.user.countryCode=this.state.countryCode;
+                      this.setState({mobileIsRegisterBefore,loading: false});
                       this.nextPage();
                   }
             })
             .catch(err => {
                 this.setState({loading: false, buldingMsg: 'خطا در ساخت تری نت'});
-
             })
             .finally()
     }
@@ -319,12 +322,12 @@ export default class registered_mobile extends Component {
                                     const mobileReg = /^9[0-9]{9}$/i;
                                     text = mapNumbersToEnglish(text);
                                     if(acceptReg.test(text)){
-                                        this.setState({ mobile:text,mobileIsRegister:false, mobileValidation:mobileReg.test(text)});
+                                        this.setState({ mobile:text,mobileIsRegisterBefore:false, mobileValidation:mobileReg.test(text)});
                                     }else if(text){
                                         showMassage(translate('fastRegister_onlyEnglish_number'),'info');
                                     }
                                     if(!text){
-                                        this.setState({mobileIsRegister:false, mobile:'', mobileValidation:false});
+                                        this.setState({mobileIsRegisterBefore:false, mobile:'', mobileValidation:false});
                                     }
 
 
@@ -352,9 +355,9 @@ export default class registered_mobile extends Component {
                             />
 
                         </View>
-                        {this.state.mobileIsRegister?(
+                        {this.state.mobileIsRegisterBefore?(
                             <View>
-                                <Text style={{fontSize:12,color:primaryDark}}>این شماره قبلا در سیستم ثبت شده است. در صورتی که قبلا ثبت نام کرده اید وارد شوید. در صورتی که رمز خود را فراموش کرده اید یا شمار شما اشتباها توسط فرد دیگری در سیستم وارد شده.عدد 100 را به شمار 09196421264 پیامک کنید تا رمز عبور موقت برای شما ارسال شود.</Text>
+                                <Text style={{fontSize:12,color:primaryDark}}>این شماره قبلا در سیستم ثبت شده است. در صورتی که قبلا ثبت نام کرده اید وارد شوید. در صورتی که رمز خود را فراموش کرده اید یا شماره شما اشتباها توسط فرد دیگری در سیستم وارد شده.عدد 100 را به شماره 09196421264 پیامک کنید تا رمز عبور موقت برای شما ارسال شود.</Text>
                                 <TouchableOpacity
                                     style={{
                                         marginTop: 20,

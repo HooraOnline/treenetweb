@@ -44,7 +44,7 @@ export default class registerYourName extends Component {
             avatar:pStore.cUser.avatar ,
             story:pStore.cUser.story ,
             gender:Number(pStore.cUser.gender ||0),
-            profileImageValidation:pStore.cUser.profileImage!=='defaultProfileImage.png',
+            profileImageValidation:false,
         };
 
         this.state.age=pStore.cUser.age;
@@ -508,7 +508,7 @@ export default class registerYourName extends Component {
                                         highlightColor={primaryDark}
                                         value={this.state.avatar}
                                     />
-                                    <Text style={{marginTop:10, fontSize:10,color:textItemBlack,textAlign:'justify',}} > در تکست باکس بالا  می توانید بجای "عضو فعال ترینتگرام" یک جمله کوتاه در مورد تخصص، کسب و کار یا هدفتان در ترینتگرام برای دیگران بنویسید. مثال:عضو فعال ترینتگرام یا فروشنده لوازم آرایشی یا مثلا خدمات بازاریابی ایران تبلیغ</Text>
+                                    <Text style={{marginTop:10, fontSize:10,color:textItemBlack,textAlign:'justify',}} > در تکست باکس بالا  می توانید یک جمله کوتاه در مورد تخصص، کسب و کار یا هدفتان در ترینتگرام برای دیگران بنویسید. مثال:عضو فعال ترینتگرام یا فروشنده لوازم آرایشی یا مثلا خدمات بازاریابی ایران تبلیغ</Text>
                                    {/* <Text style={{fontSize:12}} >چند مثال </Text>
                                     <Text style={{fontSize:12}} >تبلیغ کالای شما در شبکه ۱۰۰ هزار نفری من </Text>
                                     <Text style={{fontSize:12}} >متخصص تعمیرات لوازم برقی</Text>

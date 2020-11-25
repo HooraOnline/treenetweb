@@ -142,22 +142,23 @@ export default class RegisterPassword extends Component {
                 this.setState({loading: false});
                 this.user=member;
                 this.nextPage()*/
-                this.onLogin()
+                this.onLogin(member.username)
             })
             .catch(err => {
                 showMassage("خطا در ساخت شبکه تری نت شما.",'error');
             })
             .finally(()=>{
-                this.setState({loading: false})
+                this.setState({loading: false});
             })
 
     }
 
 
-    async onLogin() {
+    async onLogin(username) {
         this.setState({loading: true});
         const data={};
-        loginApi(this.user.mobile,this.user.password)
+        const fullMobile=this
+        loginApi(username,this.user.password)
             .then(res=>{
                 this.onSuccessLogin(res);
                 this.setState({loading:false});
@@ -165,6 +166,7 @@ export default class RegisterPassword extends Component {
             .catch(err=>{
 
                 this.setState({loading:false});
+                navigation.replace('/login');
             })
     }
     onSuccessLogin=(user)=>{

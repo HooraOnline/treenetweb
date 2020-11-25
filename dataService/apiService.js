@@ -352,10 +352,10 @@ export const loginApi= function (username,password,mobile) {
 
 }
 export const logoutApi=function (username,password) {
-    if(persistStore.notChangePassword){
-        showMassage('قبل از خروج، نام کاربری و رمز عبور خود را با لمس نوار زرد رنگ بالا عوض کنید.','info')
-        return;
-    }
+    // if(persistStore.notChangePassword){
+    //     showMassage('قبل از خروج، نام کاربری و رمز عبور خود را با لمس نوار زرد رنگ بالا عوض کنید.','info')
+    //     return;
+    // }
     navigation.navigate('home');
     persistStore.clearStore();
     userStore.clear();
