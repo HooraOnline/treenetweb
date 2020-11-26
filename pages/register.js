@@ -161,7 +161,7 @@ export default class register extends Component {
                                     fontFamily: 'IRANYekanRegular',
                                     marginBottom: 5
                                 }}>
-                                {' شما را به شبکه بین المللی ترینتگرام دعوت کرد.'}
+                                {' شما را به پلتفرم شبکه سازی ترینتگرام دعوت کرد.'}
                             </Text>
                         </View>
                         <View style={{

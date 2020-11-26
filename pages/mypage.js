@@ -319,7 +319,7 @@ export const MyPosts = observer(props => {
 
         onResizeScreen();
         getUserPost();
-    },  [postList]);
+    },  []);
     const onResizeScreen=()=> {
         setItemWidth(global.width/3-4)
         document.body.onresize = () => {
@@ -330,6 +330,7 @@ export const MyPosts = observer(props => {
 
 
     const getUserPost =(fields, include)=> {
+       
         return  Api.post('posts/me/getPosts')
             .then(posts=>{
                 let userPosts=[{file:images.ic_add}].concat(posts);

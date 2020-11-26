@@ -113,7 +113,7 @@ export const PostList = observer(props => {
     const [postList, setPostList] = useState([]);
     useEffect(() => {
 
-        getUserPost();
+        getFollowboardPosts();
     },  [posts]);
 
     const addPost=()=> {
@@ -130,13 +130,15 @@ export const PostList = observer(props => {
             })
     };
 
-    const getUserPost =(fields, include)=> {
-        return  Api.post('posts/me/getPosts')
-            .then(posts=>{
-                pStore.userPosts=posts;
-            }).catch((error)=>{
-                setloading(false)
-            });
+    const getFollowboardPosts =(fields,include)=> {
+      
+        debugger
+        return  Api.post('posts/getFollowboardPosts',{regentId:pStore.cUser.regentId})
+                    .then(posts=>{
+                        pStore.userPosts=posts;
+                    }).catch((error)=>{
+                        setloading(false)
+                    });
     };
 
     return (
