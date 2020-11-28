@@ -67,7 +67,7 @@ export default class mypage extends Component {
 
     render() {
 
-        debugger
+        
         const toolbarStyle = {
             start22: {
                 content: images.ic_back,
@@ -350,7 +350,6 @@ export const MyPosts = observer(props => {
                 data={postList}
                 flexWrap
                 ListEmptyComponent={null}
-
                 renderItem={({item, index}) =>{
                     if(index==0)
                         return(

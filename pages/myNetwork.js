@@ -137,7 +137,7 @@ class TreeView extends PureComponent {
 
                                 <Text style={{fontSize:12,fontWeight:800, color:textItem,paddingHorizontal:16,padding:10}} >{item.avatar}</Text>
                                 <TouchableOpacity
-                                    onPress={()=>navigation.navigate('userpage',{user:item})}
+                                    onPress={()=>location.pathname=item.userName }
                                     style={{alignItems:'center',padding:5}} >
                                     <RiProfileLine size={24} style={{}}/>
                                     <Text style={{fontSize:11}}>{'پستها' }</Text>

@@ -629,6 +629,8 @@ export function waitForData(func){
     setTimeout(func,persistStore.apiToken?0:20)
 }
 
+
+
 export function doDelay(time){
     time=time || 200;
     let delayPromise = new Promise((resolve, reject) => {

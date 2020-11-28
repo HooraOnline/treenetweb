@@ -35,7 +35,7 @@ export default class registered_mobile extends Component {
 
     async componentDidMount() {
         waitForData(()=>{
-            debugger
+            
             this.regentCode = navigation.getParam('regentCode');
             const countryCode = navigation.getParam('countryCode');
             this.setState({countryCode:countryCode,});

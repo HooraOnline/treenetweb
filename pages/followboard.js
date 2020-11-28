@@ -116,23 +116,9 @@ export const PostList = observer(props => {
         getFollowboardPosts();
     },  [posts]);
 
-    const addPost=()=> {
 
-    }
-    const uploadPostImage = (fileName) => {
-        const data = {profileImage: fileName};
-        postQuery('Members/me/setProfileImage', data)
-            .then(res => {
-                pStore.cUser.profileImage = res.profileImage;
-            })
-            .catch(err => {
-
-            })
-    };
 
     const getFollowboardPosts =(fields,include)=> {
-      
-        debugger
         return  Api.post('posts/getFollowboardPosts',{regentId:pStore.cUser.regentId})
                     .then(posts=>{
                         pStore.userPosts=posts;
@@ -161,10 +147,12 @@ export const PostList = observer(props => {
                 renderItem={({item, index}) =>{
                     if(!item.member)
                         return  null;
-                    let {profileImage,username,avatar}=item.member;
+                    let {profileImage,userName,avatar}=item.member;
                     return (
                         <View style={{flex:1}}>
-                            <View style={{flexDirection:'row',justifyContent:'center',paddingHorizontal:10}}>
+                            <TouchableOpacity
+                             onPress={()=> location.pathname=item.member.userName}
+                             style={{flexDirection:'row',justifyContent:'center',paddingHorizontal:10}}>
                                 <Image
                                     source={getFileUri('member',profileImage)}
                                     style={{
@@ -174,10 +162,10 @@ export const PostList = observer(props => {
                                     }}
                                 />
                                 <View style={{padding:5,flex:1,justifyContent:'center'}}>
-                                    <Text style={{ fontSize:14,fontWeight:800, }}>{username}</Text>
+                                    <Text style={{ fontSize:14,fontWeight:800, }}>{userName}</Text>
                                     <Text style={{ fontSize:10,color:textItem}}>{avatar}</Text>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                             <View
                                 style={{
                                     alignItems:'center',

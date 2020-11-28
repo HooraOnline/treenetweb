@@ -67,9 +67,10 @@ export default class LoginPage extends PureComponent {
     getUserGeo(){
         let self=this;
         self.setState({loadingGeo:true});
+        let vpn=false;
         $.getJSON('https://api.ipdata.co/?api-key=92c9cd9137ca4bd296e2a749b8cd3a7908cb960766c10013cd108f26', function(data) {
             self.geoInfo=data
-            let vpn=false;
+            
             let countryCode=self.geoInfo.calling_code;
             if( countryCode!=='98'){
                 vpn=true;
@@ -80,7 +81,7 @@ export default class LoginPage extends PureComponent {
         })
         .done(function(res) { console.log(res)})
         .fail(function(e) { 
-            vpn=true;
+            //vpn=true;
         })
         .always(function() {self.setState({loadingGeo:false}) });
        

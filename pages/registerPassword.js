@@ -131,7 +131,7 @@ export default class RegisterPassword extends Component {
         }
 
         this.setState({loading: true, loadingMessage: 'در حال ساخت شبکه تری نت شما...'});
-        debugger
+        
         postQuery('members/me/register', this.user)
             .then(member => {
                 /*self.user = member;

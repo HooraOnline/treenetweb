@@ -1,20 +1,12 @@
 import React, {PureComponent} from 'react';
 import {bool, number, string} from 'prop-types';
-import {border, borderLight, grayVD7, grL5, primaryDark} from '../constants/colors';
+import {border, borderLight, grayVD7, grL5, textItem} from '../constants/colors';
 
-import {Text, View, Animated, StyleSheet, Image, TouchableOpacity} from "../react-native";
+import {Text, View, Animated, StyleSheet,} from "../react-native";
 import {Input ,FormControl } from '@material-ui/core';
-import {makeStyles} from "@material-ui/core/styles";
-
-import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import images from "../../public/static/assets/images";
 import Platform from "../react-native/Platform";
 import MaskedInput from 'react-text-mask';
-import { IoIosBulb } from "react-icons/io";
 import { FaTree } from "react-icons/fa";
 import {persistStore} from "../stores";
 class Underline extends PureComponent {
@@ -141,7 +133,7 @@ export default class FloatingLabelTextInput extends PureComponent {
     }
 
     componentDidMount() {
-        this.fontSize = this.props.textInputStyle && this.props.textInputStyle.fontSize ? this.props.textInputStyle.fontSize : 14;
+        this.fontSize = this.props.textInputStyle && this.props.textInputStyle.fontSize ? this.props.textInputStyle.fontSize : 12;
 
         this.props.refInput ? this.props.refInput(this.refs.txtInput) : {};
         //
@@ -198,7 +190,10 @@ export default class FloatingLabelTextInput extends PureComponent {
 
     render() {
         const {style,isAccept,reverse,
-            labelStyle,unitStyle,autoFocus,keyboardType='text',
+            labelStyle={fontSize: 12,color: textItem},
+            unitStyle,
+            autoFocus,
+            keyboardType='text',
             textInputStyle, placeholder, tintColor, underlineColor,
             underlineSize=4, underlineEnabled, floatingLabelAniDuration,
             floatingLabelEnable, type,maxLength,numberOfLines,onChangeText,
@@ -208,7 +203,7 @@ export default class FloatingLabelTextInput extends PureComponent {
         if(keyboardType=='number-pad') keyboardType2='numeric'
         return (
             <View style={style}>
-                <View style={[{flex:1, flexDirection:'row', justifyContent: 'flex-end',}]}>
+                <View style={[{flex:1, flexDirection:'row', justifyContent: 'flex-end', }]}>
                     {
                         this.props.label &&
                         <Text style={this.props.laberStyle}>{this.props.label}</Text>

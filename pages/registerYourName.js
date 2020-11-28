@@ -24,7 +24,7 @@ import TextInput from "../src/react-native/TextInput";
 export default class registerYourName extends Component {
     constructor() {
         super();
-           debugger
+           
         this.state = {
             image:pStore.cUser.profileImage,
             password:'',
@@ -34,13 +34,13 @@ export default class registerYourName extends Component {
             usernameValidation:pStore.cUser.username?true:false,
             avatarValidation:pStore.cUser.avatar?true:false,
             storyValidation:pStore.cUser.story?true:false,
-            fullNameValidation:pStore.cUser.fullName?true:false,
+            firstNameValidation:pStore.cUser.firstName?true:false,
             ageValidation:pStore.cUser.age?true:false,
             countryCode:pStore.cUser.countryCode,
             username:pStore.cUser.username,
             shortMobile:pStore.cUser.shortMobile,
             email:pStore.cUser.email,
-            fullName:pStore.cUser.fullName ,
+            firstName:pStore.cUser.firstName ,
             avatar:pStore.cUser.avatar ,
             story:pStore.cUser.story ,
             gender:Number(pStore.cUser.gender ||0),
@@ -77,9 +77,14 @@ export default class registerYourName extends Component {
             //this.setState({emailReg: false});
             return translate('fastRegister_invalid_email_format');
         }
-        if (!this.state.fullName){
+        if (!this.state.firstName){
 
             return translate('نام خود را وارد کنید.');
+        }
+
+        if (!this.state.firstName){
+
+            return translate('نام خانوادگی خود را وارد کنید.');
         }
         if (!this.state.age){
             return translate('سن را وارد کنید');
@@ -89,7 +94,7 @@ export default class registerYourName extends Component {
             return translate(' تصویر  پروفایل خود را انتخاب کنید.');
         }
     }
-    updateUsernameAndPassword=()=>{
+    updateUser=()=>{
         const msg=this.checkValidation();
         if(msg){
             showMassage(msg,'warning')
@@ -105,8 +110,14 @@ export default class registerYourName extends Component {
         if(this.state.email){
             data.email=this.state.email;
         }
-        if(this.state.fullName){
-            data.fullName=this.state.fullName;
+        if(this.state.firstName){
+            data.firstName=this.state.firstName;
+        }
+        if(this.state.lastName){
+            data.lastName=this.state.lastName;
+        }
+        if(this.state.displayName){
+            data.displayName=this.state.displayName;
         }
         if(this.state.avatar){
             data.avatar=this.state.avatar;
@@ -173,7 +184,7 @@ export default class registerYourName extends Component {
                          }
                          footer={
                              <TouchableOpacity
-                                 onPress={this.updateUsernameAndPassword}
+                                 onPress={this.updateUser}
                                  style={{alignItems:'center',justifyContent:'center',padding:10, backgroundColor:primaryDark}}>
                                  <Text style={{color:bgWhite}} >تایید</Text>
                              </TouchableOpacity>
@@ -227,7 +238,7 @@ export default class registerYourName extends Component {
                                     fontFamily: 'IRANYekanRegular',
                                     paddingHorizontal: 5,
                                 }}>
-                                {this.state.aliasName || this.state.fullName}
+                                {this.state.displayName || this.state.firstName}
                             </Text>
                         </View>
                         <View style={{alignItems:'center'}}>
@@ -271,9 +282,9 @@ export default class registerYourName extends Component {
                                         this.labelInput = input;
                                     }}
                                     //labelAlign={'left'}
-                                    placeholder={translate('نام واقعی')}
+                                    placeholder={translate('نام ')}
                                     style={{flex: 1, marginTop: 20}}
-                                    labelStyle={{color: textItem}}
+                                    labelStyle={{fontSize: 12,color: textItem}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={20}
@@ -282,16 +293,16 @@ export default class registerYourName extends Component {
                                     returnKeyType="done"
                                     numberOfLines={1}
                                     tintColor={
-                                        this.state.fullNameValidation ? bgSuccess : lightRed
+                                        this.state.firstNameValidation ? bgSuccess : lightRed
                                     }
-                                    isAccept={this.state.fullNameValidation}
+                                    isAccept={this.state.firstNameValidation}
                                     textInputStyle={{
                                         fontFamily:
                                             Platform.OS === 'ios'
                                                 ? 'IRANYekan-ExtraBold'
                                                 : 'IRANYekanExtraBold',
 
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         paddingStart: 4,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -300,12 +311,53 @@ export default class registerYourName extends Component {
                                     underlineSize={1}
                                     onChangeText={text =>
                                         this.setState({
-                                            fullName: text,
-                                            fullNameValidation: true,
+                                            firstName: text,
+                                            firstNameValidation: true,
                                         })
                                     }
                                     highlightColor={primaryDark}
-                                    value={this.state.fullName}
+                                    value={this.state.firstName}
+                                />
+                                <FloatingLabelTextInput
+                                    ref={input => {
+                                        this.labelInput = input;
+                                    }}
+                                    //labelAlign={'left'}
+                                    placeholder={translate('نام خانوادگی')}
+                                    style={{flex: 1, marginTop: 20}}
+                                    labelStyle={{fontSize: 12,color: textItem}}
+                                    editable={true}
+                                    multiline={false}
+                                    maxLength={20}
+                                    floatingLabelEnable={true}
+                                    keyboardType="default"
+                                    returnKeyType="done"
+                                    numberOfLines={1}
+                                    tintColor={
+                                        this.state.lastNameValidation ? bgSuccess : lightRed
+                                    }
+                                    isAccept={this.state.lastNameValidation}
+                                    textInputStyle={{
+                                        fontFamily:
+                                            Platform.OS === 'ios'
+                                                ? 'IRANYekan-ExtraBold'
+                                                : 'IRANYekanExtraBold',
+
+                                        fontSize: 12,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 3,
+                                        //textAlign: 'right',
+                                    }}
+                                    underlineSize={1}
+                                    onChangeText={text =>
+                                        this.setState({
+                                            lastName: text,
+                                            lastNameValidation: true,
+                                        })
+                                    }
+                                    highlightColor={primaryDark}
+                                    value={this.state.lastName}
                                 />
                                 <FloatingLabelTextInput
                                     ref={input => {
@@ -314,7 +366,7 @@ export default class registerYourName extends Component {
                                     //labelAlign={'left'}
                                     placeholder={translate('نام مستعار')}
                                     style={{flex: 1, marginTop: 20}}
-                                    labelStyle={{color: textItem}}
+                                    labelStyle={{fontSize: 12,color: textItem}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={20}
@@ -323,9 +375,9 @@ export default class registerYourName extends Component {
                                     returnKeyType="done"
                                     numberOfLines={1}
                                     tintColor={
-                                        this.state.fullNameValidation ? bgSuccess : lightRed
+                                        this.state.displayNameValidation ? bgSuccess : lightRed
                                     }
-                                    isAccept={this.state.fullNameValidation}
+                                    isAccept={this.state.displayNameValidation}
                                     textInputStyle={{
 
                                         fontFamily:
@@ -333,7 +385,7 @@ export default class registerYourName extends Component {
                                                 ? 'IRANYekan-ExtraBold'
                                                 : 'IRANYekanExtraBold',
 
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         paddingStart: 4,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -343,21 +395,21 @@ export default class registerYourName extends Component {
 
                                     onChangeText={text =>
                                         this.setState({
-                                            aliasName: text,
-                                            fullNameValidation: true,
+                                            displayName: text,
+                                            displayNameValidation: true,
                                         })
                                     }
                                     highlightColor={primaryDark}
-                                    value={this.state.aliasName}
+                                    value={this.state.displayName}
                                 />
-                                <Text style={{fontSize:10}}>می توانید در ترینتگرام با نام مستعار فعالیت کنید.</Text>
+                                <Text style={{fontSize:10}}>می توانید در ترینتگرام با نام مستعار فعالیت کنید یا مثلا عنوان کسب و کار خود را وارد کنید.</Text>
 
                                 <FloatingLabelTextInput
                                     //labelAlign={'left'}
                                     //reverse={persistStore.isRtl}
                                     placeholder={translate('age')}
                                     style={{flex: 1, marginTop: 20}}
-                                    labelStyle={{color: textItem}}
+                                    labelStyle={{fontSize: 12,color: textItem}}
                                     editable={true}
                                     multiline={false}
                                     maxLength={2}
@@ -368,7 +420,7 @@ export default class registerYourName extends Component {
                                     textInputStyle={{
                                         fontFamily:'IRANYekanExtraBold',
 
-                                        fontSize: 14,
+                                        fontSize: 12,
                                         paddingRight: 10,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -456,7 +508,7 @@ export default class registerYourName extends Component {
                                             isAccept={this.state.emailValidation}
                                             textInputStyle={{
                                                 fontFamily: 'IRANYekanFaNum-Bold',
-                                                fontSize: 14,
+                                                fontSize: 12,
                                                 fontWeight:800,
                                                 color: textItemBlack,
                                                 paddingStart: 4,
@@ -476,7 +528,7 @@ export default class registerYourName extends Component {
                                         labelAlign={'left'}
                                         placeholder={translate('یک جمله کوتاه در مورد تخصص یا هدفتان در ترینتگرام')}
                                         style={{flex: 1, marginTop: 20}}
-                                        labelStyle={{color: textItem}}
+                                        labelStyle={{fontSize: 12,color: textItem}}
                                         editable={true}
                                         multiline={false}
                                         maxLength={50}
@@ -491,7 +543,7 @@ export default class registerYourName extends Component {
 
                                             fontFamily:'IRANYekanExtraBold',
 
-                                            fontSize: 14,
+                                            fontSize: 12,
                                             paddingStart: 4,
                                             paddingTop: 1,
                                             paddingBottom: 3,
@@ -538,7 +590,7 @@ const styles = StyleSheet.create({
         borderColor: subTextItem,
         borderWidth: 1,
         borderRadius: 10,
-        fontSize: 14,
+        fontSize: 12,
         textAlignVertical: 'top',
         textAlign: 'right',
         padding: 8,
@@ -558,13 +610,13 @@ const styles = StyleSheet.create({
     multiSwitchItem: {
         flex: 1,
         fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-        fontSize: 14,
+        fontSize: 12,
         paddingHorizontal: 7,
         paddingVertical: 2,
     },
     multiSwitchItemActive: {
         fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-        fontSize: 16,
+        fontSize: 12,
     },
 
 });
