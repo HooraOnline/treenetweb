@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Platform, Text, TouchableOpacity, View,StyleSheet} from "../src/react-native";
-import {persistStore,pStore} from "../src/stores";
+import {Platform, Text, TouchableOpacity, View,StyleSheet,Image} from "../src/react-native";
+import {persistStore,pStore, userStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {ImageSelector, SwitchTextMulti, Toolbar,} from "../src/components";
 import {getTabWidth, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
@@ -13,7 +13,7 @@ import {
     orange1,
     placeholderTextColor,
     primaryDark,
-    textItemBlack, subTextItem, textItem
+    textItemBlack, subTextItem, textItem, bg1
 } from "../src/constants/colors";
 import translate from "../src/language/translate";
 import {postQuery} from "../dataService/apiService";
@@ -30,17 +30,22 @@ export default class edit_profile extends Component {
             password:'',
             showPassword:false,
             mobileValidation:pStore.cUser.mobile?true:false,
+            userKeyValidation:pStore.cUser.userKey?true:false,
             emailValidation:pStore.cUser.email?true:false,
             usernameValidation:pStore.cUser.username?true:false,
             avatarValidation:pStore.cUser.avatar?true:false,
             storyValidation:pStore.cUser.story?true:false,
-            fullNameValidation:pStore.cUser.fullName?true:false,
+            firstNameValidation:pStore.cUser.firstName?true:false,
+            lastNameValidation:pStore.cUser.lastName?true:false,
             ageValidation:pStore.cUser.age?true:false,
             countryCode:pStore.cUser.countryCode,
             username:pStore.cUser.username,
+            userKey:pStore.cUser.userKey,
             shortMobile:pStore.cUser.mobile,
             email:pStore.cUser.email,
-            fullName:pStore.cUser.fullName ,
+            firstName:pStore.cUser.firstName ,
+            lastName:pStore.cUser.lastName ,
+            displayName:pStore.cUser.displayName ,
             avatar:pStore.cUser.avatar ,
             story:pStore.cUser.story ,
             gender:Number(pStore.cUser.gender ||0),
@@ -63,9 +68,13 @@ export default class edit_profile extends Component {
             //this.setState({emailReg: false});
             return translate('fastRegister_invalid_email_format');
         }
-        if (!this.state.fullName){
+        if (!this.state.firstName){
 
             return translate('نام خود را وارد کنید.');
+        }
+        if (!this.state.lastName){
+
+            return translate('نام خانوادگی خود را وارد کنید.');
         }
         if (!this.state.age){
             return translate('سن را وارد کنید');
@@ -73,6 +82,9 @@ export default class edit_profile extends Component {
 
         if(!this.state.profileImageValidation){
             return translate(' تصویر  پروفایل خود را انتخاب کنید.');
+        }
+        if(!this.state.userKeyValidation){
+            return translate(' نام کاربری وارد نشده.');
         }
     }
     updateProfile=()=>{
@@ -89,8 +101,17 @@ export default class edit_profile extends Component {
         if(this.state.email){
             data.email=this.state.email;
         }
-        if(this.state.fullName){
-            data.fullName=this.state.fullName;
+        if(this.state.firstName){
+            data.firstName=this.state.firstName;
+        }
+        if(this.state.lastName){
+            data.lastName=this.state.lastName;
+        }
+        if(this.state.userKey){
+            data.userKey=this.state.userKey;
+        }
+        if(this.state.displayName){
+            data.displayName=this.state.displayName;
         }
         if(this.state.avatar){
             data.avatar=this.state.avatar;
@@ -198,7 +219,7 @@ export default class edit_profile extends Component {
                             <View dir={"ltr"} style={{
                                 flexDirection: 'row',
                                 marginTop: 0,
-                                borderColor: this.state.mobileValidation?bgSuccess :orange1,
+                                borderColor: border,
                                 borderWidth: 1,
                                 borderRadius: 8,
                                 backgroundColor: bgWhite,
@@ -262,6 +283,105 @@ export default class edit_profile extends Component {
                                 /> */}
                               
                             </View>
+                            <View
+                            style={{
+                                flexDirection: 'row',
+                                marginTop: 34,
+                                position:'relative',
+
+                            }}
+                        >
+                            <FloatingLabelTextInput
+                                ref={input => {
+                                    this.labelInput = input;
+                                }}
+                                dir={'ltr'}
+                                reverse={persistStore.isRtl}
+                                placeholder={translate('نام کاربری')}
+                                style={{flex: 1, marginTop: 10}}
+                                labelStyle={{color: textItem, marginTop: -19}}
+                                editable={true}
+                                multiline={false}
+                                maxLength={50}
+                                floatingLabelEnable={true}
+                                labelAlign={'left'}
+                                keyboardType="default"
+                                returnKeyType="done"
+                                numberOfLines={1}
+                                underlineSize={4}
+                                underlineColor={this.state.userKeyValidation ? bgSuccess : primaryDark}
+                                isAccept={this.state.userKeyValidation}
+                                textInputStyle={{
+                                    fontWeight: 'normal',
+                                    fontFamily:'IRANYekanRegular',
+                                    color: bg1,
+                                    fontSize: 14,
+                                    paddingStart: 4,
+                                    paddingTop: 1,
+                                    paddingBottom: 3,
+                                    //paddingLeft:35,
+                                    textAlign: 'left',
+                                }}
+
+                                value={this.state.userKey}
+                                onChangeText={ async (text) =>{
+                                    const userKeyReg =/^[a-zA-Z0-9_.]+$/;
+                                    text = mapNumbersToEnglish(text);
+                                    if(text && !userKeyReg.test(text)){
+                                        showMassage(translate('در نام کاربری فقط از حروف انگلیسی اعداد و کاراکترهای خاص استفاده شود'),'warning');
+                                        this.setState({
+                                            userKeyValidation: false,
+                                            userKey:this.state.userKey,
+                                        })
+
+                                        return;
+                                    }
+
+                                    const userKeyReg2 =/^\d+$/;
+                                    if(text && userKeyReg2.test(text.substring(0,1))){
+                                        showMassage(translate(' نام کاربری نمی تواند با عدد شروع شود'),'warning');
+                                        this.setState({
+                                            userKeyValidation: false,
+                                            userKey:'',
+                                        })
+                                        return;
+                                    }
+                                    if(text.length>2){
+                                        this.setState({checkingUserKey:true});
+                                        postQuery('members/me/checkuserKeyExist',{userKey:text,currentUserKey:userStore.userKey})
+                                            .then((userKeyExist)=>{
+                                                this.setState({userKeyReserved:userKeyExist,userKeyValidation:!userKeyExist});
+                                            })
+                                            .finally(()=>this.setState({checkingUserKey:false}))
+
+                                    }else{
+                                        this.setState({userKeyValidation:false});
+                                    }
+                                    this.setState({
+                                        userKey: text,
+                                    })
+                                }
+                                }
+
+
+                            />
+                            <View
+                                style={{position: 'absolute', start: 30, bottom: 8}}
+                            >
+                                {this.state.checkingUserKey ?(
+                                     <Image
+                                        source={images.ic_search}
+                                        style={{height: 24, width: 24,
+                                         //tintColor: textItem
+                                     }}
+                                 />
+                                ):null}
+                            </View>
+                        </View>
+                        {this.state.userKeyReserved && userStore.userKey!=this.state.userKey && (
+                            <Text style={{marginTop:4, color:primaryDark,fontSize:12}} >{translate('این نام کاربری قبلا رزرو شده است.')}</Text>
+                        )
+                        }
                             <View dir={"ltr"} style={{
                                 flexDirection: 'row',
                                 marginTop: 10,
@@ -337,7 +457,7 @@ export default class edit_profile extends Component {
                                         this.labelInput = input;
                                     }}
                                     //labelAlign={'left'}
-                                    placeholder={translate('fullName')}
+                                    placeholder={translate('نام')}
                                     style={{flex: 1, marginTop: 20}}
                                     labelStyle={{color: textItem}}
                                     editable={true}
@@ -348,9 +468,9 @@ export default class edit_profile extends Component {
                                     returnKeyType="done"
                                     numberOfLines={1}
                                     tintColor={
-                                        this.state.fullNameValidation ? bgSuccess : lightRed
+                                        this.state.firstNameValidation ? bgSuccess : lightRed
                                     }
-                                    isAccept={this.state.fullNameValidation}
+                                    isAccept={this.state.firstNameValidation}
                                     textInputStyle={{
 
                                         fontFamily:
@@ -368,12 +488,100 @@ export default class edit_profile extends Component {
 
                                     onChangeText={text =>
                                         this.setState({
-                                            fullName: text,
-                                            fullNameValidation: true,
+                                            firstName: text,
+                                            firstNameValidation: true,
                                         })
                                     }
                                     highlightColor={primaryDark}
-                                    value={this.state.fullName}
+                                    value={this.state.firstName}
+                                />
+
+                               <FloatingLabelTextInput
+                                    ref={input => {
+                                        this.labelInput = input;
+                                    }}
+                                    //labelAlign={'left'}
+                                    placeholder={translate('نام خانوادگی')}
+                                    style={{flex: 1, marginTop: 20}}
+                                    labelStyle={{color: textItem}}
+                                    editable={true}
+                                    multiline={false}
+                                    maxLength={70}
+                                    floatingLabelEnable={true}
+                                    keyboardType="default"
+                                    returnKeyType="done"
+                                    numberOfLines={1}
+                                    tintColor={
+                                        this.state.firstNameValidation ? bgSuccess : lightRed
+                                    }
+                                    isAccept={this.state.lastNameValidation}
+                                    textInputStyle={{
+
+                                        fontFamily:
+                                            Platform.OS === 'ios'
+                                                ? 'IRANYekan-ExtraBold'
+                                                : 'IRANYekanExtraBold',
+
+                                        fontSize: 14,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 3,
+                                        //textAlign: 'right',
+                                    }}
+                                    underlineSize={1}
+
+                                    onChangeText={text =>
+                                        this.setState({
+                                            lastName: text,
+                                            lastNameValidation: true,
+                                        })
+                                    }
+                                    highlightColor={primaryDark}
+                                    value={this.state.lastName}
+                                />
+
+                                 <FloatingLabelTextInput
+                                    ref={input => {
+                                        this.labelInput = input;
+                                    }}
+                                    //labelAlign={'left'}
+                                    placeholder={translate('نام مستعار')}
+                                    style={{flex: 1, marginTop: 20}}
+                                    labelStyle={{color: textItem}}
+                                    editable={true}
+                                    multiline={false}
+                                    maxLength={70}
+                                    floatingLabelEnable={true}
+                                    keyboardType="default"
+                                    returnKeyType="done"
+                                    numberOfLines={1}
+                                    tintColor={
+                                        this.state.displayNameValidation ? bgSuccess : lightRed
+                                    }
+                                    isAccept={this.state.displayNameValidation}
+                                    textInputStyle={{
+
+                                        fontFamily:
+                                            Platform.OS === 'ios'
+                                                ? 'IRANYekan-ExtraBold'
+                                                : 'IRANYekanExtraBold',
+
+                                        fontSize: 14,
+                                        paddingStart: 4,
+                                        paddingTop: 1,
+                                        paddingBottom: 3,
+                                        //textAlign: 'right',
+                                    }}
+                                    underlineSize={1}
+
+                                    onChangeText={text =>
+                                        this.setState({
+                                            displayName: text,
+                                            displayNameValidation: true,
+                                        })
+                                    }
+                                    highlightColor={primaryDark}
+                                    value={this.state.displayName}
                                 />
 
                                 <FloatingLabelTextInput
@@ -462,7 +670,7 @@ export default class edit_profile extends Component {
                                     returnKeyType="done"
                                     numberOfLines={1}
                                     tintColor={
-                                        this.state.fullNameValidation ? bgSuccess : lightRed
+                                        this.state.firstNameValidation ? bgSuccess : lightRed
                                     }
                                     textInputStyle={{
 

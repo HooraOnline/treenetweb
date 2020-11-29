@@ -400,11 +400,11 @@ export const getUserProfileApi = function (fields, include) {
 };
 export const getUserSubsetApi = (userId)=> {
     let params = {};
-    if(userId) params.userId=userId;
+    if(userId) params.memberId=userId;
     //params.filter = {};
     //params.filter.fields = fields;
     //params.filter.include = include;
-    return  Api.post('members/me/getSubsetList', params)
+    return  Api.post('members/getSubsetList', params)
         .then(subsetlist=>{
             return subsetlist;
         });

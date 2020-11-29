@@ -232,7 +232,7 @@ export default class Toolbar extends PureComponent {
                             justifyContent: 'space-between',
                         }}>
 
-                            {this.state.showStart ? (
+                            {this.props.customStyle.start ? (
                                 <TouchableOpacity
                                     disabled={isExpand && persistStore.selected === 0}
                                     onPress={isExpand ? () => this.animateExpand(false, true) : start.onPress}

@@ -44,10 +44,12 @@ const PanelLayout = observer( props => {
         }
     }
     const getProfile=()=>{
+        
         setLoading(true);
         getUserProfileApi()
             .then(res=>{
                 console.log(res);
+               
                 setLoading(false);
             })
             .catch(err=>{

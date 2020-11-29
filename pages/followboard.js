@@ -119,9 +119,10 @@ export const PostList = observer(props => {
 
 
     const getFollowboardPosts =(fields,include)=> {
-        return  Api.post('posts/getFollowboardPosts',{regentId:pStore.cUser.regentId})
+          Api.post('posts/getFollowboardPosts',{regentId:pStore.cUser.regentId})
                     .then(posts=>{
                         pStore.userPosts=posts;
+                        setPosts(posts)
                     }).catch((error)=>{
                         setloading(false)
                     });
@@ -132,7 +133,7 @@ export const PostList = observer(props => {
                 loading={loading}
                 style={{justifyContent:'center'}}
                 keyExtractor={(item, index) => index.toString()}
-                data={pStore.userPosts}
+                data={posts}
                 ListEmptyComponent={
                     <View
                         style={{
@@ -147,11 +148,11 @@ export const PostList = observer(props => {
                 renderItem={({item, index}) =>{
                     if(!item.member)
                         return  null;
-                    let {profileImage,userName,avatar}=item.member;
+                    let {profileImage,userKey,avatar}=item.member;
                     return (
                         <View style={{flex:1}}>
                             <TouchableOpacity
-                             onPress={()=> location.pathname=item.member.userName}
+                             onPress={()=> location.pathname=item.member.userKey}
                              style={{flexDirection:'row',justifyContent:'center',paddingHorizontal:10}}>
                                 <Image
                                     source={getFileUri('member',profileImage)}
@@ -162,7 +163,7 @@ export const PostList = observer(props => {
                                     }}
                                 />
                                 <View style={{padding:5,flex:1,justifyContent:'center'}}>
-                                    <Text style={{ fontSize:14,fontWeight:800, }}>{userName}</Text>
+                                    <Text style={{ fontSize:14,fontWeight:800, }}>{userKey}</Text>
                                     <Text style={{ fontSize:10,color:textItem}}>{avatar}</Text>
                                 </View>
                             </TouchableOpacity>

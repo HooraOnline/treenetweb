@@ -60,7 +60,7 @@ class Building {
         this.userID = null;
         this.apartmentID = null;
         this.apartmentName = null;
-        this.userName = null;
+        this.userKey = null;
         this.postalCode = null;
         this.numberOfFloors = null;
         this.numberOfUnits = null;

@@ -1,5 +1,5 @@
 import React, {Component, useEffect, useState} from 'react';
-import {globalState, persistStore} from "../src/stores";
+import {globalState, persistStore, userStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {ImageSelector, Toolbar} from "../src/components";
 
@@ -21,7 +21,7 @@ import {
 import NavBar from "../src/components/layouts/NavBar";
 import {BgImageChacheProgress, FlatList, Text, TouchableOpacity, View,} from "../src/react-native";
 
-import {getFileUri, logoutApi, postQuery} from "../dataService/apiService";
+import {getFileUri, getUserSubsetApi, logoutApi, postQuery} from "../dataService/apiService";
 import {observer} from "mobx-react";
 import Image from "../src/react-native/Image";
 import pStore from "../src/stores/PublicStore";
@@ -31,6 +31,11 @@ import Api from "../dataService/apiCaller";
 import { FaStar,FaWindowClose } from "react-icons/fa";
 import { IoMdHeartEmpty ,IoMdShare,} from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa";
+import translate from '../src/language/translate';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
+let leavesCount=0
+
 
 @observer
 export default class userpage extends Component {
@@ -40,44 +45,100 @@ export default class userpage extends Component {
     }
 
 
-
     componentDidMount() {
+       
+        this.getPageInfo();
+    }
+    
+    calculateCount=(user)=>{
+        leavesCount=leavesCount+user.subsets.length;
+        for(let i=0;i<user.subsets.length;++i){
+            this.calculateCount(user.subsets[i]);
+        }
+    }
+
+    calculateTotalSubsetsCount=(subsets)=>{
+        debugger
+        for(let p=0;p<subsets.length;++p){
+            this.calculateCount(subsets[p]);
+        }
+    }
+    getPageInfo=()=> {
         this.setState({loading:true})
-        doDelay(200)
-        .then(()=>{
-            //this.userName=navigation.getParam('userName');
             const pathname = window.location.pathname;
-            this.userName=pathname.split('/').join('');
-            Api.post('posts/getUserPosts',{userName: this.userName})
+            this.userKey=pathname.split('/').join('');
+         
+            Api.post('members/getUserPage',{userKey: this.userKey})
                 .then(users=>{
-                  
                     if(users && users[0]){
                         let user =users[0];
                         this.user=user;
+                        this.cUserId=users.cUserId;
                         this.userPosts=user.posts;
                         pStore.userPosts=user.posts;
+                        this.userFollowed=user.followeds;
+                        this.userFollowers=user.followers;
+                        this.isFollowing=this.user.followers.find(item=>item.followerId==this.cUserId);
+                        this.isPageAdmin=pStore.cUser.userKey===user.userKey;
+                        this.setState({loading:false});
+                        getUserSubsetApi(user.id)
+                        .then(subsetList=>{
+                            leavesCount=0;
+                            pStore.subsetList=subsetList;
+                            this.calculateTotalSubsetsCount(subsetList);
+                            pStore.branchesCount=subsetList.length;
+                            pStore.leavesCount=leavesCount;
+        
+                        })
+                        .catch(err=>{
+                            //this.setState({loading:false});
+                        });
+
+                       
+                            
+                      
                     }
 
                     this.setState({loading:false});
                 }).catch((error)=>{
-                    this.setState({loading:true});
+                    this.setState({loading:false});
                 });
-        })
+        
     }
 
-   
+    followUser=(followedId)=>{
+        this.setState({loading:true});
+        Api.post('Followers/followUser',{followedId: followedId})
+        .then(users=>{
+            this.getPageInfo();
+            this.setState({loading:false,});
+        }).catch((error)=>{
+            this.setState({loading:false});
+        });
+
+    }
+
 
     render() {
-        let title=this.user?this.user.displayName || this.user.fullName:''
-        let ss=this.user
         
-        const toolbarStyle = {
+       
+        let title=this.user?this.user.displayName || this.user.fullName:''
+        
+        const toolbarAdminStyle = {
+          
+            title: userStore.fullName,
+            end: {
+                onPress: () => logoutApi(),
+                icon: images.ic_Period,
+            },
+        };
+        
+        const toolbarStyle={
             start: {
                 content: images.ic_back,
                 onPress: ()=>navigation.goBack(),
             },
             title:title,
-
         };
 
        
@@ -90,14 +151,45 @@ export default class userpage extends Component {
                          style={{alignItems: 'center'}}
                          header={
                              <Toolbar
-                                 customStyle={toolbarStyle}
+                                 customStyle={this.isPageAdmin?toolbarAdminStyle:toolbarStyle}
                                  isExpand={this.state.showAccountSelect }
                              />
                          }
-                         >
+
+                         footer={
+                            <View style={{paddingHorizontal: 20}}>
+                                {this.isPageAdmin &&(
+                                    <NavBar navButtons={[
+                                    {
+                                        label: translate('پستها'),
+                                        path: "/mypage",
+                                        icon: <FontAwesomeIcon icon={faUser}/>
+                                    },
+                                    {
+                                        label: translate('سرویسها'),
+                                        path: "/myServices",
+                                        icon: <FontAwesomeIcon icon={faCogs}/>
+                                    },
+                                    {
+                                        label: translate('فالوبورد'),
+                                       path: "/followboard",
+                                        icon: <FontAwesomeIcon icon={faCompass}/>
+                                    },
+                                ]}/>
+                                )}
+                                
+                            </View>
+                        }>
+                         
                              {this.user?(
                                 <View style={{flex:1, marginTop: 0, alignItems: 'center'}}>
-                                    <UserCard style={{maxWidth: 500,paddingTop: 25,paddingHorizontal:16}} user={this.user}/>
+                                    <UserCard
+                                        style={{maxWidth: 500,paddingTop: 25,paddingHorizontal:16}} 
+                                        user={this.user}
+                                        isFollowing={this.isFollowing}
+                                        onPressFollowBotton={(followedId)=>this.followUser(followedId)}
+                                        isPageAdmin={this.isPageAdmin}
+                                     />
                                     <View style={{flex:1,width:'100%',backgroundColor:bgWhite,minHeight:600}}>
                                     {this.userPosts &&(
                                         <UserPosts postList={this.userPosts}/>
@@ -172,6 +264,9 @@ export const UserCard = observer(props => {
     let {user} = props;
     if(!user) return null;
 
+    
+
+    
     return (
         <View style={props.style}>
             <View style={{
@@ -225,8 +320,8 @@ export const UserCard = observer(props => {
                             <Text style={{fontSize: 12}}>{pStore.leavesCount}</Text>
                         </View>
                         <View style={{alignItems: 'center', paddingHorizontal: 15}}>
-                            <Text style={{fontSize: 12}}>عضو</Text>
-                            <Text style={{fontSize: 12}}>{pStore.branchesCount + pStore.leavesCount + 1}</Text>
+                            <Text style={{fontSize: 12}}>شبکه</Text>
+                            <Text style={{fontSize: 12}}>{pStore.branchesCount + pStore.leavesCount +user.followers.length+ 1}</Text>
                         </View>
                     </View>
                     <Text
@@ -252,15 +347,15 @@ export const UserCard = observer(props => {
             }}>
                 <Text style={{fontSize: 12, textAlign: 'justify',color:textItem}}>{user.story}</Text>
             </View>
-            <View style={{flexDirection:'row'}}>
+            {props.isPageAdmin?(
+                <View style={{flexDirection:'row'}}>
                 <TouchableOpacity
                     onPress={()=>{navigation.navigate('edit_profile')}}
-                    disabled={true}
                     style={{
                         flex:1,
                         margin:10,
                         width:'100%',
-                        maxWidth:300,
+                        width:140,
                         borderRadius:8,
                         flexDirection:'row',
                         justifyContent:'center',
@@ -272,8 +367,58 @@ export const UserCard = observer(props => {
                         height: 24,
                         tintColor:bgWhite
                     }}/>
-                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>تماس</Text>
+                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=>{navigation.navigate('myNetwork')}}
+                    style={{
+                        flex:1,
+                        margin:10,
+                        width:'100%',
+                        maxWidth:300,
+                        width:140,
+                        borderRadius:8,
+                        flexDirection:'row',
+                        justifyContent:'center',
+                        padding:10,
+                        backgroundColor: bgSuccess
+                    }}>
+                    <IoIosLink
+                        color={bgWhite}
+                        style={{
+                            width: 24,
+                            height: 24,
+                            tintColor:bgWhite
+                        }}
+                    />
+
+                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>شبکه من</Text>
+                </TouchableOpacity>
+            </View>
+            ):(
+                <View style={{flexDirection:'row'}}>
+                <TouchableOpacity
+                    onPress={()=>{props.onPressFollowBotton(user.id)}}
+                    
+                    style={{
+                        flex:1,
+                        margin:10,
+                        width:'100%',
+                        maxWidth:300,
+                        borderRadius:8,
+                        flexDirection:'row',
+                        justifyContent:'center',
+                        padding:10,
+                        backgroundColor: props.isFollowing?orange1:bgSuccess
+                    }}>
+                    <Image source={images.ic_edit} style={{
+                        width: 24,
+                        height: 24,
+                        tintColor:bgWhite
+                    }}/>
+                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>{props.isFollowing?'دنبال نکردن':'دنبال کردن'}</Text>
+                </TouchableOpacity>
+             
                 <TouchableOpacity
                     onPress={()=>{navigation.navigate('myLink')}}
                     disabled={true}
@@ -300,6 +445,10 @@ export const UserCard = observer(props => {
                     <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>شبکه</Text>
                 </TouchableOpacity>
             </View>
+            )
+
+            }
+            
         </View>
 
     )

@@ -39,6 +39,7 @@ class UserStore {
         this.user=user;
         this.userID= user.id ;
         this.username= user.username ;
+        this.userKey= user.userKey ;
         this.profileImage= user.profileImage ;
         this.inviteProfileImage=user.inviteProfileImage;
         this.avatar=user.avatar;
@@ -85,6 +86,7 @@ class UserStore {
         this.cUser='',
         this.userID= '' ;
         this.username= '' ;
+        this.userKey='';
         this.birthDate= '' ;
         this.birthDate= '' ;
         this.displayName= '' ;

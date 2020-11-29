@@ -19,7 +19,7 @@ import {
 } from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
 import {FlatList, Text, TouchableOpacity, View,} from "../src/react-native";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+
 import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
 import {getFileUri, logoutApi, postQuery} from "../dataService/apiService";
@@ -29,6 +29,7 @@ import pStore from "../src/stores/PublicStore";
 import { IoIosLink } from "react-icons/io";
 import {set} from "mobx";
 import Api from "../dataService/apiCaller";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { FaStar,FaWindowClose } from "react-icons/fa";
 import { IoMdHeartEmpty ,IoMdShare,} from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa";
@@ -60,7 +61,7 @@ export default class mypage extends Component {
     }
 
     async componentDidMount() {
-
+       
 
     }
 
@@ -79,7 +80,7 @@ export default class mypage extends Component {
             },
         };
 
-
+       
         return (
             //<PanelLayout title={`Treenetgram`} onRoleSelected={onRoleSelected}>
             <PanelLayout title={`Treenetgram`} loading={this.state.loading} loadingMessage={this.state.loadingMessage}

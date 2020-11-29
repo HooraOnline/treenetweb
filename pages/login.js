@@ -115,8 +115,8 @@ export default class LoginPage extends PureComponent {
         this.setState({loading: true});
         const data={};
         this.setState({loading:true});
-        const userName=this.state.countryCode+this.state.username;
-        loginApi(userName,this.state.password)
+        const userKey=this.state.countryCode+this.state.username;
+        loginApi(userKey,this.state.password)
             .then(res=>{
                 this.onSuccessLogin(res);
                 this.setState({loading:false});

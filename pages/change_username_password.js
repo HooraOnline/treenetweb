@@ -20,7 +20,7 @@ import {postQuery} from "../dataService/apiService";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 import {IoMdEye, IoMdEyeOff} from "react-icons/io";
 
-export default class change_username_password extends Component {
+export default class change_userKey_password extends Component {
     constructor() {
         super();
         this.state = {
@@ -28,9 +28,9 @@ export default class change_username_password extends Component {
             showPassword:false,
             passwordValidation:false,
             passwor2dValidation:false,
-            usernameValidation:false,
+            userKeyValidation:false,
             countryCode:userStore.countryCode,
-            username:'',
+            userKey:'',
             shortMobile:userStore.shortMobile,
             email:userStore.email ||'',
             fullName:userStore.fullName ||'',
@@ -45,21 +45,21 @@ export default class change_username_password extends Component {
     }
 
     checkValidation() {
-        if(this.state.usernameReserved){
-            this.setState({usernameValidation: false});
+        if(this.state.userKeyReserved){
+            this.setState({userKeyValidation: false});
             return translate('این نام کاربری قبلا گرفته شده است.');
         }
-        if (!this.state.username ) {
-            this.setState({usernameValidation: false});
-            return translate('registerPassword_enter_username');
+        if (!this.state.userKey ) {
+            this.setState({userKeyValidation: false});
+            return translate('registerPassword_enter_userKey');
         }
-        if (this.state.username==persistStore.username) {
-            this.setState({usernameValidation: false});
+        if (this.state.userKey==persistStore.userKey) {
+            this.setState({userKeyValidation: false});
             return translate('نام کاربری پیشفرض را عوض کنید.');
         }
-        if (this.state.username.length<3) {
-            this.setState({usernameValidation: false});
-            return translate('registerPassword_username_can_not_be_les_than');
+        if (this.state.userKey.length<3) {
+            this.setState({userKeyValidation: false});
+            return translate('registerPassword_userKey_can_not_be_les_than');
         }
 
         if (!this.state.password) {
@@ -110,7 +110,7 @@ export default class change_username_password extends Component {
         }
 
     }
-    updateUsernameAndPassword=()=>{
+    updateuserKeyAndPassword=()=>{
 
         const msg=this.checkValidation();
         if(msg){
@@ -119,7 +119,7 @@ export default class change_username_password extends Component {
         }
 
         const data={
-            username:this.state.username,
+            userKey:this.state.userKey,
             password:this.state.password,
             showNotifAction:true,
         };
@@ -141,7 +141,7 @@ export default class change_username_password extends Component {
 
 
         this.setState({loading:true,loadingMessage:'در حال اجرا'});
-        postQuery('Members/me/updateUsernameAndPassword',data)
+        postQuery('Members/me/updateuserKeyAndPassword',data)
             .then(res=>{
                 console.log(res);
                 navigation.replace('mypage');
@@ -195,7 +195,7 @@ export default class change_username_password extends Component {
                 }
                 footer={
                     <TouchableOpacity
-                        onPress={this.updateUsernameAndPassword}
+                        onPress={this.updateuserKeyAndPassword}
                         style={{alignItems:'center',justifyContent:'center',padding:15, backgroundColor:primaryDark}}>
                         <Text style={{color:bgWhite}} >ذخیره</Text>
                     </TouchableOpacity>
@@ -229,7 +229,7 @@ export default class change_username_password extends Component {
                                 }}
                                 dir={'ltr'}
                                 reverse={persistStore.isRtl}
-                                placeholder={translate('registerPassword_username_example')}
+                                placeholder={translate('registerPassword_userKey_example')}
                                 style={{flex: 1, marginTop: 10}}
                                 labelStyle={{color: textItem, marginTop: -19}}
                                 editable={true}
@@ -241,8 +241,8 @@ export default class change_username_password extends Component {
                                 returnKeyType="done"
                                 numberOfLines={1}
                                 underlineSize={4}
-                                underlineColor={this.state.usernameValidation ? bgSuccess : primaryDark}
-                                isAccept={this.state.usernameValidation}
+                                underlineColor={this.state.userKeyValidation ? bgSuccess : primaryDark}
+                                isAccept={this.state.userKeyValidation}
                                 textInputStyle={{
                                     fontWeight: 'normal',
                                     fontFamily:'IRANYekanRegular',
@@ -255,42 +255,42 @@ export default class change_username_password extends Component {
                                     textAlign: 'left',
                                 }}
 
-                                value={this.state.username}
+                                value={this.state.userKey}
                                 onChangeText={ async (text) =>{
-                                    const usernameReg =/^[a-zA-Z0-9_.]+$/;
+                                    const userKeyReg =/^[a-zA-Z0-9_.]+$/;
                                     text = mapNumbersToEnglish(text);
-                                    if(text && !usernameReg.test(text)){
-                                        showMassage(translate('registerPassword_username_rule'),'warning');
+                                    if(text && !userKeyReg.test(text)){
+                                        showMassage(translate('registerPassword_userKey_rule'),'warning');
                                         this.setState({
-                                            usernameValidation: false,
-                                            username:this.state.username,
+                                            userKeyValidation: false,
+                                            userKey:this.state.userKey,
                                         })
 
                                         return;
                                     }
 
-                                    const usernameReg2 =/^\d+$/;
-                                    if(text && usernameReg2.test(text.substring(0,1))){
-                                        showMassage(translate('registerPassword_username_rule2'),'warning');
+                                    const userKeyReg2 =/^\d+$/;
+                                    if(text && userKeyReg2.test(text.substring(0,1))){
+                                        showMassage(translate('registerPassword_userKey_rule2'),'warning');
                                         this.setState({
-                                            usernameValidation: false,
-                                            username:'',
+                                            userKeyValidation: false,
+                                            userKey:'',
                                         })
                                         return;
                                     }
                                     if(text.length>2){
                                         this.setState({checkingPassword:true});
-                                        postQuery('Members/me/checkUserNameExist',{username:text,currentUsername:userStore.username})
-                                            .then((usernameExist)=>{
-                                                this.setState({usernameReserved:usernameExist,usernameValidation:!usernameExist});
+                                        postQuery('Members/me/checkuserKeyExist',{userKey:text,currentUserKey:userStore.userKey})
+                                            .then((userKeyExist)=>{
+                                                this.setState({userKeyReserved:userKeyExist,userKeyValidation:!userKeyExist});
                                             })
                                             .finally(()=>this.setState({checkingPassword:false}))
 
                                     }else{
-                                        this.setState({usernameValidation:false});
+                                        this.setState({userKeyValidation:false});
                                     }
                                     this.setState({
-                                        username: text,
+                                        userKey: text,
                                     })
                                 }
                                 }
@@ -310,8 +310,8 @@ export default class change_username_password extends Component {
                                 )}
                             </View>
                         </View>
-                        {this.state.usernameReserved && userStore.username!=this.state.username && (
-                            <Text style={{marginTop:4, color:primaryDark,fontSize:12}} >{translate('registerPassword_username_is_reserved')}</Text>
+                        {this.state.userKeyReserved && userStore.userKey!=this.state.userKey && (
+                            <Text style={{marginTop:4, color:primaryDark,fontSize:12}} >{translate('registerPassword_userKey_is_reserved')}</Text>
                         )
                         }
 
