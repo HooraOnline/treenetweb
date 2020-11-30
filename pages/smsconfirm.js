@@ -110,7 +110,7 @@ export default class Smsconfirm extends Component {
                         <Text
                             style={{
                                 marginTop: 10,
-                                fontSize: 16,
+                                fontSize:14,
                                 fontWeight: 800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 color: bgSuccess,
@@ -120,7 +120,7 @@ export default class Smsconfirm extends Component {
                         </Text>
 
                         <View  dir={'ltr'} id='sms code' style={{marginTop:10, flexDirection:'row',justifyContent:'center', marginHorizontal:10}}  >
-                            {/*  <Text style={{marginTop:20,fontSize:14,color:bgWhite}}>Enter your phone number</Text>*/}
+                            {/*  <Text style={{marginTop:20,fontSize:12,color:bgWhite}}>Enter your phone number</Text>*/}
                             <View style={{ width:50,marginHorizontal:2,}} >
                                 <FloatingLabelTextInput
                                     dir={'rtl'}

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {persistStore, userStore} from "../src/stores";
+import {persistStore, pStore, userStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {SwitchTextMulti, Toolbar} from "../src/components";
 import {getTabWidth, mapNumbersToEnglish, navigation, showMassage} from "../src/utils";
@@ -144,7 +144,7 @@ export default class change_userKey_password extends Component {
         postQuery('Members/me/updateuserKeyAndPassword',data)
             .then(res=>{
                 console.log(res);
-                navigation.replace('mypage');
+                navigation.replace(pStore.cUser.userKey);
                 this.setState({loading:false});
                 //showMassage('مشخصات با موفقیت ویرایش شد.','success')
             })
@@ -208,7 +208,7 @@ export default class change_userKey_password extends Component {
                         <Text
                             style={{
                                 marginTop:2,
-                                fontSize:14,
+                                fontSize:12,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign:'justify',
                             }}>
@@ -247,7 +247,7 @@ export default class change_userKey_password extends Component {
                                     fontWeight: 'normal',
                                     fontFamily:'IRANYekanRegular',
                                     color: bg1,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     paddingStart: 4,
                                     paddingTop: 1,
                                     paddingBottom: 3,
@@ -344,7 +344,7 @@ export default class change_userKey_password extends Component {
                                     fontWeight: 'normal',
                                     fontFamily: 'IRANYekanRegular',
                                     color: bg1,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     paddingStart: 4,
                                     paddingTop: 1,
                                     //textAlign: 'left',
@@ -415,7 +415,7 @@ export default class change_userKey_password extends Component {
                                     fontWeight: 'normal',
                                     fontFamily: 'IRANYekanRegular',
                                     color: bg1,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     paddingStart: 4,
                                     paddingTop: 1,
                                     //textAlign: 'left',
@@ -462,7 +462,7 @@ export default class change_userKey_password extends Component {
                             }}>
                                 <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                    fontSize: 16,
+                                    fontSize:14,
                                     color: border,
 
                                     padding: 5,
@@ -497,7 +497,7 @@ export default class change_userKey_password extends Component {
                                     isAccept={this.state.shortMobileValidation}
                                     textInputStyle={{
                                         fontFamily: 'IRANYekanFaNum-Bold',
-                                        fontSize: 16,
+                                        fontSize:14,
                                         fontWeight:800,
                                         color: textItemBlack,
                                         paddingStart: 4,
@@ -550,7 +550,7 @@ export default class change_userKey_password extends Component {
                                     isAccept={this.state.emailValidation}
                                     textInputStyle={{
                                         fontFamily: 'IRANYekanFaNum-Bold',
-                                        fontSize: 16,
+                                        fontSize:14,
                                         fontWeight:800,
                                         color: textItemBlack,
                                         paddingStart: 4,
@@ -600,7 +600,7 @@ export default class change_userKey_password extends Component {
                                                 ? 'IRANYekan-ExtraBold'
                                                 : 'IRANYekanExtraBold',
                                         color: textItemBlack,
-                                        fontSize: 16,
+                                        fontSize:14,
                                         paddingStart: 4,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -635,7 +635,7 @@ export default class change_userKey_password extends Component {
                                         fontWeight: 'normal',
                                         fontFamily:'IRANYekanExtraBold',
                                         color: textItemBlack,
-                                        fontSize: 16,
+                                        fontSize:14,
                                         paddingRight: 10,
                                         paddingTop: 1,
                                         paddingBottom: 3,

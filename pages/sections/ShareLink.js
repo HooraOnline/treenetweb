@@ -49,7 +49,7 @@ export default class ShareLink extends Component {
                 <Text
                     style={{
                         marginTop: 0,
-                        fontSize: 14,
+                        fontSize:12,
                         fontWeight: 400,
                         fontFamily: 'IRANYekanFaNum-Bold',
                         color: bgSuccess,
@@ -75,7 +75,7 @@ export default class ShareLink extends Component {
                         <Text
                             style={{
                                 verticalAlign: 'middle',
-                                fontSize: 14,
+                                fontSize:12,
                                 backgroundColor: '#979A9A',
                                 fontFamily: 'IRANYekanRegular',
                                 color: bgWhite,
@@ -201,7 +201,7 @@ export default class ShareLink extends Component {
                                 color: bg10,
                                 width: 40,
                                 height: 40,
-                                fontSize: 16,
+                                fontSize:14,
                                 marginHorizontal: 0,
                                 backgroundColor: orange1,
                             }}

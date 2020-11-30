@@ -25,7 +25,7 @@ export default class autoRegister extends Component {
 
     async componentDidMount() {
         if (persistStore.apiToken) {
-            navigation.replace('/mypage');
+            navigation.replace(pStore.cUser.userKey);
         }
         this.regentCode = navigation.getParam('regentCode');
         if (!persistStore.userRegisterbefor || version.release == false) {
@@ -165,7 +165,7 @@ export default class autoRegister extends Component {
                             style={{
                                 marginTop: 5,
                                 marginBottom: 10,
-                                fontSize: 14,
+                                fontSize:12,
                                 fontWeight: 800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
 

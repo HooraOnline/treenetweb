@@ -90,7 +90,7 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                             Platform.OS === 'ios'
                                                 ? 'IRANYekan-Medium'
                                                 : 'IRANYekanMedium',
-                                        fontSize: 14,
+                                        fontSize:12,
                                         color: success,
                                     }}>  {'پرداخت شده'} . {item.PaymentTypeName}
                                 </Text>

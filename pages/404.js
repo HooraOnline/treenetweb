@@ -44,9 +44,7 @@ export default class userpage extends Component {
         this.state = {};
     }
 
-
     componentDidMount() {
-       
         this.getPageInfo();
     }
     
@@ -58,11 +56,11 @@ export default class userpage extends Component {
     }
 
     calculateTotalSubsetsCount=(subsets)=>{
-        debugger
         for(let p=0;p<subsets.length;++p){
             this.calculateCount(subsets[p]);
         }
     }
+
     getPageInfo=()=> {
         this.setState({loading:true})
             const pathname = window.location.pathname;
@@ -75,31 +73,36 @@ export default class userpage extends Component {
                         this.user=user;
                         this.cUserId=users.cUserId;
                         this.userPosts=user.posts;
-                        pStore.userPosts=user.posts;
+                       
                         this.userFollowed=user.followeds;
                         this.userFollowers=user.followers;
                         this.isFollowing=this.user.followers.find(item=>item.followerId==this.cUserId);
                         this.isPageAdmin=pStore.cUser.userKey===user.userKey;
+                        pStore.userPosts=user.posts;
+                       
                         this.setState({loading:false});
                         getUserSubsetApi(user.id)
                         .then(subsetList=>{
+                            
                             leavesCount=0;
                             pStore.subsetList=subsetList;
                             this.calculateTotalSubsetsCount(subsetList);
                             pStore.branchesCount=subsetList.length;
                             pStore.leavesCount=leavesCount;
+                            this.isPageAdmin=pStore.cUser.userKey===user.userKey;
+                           
+                            this.setState({loading:false});
         
                         })
                         .catch(err=>{
-                            //this.setState({loading:false});
+                           
+                            this.isPageAdmin=pStore.cUser.userKey===user.userKey;
+                            this.setState({loading:false});
                         });
-
-                       
-                            
-                      
+                    }else{
+                        this.setState({loading:false});
                     }
-
-                    this.setState({loading:false});
+                   
                 }).catch((error)=>{
                     this.setState({loading:false});
                 });
@@ -126,7 +129,7 @@ export default class userpage extends Component {
         
         const toolbarAdminStyle = {
           
-            title: userStore.fullName,
+            title:  this.user?this.user.fullName+'('+this.userKey+')':'صفحه من',
             end: {
                 onPress: () => logoutApi(),
                 icon: images.ic_Period,
@@ -162,7 +165,7 @@ export default class userpage extends Component {
                                     <NavBar navButtons={[
                                     {
                                         label: translate('پستها'),
-                                        path: "/mypage",
+                                        path: "/"+pStore.cUser.userKey,
                                         icon: <FontAwesomeIcon icon={faUser}/>
                                     },
                                     {
@@ -206,7 +209,7 @@ export default class userpage extends Component {
                                                 marginTop: 20,
                                                 alignSelf:'center',
                                                 marginBottom: 10,
-                                                fontSize: 14,
+                                                fontSize:12,
                                                 fontWeight: 800,
                                                 fontFamily: 'IRANYekanFaNum-Bold',
                                                 color: orange1
@@ -227,7 +230,7 @@ export default class userpage extends Component {
                                                 marginTop: 20,
                                                 alignSelf:'center',
                                                 marginBottom: 10,
-                                                fontSize: 14,
+                                                fontSize:12,
                                                 fontWeight: 800,
                                                 fontFamily: 'IRANYekanFaNum-Bold',
                                                 color: orange1
@@ -263,7 +266,16 @@ export const UserCard = observer(props => {
     let leavesCount = 0;
     let {user} = props;
     if(!user) return null;
+    const setProfileImage = (fileName) => {
+        const data = {profileImage: fileName};
+        postQuery('Members/me/setProfileImage', data)
+            .then(res => {
+                pStore.cUser.profileImage = res.profileImage;
+            })
+            .catch(err => {
 
+            })
+    };
     
 
     
@@ -276,7 +288,7 @@ export const UserCard = observer(props => {
                 borderRadius: 10,
                 alignItems: 'center',
             }}>
-                      <BgImageChacheProgress
+                      {/* <BgImageChacheProgress
                                     style={[{width:100,height:100, borderRadius: 50,}]}
                                     //resizeMode="cover"
                                     source={user.profileImage?getFileUri('member',user.profileImage):"noImage"}
@@ -306,7 +318,31 @@ export const UserCard = observer(props => {
                                     onLoadEnd={() => {
                                         this.setState({loadImageCompelete: true})
                                     }}
-                                ></BgImageChacheProgress>
+                                ></BgImageChacheProgress> */}
+                                <View style={{alignItems:'center'}}>
+                                <ImageSelector
+                                    style={{
+                                        borderColor: bg8,
+                                        height: 90,
+                                        width: 90,
+                                        borderRadius: 45,
+                                        alignSelf: 'center'
+                                    }}
+                                    folderName={'member'}
+                                    onUplodedFile={(fileName) => {
+                                        setProfileImage(fileName);
+                                    }}
+                                    canUpload={props.isPageAdmin}
+                                    autoUpload={true}
+                                    imageStyle={{height: 100, width: 100, borderRadius: 50}}
+                                    image={user.profileImage}
+                                    noImage={images.default_ProPic}
+                                    hideDeleteBtn={true}
+                                />
+                                <Text style={{marginTop:5,fontWeight:800}}>{props.user.userKey}</Text>
+                                </View>
+                                 
+
 
                 <View style={{width: 20}}/>
                 <View style={{alignItems: 'center'}}>
@@ -319,10 +355,21 @@ export const UserCard = observer(props => {
                             <Text style={{fontSize: 12}}>برگ</Text>
                             <Text style={{fontSize: 12}}>{pStore.leavesCount}</Text>
                         </View>
-                        <View style={{alignItems: 'center', paddingHorizontal: 15}}>
-                            <Text style={{fontSize: 12}}>شبکه</Text>
+                        {/* <View style={{alignItems: 'center', paddingHorizontal: 15}}>
+                            <Text style={{fontSize: 12}}>عضو</Text>
                             <Text style={{fontSize: 12}}>{pStore.branchesCount + pStore.leavesCount +user.followers.length+ 1}</Text>
-                        </View>
+                        </View> */}
+                         <TouchableOpacity 
+                            style={{alignItems: 'center', paddingHorizontal: 15}}
+                            onPress={()=>{
+                                if(user.followers.length>0){
+                                    navigation.navigate('userfollowers',{uidc:user.id,userKey:user.userKey});
+                                }
+                            }}
+                         >
+                            <Text style={{fontSize: 12}}>فالور</Text>
+                            <Text style={{fontSize: 12}}>{user.followers.length}</Text>
+                        </TouchableOpacity>
                     </View>
                     <Text
                         style={{
@@ -399,7 +446,6 @@ export const UserCard = observer(props => {
                 <View style={{flexDirection:'row'}}>
                 <TouchableOpacity
                     onPress={()=>{props.onPressFollowBotton(user.id)}}
-                    
                     style={{
                         flex:1,
                         margin:10,
@@ -409,14 +455,14 @@ export const UserCard = observer(props => {
                         flexDirection:'row',
                         justifyContent:'center',
                         padding:10,
-                        backgroundColor: props.isFollowing?orange1:bgSuccess
+                        backgroundColor: props.isFollowing?bgSuccess:orange1
                     }}>
-                    <Image source={images.ic_edit} style={{
+                    <Image source={images.ic_Information} style={{
                         width: 24,
                         height: 24,
                         tintColor:bgWhite
                     }}/>
-                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>{props.isFollowing?'دنبال نکردن':'دنبال کردن'}</Text>
+                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>{props.isFollowing?'رها کردن':'دنبال کردن'}</Text>
                 </TouchableOpacity>
              
                 <TouchableOpacity
@@ -457,7 +503,7 @@ export const UserCard = observer(props => {
 export const UserPosts = observer(props => {
     const [loading, setLoading] = useState(false);
     const [itemWidth, setItemWidth] = useState(100);
-    const [posts, setPosts] = useState([{image:images.ic_Social_Telegram}]);
+    //const [posts, setPosts] = useState([{image:images.ic_Social_Telegram}]);
    
     const [selectedItem, setSelectedItem] = useState(null);
     useEffect(() => {
@@ -472,8 +518,16 @@ export const UserPosts = observer(props => {
         };
     }
 
+    const pathname = window.location.pathname;
+    const userKey=pathname.split('/').join('');
+    const isPageAdmin=pStore.cUser.userKey===userKey;
+    let posts=[]
    
-   
+    if(isPageAdmin){
+        posts=[{file:images.ic_add}].concat(pStore.userPosts);
+    }else{
+        posts=pStore.userPosts;
+    }
 
     return (
         <View style={{flex:1,marginTop:2}}>
@@ -481,11 +535,58 @@ export const UserPosts = observer(props => {
                 loading={loading}
                 style={{justifyContent:'center'}}
                 keyExtractor={(item, index) => index.toString()}
-                data={ pStore.userPosts}
+                data={posts}
                 flexWrap
                 ListEmptyComponent={null}
 
                 renderItem={({item, index}) =>{
+                    
+                    if(index==0 && isPageAdmin)
+                        return(
+                            <ImageSelector
+                                style={{
+                                    alignItems:'center',
+                                    justifyContent:'center',
+                                    width:itemWidth,
+                                    height:itemWidth,
+                                    borderRadius:4,
+                                    margin:2,
+                                    backgroundColor:textGray
+                                }}
+                                folderName={'post'}
+                                onUplodedFile={(fileName) => {
+                                    pStore.param1=fileName;
+                                    navigation.navigate('addpost');
+
+                                }}
+                                onSelectFile={(files,formData,file0,filebase64)=>{
+                                    pStore.param1=files;
+                                    pStore.param2=filebase64;
+                                    //navigation.navigate('addpost')
+                                }}
+
+                                canUpload={true}
+                                autoUpload={true}
+                                imageStyle={{height: 100, width: 100, borderRadius: 50}}
+                                image={item.file}
+                                noImage={images.default_ProPic}
+                                hideDeleteBtn={true}
+                            >
+                                <View style={{flex:1,width:'100%', height:'100%',justifyContent:'center',alignItems:'center'}}>
+                                <Image
+                                    source={images.ic_addCircle}
+                                    style={{
+                                        marginTop:'25%',
+                                        width:50,
+                                        height:50,
+
+                                    }}
+                                />
+                                    <Text style={{fontSize:10,}} >پست جدید</Text>
+                                </View>
+                            </ImageSelector>
+                        )
+                    
                     return (
                         <TouchableOpacity
                             onPress={()=>{
@@ -494,7 +595,7 @@ export const UserPosts = observer(props => {
                                     username:pStore.cUser.username,
                                     avatar:pStore.cUser.avatar,
                                 };
-                                navigation.navigate('edit_post',{post:item});
+                                navigation.navigate('view_post',{post:item});
                             }}
                             style={{
                                 alignItems:'center',

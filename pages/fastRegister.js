@@ -121,7 +121,7 @@ export default class FastRegister extends Component {
                             style={{
                                 alignItems: 'center',
                                 marginTop: 2,
-                                fontSize: 14,
+                                fontSize:12,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign: 'justify',
                                 color: bgSuccess,
@@ -131,7 +131,7 @@ export default class FastRegister extends Component {
                         <Text
                             style={{
                                 marginTop: 10,
-                                fontSize: 16,
+                                fontSize:14,
                                 fontWight: 800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 color: bgSuccess,
@@ -148,7 +148,7 @@ export default class FastRegister extends Component {
                         }}>
                             <Text style={{
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                fontSize: 16,
+                                fontSize:14,
                                 color: border,
 
                                 padding: 5,
@@ -182,7 +182,7 @@ export default class FastRegister extends Component {
                                 isAccept={this.state.mobileValidation}
                                 textInputStyle={{
                                     fontFamily: 'IRANYekanFaNum-Bold',
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontWeight:800,
                                     color: textItemBlack,
                                     paddingStart: 4,
@@ -233,7 +233,7 @@ export default class FastRegister extends Component {
                                 isAccept={this.state.emailValidation}
                                 textInputStyle={{
                                     fontFamily: 'IRANYekanFaNum-Bold',
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontWeight:800,
                                     color: textItemBlack,
                                     paddingStart: 4,
@@ -268,7 +268,7 @@ export default class FastRegister extends Component {
                             onPress={() =>this.registerPhone()}
                         >
                             <Text style={{
-                                fontSize: 16,
+                                fontSize:14,
                                 color: bgSuccess,
                                 fontWeight: 500,
                                 paddingVertical: 12

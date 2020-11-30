@@ -18,7 +18,7 @@ import {
 import {BgImageChacheProgress, Image, Text, TouchableOpacity, View,Progress} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
 import {getFileUri, postQuery} from "../dataService/apiService";
-import {persistStore, userStore} from "../src/stores";
+import {persistStore, pStore, userStore} from "../src/stores";
 import {observer} from "mobx-react";
 
 
@@ -39,7 +39,7 @@ export default class register extends Component {
             await fetchStore()
         }
         if (persistStore.apiToken) {
-            navigation.replace('/mypage');
+            navigation.replace(pStore.cUser.userKey);
         }/*if(!persistStore.userRegisterbefor){
             navigation.replace('/login');
             return;
@@ -143,7 +143,7 @@ export default class register extends Component {
                                 style={{
                                     alignItems: 'center',
 
-                                    fontSize: 14,
+                                    fontSize:12,
                                     color: accentLight,
                                     fontWeight: 500,
                                     fontFamily: 'IRANYekanRegular',
@@ -294,7 +294,7 @@ export default class register extends Component {
                                     }}>
                                     <Text
                                         style={{
-                                            fontSize: 14,
+                                            fontSize:12,
                                             fontFamily: 'IRANYekanFaNum-Bold',
                                             paddingTop: 2,
                                         }}>
@@ -343,7 +343,7 @@ export default class register extends Component {
                                 onPress={() => this.initUser()}
                             >
                                 <Text style={{
-                                    fontSize: 14,
+                                    fontSize:12,
                                     color: bgWhite,
                                     fontWeight: 500,
                                     paddingVertical: 10,

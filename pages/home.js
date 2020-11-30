@@ -8,7 +8,7 @@ import {bgSuccess, bgWhite, borderSeparate, orange1, primaryDark} from "../src/c
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
 import {postQuery} from "../dataService/apiService";
-import {persistStore} from "../src/stores";
+import {persistStore, pStore} from "../src/stores";
 import {observer} from "mobx-react";
 
 @observer
@@ -27,7 +27,7 @@ export default class index extends Component {
             await fetchStore()
         }
         if (persistStore.apiToken) {
-            navigation.replace('/mypage');
+            navigation.replace(pStore.cUser.userKey);
         } else {
             this.regentCode = navigation.getParam('regentCode');
             this.getUserGeo()
@@ -94,7 +94,7 @@ export default class index extends Component {
 
     loginPanel() {
         if ( persistStore.apiToken)
-            navigation.navigate('/mypage');
+            navigation.navigate(pStore.cUser.userKey);
         else{
             navigation.navigate('/login');
         }
@@ -176,7 +176,7 @@ export default class index extends Component {
                                     }}>
                                     <Text
                                         style={{
-                                            fontSize: 14,
+                                            fontSize:12,
                                             fontFamily: 'IRANYekanFaNum-Bold',
                                             paddingTop: 2,
                                         }}>
@@ -222,7 +222,7 @@ export default class index extends Component {
                             onPress={() => this.loginPanel()}
                         >
                             <Text style={{
-                                fontSize: 14,
+                                fontSize:12,
                                 color: bgWhite,
                                 fontWeight: 500,
                                 paddingVertical: 10,
@@ -263,7 +263,7 @@ export default class index extends Component {
                            {/* <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontFamily: 'IRANYekanRegular',
 
                                     textAlign: 'justify',
@@ -315,7 +315,7 @@ export default class index extends Component {
                             {/*<Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontFamily: 'IRANYekanRegular',
 
                                     textAlign: 'justify',
@@ -327,7 +327,7 @@ export default class index extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontFamily: 'IRANYekanRegular',
 
                                     textAlign: 'justify',
@@ -341,7 +341,7 @@ export default class index extends Component {
                                 style={{
                                     alignItems: 'center',
                                     marginTop: 0,
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontFamily: 'IRANYekanRegular',
                                     textAlign: 'justify',
 

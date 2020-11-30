@@ -534,7 +534,7 @@ const MenuBar=observer(props=> {
                         style={{ height: "25px", width: "25px", display: "block",position:'absolute',right:'9%' }}
                         src="../static/assets/images/theme/ic_nd_logout.png"
                     />
-                    <span style={{ fontSize:14,padding:10}} > خروج از حساب کاربری</span>
+                    <span style={{ fontSize:12,padding:10}} > خروج از حساب کاربری</span>
                 </div>
 
             </Drawer>

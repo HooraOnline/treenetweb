@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     },
     textUnitNumber: {
         fontFamily:'IRANYekanFaNum-Bold',
-        fontSize: 16,
+        fontSize:14,
     },
     textUnit: {
         color: border,
@@ -212,7 +212,7 @@ const styles ={
     },
     textUnitNumber: {
         fontFamily:'IRANYekanBold' ,
-        fontSize: 16,
+        fontSize:14,
     },
     textUnit: {
         color: border,

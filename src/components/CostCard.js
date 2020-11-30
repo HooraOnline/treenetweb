@@ -93,7 +93,7 @@ export default class CostCard extends PureComponent {
                             style={{
                                 marginTop: 10,
                                 color: textItem,
-                                fontSize: 16,
+                                fontSize:14,
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
                             }}
                         >{CostTypeName}</Text>
@@ -182,7 +182,7 @@ export default class CostCard extends PureComponent {
             color: 'white',
             textAlign: 'center',
             flex: 1,
-            fontSize: 14,
+            fontSize:12,
         }}
     >{CostTypeName} ({PeriodName})</Text>
     {(permission && permission.writeAccess) && (

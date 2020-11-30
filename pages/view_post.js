@@ -24,7 +24,7 @@ import { IoMdHeartEmpty ,IoMdShare} from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 
-export default class edit_post extends Component {
+export default class view_post extends Component {
     constructor() {
         super();
 
@@ -63,14 +63,14 @@ export default class edit_post extends Component {
                 loadingMessage={this.state.loadingMessage}
                 title={`مشاهده پست`}
                 showMenu={this.state.showMenu}
-                style={{alignItems:'center'}}
+                style={{alignItems:'center',}}
                 header={
                     <Toolbar
                         customStyle={toolbarStyle}
                         isExpand={this.state.showAccountSelect }
                     />
                 }>
-                <View style={{flex:1}}>
+                <View style={{flex:1,paddingTop:16}}>
                     <View style={{flexDirection:'row',justifyContent:'center',paddingHorizontal:10}}>
                         <Image
                             source={getFileUri('member',profileImage)}
@@ -81,7 +81,7 @@ export default class edit_post extends Component {
                             }}
                         />
                         <View style={{padding:5,flex:1,justifyContent:'center'}}>
-                            <Text style={{ fontSize:14,fontWeight:800, }}>{username}</Text>
+                            <Text style={{ fontSize:12,fontWeight:800, }}>{username}</Text>
                             <Text style={{ fontSize:10,color:textItem}}>{avatar}</Text>
                         </View>
                     </View>

@@ -248,7 +248,7 @@ export default class MyNetwork extends Component {
                                               <TouchableOpacity
                                                   onPress={()=>{navigation.navigate('change_username_password')}}
                                                   style={{flex:1,paddingBottom:40, flexDirection:'row',justifyContent:'space-between', padding:10,backgroundColor:'#F1C40F'}}>
-                                                  <Text style={{fontSize:14,color:textItem,padding:5}}>{'رمز موقت را تغییر دهید.'} </Text>
+                                                  <Text style={{fontSize:12,color:textItem,padding:5}}>{'رمز موقت را تغییر دهید.'} </Text>
                                                   <View style={{flexDirection:'row',height:40, backgroundColor:'#27AE60',borderRadius:8,alignItems:'cener',justifyContent:'center', padding:5,paddingHorizontal:15}}>
                                                       <Image source={images.ic_edit} style={{
                                                           width: 24,
@@ -256,7 +256,7 @@ export default class MyNetwork extends Component {
                                                           paddingHorizontal:5,
                                                           tintColor:bgWhite
                                                       }}/>
-                                                      <Text style={{color:bgWhite,fontSize:14,paddingHorizontal:5}} >تغییر</Text>
+                                                      <Text style={{color:bgWhite,fontSize:12,paddingHorizontal:5}} >تغییر</Text>
                                                   </View>
                                               </TouchableOpacity>
                                           </div>
@@ -268,7 +268,7 @@ export default class MyNetwork extends Component {
                                 <NavBar navButtons={[
                                     {
                                         label: translate('پستها'),
-                                        path: "/mypage",
+                                        path: "/"+pStore.cUser.userKey,
                                         icon: <FontAwesomeIcon icon={faUser}/>
                                     },
                                     {
@@ -309,7 +309,7 @@ export default class MyNetwork extends Component {
                     {pStore.subsetList.length==0 &&(
                         <View style={{marginTop:10,alignItems:'center'}}>
                             <Text
-                                style={{textAlign:'justify',paddingHorizontal:30,fontSize:14,color:itemListText}}
+                                style={{textAlign:'justify',paddingHorizontal:30,fontSize:12,color:itemListText}}
                             > شما هنوز هیچ فردی را به تری نتگرام دعوت نکرده و شاخه ای نساخته اید. برای ایجاد شاخه های درخت خود، کافی است لینک اختصاصی خود را برای چند نفر ارسال کنید یا آنرا در شبکه های اجتماعی مانند فیسبوک یا تلگرام به اشتراک بگذارید. </Text>
 
                             <TouchableOpacity

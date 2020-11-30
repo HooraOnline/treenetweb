@@ -131,7 +131,7 @@ export default class edit_profile extends Component {
             .then(res=>{
                 console.log(res);
                 //pStore.cUser=res;
-                navigation.replace('mypage');
+                navigation.replace(pStore.cUser.userKey);
                 this.setState({loading:false});
                 //showMassage('پروفایل با موفقیت ویرایش شد.','success')
             })
@@ -227,7 +227,7 @@ export default class edit_profile extends Component {
                                
                                  <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                    fontSize: 14,
+                                    fontSize:12,
                                     color: border,
 
                                     padding: 5,
@@ -264,7 +264,7 @@ export default class edit_profile extends Component {
                                     isAccept={this.state.mobileValidation}
                                     textInputStyle={{
                                         fontFamily: 'IRANYekanFaNum-Bold',
-                                        fontSize: 14,
+                                        fontSize:12,
                                         fontWeight:800,
                                         color: textItemBlack,
                                         paddingStart: 4,
@@ -315,7 +315,7 @@ export default class edit_profile extends Component {
                                     fontWeight: 'normal',
                                     fontFamily:'IRANYekanRegular',
                                     color: bg1,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     paddingStart: 4,
                                     paddingTop: 1,
                                     paddingBottom: 3,
@@ -412,7 +412,7 @@ export default class edit_profile extends Component {
                                     numberOfLines={1}
                                     isAccept={this.state.emailValidation}
                                     textInputStyle={{   
-                                        fontSize: 14,
+                                        fontSize:12,
                                         color: textItemBlack,
                                         paddingStart: 4,
                                         paddingTop: 1,
@@ -478,7 +478,7 @@ export default class edit_profile extends Component {
                                                 ? 'IRANYekan-ExtraBold'
                                                 : 'IRANYekanExtraBold',
 
-                                        fontSize: 14,
+                                        fontSize:12,
                                         paddingStart: 4,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -522,7 +522,7 @@ export default class edit_profile extends Component {
                                                 ? 'IRANYekan-ExtraBold'
                                                 : 'IRANYekanExtraBold',
 
-                                        fontSize: 14,
+                                        fontSize:12,
                                         paddingStart: 4,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -566,7 +566,7 @@ export default class edit_profile extends Component {
                                                 ? 'IRANYekan-ExtraBold'
                                                 : 'IRANYekanExtraBold',
 
-                                        fontSize: 14,
+                                        fontSize:12,
                                         paddingStart: 4,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -600,7 +600,7 @@ export default class edit_profile extends Component {
                                     textInputStyle={{
                                         fontFamily:'IRANYekanExtraBold',
 
-                                        fontSize: 14,
+                                        fontSize:12,
                                         paddingRight: 10,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -676,7 +676,7 @@ export default class edit_profile extends Component {
 
                                         fontFamily:'IRANYekanExtraBold',
 
-                                        fontSize: 14,
+                                        fontSize:12,
                                         paddingStart: 4,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -725,7 +725,7 @@ const styles = StyleSheet.create({
         borderColor: subTextItem,
         borderWidth: 1,
         borderRadius: 10,
-        fontSize: 14,
+        fontSize:12,
         textAlignVertical: 'top',
         textAlign: 'right',
         padding: 8,
@@ -745,13 +745,13 @@ const styles = StyleSheet.create({
     multiSwitchItem: {
         flex: 1,
         fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-        fontSize: 14,
+        fontSize:12,
         paddingHorizontal: 7,
         paddingVertical: 2,
     },
     multiSwitchItemActive: {
         fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-        fontSize: 16,
+        fontSize:14,
     },
 
 });

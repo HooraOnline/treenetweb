@@ -1,7 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {ImageSelector, Toolbar} from "../src/components";
-import {navigation, showMassage} from "../src/utils";
+import {doDelay, navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
 import {
     bgEmpty,
@@ -30,7 +30,7 @@ import { IoMdHeartEmpty ,IoMdShare} from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 @observer
-export default class followboard extends Component {
+export default class userfollower extends Component {
     constructor() {
         super();
         //globalState.changeStatusBarColor(primaryDark);
@@ -43,14 +43,38 @@ export default class followboard extends Component {
             anchorEl: null,
             showMenu: false,
             isWide: false,
-            forms: []
+            forms: [],
+            userKey:'',
+            followers:[]
         };
+        this.userKey='';
     }
 
 
     async componentDidMount  () {
-
+        doDelay(100)
+        .then(()=>{
+           const memberId= navigation.getParam('uidc');
+           this.userKey= navigation.getParam('userKey');
+           if(memberId) {
+               this.getFollowers(memberId);
+           }
+        })
     }
+
+    getFollowers =(memberId)=> {
+        this.setState({loading:true})
+        Api.post('Followers/getUserFollowers',{memberId:memberId})
+                  .then(followers=>{
+                     debugger
+                     this.setState({followers:followers})
+                  }).catch((error)=>{
+                     showMassage('خطا در بارگذاری دنبال کنندگان')
+                  })
+                  .finally(()=>{
+                    this.setState({loading:false})
+                  });
+  };
 
     render() {
         const toolbarStyle = {
@@ -58,11 +82,11 @@ export default class followboard extends Component {
                 content: images.ic_back,
                 onPress: ()=>navigation.goBack(),
             },
-            title: 'فالوبورد',
+            title: this.userKey+'('+this.state.followers.length+')',
         };
 
         return (
-            <PanelLayout title={`Panel`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage} showMenu={this.state.showMenu}
+            <PanelLayout title={`فالورها`}  loading={this.state.loading} loadingMessage={this.state.loadingMessage}
                          onRef={(initDrawer) => this.initDrawer = initDrawer}
                          onCloseMenu={() => this.setState({showMenu: false})}
                          style={{margin: 0}}
@@ -94,8 +118,8 @@ export default class followboard extends Component {
                              </View>
                          }>
                 <View style={{flex:1,paddingBottom:40,paddingTop:16}}>
-                    <View style={{padding: 0, marginTop: 0,alignItems:'center'}}>
-                        <PostList/>
+                    <View style={{padding: 0, marginTop: 0,}}>
+                        <FollowerList followers={this.state.followers}/>
                     </View>
                 </View>
             </PanelLayout>
@@ -106,54 +130,38 @@ export default class followboard extends Component {
 
 }
 
-export const PostList = observer(props => {
+export const FollowerList = observer(props => {
     const [loading, setloading] = useState(false);
-    const [itemWidth, setItemWidth] = useState(100);
-    const [posts, setPosts] = useState([{image:images.ic_Social_Telegram}]);
-    const [postList, setPostList] = useState([]);
+  
     useEffect(() => {
+      
+    },[]);
 
-        getFollowboardPosts();
-    },  []);
-
-
-
-    const getFollowboardPosts =(fields,include)=> {
-          Api.post('posts/getFollowboardPosts',{regentId:pStore.cUser.regentId})
-                    .then(posts=>{
-                        pStore.userPosts=posts;
-                        setPosts(posts)
-                    }).catch((error)=>{
-                        setloading(false)
-                    });
-    };
 
     return (
             <FlatList
                 loading={loading}
                 style={{justifyContent:'center'}}
                 keyExtractor={(item, index) => index.toString()}
-                data={posts}
+                data={props.followers}
                 ListEmptyComponent={
                     <View
                         style={{
                             justifyContent: 'center',
                             alignItems: 'center',
-                            backgroundColor: posts.length > 0 ? bgScreen : bgEmpty
+                            backgroundColor: props.followers.length > 0 ? bgScreen : bgEmpty
                         }}>
-
-
                     </View>
                 }
                 renderItem={({item, index}) =>{
-                    if(!item.member)
+                    if(!item.follower)
                         return  null;
-                    let {profileImage,userKey,avatar}=item.member;
+                    let {profileImage,userKey,avatar}=item.follower;
                     return (
                         <View style={{flex:1}}>
                             <TouchableOpacity
                              onPress={()=> location.pathname=item.member.userKey}
-                             style={{flexDirection:'row',justifyContent:'center',paddingHorizontal:10}}>
+                             style={{flexDirection:'row',justifyContent:'center',paddingHorizontal:10,margin:16}}>
                                 <Image
                                     source={getFileUri('member',profileImage)}
                                     style={{
@@ -167,50 +175,6 @@ export const PostList = observer(props => {
                                     <Text style={{ fontSize:10,color:textItem}}>{avatar}</Text>
                                 </View>
                             </TouchableOpacity>
-                            <View
-                                style={{
-                                    alignItems:'center',
-                                    justifyContent:'center',
-                                    width:'100%',
-                                    maxWidth:global.width,
-                                    height:global.width/2,
-                                    maxHeight:global.width/2,
-                                    borderRadius:0,
-                                    borderWidth:0.4,
-                                    borderColor:borderLight,
-                                    margin:1,
-                                    position:'relative',
-                                }}>
-                                {item.isSpecial &&(
-                                    <FaStar
-                                        size={30}
-                                        color={yellowmin}
-                                        style={{
-                                            position:'absolute',
-                                            top:5,
-                                            left:5
-                                        }}
-                                    />
-                                )}
-                                <Image
-                                    source={getFileUri('post',item.file)}
-                                    style={{
-                                        width:global.width-10,
-                                        height:'100%',
-
-                                    }}
-                                />
-
-                            </View>
-                            <View style={{flex:1,padding:10,paddingBottom:30}}>
-                                <Text style={{ fontSize:12,}}>{item.text}</Text>
-                                <View style={{flex:1,flexDirection:'row'}}>
-                                    <IoMdHeartEmpty size={25} style={{margin:10}}/>
-                                    <IoMdShare size={25} style={{margin:10}}/>
-                                    <FaRegCommentDots size={25} style={{margin:10}}/>
-
-                                </View>
-                            </View>
                         </View>
                     )
                 } }

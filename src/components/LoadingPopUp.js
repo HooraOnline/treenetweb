@@ -49,7 +49,7 @@ function Content({message}) {
               {/*  <Progress.CircleSnail duration={700} spinDuration={3000}
                                       color={[primary, 'red', primaryDark]}/>*/}
                 {/*<LinearProgress variant="determinate" />*/}
-                <Text style={{color: primaryDark, fontSize: 14,alignSelf:'center'}}>
+                <Text style={{color: primaryDark, fontSize:12,alignSelf:'center'}}>
                     {message}
                 </Text>
             </View>

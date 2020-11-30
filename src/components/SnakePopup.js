@@ -100,7 +100,7 @@ export default class SnakePopup extends PureComponent {
                             style={{
                                 paddingHorizontal:5,
                                 color: 'black',
-                                fontSize: 16,
+                                fontSize:14,
                                 fontFamily:'IRANYekanFaNum-Bold',
                             }}>
                             {toolbarTitle}

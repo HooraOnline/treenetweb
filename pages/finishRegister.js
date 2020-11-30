@@ -81,7 +81,7 @@ export default class FinishRegister extends Component {
                         <Text
                             style={{
                                 marginTop:20,
-                                fontSize:16,
+                                fontSize:14,
                                 fontWeight:800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 color:primaryDark,
@@ -114,7 +114,7 @@ export default class FinishRegister extends Component {
                                 <Text
                                     style={{
                                         marginTop:10,
-                                        fontSize:16,
+                                        fontSize:14,
                                         fontWeight:800,
                                         fontFamily: 'IRANYekanFaNum-Bold',
                                         color:grL5,
@@ -138,7 +138,7 @@ export default class FinishRegister extends Component {
                                             color: bg10,
                                             width: 60,
                                             height: 60,
-                                            fontSize: 16,
+                                            fontSize:14,
                                             marginHorizontal: 0,
                                             backgroundColor: bgSuccess,
                                         }}
@@ -147,7 +147,7 @@ export default class FinishRegister extends Component {
                                     </TouchableOpacity>
                                     <Text
                                         style={{
-                                            fontSize:14,
+                                            fontSize:12,
                                             fontFamily: 'IRANYekanRegular',
                                             color:grL5,
                                             //maxWidth:global.width-50,
@@ -160,7 +160,7 @@ export default class FinishRegister extends Component {
                                 <Text
                                     style={{
                                         marginTop: 20,
-                                        fontSize: 16,
+                                        fontSize:14,
                                         paddingHorizontal: 5,
                                         fontFamily: 'IRANYekanRegular',
                                         color: bgSuccess,
@@ -171,7 +171,7 @@ export default class FinishRegister extends Component {
                                 <Text
                                     style={{
                                         marginTop: 10,
-                                        fontSize: 16,
+                                        fontSize:14,
                                         fontWeight: 800,
                                         paddingHorizontal: 5,
                                         fontFamily: 'IRANYekanRegular',
@@ -183,7 +183,7 @@ export default class FinishRegister extends Component {
                                 <ul
                                     style={{
                                         margin: 5,
-                                        fontSize: 16,
+                                        fontSize:14,
                                         fontFamily: 'IRANYekanRegular',
                                         color: bgSuccess,
                                         alignSelf: 'center',
@@ -204,7 +204,7 @@ export default class FinishRegister extends Component {
                                 <Text
                                     style={{
                                         marginTop: 10,
-                                        fontSize: 16,
+                                        fontSize:14,
                                         fontFamily: 'IRANYekanFaNum',
                                         color: bgSuccess,
                                         paddingHorizontal: 5,
@@ -215,7 +215,7 @@ export default class FinishRegister extends Component {
                                 <Text
                                     style={{
                                         marginTop: 0,
-                                        fontSize: 16,
+                                        fontSize:14,
                                         fontWeight: 400,
                                         fontFamily: 'IRANYekanFaNum',
                                         color: bgSuccess,
@@ -231,7 +231,7 @@ export default class FinishRegister extends Component {
                         <Text
                             style={{
                                 marginTop:10,
-                                fontSize:16,
+                                fontSize:14,
                                 fontWeight:800,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 color:grL5,
@@ -255,7 +255,7 @@ export default class FinishRegister extends Component {
                                     color: bg10,
                                     width: 60,
                                     height: 60,
-                                    fontSize: 16,
+                                    fontSize:14,
                                     marginHorizontal: 0,
                                     backgroundColor: bgSuccess,
                                 }}
@@ -264,7 +264,7 @@ export default class FinishRegister extends Component {
                             </TouchableOpacity>
                             <Text
                                 style={{
-                                    fontSize:14,
+                                    fontSize:12,
                                     fontFamily: 'IRANYekanRegular',
                                     color:grL5,
                                     //maxWidth:global.width-50,

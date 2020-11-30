@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     },
     subTitle: {
         textAlign: 'center',
-        fontSize: 14,
+        fontSize:12,
         color: subTextItem,
     },
 });

@@ -72,7 +72,7 @@ export default class MyServices extends Component {
                                 <NavBar navButtons={[
                                     {
                                         label: translate('پستها'),
-                                        path: "/mypage",
+                                        path: "/"+pStore.cUser.userKey,
                                         icon: <FontAwesomeIcon icon={faUser}/>
                                     },
                                     {

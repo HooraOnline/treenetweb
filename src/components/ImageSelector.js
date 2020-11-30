@@ -88,10 +88,11 @@ export default class ImageSelector extends PureComponent {
             <View style={[{ position: 'relative',alignItems:'center',justifyContent:'center' },style]}>
 
                 <piperecorder pipe-width={400} pipe-height={330}/>
-                {canUpload &&(
+               
 
                     <FileInput
                         style={{}}
+                        canUpload={canUpload}
                         accept={'image/jpeg, image/png'}
                         onSelectFile={(files,formData,file0,url,filebase64)=>{
                             this.props.onSelectFile && this.props.onSelectFile(formData,file0,url,filebase64);
@@ -142,8 +143,7 @@ export default class ImageSelector extends PureComponent {
                             {children}
                         </BgImageChacheProgress>
                     </FileInput>
-                )
-                }
+               
 
                 {canUpload && !hideDeleteBtn && (this.state.image || this.state.selectedImage) && (
                     <TouchableOpacity

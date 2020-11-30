@@ -8,7 +8,7 @@ import {bg10, bgHeader, bgWhite, borderSeparate, bgSuccess, orange1, primaryDark
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {ListDialogPopUp} from "../src/components";
 import {getServerFilePath, getUserSubsetApi} from "../dataService/apiService";
-import {persistStore, userStore} from "../src/stores";
+import {persistStore, pStore, userStore} from "../src/stores";
 import {observer} from "mobx-react";
 
 @observer
@@ -40,7 +40,7 @@ export default class newInvite extends Component {
 
     loginPanel() {
         if (persistStore.apiToken)
-            navigation.navigate('/mypage');
+            navigation.navigate(pStore.cUser.userKey);
         else{
             navigation.navigate('/login');
         }
@@ -120,7 +120,7 @@ export default class newInvite extends Component {
                                     <Text
                                         style={{
                                             fontFamily: 'IRANYekanFaNum-Bold',
-                                            fontSize: 14,
+                                            fontSize:12,
                                             paddingTop: 2,
                                         }}>
                                         {this.state.languageIndex !== undefined
@@ -207,7 +207,7 @@ export default class newInvite extends Component {
                                 onPress={() => this.goToPanel()}
                             >
                                 <Text style={{
-                                    fontSize: 16,
+                                    fontSize:14,
                                     color: bgWhite,
                                     fontWeight: 500,
                                     paddingVertical: 12,
@@ -221,7 +221,7 @@ export default class newInvite extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontFamily: 'IRANYekanRegular',
                                     textAlign: 'justify',
                                     marginBottom: 5
@@ -233,7 +233,7 @@ export default class newInvite extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontFamily: 'IRANYekanRegular',
                                     textAlign: 'justify',
                                     marginBottom: 5
@@ -244,7 +244,7 @@ export default class newInvite extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontFamily: 'IRANYekanRegular',
                                     textAlign: 'justify',
                                     marginBottom: 5
@@ -255,7 +255,7 @@ export default class newInvite extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontFamily: 'IRANYekanRegular',
                                     textAlign: 'justify',
                                     marginBottom: 5
@@ -266,7 +266,7 @@ export default class newInvite extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontFamily: 'IRANYekanRegular',
 
                                     textAlign: 'justify',
@@ -280,7 +280,7 @@ export default class newInvite extends Component {
                                 style={{
                                     alignItems: 'center',
                                     marginTop: 0,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontFamily: 'IRANYekanRegular',
                                     textAlign: 'justify',
 
@@ -341,7 +341,7 @@ const RegentCard=observer(
                         style={{
                             alignItems: 'center',
                             marginTop: 25,
-                            fontSize: 14,
+                            fontSize:12,
                             color: primaryDark,
                             fontWeight: 500,
                             fontFamily: 'IRANYekanRegular',

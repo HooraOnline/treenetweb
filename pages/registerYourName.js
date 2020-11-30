@@ -137,7 +137,7 @@ export default class registerYourName extends Component {
             .then(res=>{
                 console.log(res);
                 //pStore.cUser=res;
-                navigation.replace('mypage');
+                navigation.replace(pStore.cUser.userKey);
                 this.setState({loading:false});
                 //showMassage('پروفایل با موفقیت ویرایش شد.','success')
             })

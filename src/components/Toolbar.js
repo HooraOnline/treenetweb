@@ -158,7 +158,7 @@ export default class Toolbar extends PureComponent {
                                 onPress={search.onPressType}>
                                   <Text
                                       style={{
-                                          fontSize: 14,
+                                          fontSize:12,
                                           color: textItemRed,
                                       }}>
                                     {search.typeName.length > 13
@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: toolbarItem,
-        fontSize: 16,
+        fontSize:14,
         fontFamily: 'IRANYekanMedium',
         alignSelf: 'flex-start',
     },
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'flex-start',
         textAlign: 'right',
-        fontSize: 14,
+        fontSize:12,
         fontFamily: 'IRANYekanMedium',
         paddingTop: 8,
         paddingBottom: 5,

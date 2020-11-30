@@ -11,7 +11,7 @@ import {
     subTextItem,
     textItem, textGray, orange1, bgWhite, lightGrey,
 } from '../src/constants/colors';
-import {globalState, persistStore,} from '../src/stores';
+import {globalState, persistStore, pStore,} from '../src/stores';
 import {getWidth, mapNumbersToEnglish, showMassage,} from '../src/utils';
 import {FloatingLabelTextInput, LoadingPopUp} from '../src/components';
 import translate from "../src/language/translate";
@@ -20,7 +20,7 @@ import Router from 'next/router'
 import BaseLayout from "../src/components/layouts/BaseLayout";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {IoMdEye, IoMdEyeOff} from "react-icons/io";
-import {loginApi} from "../dataService/apiService";
+import {getUserProfileApi, loginApi} from "../dataService/apiService";
 
 const loginInput = [];
 export default class LoginPage extends PureComponent {
@@ -105,7 +105,7 @@ export default class LoginPage extends PureComponent {
 
     onSuccessLogin=(user)=>{
         global.width=null;//reset new panel width
-        Router.replace('/mypage');
+        Router.replace(pStore.cUser.userKey);
     }
 
     async onLogin() {
@@ -118,8 +118,16 @@ export default class LoginPage extends PureComponent {
         const userKey=this.state.countryCode+this.state.username;
         loginApi(userKey,this.state.password)
             .then(res=>{
-                this.onSuccessLogin(res);
-                this.setState({loading:false});
+                getUserProfileApi()
+                    .then(res=>{
+                        this.onSuccessLogin(res);
+                        this.setState({loading:false});
+                    })
+                    .catch(err=>{
+                        this.setState({loading:false});
+                    });
+               
+              
             })
             .catch(err=>{
 
@@ -282,7 +290,7 @@ export default class LoginPage extends PureComponent {
                                 <Text style={{
                                     marginTop: 6,
                                     marginBottom: 20,
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Light' : 'IRANYekanLight(FaNum)',
                                     textAlign: 'center',
                                 }}>
@@ -314,7 +322,7 @@ export default class LoginPage extends PureComponent {
 
                             <Text style={{
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                fontSize: 16,
+                                fontSize:14,
                                
                                 alignSelf: 'center',
                                 marginHorizontal:5,
@@ -382,7 +390,7 @@ export default class LoginPage extends PureComponent {
                                         fontWeight: 'normal',
                                         fontFamily: Platform.OS === 'ios' ? 'IRANYekan-ExtraBold' : 'IRANYekanExtraBold',
                                         color: textItemBlack,
-                                        fontSize: 14,
+                                        fontSize:12,
                                         paddingStart: 4,
                                         paddingTop: 1,
                                         paddingBottom: 3,
@@ -451,7 +459,7 @@ export default class LoginPage extends PureComponent {
                                             fontWeight: 'normal',
                                             fontFamily: 'IRANYekan-ExtraBold',
                                             color: textItemBlack,
-                                            fontSize: 14,
+                                            fontSize:12,
                                             paddingStart: 4,
                                             paddingTop: 1,
                                             paddingBottom: 3,
@@ -507,7 +515,7 @@ export default class LoginPage extends PureComponent {
                                 }}
                             >
                                 <Text style={{
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekan-ExtraBold' : 'IRANYekanExtraBold',
                                     color: this.checkValidation() ? 'white' : subTextItem,
                                 }}

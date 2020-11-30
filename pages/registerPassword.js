@@ -51,7 +51,7 @@ export default class RegisterPassword extends Component {
 
                 this.user= navigation.getParam('user');
                 if (persistStore.apiToken) {
-                    navigation.replace('/mypage');
+                    navigation.replace(+pStore.cUser.userKey);
                 }
                /* else if (persistStore.userRegisterbefor) {
                     navigation.replace('/login');
@@ -200,12 +200,12 @@ export default class RegisterPassword extends Component {
                     </Text>
 
                     <View id='form' style={{width:'100%',maxWidth:500,marginTop:3,padding:16}}   >
-                         {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:14,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
+                         {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:12,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
                         <Text
                             style={{
                                 alignItems:'center',
                                 marginTop:2,
-                                fontSize:14,
+                                fontSize:12,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign:'justify',
                                 color:bg1,
@@ -246,7 +246,7 @@ export default class RegisterPassword extends Component {
                                     fontWeight: 'normal',
                                     fontFamily:'IRANYekanRegular',
                                     color: bg1,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     paddingStart: 4,
                                     paddingTop: 1,
                                     paddingBottom: 3,
@@ -342,7 +342,7 @@ export default class RegisterPassword extends Component {
                                     fontWeight: 'normal',
                                     fontFamily: 'IRANYekanRegular',
                                     color: bg1,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     paddingStart: 4,
                                     paddingTop: 1,
                                     //textAlign: 'left',
@@ -413,7 +413,7 @@ export default class RegisterPassword extends Component {
                                     fontWeight: 'normal',
                                     fontFamily: 'IRANYekanRegular',
                                     color: bg1,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     paddingStart: 4,
                                     paddingTop: 1,
                                     //textAlign: 'left',
@@ -469,7 +469,7 @@ export default class RegisterPassword extends Component {
                             onPress={() =>this.registerUser()}
                         >
                             <Text style={{
-                                fontSize: 16,
+                                fontSize:14,
                                 color: bgWhite,
                                 fontWeight: 500,
                                 paddingVertical: 12

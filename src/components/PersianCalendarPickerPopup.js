@@ -177,7 +177,7 @@ export default class PersianCalendarPickerPopup extends PureComponent {
 const styles = StyleSheet.create({
     text: {
         // textAlign: 'right',
-        fontSize: 14,
+        fontSize:12,
         color: 'black',
         marginStart: 7,
         // marginEnd: 13

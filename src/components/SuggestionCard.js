@@ -91,7 +91,7 @@ export default class SuggestionCard extends PureComponent {
                         />
                         <View style={{flex:1,marginHorizontal:10}} >
                             <Text style={{
-                                alignSelf: 'flex-start', fontSize: 16, color: '#5D4A4A', fontFamily:
+                                alignSelf: 'flex-start', fontSize:14, color: '#5D4A4A', fontFamily:
                                     Platform.OS === 'ios'
                                         ? 'IRANYekan-ExtraBold'
                                         : 'IRANYekanExtraBold',
@@ -118,7 +118,7 @@ export default class SuggestionCard extends PureComponent {
 
                     <Text
                         style={{
-                            alignSelf: 'flex-start',marginStart:15, fontSize: 14, color: '#5D4A4A', marginTop: 8, marginBottom: 5,
+                            alignSelf: 'flex-start',marginStart:15, fontSize:12, color: '#5D4A4A', marginTop: 8, marginBottom: 5,
                         }}
                     >
                         {Description}

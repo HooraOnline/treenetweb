@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {globalState, persistStore, userStore} from "../src/stores";
+import {globalState, persistStore, pStore, userStore} from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import {ImageSelector, Toolbar} from "../src/components";
 
@@ -99,7 +99,7 @@ export default class Profile extends Component {
                                               <TouchableOpacity
                                                   onPress={()=>{navigation.navigate('change_username_password')}}
                                                   style={{flex:1,paddingBottom:40, flexDirection:'row',justifyContent:'space-between', padding:10,backgroundColor:'#F1C40F'}}>
-                                                  <Text style={{fontSize:14,color:textItem,padding:5}}>{'رمز موقت را تغییر دهید.'} </Text>
+                                                  <Text style={{fontSize:12,color:textItem,padding:5}}>{'رمز موقت را تغییر دهید.'} </Text>
                                                   <View style={{flexDirection:'row',height:40, backgroundColor:'#27AE60',borderRadius:8,alignItems:'cener',justifyContent:'center', padding:5,paddingHorizontal:15}}>
                                                       <Image source={images.ic_edit} style={{
                                                           width: 24,
@@ -107,7 +107,7 @@ export default class Profile extends Component {
                                                           paddingHorizontal:5,
                                                           tintColor:bgWhite
                                                       }}/>
-                                                      <Text style={{color:bgWhite,fontSize:14,paddingHorizontal:5}} >تغییر</Text>
+                                                      <Text style={{color:bgWhite,fontSize:12,paddingHorizontal:5}} >تغییر</Text>
                                                   </View>
                                               </TouchableOpacity>
                                           </div>
@@ -122,7 +122,7 @@ export default class Profile extends Component {
                                       <NavBar navButtons={[
                                           {
                                               label: translate('پستها'),
-                                              path: "/mypage",
+                                              path: "/"+pStore.cUser.userKey,
                                               icon: <FontAwesomeIcon icon={faUser}/>
                                           },
                                           {
@@ -184,7 +184,7 @@ export default class Profile extends Component {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{fontWeight: 400}}> نام کاربری:</Text>
-                            <Text style={{fontSize:14}}>{username}</Text>
+                            <Text style={{fontSize:12}}>{username}</Text>
                         </View>
 
                         <View style={{
@@ -194,11 +194,11 @@ export default class Profile extends Component {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{fontWeight: 400}}> نام:</Text>
-                            <Text style={{fontSize:14}}>{fullName || '.........'}</Text>
+                            <Text style={{fontSize:12}}>{fullName || '.........'}</Text>
                         </View>
                             <View style={{width:'100%',  flexDirection:'row',marginVertical:4,justifyContent:'space-between'}}>
                                 <Text style={{fontWeight:400}} > موبایل:</Text>
-                                <Text style={{fontSize:14}}>{shortMobile || '.........'}</Text>
+                                <Text style={{fontSize:12}}>{shortMobile || '.........'}</Text>
                             </View>
 
                         <View style={{
@@ -209,7 +209,7 @@ export default class Profile extends Component {
                             justifyContent: 'space-between'
                         }}>
                             <Text style={{fontWeight: 400}}> آواتار:</Text>
-                            <Text style={{fontSize:14}} >{avatar}</Text>
+                            <Text style={{fontSize:12}} >{avatar}</Text>
                         </View>
                             <TouchableOpacity
                                 onPress={()=>{navigation.navigate('edit_profile')}}
@@ -229,7 +229,7 @@ export default class Profile extends Component {
                                     height: 24,
                                     tintColor:bgWhite
                                 }}/>
-                                <Text style={{fontSize:14,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
+                                <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
                             </TouchableOpacity>
 
                         </View>

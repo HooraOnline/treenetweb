@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: textItem,
-        fontSize: 16,
+        fontSize:14,
         fontFamily:
             Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
     },

@@ -155,7 +155,7 @@ class Content extends PureComponent {
                         />*/}
                         <Text style={{
                             color: bgWhite,
-                            fontSize: 14,
+                            fontSize:12,
                             padding:10,
 
                         }}>{this.message}</Text>

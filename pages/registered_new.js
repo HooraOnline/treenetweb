@@ -46,7 +46,7 @@ export default class registered_new extends Component {
     onSuccessLogin=(user)=>{
         global.width=null;
 
-        //Router.replace('/mypage');
+       
        navigation.navigate('/registerPassword');
     }
     login() {
@@ -101,12 +101,12 @@ export default class registered_new extends Component {
                               marginTop: 3,
                               padding: 16,
                           }}>
-                        {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:14,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
+                        {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:12,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
                         <Text
                             style={{
                                 alignItems: 'center',
                                 marginTop: 2,
-                                fontSize: 14,
+                                fontSize:12,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign: 'justify',
                                 color: bg1,
@@ -137,7 +137,7 @@ export default class registered_new extends Component {
                                 style={{
                                     alignItems: 'center',
                                     marginTop: 2,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontFamily: 'IRANYekanFaNum',
                                     textAlign: 'justify',
                                     color: bg1,
@@ -149,7 +149,7 @@ export default class registered_new extends Component {
                                 style={{
                                     alignItems: 'center',
                                     marginTop: 2,
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontWeight: 800,
                                     paddingHorizontal: 10,
                                     fontFamily: 'IRANYekanFaNum-Bold',
@@ -169,7 +169,7 @@ export default class registered_new extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontFamily: 'IRANYekanFaNum',
                                     textAlign: 'justify',
                                     color: bg1,
@@ -180,7 +180,7 @@ export default class registered_new extends Component {
                             <Text
                                 style={{
                                     alignItems: 'center',
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontWeight: 800,
                                     paddingHorizontal: 10,
                                     fontFamily: 'IRANYekanFaNum-Bold',
@@ -201,7 +201,7 @@ export default class registered_new extends Component {
                         }}>
                             <Text style={{
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                fontSize: 16,
+                                fontSize:14,
                                 padding: 5,
                                 alignSelf: 'center',
                                 marginHorizontal:5,
@@ -227,7 +227,7 @@ export default class registered_new extends Component {
                                 //isAccept={this.state.countryCode}
                                 textInputStyle={{
                                     fontFamily: 'IRANYekanFaNum-Bold',
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontWeight:800,
                                     color: textItemBlack,
                                     paddingStart: 4,
@@ -274,7 +274,7 @@ export default class registered_new extends Component {
                                 isAccept={this.state.mobileValidation}
                                 textInputStyle={{
                                     fontFamily: 'IRANYekanFaNum-Bold',
-                                    fontSize: 16,
+                                    fontSize:14,
                                     fontWeight:800,
                                     color: textItemBlack,
                                     paddingStart: 4,
@@ -311,7 +311,7 @@ export default class registered_new extends Component {
                             onPress={() => this.login()}
                         >
                             <Text style={{
-                                fontSize: 16,
+                                fontSize:14,
                                 color: bgWhite,
                                 fontWeight: 500,
                                 paddingVertical: 8

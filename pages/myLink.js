@@ -64,7 +64,7 @@ export default class MyLink extends Component {
                                 style={{
                                     marginTop: 0,
                                     maxWidth:400,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontFamily: 'IRANYekanFaNum',
                                     textAlign:'justify'
                                 }}>
@@ -86,7 +86,7 @@ export default class MyLink extends Component {
                                         paddingHorizontal:5,
                                         tintColor:bgWhite
                                     }}/>
-                                    <Text style={{color:bgWhite, fontSize:14,paddingHorizontal:5,padding:5}} >تغییر رمز موقت</Text>
+                                    <Text style={{color:bgWhite, fontSize:12,paddingHorizontal:5,padding:5}} >تغییر رمز موقت</Text>
                                 </View>
                             </TouchableOpacity>
 
@@ -96,7 +96,7 @@ export default class MyLink extends Component {
                             <Text
                                 style={{
                                     marginTop: 0,
-                                    fontSize: 14,
+                                    fontSize:12,
                                     fontWeight: 400,
                                     fontFamily: 'IRANYekanFaNum-Bold',
                                     marginHorizontal:10
@@ -107,19 +107,19 @@ export default class MyLink extends Component {
                             <Text style={{
                                 textAlign: 'justify',
                                 paddingHorizontal: 30,
-                                fontSize: 14,
+                                fontSize:12,
                                 color: itemListText
                             }}>{translate('با اشتراک گذاری لینک خودت در شبکه های اجتماعی یا کپی و ارسال اون برای دوستان و آشنایان، می تونی خیلی سریع شبکه خودتو رشد بدی. فقط کافیه مخاطب، روی لینک ارسالی شما بزنه و وارد سایت تری نتگرام بشه. به محض ورود شماره موبایل، بصورت اتوماتیک ثبت نام و جز شبکه شما میشه. و فالوبورد اعلانات شما رو خواهد دید.')}</Text>
                             <Text style={{
                                 textAlign: 'justify',
                                 paddingHorizontal: 30,
-                                fontSize: 14,
+                                fontSize:12,
                                 color: itemListText
                             }}>{translate('هر فردی هم که دوست شما لینک خودشو براش بفرسته، اون فرد هم جز شبکه شما میشه و الی آخر، و به همین علت اعضای صفحه شما به سرعت رشد می کنه.')}</Text>
                             <Text style={{
                                 textAlign: 'justify',
                                 paddingHorizontal: 30,
-                                fontSize: 14,
+                                fontSize:12,
                                 color: itemListText
                             }}>{translate('حتی می تونی لینک خودتو به دوستان و آشنایان خارجی خودت بفرستی یا در شبکه های اجتماعی و فرومهایی که افراد خارجی هستند ارسال کنی. به همین سادگی شاخه های بین المللی شبکه خودتو کم کم ایجاد می کنی. و حتما میدونی که شبکه بین المللی یعنی درآمد بین المللی. مثلا درآمد از سرویس تبلیغات تری نتگرام و سایر سرویسهای درآمدزایی که به تدریج به ترینتگرام اضابه خواهند شد.')}</Text>
                                                       

@@ -41,7 +41,7 @@ export default class Fab extends PureComponent {
                         {title &&
                         <Text style={{
                             marginStart: 16,
-                            fontSize: 16,
+                            fontSize:14,
                             color: '#5D4A4A',
                             fontFamily: 'IRANYekan-ExtraBold',
                         }}>{title}</Text>

@@ -323,7 +323,7 @@ export default class ListMultiSelect extends PureComponent {
                                                     <Text style={{
                                                         flex: 1,
                                                         alignSelf: 'flex-start',
-                                                        fontSize: 14,
+                                                        fontSize:12,
                                                         color: drawerItem,
                                                         marginStart: 16,
                                                         marginVertical: 16,
@@ -346,7 +346,7 @@ export default class ListMultiSelect extends PureComponent {
                                 >
                                     <Text style={{
                                         fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-                                        fontSize: 16,
+                                        fontSize:14,
                                         paddingVertical: 10,
                                         color: 'white',
                                     }}>ثبت</Text>

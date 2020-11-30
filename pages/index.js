@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {fetchStore, getUrlParameter, navigation, setScreenSize} from "../src/utils";
 import persistStore from "../src/stores/PersistStore";
+import { pStore } from "../src/stores";
+import { getUserProfileApi } from "../dataService/apiService";
 
 export default class Index extends Component {
 
@@ -11,7 +13,15 @@ export default class Index extends Component {
         persistStore.userRegisterbefor=false
         const invitationCode = getUrlParameter('invitationCode');
         if (persistStore.apiToken) {
-            navigation.replace('mypage');
+            getUserProfileApi()
+            .then(res=>{
+                navigation.replace(pStore.cUser.userKey);
+                this.setState({loading:false});
+            })
+            .catch(err=>{
+                this.setState({loading:false});
+            });
+           
 
         }
        /* else if(persistStore.userRegisterbefor){

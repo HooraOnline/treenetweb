@@ -1,16 +1,8 @@
 export const  ic_add= require('./images/theme/ic_add.svg');
 const images = {
   //New theme Icon
-  bgh_01: require('./images/theme/bgh_01.jpg'),
-  bgh_01_Copy: require('./images/theme/money.jpg'),
-  bgh_02: require('./images/theme/bgh_02.jpg'),
-  bgh_02_Copy: require('./images/theme/bgh_02 - Copy.jpg'),
-  bgh_03: require('./images/theme/bgh_03.jpg'),
-  bgh_03_Copy: require('./images/theme/biliard.png'),
-  bgh_04: require('./images/theme/bgh_04.jpg'),
-  bgh_05: require('./images/theme/bgh_05.jpg'),
-  bgh_07: require('./images/theme/bgh_07.jpg'),
 
+  bgh_01_Copy: require('./images/theme/money.jpg'),
   ic_add: require('./images/theme/ic_add.svg'),
   ic_addCircle: require('./images/theme/ic_addcircle.svg'),
   ic_back: require('./images/theme/ic_back.svg'),
@@ -159,8 +151,7 @@ const images = {
   //BackGround
   publicPg: require('./images/theme/publicPg.png'),
   landing_bg: require('./images/theme/landing_bg.jpg'),
-  bg7: require('./images/theme/bg7.jpg'),
-  bg_addphoto: require('./images/theme/bg_addphoto.png'),
+
   bg_login: require('./images/theme/bg_login.jpg'),
   bg_loginweb: require('./images/theme/bg_loginweb.jpg'),
   es_Inbox: require('./images/theme/es_Inbox.png'),
@@ -175,10 +166,7 @@ const images = {
   es_team: require('./images/theme/es_team.png'),
   es_proflepicture: require('./images/theme/es_proflepicture.png'),
   es_InProgress: require('./images/theme/es_InProgress.png'),
-  bg_About: require('./images/theme/bg_About.png'),
-  bg_About_Shadow: require('./images/theme/bg_About_Shadow.png'),
-
-  bgh_06: require('./images/theme/bgh_06.png'),
+ 
   //social media
   ic_Social_Email:require('./images/theme/ic_Social_Email.png'),
   ic_Social_Telegram:require('./images/theme/ic_Social_Telegram.png'),

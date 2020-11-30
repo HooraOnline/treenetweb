@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     message: {
         alignSelf: 'flex-start',
         marginTop: 16,
-        fontSize: 16,
+        fontSize:14,
         color: drawerItem,
     }
 });

@@ -230,7 +230,7 @@ export default class ListDialogPopUp extends PureComponent {
                                 </TouchableOpacity>
                                 <Text
                                     style={{
-                                        fontSize: 16,
+                                        fontSize:14,
                                     }}>
                                     {title}
                                 </Text>
@@ -353,7 +353,7 @@ export default class ListDialogPopUp extends PureComponent {
                                 </TouchableOpacity>
                                 <Text
                                     style={{
-                                        fontSize: 16,
+                                        fontSize:14,
                                         // paddingHorizontal: 24,
                                         paddingTop: 24,
                                         paddingBottom: 16,

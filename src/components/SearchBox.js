@@ -37,7 +37,7 @@ export default class SearchBox extends Component {
                     floatingLabelEnable={false}
                     tintColor={placeholderTextColor}
                     textInputStyle={{
-                        fontSize: 14,
+                        fontSize:12,
                         color: 'black',
                         flexGrow: 1,
                         textAlign: 'right',

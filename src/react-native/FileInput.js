@@ -24,6 +24,7 @@ export default class FileInput extends PureComponent{
     render() {
        return (
            <TouchableOpacity {...this.props}  onPress={(event)=> {
+               if(this.props.canUpload)
                this.refs.fileUploader.click()
            }}>
                {

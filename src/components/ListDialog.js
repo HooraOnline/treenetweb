@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
     },
     text: {
-        fontSize: 16,
+        fontSize:14,
         fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
         paddingVertical: 14,
         textAlign: 'center'

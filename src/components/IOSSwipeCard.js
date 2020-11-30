@@ -24,7 +24,7 @@ function BtnSwipe({icon, color, text, corner, noPadding = false,disabled}) {
                     />
                     <Text
                     style={{
-                        fontSize: 14,
+                        fontSize:12,
                             color: 'white',
                     }}
                 >
@@ -135,7 +135,7 @@ export default class IOSSwipeCard extends PureComponent {
                     <Text
                         style={{
                         color: 'white',
-                            fontSize: 16,
+                            fontSize:14,
                     }}
                     >
                         {title}

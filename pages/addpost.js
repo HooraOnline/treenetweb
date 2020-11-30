@@ -8,6 +8,7 @@ import {
     bg8,
     bgSuccess,
     bgWhite,
+    gray,
     greenDark,
     itemListText,
     lightRed,
@@ -72,7 +73,7 @@ export default class addpost extends Component {
         this.setState({loading:true});
         postQuery('posts/me/addPost',post)
             .then(res=>{
-                navigation.replace('mypage')
+                navigation.replace(pStore.cUser.userKey)
                 this.setState({loading:false});
             })
             .catch(err=>{
@@ -83,13 +84,13 @@ export default class addpost extends Component {
     getTimeMessage(secend){
         let min=secend/60;
         if(min<1)
-            return `شما ${Math.floor(secend)} ثانیه پیش یک پست ویژه منتشر کردید. هر ۱۲ ساعت فقط یک پست ویژه قابل انتشار در شبکه است.` ;
+            return `شما ${Math.floor(secend)} ثانیه پیش یک پست ویژه منتشر کردید. هر 6 ساعت فقط یک پست ویژه قابل انتشار در شبکه است.` ;
        let h=min/60;
        if(h<1)
-          return `شما ${Math.floor(min)} دقیقه پیش یک پست ویژه منتشر کردید. هر ۱۲ ساعت فقط یک پست ویژه قابل انتشار در شبکه است.` ;
-        let dayhlf=h/12;
+          return `شما ${Math.floor(min)} دقیقه پیش یک پست ویژه منتشر کردید. هر 6 ساعت فقط یک پست ویژه قابل انتشار در شبکه است.` ;
+        let dayhlf=h/6;
         if(dayhlf<1)
-            return `شما ${Math.floor(h)} ساعت پیش یک پست ویژه منتشر کردید. هر ۱۲ ساعت فقط یک پست ویژه قابل انتشار در شبکه است.` ;
+            return `شما ${Math.floor(h)} ساعت پیش یک پست ویژه منتشر کردید. هر 6 ساعت فقط یک پست ویژه قابل انتشار در شبکه است.` ;
         return null;
     }
 
@@ -134,11 +135,68 @@ export default class addpost extends Component {
                          onCloseMenu={() => this.setState({showMenu: false})}
                          style={{margin: 0}}
                          header={
-                             <Toolbar
+                             <View>
+                                <Toolbar
                                  customStyle={toolbarStyle}
                                  isExpand={this.state.showAccountSelect}
-                             />
-                         }>
+                               />
+                               
+                               </View>
+                               
+                            
+                         }
+                         footer={
+                             <View>
+                                 {!persistStore.postHelp && (
+                                     <div style={{width: globalState.width, zIndex: 4}}>
+                                         <TouchableOpacity
+                                             onPress={() => {
+                                                 navigation.navigate('change_username_password')
+                                             }}
+                                             style={{
+                                                 flex: 1,
+                                                 paddingBottom: 10,
+                                                 justifyContent: 'space-between',
+                                                 padding: 10,
+                                                 backgroundColor: '#F1C40F'
+                                             }}>
+                                             <Text style={{
+                                                 fontSize: 11,
+                                                 color: textItem,
+                                                 padding: 5
+                                             }}>پستهای ویژه برای همه اعضای شبکه (شاخ و برگها و فالورها)و پستهای عادی فقط برای فالورها نمایش داده می شود </Text>
+                                             <View style={{
+                                                 flexDirection: 'row',
+                                                 height: 35,
+                                                 backgroundColor:primaryDark,
+                                                 borderRadius: 8,
+                                                 alignItems: 'cener',
+                                                 justifyContent: 'center',
+                                                 padding: 5,
+                                                 alignSelf:'center',
+                                                 width:100,
+                                             }}>
+                                                 <Image source={images.ic_AllPaid} style={{
+                                                     width: 24,
+                                                     height: 24,
+                                                     paddingHorizontal: 5,
+                                                     tintColor: bgWhite
+                                                 }}/>
+                                                 <Text style={{
+                                                     color: bgWhite,
+                                                     fontSize: 11,
+                                                     paddingHorizontal: 5
+                                                 }}>متوجه شدم</Text>
+                                             </View>
+                                         </TouchableOpacity>
+                                     </div>
+                                 )
+
+                                 }
+                             </View>
+                         }
+                         
+                         >
                 <View style={{flex:1,paddingBottom:40}}>
                     <img
                         src={this.state.base64}
@@ -180,7 +238,7 @@ export default class addpost extends Component {
                                     src={ this.state.isSpecial?images.checked_icon:images.unchecked_icon}
                                     style={{height:24,width:24,}}
                                 />
-                                <Text style={{fontSize:14, paddingHorizontal:5}}>پست ویژه(نمایش در فالوبرد تمام اعضای شبکه من)</Text>
+                                <Text style={{fontSize:12, paddingHorizontal:5}}>پست ویژه(نمایش در فالوبرد تمام اعضای شبکه من)</Text>
                             </TouchableOpacity>
                         </View>
                          <TouchableOpacity
@@ -204,7 +262,7 @@ export default class addpost extends Component {
                                         paddingTop:7,
                                         tintColor:bgWhite
                                     }}/>
-                                    <Text style={{color:bgWhite, fontSize:14,paddingHorizontal:5,padding:5}} >اشتراک گذاری</Text>
+                                    <Text style={{color:bgWhite, fontSize:12,paddingHorizontal:5,padding:5}} >اشتراک گذاری</Text>
                                 </View>
                             </TouchableOpacity>
 

@@ -121,7 +121,7 @@ export default function DetailDialog({width,visible, title, subTitle, price, rem
                                                         Platform.OS === 'ios'
                                                             ? 'IRANYekan-Medium'
                                                             : 'IRANYekanMedium',
-                                                    fontSize: 14,
+                                                    fontSize:12,
                                                     color: status === 1 ? success : goldDark,
                                                 }}>
                                                 {statusText}
@@ -327,7 +327,7 @@ export default function DetailDialog({width,visible, title, subTitle, price, rem
                                             Platform.OS === 'ios'
                                                 ? 'IRANYekanFaNum-Bold'
                                                 : 'IRANYekanBold(FaNum)',
-                                        fontSize: 16,
+                                        fontSize:14,
                                         marginStart: 24,
                                         marginEnd: 8,
                                     }}>
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     },
     subTitle: {
         textAlign: 'center',
-        fontSize: 14,
+        fontSize:12,
         color: subTextItem,
     },
     footer: {

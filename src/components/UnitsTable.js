@@ -67,7 +67,7 @@ class UnitTableElement extends Component {
                             returnKeyType="done"
                             tintColor={gray}
                             textInputStyle={{
-                                fontSize: 14,
+                                fontSize:12,
                                 fontFamily:'IRANYekanFaNum',
                                 color: black,
                                 textAlign: 'right',

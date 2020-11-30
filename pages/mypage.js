@@ -109,7 +109,7 @@ export default class mypage extends Component {
                                                  backgroundColor: '#F1C40F'
                                              }}>
                                              <Text style={{
-                                                 fontSize: 14,
+                                                 fontSize:12,
                                                  color: textItem,
                                                  padding: 5
                                              }}>{'رمز موقت را تغییر دهید.'} </Text>
@@ -131,7 +131,7 @@ export default class mypage extends Component {
                                                  }}/>
                                                  <Text style={{
                                                      color: bgWhite,
-                                                     fontSize: 14,
+                                                     fontSize:12,
                                                      paddingHorizontal: 5
                                                  }}>تغییر</Text>
                                              </View>
@@ -147,7 +147,7 @@ export default class mypage extends Component {
                                  <NavBar navButtons={[
                                      {
                                          label: translate('پستها'),
-                                         path: "/mypage",
+                                         path: "/",
                                          icon: <FontAwesomeIcon icon={faUser}/>
                                      },
                                      {
@@ -317,7 +317,6 @@ export const MyPosts = observer(props => {
     const [postList, setPostList] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     useEffect(() => {
-
         onResizeScreen();
         getUserPost();
     },  []);
@@ -384,7 +383,7 @@ export const MyPosts = observer(props => {
                                 hideDeleteBtn={true}
                             >
                                 <View style={{flex:1,width:'100%', height:'100%',justifyContent:'center',alignItems:'center'}}>
-                                    <Text style={{fontWeight:800,fontSize:14,}} >New Post</Text>
+                                    <Text style={{fontWeight:800,fontSize:12,}} >New Post</Text>
                                 </View>
                             </ImageSelector>
                         )
@@ -397,7 +396,7 @@ export const MyPosts = observer(props => {
                                     username:pStore.cUser.username,
                                     avatar:pStore.cUser.avatar,
                                 };
-                                navigation.navigate('edit_post',{post:item});
+                                navigation.navigate('view_post',{post:item});
                             }}
                             style={{
                                 alignItems:'center',

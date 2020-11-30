@@ -31,7 +31,7 @@ export default class NoticboardCard extends PureComponent {
                 <View style={{flexDirection: 'column', padding: 24, paddingVertical: 15}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{
-                            alignSelf: 'flex-start', fontSize: 16, color: '#5D4A4A', fontFamily:
+                            alignSelf: 'flex-start', fontSize:14, color: '#5D4A4A', fontFamily:
                                 Platform.OS === 'ios'
                                     ? 'IRANYekanFaNum-Bold'
                                     : 'IRANYekanBold(FaNum)',

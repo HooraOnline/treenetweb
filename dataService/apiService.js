@@ -347,6 +347,7 @@ export const loginApi= function (username,password,mobile) {
       .then(user=>{
           persistStore.apiToken=user.token;
           Api.setToken(user.token);
+          
           return user;
       })
 

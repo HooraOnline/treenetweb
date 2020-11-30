@@ -123,12 +123,12 @@ export default class Repeatmobil extends Component {
                     </Text>
 
                     <View id='form' style={{width:'100%',maxWidth:500,marginTop:30}}   >
-                         {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:14,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
+                         {/* <Text style={{ textAlign:'center', marginTop:30,fontSize:12,color:bgWhite}}>{translate("for_start_enter_your_phone_number")}</Text>*/}
                         <Text
                             style={{
                                 alignItems: 'center',
                                 marginTop: 2,
-                                fontSize: 14,
+                                fontSize:12,
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign: 'justify',
                                 color: bgSuccess,
@@ -149,7 +149,7 @@ export default class Repeatmobil extends Component {
                             }}>
                                 <Text style={{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                    fontSize: 16,
+                                    fontSize:14,
                                     color: border,
 
                                     padding: 5,
@@ -172,7 +172,7 @@ export default class Repeatmobil extends Component {
                                     isAccept={this.state.repeateMobileValidation}
                                     textInputStyle={{
                                         fontFamily: 'IRANYekanFaNum-Bold',
-                                        fontSize: 16,
+                                        fontSize:14,
                                         fontWeight:800,
                                         color: textItemBlack,
                                         paddingStart: 4,
@@ -214,7 +214,7 @@ export default class Repeatmobil extends Component {
                                     isAccept={this.state.repeateEmailValidation}
                                     textInputStyle={{
                                         fontFamily: 'IRANYekanFaNum-Bold',
-                                        fontSize: 16,
+                                        fontSize:14,
                                         fontWeight:800,
                                         color: textItemBlack,
                                         paddingStart: 4,
@@ -249,7 +249,7 @@ export default class Repeatmobil extends Component {
                             onPress={() =>this.registerPhone()}
                         >
                             <Text style={{
-                                fontSize: 16,
+                                fontSize:14,
                                 color: bgSuccess,
                                 fontWeight: 500,
                                 paddingVertical: 12
@@ -271,7 +271,7 @@ export default class Repeatmobil extends Component {
                                 onPress={() =>this.perevius()}
                             >
                                 <Text style={{
-                                    fontSize: 16,
+                                    fontSize:14,
                                     color: bgSuccess,
                                     fontWeight: 500,
                                     paddingVertical: 12
