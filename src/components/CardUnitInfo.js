@@ -69,12 +69,13 @@ export default function CardUnitInfo({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginVertical: 5,
+        marginVertical: 0,
         flexDirection: 'row',
         borderBottomStartRadius: 10,
         borderTopStartRadius: 10,
-        marginTop: 10,
-        marginStart: 16,
+        marginLeft:3,
+       // marginTop: 10,
+        marginStart: 0,
 
 
     },
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     },
     textUnitNumber: {
         fontFamily:'IRANYekanFaNum-Bold',
-        fontSize:14,
+        fontSize: 14,
     },
     textUnit: {
         color: border,
@@ -212,7 +213,7 @@ const styles ={
     },
     textUnitNumber: {
         fontFamily:'IRANYekanBold' ,
-        fontSize:14,
+        fontSize: 14,
     },
     textUnit: {
         color: border,

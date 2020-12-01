@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Animated, Platform, StyleSheet, Text, TouchableWithoutFeedback, View} from '../react-native';
-import {persistStore} from "../stores";
-import {border, borderSeparate, textDisabled} from '../constants/colors';
+
+import {borderSeparate, textDisabled} from '../constants/colors';
 
 
 export default class SwitchTextMulti extends PureComponent {
@@ -10,25 +10,47 @@ export default class SwitchTextMulti extends PureComponent {
         this.firsSet = true;
         // this.backgroundMove = useState();
         this.state = {
-            backgroundMove: 0,
+            backgroundMove: new Animated.Value(0),
         };
+        this.myRef = React.createRef();
 
     }
 
     componentDidMount() {
-         const {selectedIndex} = this.props;
-
-         this.setState({backgroundMove: selectedIndex * this.props.itemWidth});
+         const {activeIndex} = this.props;
+         this.setState({
+            itemWidth:this.myRef.current.offsetWidth/this.props.data.length,
+        });
+         this.animateSwitch(activeIndex, () => null);
     }
 
-    onselect = (index)=>{
+    componentDidUpdate() {
+        //this.animateSwitch(this.props.activeIndex, () => null);
+    }
 
-        this.setState({backgroundMove: index * this.props.itemWidth});
-        this.props.onSelect && this.props.onSelect(index);
+
+ /*   animateSwitch = (activeIndex, cb = () => {}) => {
+        Animated.parallel([
+            Animated.timing(this.state.backgroundMove, {
+                toValue: activeIndex * this.props.itemWidth,
+                duration: 150,
+                friction: 3,
+                tension: 40,
+            }),
+        ]).start(cb);
+    };*/
+
+    animateSwitch = (activeIndex=0)=>{
+        this.state.itemWidth=this.state.itemWidth || this.myRef.current.offsetWidth/this.props.data.length;
+        this.props.onActivate && this.props.onActivate(activeIndex);
+        let backgroundMove=activeIndex * this.state.itemWidth;
+        
+        this.setState({backgroundMove })
     };
 
     render() {
-        const {style,data, selectedIndex, itemWidth, backgroundActive, backgroundInactive, activeTextStyle, inactiveTextStyle, onActivate} = this.props;
+        const {style,data, activeIndex, backgroundActive, backgroundInactive, activeTextStyle, inactiveTextStyle, onActivate} = this.props;
+        const itemWidth=this.state.itemWidth;
 
         // const moveBackground = backgroundMove.interpolate({
         //     inputRange: [0, data.length],
@@ -37,61 +59,63 @@ export default class SwitchTextMulti extends PureComponent {
 
         return (
 
-            <View
-                style={[{
-                    flex: 1,
-                    flexDirection: 'row',
-                    backgroundColor: backgroundInactive,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    minHeight: this.props.height ? this.props.height : 24,
-                    borderWidth: 1,
-                    borderColor: borderSeparate,
-                    borderRadius: 100,
-                    position:'relative'
-                },style]}
-            >
-                <Animated.View
-                    style={
-                        {
-                            position: 'absolute',
-                            backgroundColor: backgroundActive,
-                            //height: '100%',
-                            height:50,
-                            width: itemWidth,
-                            right:persistStore.isRtl? this.state.backgroundMove:undefined,
-                            left:persistStore.isRtl?undefined :this.state.backgroundMove,
-                            elevation: '50deg',
-                            shadowColor: backgroundActive,
-                            shadowOffset: {width: 0, height: 1},
-                            shadowOpacity: 0.5,
-                            borderRadius: 100,
-                            alignItems: 'center',
-                            justifyContent: 'center'
+            <div ref={this.myRef} style={style}>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        backgroundColor: backgroundInactive,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        minHeight: this.props.height ? this.props.height : 24,
+                        borderWidth: 1,
+                        borderColor: borderSeparate,
+                        borderRadius: 100,
+                        position:'relative'
+                    }}
+                >
+                    <Animated.View
+                        style={
+                            {
+                                position: 'absolute',
+                                backgroundColor: backgroundActive,
+                                //height: '100%',
+                                height:43,
+                                width: itemWidth,
+                                right: this.state.backgroundMove,
+                                elevation: '50deg',
+                                shadowColor: backgroundActive,
+                                shadowOffset: {width: 0, height: 1},
+                                shadowOpacity: 0.5,
+                                borderRadius: 100,
+                                alignItems: 'center',
+                                justifyContent: 'center'
 
-                        }}>
-                </Animated.View>
+                            }}>
+                    {/* <Text style={{color:'#fff',alignSelf:'center'  }} >{data[activeIndex]}</Text>*/}
+                    </Animated.View>
 
-                {data.map((item, index) => {
-
-                    let selected=index ==Number(selectedIndex)
-                    return (
-                        <TouchableWithoutFeedback
-                            style={{flex:1,padding:5}}
-                            onPress={() => this.onselect(index)}>
-                            <View style={[styles.item]} key={index.toString()}>
-                                <Text
-                                    style={[styles.text, {
-                                        fontFamily: selected ?
-                                            'IRANYekanFaNum-Bold': 'IRANYekanFaNum' ,
-                                        fontSize: selected ? 16 : 14,
-                                        color: selected ? 'white' : border,
-                                    },selected ? activeTextStyle : inactiveTextStyle]}>{item}</Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    );
-                })}
-            </View>
+                    {data.map((item, index) => {
+                        return (
+                            <TouchableWithoutFeedback
+                                style={{flex:1,padding:5}}
+                                onPress={() => this.animateSwitch(index)}>
+                                <View style={[styles.item]} key={index.toString()}>
+                                    <Text
+                                        style={[styles.text, {
+                                            fontFamily: index === activeIndex ?
+                                                Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)' :
+                                                Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
+                                            fontSize: index === activeIndex ? 12 : 11,
+                                            color: index === activeIndex ? 'white' : textDisabled,
+                                        }, index === activeIndex ? activeTextStyle : inactiveTextStyle]}>{item}</Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        );
+                    })}
+                </View>
+            </div>
+            
         );
     }
 }

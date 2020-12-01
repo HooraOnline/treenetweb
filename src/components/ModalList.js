@@ -43,6 +43,9 @@ export default class ModalList extends PureComponent {
         this.setState({open:false})
     }
     onSearch(text){
+        if(!text) return;
+        text=text.replaceAll('ي','ی');
+        text=text.replaceAll('ك','ک');
         this.setState({keyWord: text})
         let items=this.props.items.filter((item)=> item[this.props.searchField].search(text)>-1);
         this.setState({searchItems:items})
@@ -207,7 +210,7 @@ export default class ModalList extends PureComponent {
                                 </TouchableOpacity>
                                 <Text
                                     style={{
-                                        fontSize:14,
+                                        fontSize: 14,
                                         // paddingHorizontal: 24,
                                         paddingTop: 24,
                                         paddingBottom: 16,

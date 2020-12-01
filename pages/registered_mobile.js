@@ -11,6 +11,7 @@ import {
     lightGrey,
     orange1,
     primaryDark,
+    subTextItem,
     textItem,
     textItemBlack
 } from "../src/constants/colors";
@@ -253,7 +254,7 @@ export default class registered_mobile extends Component {
                             flexDirection: 'row',
                             marginTop: 10,
                             borderColor: orange1,
-                            borderWidth: 2,
+                            borderWidth: 1,
                             borderRadius: 8,
                             backgroundColor: bgWhite,
                             alignItems:'center',
@@ -263,14 +264,15 @@ export default class registered_mobile extends Component {
                             <Text style={{
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                 fontSize:14,
-                                padding: 5,
+                                padding: 0,
                                 alignSelf: 'center',
-                                marginHorizontal:5,
+                                marginHorizontal:0,
+                                color:border
                             }}>+</Text>
                             <FloatingLabelTextInput
                                 dir={'ltr'}
                                 reverse={persistStore.isRtl}
-                                style={{width:30,paddingVertical:5,paddingTop:7}}
+                                style={{width:25,paddingTop:12,paddingBottom:5,}}
                                 placeholder={translate("کد")}
                                 value={this.state.countryCode}
 
@@ -290,11 +292,9 @@ export default class registered_mobile extends Component {
                                     fontFamily: 'IRANYekanFaNum-Bold',
                                     fontSize:12,
                                     fontWeight:800,
-                                    color: textItemBlack,
+                                    color: border,
                                     paddingStart: 4,
-                                    paddingTop: 1,
-                                    paddingBottom: 10,
-                                    //textAlign: 'left',
+                                    paddingTop: 0,
                                 }}
                                 underlineSize={0}
 
@@ -310,7 +310,7 @@ export default class registered_mobile extends Component {
                                 dir={'ltr'}
                                 autoFocus={true}
                                 reverse={persistStore.isRtl}
-                                style={{flex:1,width:'100%',paddingHorizontal:5,paddingEnd:6, paddingVertical:5,paddingTop:7}}
+                                style={{flex:1,width:'100%',paddingHorizontal:5,paddingEnd:4, paddingTop:12,paddingBottom:5}}
                                 placeholder={translate("fastRegister_mobile_number")}
                                 value={this.state.mobile}
                                 onChangeText={text => {
@@ -336,12 +336,12 @@ export default class registered_mobile extends Component {
                                 isAccept={this.state.mobileValidation}
                                 textInputStyle={{
                                     fontFamily: 'IRANYekanFaNum-Bold',
-                                    fontSize:14,
+                                    fontSize:12,
                                     fontWeight:800,
                                     color: textItemBlack,
                                     paddingStart: 4,
-                                    paddingTop: 1,
-                                    paddingBottom: 10,
+                                    paddingTop: 0,
+                                  
                                     //textAlign: 'left',
                                 }}
                                 underlineSize={0}

@@ -467,7 +467,7 @@ export default class edit_profile extends Component {
                                     keyboardType="default"
                                     returnKeyType="done"
                                     numberOfLines={1}
-                                    tintColor={
+                                    underlineColor={
                                         this.state.firstNameValidation ? bgSuccess : lightRed
                                     }
                                     isAccept={this.state.firstNameValidation}
@@ -511,7 +511,7 @@ export default class edit_profile extends Component {
                                     keyboardType="default"
                                     returnKeyType="done"
                                     numberOfLines={1}
-                                    tintColor={
+                                    underlineColor={
                                         this.state.firstNameValidation ? bgSuccess : lightRed
                                     }
                                     isAccept={this.state.lastNameValidation}
@@ -555,7 +555,7 @@ export default class edit_profile extends Component {
                                     keyboardType="default"
                                     returnKeyType="done"
                                     numberOfLines={1}
-                                    tintColor={
+                                    underlineColor={
                                         this.state.displayNameValidation ? bgSuccess : lightRed
                                     }
                                     isAccept={this.state.displayNameValidation}
@@ -624,7 +624,7 @@ export default class edit_profile extends Component {
                                     }
 
                                     }
-                                    tintColor={
+                                    underlineColor={
                                         this.state.ageValidation ? bgSuccess : lightRed
                                     }
                                     isAccept={this.state.ageValidation}
@@ -669,7 +669,7 @@ export default class edit_profile extends Component {
                                     keyboardType="default"
                                     returnKeyType="done"
                                     numberOfLines={1}
-                                    tintColor={
+                                    underlineColor={
                                         this.state.firstNameValidation ? bgSuccess : lightRed
                                     }
                                     textInputStyle={{

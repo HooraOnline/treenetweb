@@ -17,11 +17,11 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import images from "../../public/static/assets/images";
 import {getHeight} from "../utils";
 import Grow from "@material-ui/core/Grow";
-import {TouchableOpacity,View ,Text,Image} from "../react-native";
+import {TouchableOpacity, View, Text, Image, ScrollView, IconApp} from "../react-native";
 
 export default class SnakePopup extends PureComponent {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {open:false};
     }
 
@@ -52,6 +52,7 @@ export default class SnakePopup extends PureComponent {
             position,
             contentStyle={},
             children,
+            containerStyle,
         } = this.props;
 
         if (visible) {
@@ -60,91 +61,111 @@ export default class SnakePopup extends PureComponent {
 
         }
         console.log(items);
-            let cStyle={ marginTop:'80%',width:global.width,backgroundColor:bgWhite, borderTopRightRadius: 40,borderTopLeftRadius:40,borderColor:bgScreen};
+            let cStyle={
+                marginTop:'80%',
+                width:global.width-2,backgroundColor:bgWhite, borderTopRightRadius: 40,borderTopLeftRadius:40,borderColor:bgScreen};
             if(fromTop)
-                cStyle={ width:global.width,backgroundColor:bgWhite, borderBottomRightRadius: 40,borderBottomLeftRadius:40,borderColor:bgScreen};
-        return (
-            <PopupBase
-                opener={this.item}
-                top={false}
-                visible={visible}
-                onClose={onClose}
-                dialogOpacity={dialogOpacity}
-                style={style || {marginTop:fromTop || 60,height:'80%',backgroundColor:bgScreen,opacity:1}}
-                contentStyle={[contentStyle,cStyle].reduce(function(acc, x) {
-                    for (var key in x) acc[key] = x[key];
-                    return acc;
-                } )}
-                >
+                cStyle={ width:global.width-2,backgroundColor:bgWhite, borderBottomRightRadius: 30,borderBottomLeftRadius:30,borderColor:bgScreen};
 
-                <View>
-                    <TouchableOpacity
-                        onPress={ ()=> this.handleClose()}
-                        style={{
+            let marginTop;
+            if(fromTop){
+                marginTop=typeof(fromTop)=='number'?fromTop:50;
+            }
+            return (
+                <PopupBase
+                    opener={this.item}
+                    top={false}
+                    visible={visible}
+                    onClose={onClose}
+                    dialogOpacity={dialogOpacity}
+                    style={style || {marginTop:marginTop,height:'100%',backgroundColor:bgScreen,opacity:1}}
+                    contentStyle={[contentStyle,cStyle].reduce(function(acc, x) {
+                        for (var key in x) acc[key] = x[key];
+                        return acc;
+                    } )}
+                >
+                    <View>
+                        {
+                            this.props.headerComponent
+                        }
+                        <TouchableOpacity
+                            onPress={ ()=> this.handleClose()}
+                            style={{
                                 paddingRight: 24,
                                 paddingLeft: 24,
                                 paddingVertical:16,
                                 height: 50,
                                 //marginBottom:16,
-                                // backgroundColor: primaryColor,
+                                 //backgroundColor: border,
                                 flexDirection: 'row',
                                 // justifyContent: 'center',
                                 alignItems: 'center',
-                           }}>
-                        <img
-                            src={catchTouch ? images.ic_close : images.ic_circleDone}
-                            style={styles.img}
-                        />
-
-                        <Text
-                            style={{
-                                paddingHorizontal:5,
-                                color: 'black',
-                                fontSize:14,
-                                fontFamily:'IRANYekanFaNum-Bold',
                             }}>
-                            {toolbarTitle}
-                        </Text>
-                    </TouchableOpacity>
-                    <View style={{borderWidth:0,borderBottomWidth:1, borderColor:borderLight,  borderStyle:'dotted',marginBottom:20 }}/>
-                    {items.map((item,index) => {
-                            return (
-                                <View style={{ cursor: 'pointer',}}
-                                     onClick={()=>this.onSelect(item)}>
-                                    {itemComponent ? (
-                                        itemComponent(item,index)
-                                    ) : (
-                                        <View style={{
-                                            marginRight: 16,
-                                            marginLeft:16,
-                                            display:'flex',
-                                            flexDirection:'column',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                        }}>
-                                            <View style={{height:1,width:'100%',backgroundColor:lightGrey,opacity:0.3,}} />
-                                        <Text
-                                            style={{
-                                                textAlign: 'center',
-                                                padding: 13,
-                                            }}>
-                                            {fieldItem ? item[fieldItem] : item.Name}
-                                        </Text>
+                            <IconApp
+                                class={catchTouch ? 'apic_close' : 'apic_done_circle'}
+                                style={styles.img}
+                            />
+
+                            <Text
+                                style={{
+                                    flex:1,
+                                    paddingHorizontal:5,
+                                    //color: bgWhite,
+                                    fontSize: 12,
+                                    fontWeight:800,
+                                    fontFamily:'IRANYekanFaNum-Bold',
+                                }}>
+                                {toolbarTitle}
+                            </Text>
+                        </TouchableOpacity>
+                        <View style={{borderWidth:0,borderBottomWidth:1, borderColor:borderLight,  borderStyle:'dotted',marginBottom:5 }}/>
+                        <ScrollView style={{paddingBottom:16,margin:5, maxHeight: global.height/1.5, }}>
+                            {items.map((item,index) => {
+                                    return (
+                                        <View style={{ cursor: 'pointer',}}
+                                              onClick={()=>this.onSelect(item)}>
+                                            {itemComponent ? (
+                                                itemComponent(item,index)
+                                            ) : (
+                                                <View style={{
+                                                    marginRight: 16,
+                                                    marginLeft:16,
+                                                    display:'flex',
+                                                    flexDirection:'column',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                }}>
+
+                                                    {index>0 &&
+                                                    <View style={{height:1,width:'100%',backgroundColor:lightGrey,opacity:0.3,}} />
+                                                    }
+
+
+                                                    <Text
+                                                        style={{
+                                                            textAlign: 'center',
+                                                            padding: 13,
+                                                        }}>
+                                                        {fieldItem ? item[fieldItem] : item.Name}
+                                                    </Text>
+                                                </View>
+                                            )}
                                         </View>
-                                    )}
-                                </View>
-                            )
-                        }
-                    )}
-                    {children}
-                </View>
-                <style jsx global>{`
+                                    )
+                                }
+                            )}
+                        </ScrollView>
+                        {children}
+                    </View>
+                    <style jsx global>{`
                      .MuiPaper-rounded {
                         border-radius: 0px;
                       }
                       `}
-                </style>
-            </PopupBase>
+                    </style>
+                </PopupBase>
+
+
         );
     }
 
@@ -186,10 +207,10 @@ const styles ={
 
     },
     img: {
-        tintColor: 'black',
+        tintColor: border,
         height: 24,
         width: 24,
-        marginEnd: 24,
+        marginEnd: 5,
     },
     actionIcon: {
         paddingHorizontal: 24,

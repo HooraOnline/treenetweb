@@ -590,7 +590,7 @@ export default class change_userKey_password extends Component {
                                     keyboardType="default"
                                     returnKeyType="done"
                                     numberOfLines={1}
-                                    tintColor={
+                                    underlineColor={
                                         this.state.fullNameValidation ? bgSuccess : primaryDark
                                     }
                                     textInputStyle={{
@@ -659,7 +659,7 @@ export default class change_userKey_password extends Component {
                                     }
 
                                     }
-                                    tintColor={
+                                    underlineColor={
                                         this.state.ageValidation ? bgSuccess : primaryDark
                                     }
                                     highlightColor={primaryDark}

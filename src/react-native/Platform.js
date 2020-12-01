@@ -1,8 +1,7 @@
-import View from "./View";
-import Keyboard from "./Keyboard";
 
-const Platform={
-    OS:'android',
+let Platform={
+    OS:null,
+    Browser:null,
 }
 
 export default Platform;

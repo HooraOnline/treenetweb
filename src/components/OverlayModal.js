@@ -35,6 +35,7 @@ export default class OverlayModal extends Component {
                         <View
                             style={{
                                 flex: 1,
+
                                 ...StyleSheet.absoluteFillObject,
                             }}
                             pointerEvents={catchTouch ? 'auto' : 'box-none'}

@@ -1,5 +1,5 @@
-import React from 'react';
-import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from '../react-native';
+import React,{PureComponent} from 'react';
+import {IconApp, Image, Platform, StyleSheet, Text, TouchableOpacity, View} from '../react-native';
 
 import {
     bgItem,
@@ -28,26 +28,26 @@ export default function TransactionCard({item, onPress, isTransaction = false,st
                     elevation: isTransaction ? 0 : 3,
                     shadowOffset: {width: 0, height: isTransaction ? 0 : 1},
                     marginHorizontal: isTransaction ? 0 : 24,
-
                     borderWidth: (status !== 1 || isTransaction) ? 1 : 0,
                     borderColor: isTransaction ? borderSeparate : status === 2 ? fab : primaryDark,
                 },style]}>
-                <View style={{marginVertical: 10, marginEnd: 8, alignItems: 'flex-start'}}>
+                <View style={{marginBottom:Platform.OS==='web'?15:10,marginTop:10, marginEnd: 8, alignItems: 'flex-start'}}>
                     <Text style={[styles.title]}>{item.Title}</Text>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         {item.PeriodName && (
-                            <Text style={{color: subTextItem, fontSize: 12}}>{item.PeriodName} . </Text>
+                            <Text style={{color: subTextItem, fontSize: 11,}}>{item.PeriodName} . </Text>
                         )}
-                        <ShowDateTime color={subTextItem} time={date}/>
+                        <ShowDateTime color={subTextItem} time={date} style={{paddingVertical:3,fontSize:9}}/>
                     </View>
                     {item.Tasviye && (
-                        <Text style={{paddingTop: 8,color: success, fontSize: 12}}>تسویه</Text>
+                        <Text style={{paddingBottom:10,color: success, fontSize: 11}}>تسویه</Text>
                     )}
                 </View>
                 <View
                     style={{
                         alignItems: 'flex-end',
-                        justifyContent: !isBed ? 'flex-start' : 'center',
+                        justifyContent: !isBed ? 'flex-start' : 'flex-start',
+                        borderWidth:0,
                     }}>
                     {!isBed && (
                         <View style={{flexDirection: 'row'}}>
@@ -55,7 +55,7 @@ export default function TransactionCard({item, onPress, isTransaction = false,st
                                 <ShowPrice
                                     priceStyle={{textDecorationLine: 'line-through', textDecorationStyle: 'double'}}
                                     style={{
-                                        marginEnd: 8,
+                                        marginEnd: 0,
                                         marginTop: 8
                                     }}
                                     color={textRedLight}
@@ -78,23 +78,23 @@ export default function TransactionCard({item, onPress, isTransaction = false,st
                             </View>
                         </View>
                     )}
-                    <View style={{flexDirection: 'row', alignItems: 'center', marginEnd: isBed ? 0 : 16}}>
+                    <View style={{flexDirection: 'row', marginTop: isBed ? 8 : 0, marginEnd: isBed ? 0 : 10}}>
                         <ShowPrice
                             color={isBed ? primaryDark : textItem}
                             colorCurrency={isBed ? primaryDark : textItem}
-                            fontSize={20}
+                            fontSize={16}
                             fontSizeCurrency={12}
                             price={status === 2 ? item.Mandeh : item.Price}
                         />
 
                         {isBed && (
-                            <Image
-                                source={images.ic_left}
+                            <IconApp
+                                class={'apic_left'}
                                 style={{
                                     tintColor: subTextItem,
                                     width: 24,
                                     height: 24,
-                                    marginEnd: 8,
+                                    marginEnd: 3,
                                 }}
                             />
                         )}
@@ -113,8 +113,10 @@ export default function TransactionCard({item, onPress, isTransaction = false,st
                 </View>
             </TouchableOpacity>
         );
-    } else {
-        return (
+    }
+
+
+    return (
             <TouchableOpacity
                 onPress={onPress.bind(this, item)}
                 // disabled={true}
@@ -125,7 +127,7 @@ export default function TransactionCard({item, onPress, isTransaction = false,st
                     padding: 16,
                     backgroundColor: bgItem,
                     elevation: 3,
-                    shadowColor: '#000',
+                    shadowColor: '#aaaaaa',
                     shadowOffset: {width: 0, height: 1},
                     shadowOpacity: 0.5,
                     borderRadius: 10,
@@ -137,18 +139,18 @@ export default function TransactionCard({item, onPress, isTransaction = false,st
                         showTime
                     />
                     <ShowPrice
-                        fontSize={20}
+                        fontSize={17}
                         price={item.TotalPrice}
                     />
                 </View>
-                <View style={{paddingTop: 4, borderTopWidth: 1, borderColor: borderSeparate, flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{fontSize: 12}}>
+                <View style={{paddingTop: 4, borderTopWidth: 1, borderColor: borderSeparate, flexDirection: 'row', justifyContent: 'space-between',}}>
+                    <Text style={{fontSize: 11}}>
                         {item.PaymentTypeName}
                     </Text>
                 </View>
             </TouchableOpacity>
-        );
-    }
+    );
+    
 
 }
 
@@ -166,9 +168,8 @@ const styles = StyleSheet.create({
     },
     title: {
         color: textItem,
-        fontSize:14,
-        fontFamily:
-            Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
+        fontSize: 12,
+
     },
     iconDode: {
         borderBottomStartRadius: 10,

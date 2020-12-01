@@ -1,9 +1,9 @@
 import React, {PureComponent} from 'react';
-import {Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from '../react-native';
+import {IconApp, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View} from '../react-native';
 
 import {
     bgScreen,
-    bgSuccess,
+    bgSuccess, bgWhite,
     lightRed,
     overlayColor,
     placeholderTextColor,
@@ -26,7 +26,7 @@ export default class TransactionDialog extends PureComponent {
         let validPrice = userStore.CurrencyID === 'تومان' ? Number(props.item.Mandeh) * 10 : Number(props.item.Mandeh);
         this.state = {
             currentPrice: validPrice,
-            currentPriceValidation: true,
+            currentPriceValidation: false,
         };
     }
 
@@ -35,22 +35,23 @@ export default class TransactionDialog extends PureComponent {
 
         if (visible) {
             return (
-
                     <Overlay catchTouch={true} onPress={onDismiss} fill={null}>
-
                         <View
                             style={{
                                 backgroundColor: 'white',
                                 minHeight: 77,
+                                minWidth:300,
+                                maxWidth:500,
                                 borderRadius: 20,
                                 marginHorizontal: 24,
+                                alignSelf:"center",
                             }}>
                             <View style={{flexDirection: 'row'}}>
                                 <TouchableOpacity
                                     style={{flex: 0.1, paddingStart: 16, paddingTop: 16}}
                                     onPress={onDismiss}>
-                                    <Image
-                                        source={images.ic_close}
+                                    <IconApp
+                                        class={'apic_close'}
                                         style={{tintColor: subTextItem, width: 24, height: 24}}
                                     />
                                 </TouchableOpacity>
@@ -70,21 +71,27 @@ export default class TransactionDialog extends PureComponent {
                                     flexDirection: 'row',
                                     justifyContent: 'center',
                                     alignItems: 'center',
-                                    backgroundColor: overlayColor,
-                                    marginVertical: 24,
+                                    backgroundColor: bgWhite,
+                                    // marginVertical: 8,
                                 }}>
-                                <Image source={images.halfCircle} style={{height: 18, width: 10}}/>
+                                {/* <Image source={images.halfCircle} style={{height: 18, width: 10,tintColor:overlayColor}}/>*/}
+                                <View style={{width:18,height:18,backgroundColor:'rgb(102, 97, 96)',borderRadius:9,marginStart:-9}}/>
                                 <View style={{flex: 1, backgroundColor: 'white'}}>
                                     <View
-                                        style={{flex: 1, justifyContent: 'center', marginHorizontal: 14}}>
+                                        style={{
+                                            flex: 1,
+                                            justifyContent: 'center',
+                                            marginHorizontal: 7,
+                                        }}>
                                         <LineCustom color={subTextItem}/>
                                     </View>
                                 </View>
+                                <View style={{width:18,height:18,backgroundColor:'rgb(102, 97, 96)',borderRadius:9,marginEnd:-9}}/>
 
-                                <Image
-                                    source={images.halfCircle}
-                                    style={{transform: [{rotate: '180deg'}], height: 18, width: 10}}
-                                />
+                                {/* <Image
+                                                source={images.halfCircle}
+                                                style={{transform: [{rotate: '180deg'}], height: 18, width: 10,tintColor:borderLight}}
+                                            />*/}
                             </View>
 
                             <View
@@ -94,13 +101,13 @@ export default class TransactionDialog extends PureComponent {
                                     marginBottom: 24,
                                 }}>
                                 <Text style={[styles.costTitle]}>{item.Title}</Text>
-                                <Text style={{fontSize: 12, color: subTextItem, marginTop: 8}}>
+                                <Text style={{fontSize: 10, color: subTextItem, marginTop: 8,flexDirection:'row'}}>
                                     مبلغ قابل پرداخت
                                     <Text
                                         style={{
                                             fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
                                             color: primaryDark,
-                                            fontSize: 12,
+                                            fontSize: 10,
                                         }}>
                                         {' (ریال)'}
                                     </Text>
@@ -108,9 +115,11 @@ export default class TransactionDialog extends PureComponent {
                                 <View style={{
                                     flexDirection: 'row',
                                     marginHorizontal: 24,
+                                    marginTop:5,
+                                    alignItems: 'center',
                                 }}>
                                     <TextInput
-                                        onChangeText={text => {
+                                        onChangeText={text => {                                   
                                             const textNumber = parseInt(accounting.unformat(inputNumberValidation(text, this.state.currentPrice)));
                                             this.setState({
                                                 currentPrice: textNumber,
@@ -121,15 +130,17 @@ export default class TransactionDialog extends PureComponent {
                                         style={{
                                             borderWidth: 1,
                                             borderColor: this.state.currentPriceValidation ? placeholderTextColor : lightRed,
-                                            flex: .7,
+                                           
                                             fontWeight: 'normal',
                                             fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-                                            fontSize: 32,
+                                            fontSize: 18,
                                             color: primaryDark,
+                                            maxWidth:190,
                                             paddingStart: 4,
-                                            paddingTop: 1,
-                                            paddingBottom: 3,
+                                            paddingVertical: 10,
+                                            paddingBottom: 10,
                                             textAlign: 'center',
+                                            alignSelf:'center'
                                         }}
                                         multiline={false}
                                         maxLength={17}
@@ -144,11 +155,11 @@ export default class TransactionDialog extends PureComponent {
                                     style={{
                                         alignItems: 'center',
                                         flexDirection: 'row',
-                                        backgroundColor: this.state.currentPriceValidation ? bgSuccess : placeholderTextColor,
+                                        backgroundColor: this.state.currentPrice<1000?placeholderTextColor: bgSuccess  ,
                                         borderRadius: 10,
                                         marginTop: 8,
                                     }}
-                                    disabled={!this.state.currentPriceValidation}
+                                    disabled={this.state.currentPrice<1000}
                                     onPress={onConfirm.bind(this, this.state.currentPrice)}>
                                     <Text
                                         style={{
@@ -158,11 +169,12 @@ export default class TransactionDialog extends PureComponent {
                                                     ? 'IRANYekanFaNum-Bold'
                                                     : 'IRANYekanBold(FaNum)',
                                             paddingHorizontal: 16,
+                                            padding:10,
                                         }}>
                                         تایید و پرداخت
                                     </Text>
-                                    <Image
-                                        source={images.ic_left}
+                                    <IconApp
+                                        class={'apic_left'}
                                         style={{
                                             tintColor: 'white',
                                             width: 24,
@@ -183,7 +195,7 @@ export default class TransactionDialog extends PureComponent {
                                         borderBottomEndRadius: 20,
                                         paddingHorizontal: 24,
                                     }}>
-                                    <Text style={[styles.subTitle, {fontSize: 12, paddingVertical: 8}]}>
+                                    <Text style={[styles.subTitle, {fontSize: 11, paddingVertical: 8}]}>
                                         مهلت پرداخت
                                     </Text>
                                     <View
@@ -215,29 +227,29 @@ export default class TransactionDialog extends PureComponent {
 const styles = StyleSheet.create({
     btn: {
         paddingVertical: 6,
-        paddingHorizontal: 20,
+        paddingHorizontal: 16,
     },
     title: {
         fontFamily:
             Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-        fontSize: 20,
+        fontSize: 14,
         textAlign: 'center',
     },
     costTitle: {
         fontFamily:
             Platform.OS === 'ios' ? 'IRANYekan-ExtraBold' : 'IRANYekanExtraBold',
-        fontSize: 18,
+        fontSize: 14,
     },
     costPrice: {
         fontFamily:
             Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-        fontSize: 32,
+        fontSize: 20,
         color: primaryDark,
         marginEnd: 4,
     },
     subTitle: {
         textAlign: 'center',
-        fontSize:12,
+        fontSize: 11,
         color: subTextItem,
     },
 });

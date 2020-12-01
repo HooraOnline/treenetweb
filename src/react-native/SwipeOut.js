@@ -6,9 +6,10 @@ import { render } from "react-dom";
 import useScrollOnDrag from "react-scroll-ondrag";
 import styled from "styled-components";
 import {isMobile} from "../utils";
-export default function SwipeOut({runScroll,children,style={},right,close,onOpen,onClose}) {
+export default function SwipeOut({runScroll,children,style={},right,close,onOpen,onClose,actionIconStyle,disabled}) {
     const [deviceWidth, setDeviceWidth] = useState(width);
     const [width, setWidth] = useState(width);
+    const [height, setHeight] = useState(width);
     const containerRef = useRef(null);
     let cHeight,cWidth;
     if(containerRef.current){
@@ -40,45 +41,56 @@ export default function SwipeOut({runScroll,children,style={},right,close,onOpen
       background: yellow;
      
     `;
-    let btnContainerWidth=right.length*60
-    const Actions  = <View style={{width:btnContainerWidth,height:'100%', flexDirection:'row',}}>
-        {
-            right.map((action)=><TouchableOpacity style={{width:160}} onPress={action.onPress}>{action.component}</TouchableOpacity> )
-        }
-    </View>;
+    let btnContainerWidth=disabled?0:right.length*60
 
     useEffect(() => {
         setDeviceWidth(global.width);
         if(containerRef.current){
             cWidth=containerRef.current.clientWidth;
+            cHeight=containerRef.current.clientHeight;
             setWidth(cWidth);
+            setHeight(cHeight);
         }
+        children.props.style.padding=30
     },  []);
 
-    if(isMobile()){
-        return(
-            <View   style={style}>
-                <div ref={containerRef} style={{width:width, overflowX: 'scroll', }}  onScroll={(e)=>{onOpen()}}>
-                    <View style={{width:close?width+2:width+btnContainerWidth+2}}>
-                        <View style={{flex:3,flexDirection:'row',}}>
-                            <View style={{flex:close?1:2}} >
-                                {children}
-                            </View>
 
-                            {!close &&
-                                <View style={{width:btnContainerWidth,flexDirection:'row',}} >
-                                    {right.map((action)=><TouchableOpacity style={{width:60,}} onPress={action.onPress}>{action.component}</TouchableOpacity> )}
+    return(
+        <View   style={style}>
+            {isMobile()?(
+                    <div  ref={containerRef} style={{width:width, overflowX: 'auto', }}  onScroll={(e)=>{onOpen()}}>
+                        <View style={{width:disabled?undefined: close?width+2:width+btnContainerWidth+4}}>
+                            <View style={{flex:3,flexDirection:'row',}}>
+                                <View style={{flex:close?1:2}} >
+                                    {children}
                                 </View>
-                            }
+                                {!close && !disabled &&
+                                    <View style={{width:btnContainerWidth,flexDirection:'row',alignItems:'center'}} >
+                                        {right.map((action)=><TouchableOpacity style={{padding:2,}} onPress={action.onPress}>{action.component}</TouchableOpacity> )}
+                                    </View>
+                                }
+                            </View>
                         </View>
+                    </div>
+            ):(
+                <View style={{flex:1,position:'relative'}}>
+                    <div ref={containerRef}>
+                        {children}
+                    </div>
+                    <View style={[{position:'absolute',bottom: 'calc(50% - 13px)' ,left:-2,zIndex:3,flexDirection:'row',justifyContent:'flex-end',marginEnd:16},actionIconStyle]}>
+                        {!disabled &&
+                            right.map((action)=><TouchableOpacity style={{margin:3,marginBottom:0}} onPress={action.onPress}>{action.component}</TouchableOpacity> )
+                        }
                     </View>
-                </div>
-            </View>
-        );
-    }
+                </View>
+            )
+            }
+        </View>
+    );
+
 
 //for web dragable
-    return (
+   /* return (
         <View style={style}>
             <Container {...events} ref={containerRef}  onScroll={(e)=>onOpen()}  >
                 <ChildrenHost>
@@ -86,14 +98,18 @@ export default function SwipeOut({runScroll,children,style={},right,close,onOpen
                         {children}
                     </View>
                 </ChildrenHost>
-                    <ActionHost>
+                <ActionHost>
+                    <View style={{width:btnContainerWidth, flexDirection:'row',position:'relative' }}>
                         {
-                            Actions
+                            right.map((action)=><TouchableOpacity style={{width:160,height:height+16,position:'absolute',top:-32}} onPress={action.onPress}>{action.component}</TouchableOpacity> )
                         }
-                    </ActionHost>
+                    </View>
+                </ActionHost>
             </Container>
         </View>
-    );
+    );*/
+
+
 
 
 }

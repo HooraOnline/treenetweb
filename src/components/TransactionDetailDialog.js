@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {FlatList, Image, Platform, ScrollView, Text, TouchableOpacity, View} from '../react-native';
+import {FlatList, IconApp, Image, Platform, ScrollView, Text, TouchableOpacity, View} from '../react-native';
 import {
     CardMasked,
     CardRow,
@@ -10,7 +10,7 @@ import {
     ShowPrice,
     TransactionCard,
 } from './index';
-import {bgSuccessLight, bgWhite, overlayColor, subTextItem, success} from '../constants/colors';
+import {bgSuccessLight, bgWhite, fab, overlayColor, subTextItem, success} from '../constants/colors';
 import images from "../../public/static/assets/images";
 
 export default function TransactionDetailDialog({visible, item, onDismiss}) {
@@ -23,14 +23,14 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                     onPress={() => setState({showFullImage: false})}
                     close={() => setState({showFullImage: false})}>
                     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                        <ImageComponent image={item.Image} iHeight={global.height - 100} iWidth={global.width - 50} resizeMode="contain"/>
+                        <ImageComponent image={item.Image} iHeight={ 'auto'} iWidth={global.width - 50} resizemode="contain"/>
                     </View>
                 </Overlay>
             );
         } else {
             return (
                 <Overlay catchTouch={true} onPress={onDismiss}>
-                    <ScrollView style={{marginHorizontal: 24, flexGrow: 0}}>
+                    <ScrollView style={{ flexGrow: 0,width:'90%',alignSelf:'center'}}>
                         <View
                             style={{
                                 alignItems: 'center',
@@ -43,10 +43,10 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                 <TouchableOpacity
                                     style={{flex: 0.1, paddingStart: 16, paddingTop: 16}}
                                     onPress={onDismiss}>
-                                    <Image
-                                        source={images.ic_close}
+                                    <IconApp
+                                        source={'apic_close'}
                                         style={{
-                                            //tintColor: subTextItem,
+                                            tintColor: subTextItem,
                                             width: 24,
                                             height: 24
                                         }}
@@ -56,7 +56,7 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                 <View style={{flex: 1, marginTop: 16}}>
                                     <Text style={{
                                         fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         textAlign: 'center',
                                     }}>تراکنش</Text>
                                 </View>
@@ -75,12 +75,12 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                     paddingEnd: 8,
                                     paddingVertical: 4,
                                 }}>
-                                <Image
-                                    source={images.ic_circleDone}
+                                <IconApp
+                                    source={'apic_done_circle'}
                                     style={{
                                         height: 20,
                                         width: 20,
-                                        //tintColor: success,
+                                        tintColor: success,
                                         marginEnd: 4,
                                     }}
                                 />
@@ -90,7 +90,7 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                             Platform.OS === 'ios'
                                                 ? 'IRANYekan-Medium'
                                                 : 'IRANYekanMedium',
-                                        fontSize:12,
+                                        fontSize: 12,
                                         color: success,
                                     }}>  {'پرداخت شده'} . {item.PaymentTypeName}
                                 </Text>
@@ -176,8 +176,6 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                                 }
                                             />
                                         )}
-
-
                                         <CardRow
                                             title="شناسه پرداخت"
                                             data={item.Numbers}
@@ -198,7 +196,6 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                             />
                                         )}
                                     </View>
-
                                 )}
 
                                 {!!item.ChequeName && (
@@ -217,7 +214,7 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                                                 Platform.OS === 'ios'
                                                                     ? 'IRANYekanFaNum-Bold'
                                                                     : 'IRANYekanBold(FaNum)',
-                                                            fontSize: 12,
+                                                            fontSize: 11,
                                                         }}>
                                                         {item.BankName}
                                                     </Text>
@@ -227,7 +224,6 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                                             marginStart: 8,
                                                             height: 21,
                                                             width: 21,
-                                                            // tintColor: fab,
                                                         }}
                                                     />
                                                 </View>
@@ -269,7 +265,7 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                 )}
                                 {!!item.Description && (
                                     <View style={{flex: 1, alignItems: 'flex-start', padding: 8}}>
-                                        <Text style={{fontSize: 12}}>
+                                        <Text style={{fontSize: 11}}>
                                             {item.Description}
                                         </Text>
                                     </View>
@@ -279,6 +275,7 @@ export default function TransactionDetailDialog({visible, item, onDismiss}) {
                                 <FlatList
                                     keyExtractor={(item, index) => index.toString()}
                                     data={item.items}
+                                    ListEmptyComponent={<View/>}
                                     renderItem={({item}) => (
                                         <TransactionCard
                                             isTransaction

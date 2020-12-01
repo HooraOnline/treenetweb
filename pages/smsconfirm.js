@@ -139,7 +139,7 @@ export default class Smsconfirm extends Component {
                                         this.setState({ code1:text, code1Validation: true,focus:2});
                                     }}
                                     numberOfLines={1}
-                                    tintColor={
+                                    underlineColor={
                                         this.state.code1Validation ? placeholderTextColor : lightRed
                                     }
                                     textInputStyle={{
@@ -187,7 +187,7 @@ export default class Smsconfirm extends Component {
                                         this.setState({ code2:text, code2Validation: true,focus:3});
                                     }}
                                     numberOfLines={1}
-                                    tintColor={
+                                    underlineColor={
                                         this.state.code1Validation ? placeholderTextColor : lightRed
                                     }
                                     textInputStyle={{
@@ -234,7 +234,7 @@ export default class Smsconfirm extends Component {
                                         this.setState({ code3:text, code3Validation: true,focus:4});
                                     }}
                                     numberOfLines={1}
-                                    tintColor={
+                                    underlineColor={
                                         this.state.code1Validation ? placeholderTextColor : lightRed
                                     }
                                     textInputStyle={{
@@ -281,7 +281,7 @@ export default class Smsconfirm extends Component {
                                         this.setState({ code4:text, code3Validation: true});
                                     }}
                                     numberOfLines={1}
-                                    tintColor={
+                                    underlineColor={
                                         this.state.code1Validation ? placeholderTextColor : lightRed
                                     }
                                     textInputStyle={{

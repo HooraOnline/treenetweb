@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {Image, Text, TouchableOpacity, View} from '../react-native';
-import {fab, textItem} from '../constants/colors';
+import {bgWhite, fab, textItem} from '../constants/colors';
 //import Fab from '@material-ui/core/Fab';
 export default class Fab extends PureComponent {
     constructor(props) {
@@ -22,27 +22,29 @@ export default class Fab extends PureComponent {
                 <TouchableOpacity
                     onPress={onPress}
                     style={[animatedStyle, {
-                        paddingVertical: 16,
+                        paddingVertical: title?10:16,
                         paddingHorizontal: title ? 24 : 16,
                         backgroundColor: bgColor,
-                        elevation: 3,
+                        elevation: 70,
                         shadowColor: '#000',
                         shadowOffset: {width: 0, height: 2},
                         shadowOpacity: 0.8,
                         borderRadius: 32,
+                        zIndex:4,
+
                     }]}
                 >
                     <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Image
                             source={icon}
-                            style={{height: 24, width: 24, tintColor: iconColor}}
+                            style={{height: 24, width: 24, tintColor: iconColor, zIndex:60,}}
                         />
                         {title &&
                         <Text style={{
-                            marginStart: 16,
-                            fontSize:14,
-                            color: '#5D4A4A',
+                            marginStart: 5,
+                            fontSize: 12,
+                            color: bgWhite,
                             fontFamily: 'IRANYekan-ExtraBold',
                         }}>{title}</Text>
                         }

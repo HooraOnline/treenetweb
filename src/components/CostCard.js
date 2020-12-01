@@ -10,12 +10,12 @@ import {
     border,
     bgColor,
     bgScreen,
-    transparent,
-    borderRed
+    transparent, textDisabled, borderLight, gray,
+    /*borderRed*/
 } from '../constants/colors';
 import {userStore} from '../stores';
 
-import images from "public/static/assets/images";
+import images from "../../public/static/assets/images";
 
 import accounting from 'accounting';
 
@@ -41,40 +41,41 @@ export default class CostCard extends PureComponent {
             HasAnnounced,
             PeriodName,
             HasInstallment,
-            ParentID
+            ParentID,
         } = this.props.cost;
-        const {permission} = this.props;
-        // const monthText = 'اردیبهشت'//building.monthData.find(item => item.ID == Mah)
-        // .Name;
+        const {writeAccess,haveAction} = this.props;
         return (
             <TouchableOpacity
                 onPress={() => this.props.navigateToEdit(this.props.cost)}
-                disabled={!permission && !permission.writeAccess}
+                disabled={!writeAccess}
                 style={{
                     flexDirection: 'row',
-                    marginHorizontal: 24,
+                    marginHorizontal: 10,
                     //marginVertical: 8,
                     justifyContent: 'center',
                     // alignItems: 'center',
                     paddingHorizontal: 16,
                     // paddingVertical: 8,
-                    backgroundColor: bgItem,
+                    backgroundColor: this.props.cost.HasArchived?gray:bgItem,
                     elevation: 2,
                     shadowColor: '#000',
                     shadowOffset: {width: 0, height: 1},
                     shadowOpacity: 0.5,
                     borderRadius: 10,
                     borderWidth: ParentID ? 1 : 0,
-                    borderColor: borderRed
+                    borderColor: primaryDark, //CHANGE TO BORDER RED
+                    paddingBottom:haveAction?20:0,
                 }}
             >
                 <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-start'}}>
                     <View
                         style={{
+
                             backgroundColor:Icon ? transparent : bgScreen,
                             alignItems: 'center',
                             justifyContent: 'center',
                             padding:4,
+
                             borderRadius: 32,
                             alignSelf: 'center',
                         }}>
@@ -82,31 +83,31 @@ export default class CostCard extends PureComponent {
                             source={Icon ? images[Icon] : images.th_coin}
                             style={{
                                 height:Icon ? 32 : 24,
-                               // width:24,
+                                // width:24,
                                 aspectRatio: 1,
-                                resizeMode: 'contain',
+                                resizemode: 'contain',
                             }}
                         />
                     </View>
-                    <View style={{paddingHorizontal: 10}}>
+                    <View style={{flex:1,paddingRight: 10}}>
                         <Text
                             style={{
                                 marginTop: 10,
                                 color: textItem,
-                                fontSize:14,
+                                fontSize: 14,
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
                             }}
                         >{CostTypeName}</Text>
                         <Text
                             style={{
                                 color: subTextItem,
-                                fontSize: 12,
+                                fontSize: 11,
                                 marginBottom: 10,
                             }}
                         >{CostClassName} </Text>
                     </View>
                 </View>
-                <View style={{flex: 1, alignItems: 'flex-end', justifyContent: (HasAnnounced || HasInstallment) ? 'flex-start' : 'center'}}>
+                <View style={{flex: .3, alignItems: 'flex-end', justifyContent: (HasAnnounced || HasInstallment) ? 'flex-start' : 'center'}}>
                     {(HasAnnounced || HasInstallment) && (
                         <View style={{flexDirection: 'row'}}>
                             {HasAnnounced && (
@@ -120,7 +121,10 @@ export default class CostCard extends PureComponent {
                                     }}>
                                     <Image
                                         source={images.ic_broadcast}
-                                        style={{tintColor: 'white', width: 16, height: 16}}
+                                        style={{
+                                            tintColor: 'white',
+                                            width: 16, height: 16
+                                        }}
                                     />
                                 </View>
                             )}
@@ -144,7 +148,7 @@ export default class CostCard extends PureComponent {
                         <Text
                             style={{
                                 color: textItem,
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
                                 marginEnd: 4,
                             }}
@@ -152,7 +156,7 @@ export default class CostCard extends PureComponent {
                         <Text
                             style={{
                                 color: subTextItem,
-                                fontSize: 12,
+                                fontSize: 11,
                                 alignSelf: 'center',
                             }}
                         >{userStore.CurrencyID}</Text>
@@ -167,54 +171,3 @@ export default class CostCard extends PureComponent {
     }
 }
 
-{/*<View
-    style={{
-        // paddingVertical: 8,
-        backgroundColor: primaryDark,
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        height: 43,
-    }}
->
-    <Text
-        style={{
-            color: 'white',
-            textAlign: 'center',
-            flex: 1,
-            fontSize:12,
-        }}
-    >{CostTypeName} ({PeriodName})</Text>
-    {(permission && permission.writeAccess) && (
-
-        <Image
-            source={HasAnnounced ? images.announcementIcon : images.edit_icon}
-            style={{height: 18, width: 18, tintColor: 'white', marginEnd: 13}}
-        />
-
-    )}
-</View>
-<View style={{padding: 8}}>
-<CostCardRow
-icon={images.money_icon}
-title={'مبلغ کل'}
-data={accounting.formatMoney(TotalPrice, "", 0, ",") + " " + userStore.CurrencyID}
-/>
-{!!StartDate && (
-    <CostCardRow
-        icon={images.calendar_icon}
-        title={jMoment(StartDate).format('jYYYY/jM/jD')}
-        data={EndDate ? jMoment(EndDate).format('jYYYY/jM/jD') : ''}
-    />
-)}
-
-{(!!BillNumber && BillNumber.length > 0) && (
-    <CostCardRow
-        icon={images.information_icon}
-        title={'شماره قبض '}
-        data={BillNumber}
-    />
-)}
-
-</View>*/
-}

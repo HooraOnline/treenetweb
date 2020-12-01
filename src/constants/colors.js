@@ -88,7 +88,7 @@ export const borderRed = '#EA4A29';
 export const yellowmin = '#FFC107';
 export const greenDark = '#00A28C';
 export const textGray = '#CCD1D1';
-
+export const niceBlue = '#3498DB';
 
 
 export const bgHeader ='rgb(195,195,195)';
@@ -108,6 +108,8 @@ export const bg6 = '#45B39D';
 export const bg1 = '#0B5345';
 export const grL5  = '#28B463';
 export const grayVD7 = '#85929E';
+
+
 
 
 

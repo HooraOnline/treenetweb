@@ -17,10 +17,11 @@ export default function ShowDateTime({
                                              ? 'IRANYekanFaNum'
                                              : 'IRANYekanRegular(FaNum)',
                                          dotSize = 4,
-                                         format='jYYYY/jM/jD'
+                                         format='jYYYY/jM/jD',
+                                         style={}
                                      }) {
     return (
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={[style,{flexDirection: 'row', alignItems: 'center'}]}>
             {showTime && (
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text
@@ -40,7 +41,7 @@ export default function ShowDateTime({
                             borderRadius: 2,
                             backgroundColor: color,
                             marginHorizontal: 8,
-                            marginTop: 8,
+                            marginTop: 5,
                         }}
                     />
                 </View>

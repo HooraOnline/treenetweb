@@ -1,18 +1,54 @@
-import View from "./View";
-import {makeStyles} from "@material-ui/core/styles";
-import ImageBackground from "./ImageBackground";
-import {fetchFactory, logger} from "../utils";
-import {globalState, persistStore, userStore} from "../stores";
-import {PureComponent} from "react";
-import fetch from "isomorphic-unfetch";
-import {getImageBase64Query} from "../network/Queries";
-import {getImageBase64Api} from "../../dataService/apiService";
-import Alert from "./Alert";
 
+import ImageBackground from "./ImageBackground";
+
+import React, {PureComponent} from "react";
+
+import {getImageBase64Query} from "../network/Queries";
+import {View} from "./index";
+import styled from "styled-components";
+
+let Spiner = styled.div`
+ border-radius: 50%;
+  width: 5em;
+  height: 5em;
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 0.3em solid rgba(200,200,200, 0.2);
+  border-right: 0.3em solid rgba(200,200,200, 0.2);
+  border-bottom: 0.3em solid rgba(200,200,200, 0.2);
+  border-left: 0.3em solid #A6ACAF;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+    `;
 
 export default class BgImageChacheProgress extends PureComponent{
     constructor(props) {
-        super();
+        super(props);
         this.state = {
             source: props.source,
         };
@@ -26,16 +62,21 @@ export default class BgImageChacheProgress extends PureComponent{
         } else return 'مشکلی پیش آمده! با پشتیبانی تماس بگیرید.';
     }
     async downloadImage(imageName){
-
-        await getImageBase64Api(this.props.imageFolder,imageName)
+        if(this.state.fetched)
+            return
+        this.setState({loadingImage:true})
+        await getImageBase64Query(imageName)
             .then(result => {
-                this.setState({loadingImage: false, source: result});
+                console.log(result);
+                this.setState({loadingImage: false, source: result,fetched:true});
             })
             .catch(e =>{
-                this.setState({loadingImage: false});
-            } );
+                this.setState({loadingImage: false,fetched:true});
+            } )
+
     }
     setImag=()=>{
+
         let source=this.props.source;
         if(!source){
             this.setState({source:undefined});
@@ -43,7 +84,7 @@ export default class BgImageChacheProgress extends PureComponent{
         }
         if(this.props.source==this.state.source){
 
-            return;
+           // return;
         }
         if(typeof(source)==='string'){
             this.setState({source:source})
@@ -60,12 +101,13 @@ export default class BgImageChacheProgress extends PureComponent{
     }
 
     render(){
+        if(this.state.loadingImage){
+            return <Spiner/>
+        }
         this.setImag();
-       let {props,style={}} = this.props;
+
         return (
-            <ImageBackground  source={this.state.source} {...props} style={style}  >
-                {this.props.children}
-            </ImageBackground>
+            <ImageBackground   {...this.props} resizeMode={this.props.resizeMode} source={this.state.source}/>
         )
     }
 

@@ -141,8 +141,6 @@ export const PostList = observer(props => {
                             alignItems: 'center',
                             backgroundColor: posts.length > 0 ? bgScreen : bgEmpty
                         }}>
-
-
                     </View>
                 }
                 renderItem={({item, index}) =>{
@@ -200,23 +198,23 @@ export const PostList = observer(props => {
 
                                     }}
                                 />
-
                             </View>
                             <View style={{flex:1,padding:10,paddingBottom:30}}>
                                 <Text style={{ fontSize:12,}}>{item.text}</Text>
                                 <View style={{flex:1,flexDirection:'row'}}>
                                     <IoMdHeartEmpty size={25} style={{margin:10}}/>
                                     <IoMdShare size={25} style={{margin:10}}/>
-                                    <FaRegCommentDots size={25} style={{margin:10}}/>
-
+                                    <FaRegCommentDots size={25} style={{margin:10}} onClick={()=>{
+                                           
+                                            navigation.navigate('comments',{postId:item.id});
+                                            
+                                        }}/>
                                 </View>
                             </View>
                         </View>
                     )
                 } }
             />
-
-
     )
 });
 

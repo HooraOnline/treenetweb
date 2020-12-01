@@ -1,46 +1,56 @@
-import React,{PureComponent} from 'react';
+import React, {PureComponent} from 'react';
+import {FlatList, IconApp, Modal, Platform, StyleSheet, Text, TouchableOpacity, View} from '../react-native';
 import {
-    FlatList,
-    Image,
-    Text,
-    TouchableOpacity,
-    View,
-    TextInput
-} from '../react-native';
-import {
-    bgScreen, bgWhite, border,
+    bgWhite,
+    border,
     borderSeparate,
+    placeholderTextColor,
     primaryDark,
+    subTextItem,
+    textItem
 } from '../constants/colors';
-import images from "../../public/static/assets/images";
-import PopupBase from "./PopupBase";
+import {FloatingLabelTextInput} from "./index";
+import {showMassage} from '../utils';
 
 
 export default class ListDialogPopUp extends PureComponent {
     constructor(props) {
-        super();
+        super(props);
         this.height = global.height - global.height / 4;
-        this.state = {
-            open: props.dialogVisible || false,
-        };
+        this.state = {};
+
+        props.ref && props.ref(this);
 
     }
-    handleOpen=()=>{
-        this.setState({open:true})
+
+    handleOpen = () => {
+        if (this.props.items.length == 0) {
+
+            let message = this.props.emptyListmessage || 'لیست خالی';
+            showMassage(message, '', 'error');
+        } else {
+            this.setState({open: true});
+        }
     }
-    handleClose=()=>{
-        this.setState({open:false})
+    handleClose = () => {
+        this.setState({open: false});
     }
-    onSearch(text){
+
+    onSearch(text) {
+        if(!text) return;
+        text=text.replaceAll('ي','ی');
+        text=text.replaceAll('ك','ک');
         this.setState({keyWord: text})
-        let items=this.props.items.filter((item)=> item[this.props.searchField].search(text)>-1);
-        this.setState({searchItems:items})
+        let items = this.props.items.filter((item) => item[this.props.searchField].search(text) > -1);
+        this.setState({searchItems: items})
     }
-    select(item,index) {
+
+    select(item, index) {
         this.props.onValueChange(item);
         this.handleClose();
 
     }
+
     render() {
         const {
             title,
@@ -60,17 +70,18 @@ export default class ListDialogPopUp extends PureComponent {
             snake,
             styleText,
             hasBorderBottom = true,
-            horizontal=false,
-            numColumns=1,
+            horizontal = false,
+            numColumns = 1,
             listStyle,
             catchTouch,
             dialogOpacity,
             dialogStyle,
             maxHeight,
-            marginTop,
-            style={},
-            contentStyle={},
-
+            marginTop = 0,//53,
+            style = {},
+            contentStyle = {},
+            listFormat,
+            bottom
         } = this.props;
 
 
@@ -89,22 +100,21 @@ export default class ListDialogPopUp extends PureComponent {
             }
         }
 
-        let listItems= this.state.searchItems || items ;
+        let listItems = this.state.searchItems || items;
         return (
-            <View style={[{flex:1,},this.props.style]}>
+            <View style={{flex: 1,}}>
                 <TouchableOpacity
-                    style={[{
+                    style={[style, {
                         flex: 1,
-
-                        width:'100%',
+                        width: '100%',
                         flexDirection: 'row',
-                        borderWidth: 1,
+                        borderWidth:this.props.borderWith==0?0:1,
                         // alignItems: 'center',
                         justifyContent: 'center',
-                        borderColor: validation ? bgScreen : primaryColor,
+                        borderColor: validation ? subTextItem : primaryColor,
                         borderRadius: 10,
                         // marginVertical: 7
-                    }]}
+                    },]}
                     onPress={this.handleOpen}
                     disabled={disabled}>
                     {selectedComponentCustom ? (
@@ -121,9 +131,8 @@ export default class ListDialogPopUp extends PureComponent {
                                 // paddingBottom: 3,
                                 paddingHorizontal: 4,
                                 borderRadius: 10,
-
                                 opacity: disabled ? 0.3 : 1,
-                            },this.props.selectedItemStyle]}>
+                            }, this.props.selectedItemStyle]}>
                             <View style={{flex: 1}}>
                                 {selectedItemCustom ? (
                                     selectedItemCustom
@@ -155,74 +164,68 @@ export default class ListDialogPopUp extends PureComponent {
                                 )}
                             </View>
 
-                            <Image
-                                source={images.ic_dropdown}
+                            <IconApp
+                                source={'apic_dropdown'}
                                 style={{
                                     height: 24,
                                     width: 24,
-                                   // tintColor: textItem,
+                                    tintColor: textItem,
                                 }}
                             />
                         </View>
                     )}
                 </TouchableOpacity>
-                <PopupBase
-                   /* top={-33}
-                    visible={this.state.open}
-                    contentStyle={{width:global.width}}
-                    onClose={this.handleClose}
-                    dialogOpacity={dialogOpacity}
-                    style={{'box-shadow': '1px 1px 1px 1px  rgba(6, 6, 6, .3)',backgroundColor:bgWhite,paddingBottom:10, borderBottomRightRadius: 10,borderBottomLeftRadius:10,borderColor:bgScreen}}
-*/
-                    top={false}
-                    visible={this.state.open}
-                    onClose={this.handleClose}
-                    dialogOpacity={dialogOpacity}
-                    style={[style,{
-                        marginTop:this.state.open?(marginTop ||0):0,opacity:1
-                    }].reduce((acc, x)=>{
-                        for (var key in x) acc[key] = x[key];
-                        return acc;
-                    } )}
-                    contentStyle={[contentStyle,{
 
-                        width:global.width,
-                        backgroundColor:bgWhite,
-                        borderBottomLeftRadius: snake ? 20 : 10,
-                        borderBottomRightRadius: snake ? 20 : 10,
-                        borderTopLeftRadius: snake ? 0 : 10,
-                        borderTopRightRadius: snake ? 0 : 10,
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    presentationStyle="overFullScreen"
+                    visible={this.state.open}
+                    fullWidth={true}
+                    onRequestClose={this.handleClose}>
+                    <View style={[{
+                        position: 'fixed',
+                        bottom: bottom ? 0 : undefined,
+                        top: bottom ? undefined : marginTop,
+                        width: global.width - 3,
+                        backgroundColor: bgWhite,
+                        borderBottomLeftRadius: bottom ? 0 : snake ? 20 : 10,
+                        borderBottomRightRadius: bottom ? 0 : snake ? 20 : 10,
+                        borderTopLeftRadius: (snake && !bottom) ? 0 : 10,
+                        borderTopRightRadius: (snake && !bottom) ? 0 : 10,
                         elevation: 7,
+                        zIndex: 7,
+
+                        //marginTop:marginTop?marginTop:0,
+                        //height:'90%',
+                        opacity: 1,
+                        marginBottom: 0,
                         minWidth: snake ? global.width : minWidth,
-                    }].reduce((acc, x)=>{
-                        for (var key in x) acc[key] = x[key];
-                        return acc;
-                    } )}
-                >
-
-                    <View style={{paddingBottom:20}} >
-                        <View  style={{
-                            flex:1,
-
-                        }}>
+                        //maxHeight: this.height,
+                        paddingBottom: 5,
+                    }, dialogStyle,]}>
+                        <View style={{flex: 1,}}>
                             <View
                                 style={{
                                     flexDirection: 'row',
-                                    // alignItems: 'flex-start',
                                     // justifyContent: 'center',
                                     borderBottomWidth: 1,
                                     borderColor: borderSeparate,
                                     alignItems: 'center',
-                                    paddingVertical:20,
+                                    padding: 16,
+                                    shadowColor: '#000',
+                                    shadowOffset: {width: 0, height: 1},
+                                    shadowOpacity: 0.5,
+                                    minHeight: 50,
 
                                 }}>
                                 <TouchableOpacity
                                     onPress={this.handleClose}
-                                    style={{paddingHorizontal: 16, height: '100%'}}>
-                                    <Image
-                                        source={images.ic_close}
+                                    style={{height: '100%',}}>
+                                    <IconApp
+                                        class={'apic_close'}
                                         style={{
-                                            //tintColor: textItem,
+                                            tintColor: textItem,
                                             width: 24,
                                             height: 24,
                                         }}
@@ -230,90 +233,118 @@ export default class ListDialogPopUp extends PureComponent {
                                 </TouchableOpacity>
                                 <Text
                                     style={{
-                                        fontSize:14,
+                                        fontSize: 13,
+                                        fontWeight: 800,
+                                        paddingTop: 4,
+                                        color: textItem,
+                                        paddingHorizontal: 10,
+
                                     }}>
                                     {title}
                                 </Text>
                             </View>
 
-                            {
-                                this.props.searchField &&
+                            {this.props.searchField && (<View style={{minHeight:60,justifyContent:'center',}}>
                                 <View
                                     style={{
-                                        height:44,
-                                        flexDirection:'row',
-                                        alignItems:'center',
-                                        borderColor: border,
+                                        minHeight: 38,
+                                        marginTop: 10,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        borderColor: borderSeparate,
                                         borderWidth: 1,
-                                        border:'1px solid #ececec',
-                                        borderRadius:10,
-                                        justifyCenter:'center',
-                                        backgroundColor:'#fff',
-                                        paddingHorizontal:10,
-                                        marginHorizontal:10,
-                                        marginTop:10,
+                                        border: '1px solid #ececec',
+                                        borderRadius: 10,
+                                        justifyCenter: 'center',
+                                        backgroundColor: '#fff',
+                                        paddingHorizontal: 10,
+                                        marginHorizontal: '3%',
+                                        //marginBottom: 20,
+
+                                        shadowColor: '#000',
+                                        shadowOffset: {width: 0, height: 1},
+                                        shadowOpacity: 0.8,
 
                                     }}>
-                                    <Image
-                                        source={images.ic_search}
+                                    <IconApp
+                                        source={'apic_search'}
                                         style={{
-                                            //tintColor: textItem,
+                                            tintColor: textItem,
                                             width: 24,
                                             height: 24,
-                                            marginHorizontal:10,
+
                                         }}
                                     />
-                                    <TextInput
-                                        style={{
-                                            flex:1,
-                                            textAlign:'right',
-                                            fontFamily:'IRANYekanFaNum',
-                                            borderWidth:0,
-                                            height:40
+                                    <FloatingLabelTextInput
+                                        ref="textInput"
+                                        editable={true}
+
+                                        multiline={false}
+                                        maxLength={200}
+                                        numberOfLines={1}
+                                        floatingLabelEnable={false}
+                                        underlineColor={placeholderTextColor}
+                                        textInputStyle={{
+                                            fontSize: 12,
+                                            color: 'black',
+                                            textAlign: 'right',
+
                                         }}
-                                        placeholder={"Search"}
+                                        underlineSize={0}
+                                        labeStyle={{paddingLeft: 40, color: border}}
+                                        style={{flex: 1, marginHorizontal: 10,}}
+                                        placeholder={"جستجو "}
                                         onChangeText={text => this.onSearch(text)}
                                         value={this.state.keyWord}
                                     />
 
                                 </View>
-
+                            </View>)
                             }
                         </View>
-                        <FlatList
-                            style={{flexGrow: 0}}
-                            keyExtractor={(item, index) => index.toString()}
-                            numColumns={numColumns}
-                            data={listItems}
-                            horizontal={horizontal}
-                            renderItem={({item,index}) => (
-                                <TouchableOpacity
-                                    key={item}
-                                    onPress={this.select.bind(this, item,index)}
-                                    style={[{
-                                        borderBottomWidth: hasBorderBottom ? 1 : 0,
-                                        borderColor: borderSeparate,
-                                        marginHorizontal: 24,
-                                    },listStyle]}>
-                                    {itemComponent ? (
-                                        itemComponent(item,index)
-                                    ) : (
-                                        <View>
-                                            <Text
-                                                style={{
-                                                    textAlign: 'center',
-                                                    paddingVertical: 16,
-                                                }}>
-                                                {fieldItem ? item[fieldItem] : item.Name}
-                                            </Text>
-                                        </View>
-                                    )}
-                                </TouchableOpacity>
-                            )}
-                        />
-                    </View>
+                        <View style={{marginTop:0}}>
+                            <FlatList
+                                style={this.props.listContainerStyle}
+                                listFormat={listFormat}
+                                keyExtractor={(item, index) => index.toString()}
+                                numColumns={numColumns}
+                                data={listItems}
+                                maxHeight={global.height/3}
+                                horizontal={horizontal}
+                                renderItem={({item, index}) => (
+                                    <TouchableOpacity
+                                        key={item}
+                                        onPress={this.select.bind(this, item, index)}
+                                        style={[{
+                                            borderBottomWidth: hasBorderBottom ? 1 : 0,
+                                            borderColor: borderSeparate,
+                                            marginHorizontal: 24,
+                                        }, listStyle]}>
+                                        {itemComponent ? (
+                                            itemComponent(item, index)
+                                        ) : (
+                                            <View>
+                                                <Text
+                                                    style={{
+                                                        textAlign: 'center',
+                                                        paddingVertical: 16,
+                                                    }}>
+                                                    {fieldItem ? item[fieldItem] : item.Name}
+                                                </Text>
+                                            </View>
+                                        )}
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        </View>
 
-                </PopupBase>
+
+                        </View>
+
+
+                </Modal>
+
+
                 {/*<Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
@@ -353,7 +384,7 @@ export default class ListDialogPopUp extends PureComponent {
                                 </TouchableOpacity>
                                 <Text
                                     style={{
-                                        fontSize:14,
+                                        fontSize: 14,
                                         // paddingHorizontal: 24,
                                         paddingTop: 24,
                                         paddingBottom: 16,
@@ -482,3 +513,13 @@ export default class ListDialogPopUp extends PureComponent {
 }
 
 
+const styles = StyleSheet.create({
+    text: {
+        fontSize: 12,
+        fontFamily: 'IRANYekanFaNum-Bold',
+        marginStart: 16,
+        paddingVertical: 8,
+        // marginTop: 8,
+        // marginBottom: 7
+    },
+});

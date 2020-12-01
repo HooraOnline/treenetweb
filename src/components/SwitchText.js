@@ -8,14 +8,13 @@ export default class SwitchText extends PureComponent {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            selectedIndex: props.value ? 0 : 1,
+            itemWidth:0,
         };
         this.myRef = React.createRef();
     }
 
     componentDidMount() {
-        this.width = this.myRef.current.clientWidth;
-        this.setState({selectedIndex: this.props.value ? 1 : 0});
+        this.setState({itemWidth:this.myRef.current.clientWidth/2})
     }
 
     handleSwitch(value) {
@@ -27,20 +26,15 @@ export default class SwitchText extends PureComponent {
         if (disabled) {
             return;
         }
-        this.setState({selectedIndex: value ? 1 : 0});
         onValueChange && onValueChange(!value);
     };
 
 
     render() {
-        const {
-            selectedIndex,
-            backgroundWidth,
-        } = this.state;
-        const {value, activeText, inactiveText, backgroundActive, backgroundInactive, activeTextStyle, inactiveTextStyle, big} = this.props;
+        const {value, activeText, inactiveText, backgroundActive, backgroundInactive, activeTextStyle, inactiveTextStyle, big,activeBtnHeight,small} = this.props;
 
-        const left=selectedIndex==0?this.width/2:0;
-
+        const right=value?0:this.state.itemWidth;
+        
         return (
             <div ref={this.myRef} style={{flex: 1}}>
                 <TouchableWithoutFeedback
@@ -58,6 +52,7 @@ export default class SwitchText extends PureComponent {
                                 borderColor: borderSeparate,
                                 borderRadius: 100,
                                 position: 'relative',
+                                paddingVertical: 5,
                             }}
                     >
                         <Animated.View
@@ -65,14 +60,15 @@ export default class SwitchText extends PureComponent {
                                 {
                                     position: 'absolute',
                                     backgroundColor: backgroundActive,
-                                    height: '100%',
-                                    width: this.width/2,
-                                    left: left,
+                                    height:activeBtnHeight || '105%',
+                                    width: this.state.itemWidth,
+                                    right: right,
                                     borderRadius: 100,
+                                   
                                 }}>
                         </Animated.View>
                         <View
-                            style={[styles.item,{width:this.width/2,zIndex:2}]}>
+                            style={[styles.item,{width:this.state.itemWidth,zIndex:1}]}>
                             <Text
                                 style={[styles.text, {
                                     color: value ? 'white' : textDisabled,
@@ -82,7 +78,7 @@ export default class SwitchText extends PureComponent {
 
                         </View>
                         <View
-                            style={[styles.item,{width:this.width/2,zIndex:2}]}>
+                            style={[styles.item,{width:this.state.itemWidth,zIndex:1}]}>
                             <Text
                                 style={[styles.text, {
                                     color: value ? textDisabled : 'white',

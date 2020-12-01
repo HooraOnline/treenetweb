@@ -10,7 +10,8 @@ import {
     TouchableWithoutFeedback,
     View,
 
-    Modal} from '../react-native';
+    Modal, IconApp
+} from '../react-native';
 
 import {
     bgScreen,
@@ -59,6 +60,7 @@ export default function DetailDialog({width,visible, title, subTitle, price, rem
                             <FlatList
                                 keyExtractor={(item, index) => index.toString()}
                                 data={items}
+                                ListEmptyComponent={<View/>}
                                 ListHeaderComponent={
                                     <View
                                         style={{
@@ -72,10 +74,10 @@ export default function DetailDialog({width,visible, title, subTitle, price, rem
                                             <TouchableOpacity
                                                 style={{flex: 0.1, paddingStart: 16, paddingTop: 16}}
                                                 onPress={onDismiss}>
-                                                <Image
-                                                    source={images.ic_close}
+                                                <IconApp
+                                                    class={'apic_close'}
                                                     style={{
-                                                        //tintColor: subTextItem,
+                                                        tintColor: subTextItem,
                                                         width: 24,
                                                         height: 24
                                                     }}
@@ -106,12 +108,12 @@ export default function DetailDialog({width,visible, title, subTitle, price, rem
                                                 paddingEnd: 8,
                                                 paddingVertical: 4,
                                             }}>
-                                            <Image
-                                                source={status === 1 ? images.ic_circleDone : images.ic_error}
+                                            <IconApp
+                                                source={status === 1 ? 'apic_done_circle' : 'apic_error'}
                                                 style={{
                                                     height: 20,
                                                     width: 20,
-                                                    //tintColor: status === 1 ? success : goldDark,
+                                                    tintColor: status === 1 ? success : goldDark,
                                                     marginEnd: 4,
                                                 }}
                                             />
@@ -121,7 +123,7 @@ export default function DetailDialog({width,visible, title, subTitle, price, rem
                                                         Platform.OS === 'ios'
                                                             ? 'IRANYekan-Medium'
                                                             : 'IRANYekanMedium',
-                                                    fontSize:12,
+                                                    fontSize: 12,
                                                     color: status === 1 ? success : goldDark,
                                                 }}>
                                                 {statusText}
@@ -153,7 +155,7 @@ export default function DetailDialog({width,visible, title, subTitle, price, rem
                                                         justifyContent: 'center',
                                                        marginHorizontal: 7,
                                                     }}>
-                                                    <LineCustom color={subTextItem}/>
+
                                                 </View>
                                             </View>
                                             <View style={{width:18,height:18,backgroundColor:'rgb(0,0,0,0.6)',borderRadius:9,marginEnd:-9}}/>
@@ -281,7 +283,7 @@ export default function DetailDialog({width,visible, title, subTitle, price, rem
                                                 />
                                             )}
                                             {!!item.Description && (
-                                                <Text style={{fontSize: 12, textAlign: 'center'}}>
+                                                <Text style={{fontSize: 11, textAlign: 'center'}}>
                                                     {item.Description}
                                                 </Text>
                                             )}
@@ -327,7 +329,7 @@ export default function DetailDialog({width,visible, title, subTitle, price, rem
                                             Platform.OS === 'ios'
                                                 ? 'IRANYekanFaNum-Bold'
                                                 : 'IRANYekanBold(FaNum)',
-                                        fontSize:14,
+                                        fontSize: 14,
                                         marginStart: 24,
                                         marginEnd: 8,
                                     }}>
@@ -362,13 +364,13 @@ const styles = StyleSheet.create({
     title: {
         fontFamily:
             Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-        fontSize: 20,
+        fontSize: 18,
         textAlign: 'center',
     },
     costTitle: {
         fontFamily:
             Platform.OS === 'ios' ? 'IRANYekan-ExtraBold' : 'IRANYekanExtraBold',
-        fontSize: 18,
+        fontSize: 16,
     },
     costPrice: {
         fontFamily:
@@ -379,7 +381,7 @@ const styles = StyleSheet.create({
     },
     subTitle: {
         textAlign: 'center',
-        fontSize:12,
+        fontSize: 12,
         color: subTextItem,
     },
     footer: {

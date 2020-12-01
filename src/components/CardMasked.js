@@ -12,7 +12,7 @@ export default function CardMasked({cardNumber}) {
                             Platform.OS === 'ios'
                                 ? 'IRANYekanFaNum-Bold'
                                 : 'IRANYekanBold(FaNum)',
-                        fontSize: 12,
+                        fontSize: 11,
                     }}>{cardMask(cardNumber)}</Text>
             </View>
         );
@@ -24,7 +24,7 @@ export default function CardMasked({cardNumber}) {
                         Platform.OS === 'ios'
                             ? 'IRANYekanFaNum-Bold'
                             : 'IRANYekanBold(FaNum)',
-                    fontSize: 12,
+                    fontSize: 11,
                 }}>{cardNumber}</Text>
         );
     }

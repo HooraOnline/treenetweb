@@ -69,7 +69,7 @@ const Alert={
                                 </TouchableOpacity>
                                 <Text
                                     style={{
-                                        fontSize:14,
+                                        fontSize: 16,
                                         // paddingHorizontal: 24,
                                         paddingTop: 24,
                                         paddingBottom: 16,

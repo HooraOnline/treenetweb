@@ -66,7 +66,7 @@ export default class userfollower extends Component {
         this.setState({loading:true})
         Api.post('Followers/getUserFollowers',{memberId:memberId})
                   .then(followers=>{
-                     debugger
+                     
                      this.setState({followers:followers})
                   }).catch((error)=>{
                      showMassage('خطا در بارگذاری دنبال کنندگان')
@@ -136,7 +136,6 @@ export const FollowerList = observer(props => {
     useEffect(() => {
       
     },[]);
-
 
     return (
             <FlatList

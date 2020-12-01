@@ -1,14 +1,15 @@
 import React, {PureComponent} from 'react';
 import {bool, number, string} from 'prop-types';
-import {border, borderLight, grayVD7, grL5, textItem} from '../constants/colors';
+import colors, {border, borderLight, grayVD7, grL5, primaryDark, subTextItem, textItem} from '../constants/colors';
+import {Text, View, Animated, StyleSheet, IconApp,} from "../react-native";
 
-import {Text, View, Animated, StyleSheet,} from "../react-native";
-import {Input ,FormControl } from '@material-ui/core';
-import InputLabel from '@material-ui/core/InputLabel';
+import {Input,FormControl,InputAdornment,InputLabel} from '@material-ui/core';
 import Platform from "../react-native/Platform";
-import MaskedInput from 'react-text-mask';
+import {inputNumberValidation, mapNumbersToEnglish} from "../utils";
 import { FaTree } from "react-icons/fa";
-import {persistStore} from "../stores";
+
+
+
 class Underline extends PureComponent {
     static propTypes = {
         underlineEnabled: bool,
@@ -73,7 +74,7 @@ class Underline extends PureComponent {
             <Animated.View
                 style={{
                     //position: 'absolute',
-                    backgroundColor: this.props.underlineColor ,
+                    backgroundColor: this.props.highlightColor ,
                     height: this.props.underlineSize,
                     left: 0,//this.animatedLeft,
                     width:'100%',// this.animatedLineLength,
@@ -96,12 +97,12 @@ class Underline extends PureComponent {
                 <View  // the default silver border
                     style={{
                         //position: 'absolute',
-                        backgroundColor: this.props.tintColor,
+                        backgroundColor: this.props.underlineColor,
                         height: this.props.underlineSize,
                         width:'100%',// this.state.lineLength,
                     }}
                 />
-                {this.renderUnderline()}
+              {/*  {this.renderUnderline()}*/}
             </View>
         );
     }
@@ -111,14 +112,14 @@ export default class FloatingLabelTextInput extends PureComponent {
     static propTypes = {
         value: string.isRequired,
         underlineSize: number,
-        tintColor: string,
+        underlineColor: string,
         labelColor: string,
 
     };
 
     static defaultProps = {
         underlineSize: 1,
-        tintColor:'translate',// primaryDark,
+        underlineColor: primaryDark,
         labelColor: border,
     };
 
@@ -129,12 +130,15 @@ export default class FloatingLabelTextInput extends PureComponent {
         this.state = {
             isFieldActive: false,
             isFocused: false,
+            readOnly:props.readOnly || props.editMode===2,
         };
+        this.textInput = React.createRef();
+
     }
 
-    componentDidMount() {
-        this.fontSize = this.props.textInputStyle && this.props.textInputStyle.fontSize ? this.props.textInputStyle.fontSize : 12;
 
+    componentDidMount() {
+        this.fontSize = this.props.textInputStyle && this.props.textInputStyle.fontSize ? this.props.textInputStyle.fontSize : 14;
         this.props.refInput ? this.props.refInput(this.refs.txtInput) : {};
         //
         // this._handleFocus();
@@ -155,121 +159,150 @@ export default class FloatingLabelTextInput extends PureComponent {
     }
 
     _handleFocus = () => {
-        this.refs.underline.aniStretchUnderline();
+        //this.refs.underline.aniStretchUnderline();
         this.setState({isFocused: true});
-        if (!this.state.isFieldActive) {
+       /* if (!this.state.isFieldActive) {
             this.setState({isFieldActive: true});
             this._handleAnimate(true);
-        }
-        this.props.onFocus && this.props.onFocus();
+        }*/
+        this.props.onFocus && this.props.onFocus(this.textInput.value);
     };
 
     _handleBlur = () => {
         this.refs.underline.aniShrinkUnderline();
-        this.setState({isFocused: false});
+        this.setState({isFocused: false,readOnly:this.props.editMode===2?true:this.props.readOnly});
         if (this.state.isFieldActive && !this.props.value) {
             this.setState({isFieldActive: false});
             this._handleAnimate(false);
         }
-        this.props.onBlur &&  this.props.onBlur();
     };
 
-    TextMaskCustom=(props)=> {
-        const { inputRef, ...other } = props;
+    _returnAnimatedTitleStyles = () => {
+        return {
+            bottom: this.position.interpolate({
+                inputRange: [0, 1],
+                outputRange: [this.props.labelMarginButtom || 6, this.fontSize + 15],
+            }),
+            fontSize: this.state.isFieldActive || !!this.props.value ? this.props.labelActiveFontSize || 12 : this.props.labelFontSize || 14,
+            color: this.state.isFocused ? this.props.highlightColor : this.props.labelColor,
+        };
+    };
 
-        return (
-            <MaskedInput
-                {...other}
-                ref={inputRef}
-                mask={[/\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, ' ', /\d/, /\d/, /\d/, /\d/]}
-                placeholderChar={"\u0000"}
-                showMask
-            />
-        );
-    }
+    _handleonKeyUp=(event)=>
+        {
+            //for ios delete
+            if(event.key==='Backspace'){
+                let element=this.textInput.current.childNodes[0];
+                let textLength=element.value.length;
+                try{
+                    element.setSelectionRange(textLength,textLength);
+                }catch(e){}
+            }
+        }
+
+        
+     focus=(event)=>{
+          this.textInput.current.focus();
+          //this.textInput.current.firstChild.focus();
+      }
 
     render() {
-        const {style,isAccept,reverse,
-            labelStyle={fontSize: 12,color: textItem},
-            unitStyle,
-            autoFocus,
-            keyboardType='text',
-            textInputStyle, placeholder, tintColor, underlineColor,
-            underlineSize=4, underlineEnabled, floatingLabelAniDuration,
-            floatingLabelEnable, type,maxLength,numberOfLines,onChangeText,
-            adornment} = this.props;
+
+        const {unitStyle,style,isAccept,autoFocus=false, textInputStyle, placeholder,keyboardType, underlineColor, highlightColor, underlineSize, underlineEnabled, floatingLabelAniDuration, floatingLabelEnable, type,maxLength=1000000,numberOfLines,onChangeText,adornment} = this.props;
         let props=this.props;
-        let keyboardType2=keyboardType;
-        if(keyboardType=='number-pad') keyboardType2='numeric'
+        let pKeyboardType=type || 'string';
+        if(keyboardType==='number-pad') pKeyboardType='tel'
         return (
-            <View style={style}>
-                <View style={[{flex:1, flexDirection:'row', justifyContent: 'flex-end', }]}>
-                    {
-                        this.props.label &&
-                        <Text style={this.props.laberStyle}>{this.props.label}</Text>
-                    }
+            <View style={[style,{flexDirection:'row',}]}>
+                {
+                    this.props.label &&
+                    <div style={{textAlign:'right', paddingTop:5,paddingLeft:10,fontSize: 12,...this.props.labelStyle}}>{this.props.label}</div>
+                }
 
-                    <View style={[{flex:1}]}>
+                <View style={{flex:1}}>
+                    {/*<TextField {...props}  label={floatingLabelEnable?placeholder:''} />*/}
+                    <View >
+                        {floatingLabelEnable &&(
+                            <InputLabel style={{
+                                fontFamily: Platform.OS === 'ios' ? 'IRANYekanRegular' : 'IRANYekanRegular',
+                                fontSize: 12,
+                                color: textItem,
+                                marginStart: 4,
+                                textAlign:'right',
+                                ...props.labelStyle,position:'relative',marginBottom:5}} htmlFor="standard-adornment-password">{placeholder}</InputLabel>
+                        )}
+                        <View style={{flex:1,flexDirection:'row'}}>
+                            <Input
+                                {...props}
+                                ref={this.textInput}
+                                endAdornment={
+                                    this.props.Adornment &&(
+                                        <InputAdornment position="end"  >
+                                            {this.props.Adornment}
+                                        </InputAdornment>
+                                    )
 
-                        <FormControl  dir={'rtl'} >
-                            {floatingLabelEnable &&(
-                                <div style={{height:5,width:'100%'}} >
-                                    <InputLabel style={labelStyle} >{placeholder}</InputLabel>
-                                </div>
+                                }
 
-                            )}
-                            <View dir={persistStore.isRtl?'rtl':'ltr'} style={{flex:1,flexDirection: reverse?'row-reverse':'row', }}>
+                                style={{}}
+                                // className={classes.main}
+                                fullWidth={true}
+                                readOnly={this.state.readOnly}
 
-                                <Input
-                                    {...props}
-                                    style={{textInputStyle}}
-                                    // className={classes.main}
-                                    fullWidth={true}
-                                    inputProps={{
-                                        inputMode: keyboardType2,
-                                        maxLength: maxLength,
-                                        style: textInputStyle,
-                                        autoFocus:autoFocus,
-                                    }}
+                                inputProps={{
+                                    maxLength: maxLength,
+                                    direction:'ltr',
+                                    style:{fontSize:12, ...textInputStyle,} //for solve font hiding problem in safary
+                                }}
+                                type={pKeyboardType}
+                                //value={value}
+                                autoFocus={autoFocus}
+                                rows={numberOfLines}
+                                //multiline={multiline}
+                                //label={label}
+                                disableUnderline={true}
+                                //returnKeyType={returnKeyType}
+                                floatingLabelEnable={floatingLabelEnable}
+                                highlightColor={highlightColor}
+                                underlineSize={underlineSize}
+                                underlineColor={underlineColor}
+                                
+                                onChange={event => {
+                                    let text=event.target.value;
+                                    if(text && text.length>maxLength){
+                                        return;
+                                    }
+                                   if(pKeyboardType==='tel'){
+                                       text=mapNumbersToEnglish(text);
+                                      this.beforText=this.beforText || '';
+                                       text= inputNumberValidation(text,'', /[\d]+$/);
+                                       this.beforText=text;
+                                    }
+                                    onChangeText && onChangeText(text,event)
+                                }}
 
-                                    type={type}
-                                    //value={value}
-
-                                    rows={numberOfLines}
-                                    //multiline={multiline}
-                                    //label={label}
-                                    disableUnderline={true}
-                                    //returnKeyType={returnKeyType}
-                                    floatingLabelEnable={floatingLabelEnable}
-                                    underlineColor={underlineColor}
-                                    underlineSize={underlineSize}
-                                    onChange={event => {
-                                        let text=event.target.value;
-                                        onChangeText && onChangeText(text,event)
-                                    }}
-
-
-                                    ref='txtInput'
-                                    {...this.props}
-                                    placeholder={floatingLabelEnable ? '' : placeholder}
-                                    underlineColorAndroid='transparent'
-                                    //onFocus={this._handleFocus}
-                                    onBlur={this._handleBlur}
-                                    onLayout={event => {
-                                        let {x, y, width, height} = event.nativeEvent.layout;
-                                        this.refs.underline.updateLineLength(width);
-                                    }}
-                                   /* inputComponent={this.TextMaskCustom}*/
-                                />
-                                {adornment?adornment: <Text style={[{
+                                placeholder={floatingLabelEnable ? '' : placeholder}
+                                underlineColorAndroid='transparent'
+                                onKeyUp={ this._handleonKeyUp}
+                                onFocus={this._handleFocus}
+                                onBlur={this._handleBlur}
+                                onLayout={event => {
+                                    let {x, y, width, height} = event.nativeEvent.layout;
+                                    this.refs.underline.updateLineLength(width);
+                                }}
+                            />
+                            {adornment?adornment: this.props.unit?(
+                                <Text style={[{
                                     fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum' : 'IRANYekanRegular(FaNum)',
-                                    fontSize: 12,
+                                    fontSize: 11,
                                     color: border,
-                                    marginStart: 4,
-                                    paddingTop:15,
-                                    alignSelf: 'center',
-                                },unitStyle]}>{this.props.unit}</Text>}
-                                {isAccept!==undefined &&(
+                                    marginHorizontal: 4,
+                                    alignSelf: 'left',
+                                    textAlign:'left',
+                                    paddingTop:7
+                                },unitStyle]}>{this.props.unit}</Text>
+                            ):null}
+                              {isAccept!==undefined &&(
                                     <FaTree size={30}  color={isAccept?grL5:grayVD7}
                                             style={{
                                                 padding:2,
@@ -279,46 +312,47 @@ export default class FloatingLabelTextInput extends PureComponent {
                                 )
 
                                 }
-                            </View>
-                        </FormControl>
+                        </View>
 
-                        <Underline
-                            ref="underline"
-                            underlineEnabled={underlineEnabled}
-                            underlineSize={underlineSize}
-                            underlineAniDur={floatingLabelAniDuration}
-                            underlineColor={underlineColor}
-                            tintColor={tintColor}
-                        />
+
+
+
 
                     </View>
 
-              </View>
+                    <Underline
+                        ref="underline"
+                        underlineEnabled={underlineEnabled}
+                        underlineSize={underlineSize}
+                        underlineAniDur={floatingLabelAniDuration}
+                        highlightColor={highlightColor}
+                        underlineColor={underlineColor}
+                    />
+
+                </View>
+                {props.editMode===2 &&(
+                    <IconApp source={'apic_edit'}
+                             style={{
+                                underlineColor: border,
+                                 height: 24,
+                                 width: 24,
+                             }}
+                    onClick={()=>{
+                        this.setState({readOnly:false})
+                        this.focus();
+                    }}
+                    />
+                )}
+
                 <style jsx global>{`
-                         .MuiInput-underline:before{
-                       
-                        bottom: 0;
-                        border-bottom:1px solid ${borderLight};
-                        position: absolute;
-                        transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-                        pointer-events: none;
-                    }
-                    .MuiInput-underline:after{
-                       // left: 0;
-                        right: 0;
-                        bottom: 0;
-                        border-bottom:0px solid;
-                        position: absolute;
-                        transform: scaleX(0);
-                        transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
-                        pointer-events: none
-                    }
-                    
-                    .MuiInputLabel-formControl{
-                         left:undefined;
-                         right:${this.props.labelAlign=='left'?undefined: persistStore.isRtl?0:undefined};
-                     }
-                `}</style>
+                .MuiInputLabel-shrink {
+                    transform: translate(0, 1.5px) scale(0.75);
+                    transform-origin: top right !important;
+                }  
+
+               
+                
+            `}</style>
             </View>
         );
     }
@@ -329,7 +363,7 @@ const Styles = StyleSheet.create({
         // flex: 1,
 
     },
-    textInput: {},
+
     labelStyles: {
         position: 'absolute',
         left: 3,
@@ -340,107 +374,4 @@ const Styles = StyleSheet.create({
 
 
 
-/*
 
-import React from 'react';
-import {borderLight} from "../constants/colors";
-import {Text, View} from "../react-native";
-import {TextField} from '@material-ui/core';
-import {makeStyles} from "@material-ui/core/styles";
-export default function TextInput(props) {
-    let {
-        style={},
-        ref,
-        value,
-        autoFocus,
-        placeholder,
-        placeholderTextColor,
-        numberOfLines,
-        label,
-        multiline,
-        onChangeText,
-        maxLength,
-        floatingLabelEnable,
-        returnKeyType,
-        textInputStyle,
-        underlineSize,
-        underlineColor,
-        unit,
-        unitStyle={fontSize:12,color:borderLight}
-    } = props;
-    const useStyles = makeStyles(styles);
-    const classes = useStyles();
-    return(
-        <View style={{flex:1,flexDirection:'row'}}>
-            <TextField {...props}  style={style} className={classes.main}
-                       style={style}
-                       ref={ref}
-                       inputProps={{
-                           maxLength: maxLength,
-                           style: textInputStyle
-                       }}
-
-                       value={value}
-                       autoFocus={autoFocus}
-                       placeholder={placeholder}
-                       rows={numberOfLines}
-                       multiline={multiline}
-                       label={label}
-                       disableUnderline={true}
-                       returnKeyType={returnKeyType}
-                       floatingLabelEnable={floatingLabelEnable}
-                       underlineColor={underlineColor}
-                       underlineSize={underlineSize}
-                       onChange={event => {
-                           let text=event.target.value;
-                           onChangeText && onChangeText(text,event)
-                       }}
-            />
-            {
-                unit &&(
-                    /!* <Text style={unitStyle}>{unit}</Text>*!/
-                    <Text style={[{
-                        fontSize: 10,
-                        color: borderLight,
-                        textAlign: 'left',
-                        position: 'absolute',
-                        left: 30,
-                    },unitStyle]}>
-                        {unit}
-                    </Text>
-
-                )
-            }
-            <style jsx global>{`
-                     .MuiInput-underline:before{
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    border-bottom:1px solid ${borderLight};
-                    position: absolute;
-                    transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-                    pointer-events: none;
-                }
-                .MuiInput-underline:after{
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    border-bottom:0px solid;
-                    position: absolute;
-                    transform: scaleX(0);
-                    transition: transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms;
-                    pointer-events: none
-                }
-            `}</style>
-        </View>
-    );
-}
-const styles = {
-    main: {
-
-    },
-}
-
-
-
-*/

@@ -27,6 +27,7 @@ export default class LoginPage extends PureComponent {
     constructor(props) {
         super(props);
         //StatusBar.setTranslucent(true);
+        this.passInput =  React.createRef();
         globalState.changeStatusBarColor('rgba(255,255,255,0)');
         this.topPosition = (global.height / 7) * 2;
         this.animatedHeight = new Animated.Value(global.height);
@@ -53,6 +54,7 @@ export default class LoginPage extends PureComponent {
             vpn:true,
             countryCode:"98",
         };
+       
     }
     async componentDidMount() {
         this.setState({
@@ -368,7 +370,7 @@ export default class LoginPage extends PureComponent {
                             />
                            
                                <FloatingLabelTextInput
-                                    refInput={input => loginInput[0] = input}
+                                    //refInput={input => loginInput[0] = input}
                                     dir={'ltr'}
                                     reverse={persistStore.isRtl}
                                     floatingLabelEnable={false}
@@ -379,11 +381,11 @@ export default class LoginPage extends PureComponent {
                                     maxLength={50}
                                     //keyboardType="numeric"
                                     returnKeyType="next"
-                                    onSubmitEditing={() => loginInput[1].focus()}
+                                    //onSubmitEditing={() => loginInput[1].focus()}
                                     style={{textAlign: persistStore.isRtl ? 'right' : 'left',}}
                                     numberOfLines={1}
                                     maxLength={10}
-                                    tintColor={
+                                    underlineColor={
                                         this.state.usernameValidation ? textItem : lightRed
                                     }
                                     textInputStyle={{
@@ -411,7 +413,15 @@ export default class LoginPage extends PureComponent {
                                         const mobileReg = /^9[0-9]{9}$/i;
                                         text = mapNumbersToEnglish(text);
                                         if(acceptReg.test(text)){
-                                            this.setState({ username:text,mobileIsRegister:false, usernameValidation:mobileReg.test(text)});
+                                            this.setState({ username:text,mobileIsRegister:false, usernameValidation:mobileReg.test(text)},
+                                            () => {
+
+                                                if(this.state.username.length === 10){
+                                                    
+                                                    this.passInput.current.refs.txtInput.childNodes[0].focus();
+                                                }
+                                            }
+                                            );
                                         }else if(text){
                                             showMassage(translate('fastRegister_onlyEnglish_number'),'info');
                                         }
@@ -439,6 +449,7 @@ export default class LoginPage extends PureComponent {
                                 >
                                     <FloatingLabelTextInput
                                         refInput={input => loginInput[1] = input}
+                                        ref={this.passInput}
                                         dir={'ltr'}
                                         reverse={persistStore.isRtl}
                                         type={this.state.showPassword ? 'text' : 'password'}
@@ -452,7 +463,7 @@ export default class LoginPage extends PureComponent {
                                         keyboardType="default"
                                         returnKeyType="done"
                                         numberOfLines={1}
-                                        tintColor={
+                                        underlineColor={
                                             this.state.passwordValidation ? textItem : lightRed
                                         }
                                         textInputStyle={{

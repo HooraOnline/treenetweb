@@ -10,20 +10,20 @@ const hex2rgb=function(hex,opacity){
         let b;
         let result;
         if(hex.length==3){
-             r = parseInt(hex.substring(0,1)+hex.substring(0,1), 16);
-             g = parseInt(hex.substring(1,2)+hex.substring(1,2), 16);
-             b = parseInt(hex.substring(1,3)+hex.substring(1,3), 16);
-             result = 'rgba('+r+','+g+','+b+','+opacity+')';
+            r = parseInt(hex.substring(0,1)+hex.substring(0,1), 16);
+            g = parseInt(hex.substring(1,2)+hex.substring(1,2), 16);
+            b = parseInt(hex.substring(1,3)+hex.substring(1,3), 16);
+            result = 'rgba('+r+','+g+','+b+','+opacity+')';
             console.log('saeed',result);
             return result;
         }
-         r = parseInt(hex.substring(0,2), 16);
-         g = parseInt(hex.substring(2,4), 16);
-         b = parseInt(hex.substring(4,6), 16);
-         result = 'rgba('+r+','+g+','+b+','+opacity+')';
+        r = parseInt(hex.substring(0,2), 16);
+        g = parseInt(hex.substring(2,4), 16);
+        b = parseInt(hex.substring(4,6), 16);
+        result = 'rgba('+r+','+g+','+b+','+opacity+')';
         return result;
     }catch (e) {
-       return  hex
+        return  hex
     }
 
 }
@@ -35,34 +35,36 @@ export default function View(props) {
             return acc;
         }, {});
     }
+
     let style2=Object.assign({},style);
     style2.display='flex';
-    style2.flexDirection=style2.flexDirection || 'column';
-    style2.marginRight=style2.marginRight || style2.marginStart ||style2.marginHorizontal ||style2.margin;
-    style2.marginLeft=style2.marginLeft|| style2.marginEnd ||style2.marginHorizontal ||style2.margin;
-    style2.marginTop=style2.marginTop  ||style2.marginVertical ||style2.margin;
-    style2.marginBottom=style2.marginBottom ||style2.marginVertical ||style2.margin;
+    Array.from(Array(3).keys()).map(()=>{ })
 
-    style2.paddingRight=style2.paddingRight || style2.paddingStart ||style2.paddingHorizontal || style2.padding;
-    style2.paddingLeft=style2.paddingLeft|| style2.paddingEnd ||style2.paddingHorizontal || style2.padding;
+    style2.flexDirection=(style2.flexDirection || 'column');
+    style2.marginRight=(style2.marginRight || style2.marginStart ||style2.marginHorizontal ||style2.margin);
+    style2.marginLeft=(style2.marginLeft|| style2.marginEnd ||style2.marginHorizontal ||style2.margin);
+    style2.marginTop=(style2.marginTop  ||style2.marginVertical ||style2.margin);
+    style2.marginBottom=(style2.marginBottom ||style2.marginVertical ||style2.margin);
+
+    style2.paddingRight=(style2.paddingRight || style2.paddingStart ||style2.paddingHorizontal || style2.padding);
+    style2.paddingLeft=(style2.paddingLeft|| style2.paddingEnd ||style2.paddingHorizontal || style2.padding);
     style2.paddingTop=style2.paddingTop  ||style2.paddingVertical ||style2.padding;
     style2.paddingBottom=style2.paddingBottom ||style2.paddingVertical ||style2.padding;
-    style2.border=`${style2.borderWidth}px ${style2.borderStyle||'solid'}  ${style2.borderColor || '#000'}`
+    style2.border=style2.borderWidth?`${style2.borderWidth}px ${style2.borderStyle||'solid'}  ${style2.borderColor || '#000'}`:undefined
 
     style2.borderTop=`${style2.borderTopWidth}px ${style2.borderStyle||'solid'}  ${style2.borderTopColor || style2.borderColor || '#000'}`
     style2.borderBottom=`${style2.borderBottomWidth}px ${style2.borderStyle||'solid'}  ${style2.borderBottomColor|| style2.borderColor || '#000'}`
     style2.borderRight=`${style2.borderRightWidth ||style2.borderStartWidth}px ${ style2.borderStyle||'solid'}  ${style2.borderRightColor|| style2.borderStartColor|| style2.borderColor || '#000'}`
     style2.borderLeft=`${style2.borderLeftWidth ||style2.borderEndWidth}px ${style2.borderStyle||'solid'}  ${style2.borderLeftColor|| style2.borderEndColor|| style2.borderColor || '#000'}`
 
-
-
     style2.borderTopRightRadius=style2.borderTopRightRadius || style2.borderTopStartRadius || style2.borderRadius;
     style2.borderTopLeftRadius=style2.borderTopLeftRadius || style2.borderTopEndRadius || style2.borderRadius;
     style2.borderBottomRightRadius=style2.borderBottomRightRadius || style2.borderBottomStartRadius || style2.borderRadius;
     style2.borderBottomLeftRadius=style2.borderBottomLeftRadius || style2.borderBottomEndRadius || style2.borderRadius;
 
-    if(style2.left==undefined) style2.left=style2.end;
-    if(style2.right==undefined) style2.right=style2.start;
+
+    if(style2.left===undefined) style2.left=style2.end;
+    if(style2.right===undefined) style2.right=style2.start;
 
     style2.shadowOffset && (style2['-webkit-box-shadow']= `${style2.shadowOffset.width}px ${style2.shadowOffset.height}px 4px ${hex2rgb(style2.shadowColor,style2.shadowOpacity || 1)}`);
     style2.zIndex=  style2.zIndex || style2.elevation;
@@ -105,11 +107,11 @@ export default function View(props) {
     const useStyles = makeStyles(newStyles);
     const classes = useStyles();*/
     return (
-        <div    {...props}    style={style2}
-               //className={classes.main}
+        <xcon {...props}    style={style2}
+            //className={classes.main}
         >
             {children}
-        </div>
+        </xcon>
     );
 }
 

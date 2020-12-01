@@ -1,24 +1,20 @@
 import React, {PureComponent} from 'react';
 import {
-    Alert,
     Image,
-    ImageBackground,
-    Platform,
     StyleSheet, Text,
     TouchableOpacity,
     View,
     BgImageChacheProgress,
-    Progress,
+    Progress, IconApp
 } from '../react-native';
 
 import images from "../../public/static/assets/images";
 import { globalState, persistStore,} from '../stores';
 import {getFileDownloadURL, uploadFileByFormData} from '../utils';
-import {fab, bgScreen, subTextItem, textItem, grayVD7} from "../constants/colors";
+import {fab, bgScreen, subTextItem, textItem} from "../constants/colors";
 import {AlertMessage, OverlayModal,} from "./index";
 import FileInput from "../react-native/FileInput";
-import {getFileUri, upload} from "../../dataService/apiService";
-//import Permissions from "react-native-permissions";
+
 
 export default class ImageSelector extends PureComponent {
     constructor(props) {
@@ -34,35 +30,36 @@ export default class ImageSelector extends PureComponent {
     }
 
     removeImage() {
+
+        this.state.image=null;
         this.setState({selectedImage:null,image: null,showRemoveImage: false,});
         this.props.onRemoveImage && this.props.onRemoveImage(this.state.selectedImage || this.state.image);
     }
 
-   uploadFile(files){
+   uploadFile(fileData){
+   
       globalState.showBgLoading();
-       upload(files, this.props.folderName, (r)=>{console.log(r)})
-           .then(result => {
-               console.log(result);
-               if(result.result && result.result.fields && result.result.fields.name && result.result.fields.name[0]){
-                   const fileName=result.result.fields.name[0];
-                   this.setState({image: fileName,});
-                   this.props.onUplodedFile && this.props.onUplodedFile(fileName);
-               }
-
-           })
-           .finally(() => globalState.hideBgLoading());
-
-
-
+       uploadFileByFormData(fileData)
+          .then(result => {
+              const fileName = result.fileName;
+              console.log(fileName);
+              this.setState({
+                  image: fileName,
+              });
+              this.props.onUplodedFile && this.props.onUplodedFile(fileName);
+          })
+          .finally(() =>{ 
+             
+              globalState.hideBgLoading();
+            });
   }
 
 
     renderSelectBtn() {
-        if(this.state.image || this.state.selectedImage){
-            return null
-        }
-        return this.props.SelectBtn || <Image
-            source={images.ic_camera}
+      
+
+        return this.props.SelectBtn || <IconApp
+            class={'apic_camera'}
             style={{
                 width: 24,
                 height: 24,
@@ -82,88 +79,120 @@ export default class ImageSelector extends PureComponent {
     }
 
     render() {
-        const {style,canUpload=true,hideDeleteBtn,image, noImage, imageStyle, children, renderContent, selectBtnStyle} = this.props;
+        const {onRender,style,canUpload=true,hideDeleteBtn,image, noImage, imageStyle, children, renderContent, selectBtnStyle,blureColor,blurRadius} = this.props;
+        onRender && onRender(this);
+        this.state.image=this.state.image || image;
 
         return (
-            <View style={[{ position: 'relative',alignItems:'center',justifyContent:'center' },style]}>
+            <View style={{ position: 'relative'}}>
+                <BgImageChacheProgress
+                    style={{...style, 
+                         backgroundColor:blureColor  //'rgba(166, 214, 208, .8)',
+                        }}
+                    imageStyle={imageStyle}
+                    resizemode="cover"
 
+                    source={this.state.selectedImage?this.state.selectedImage: this.state.image ? {
+                        imageName:this.state.image,
+                        uri: getFileDownloadURL(this.state.image),
+                        headers: {Authorization: 'Bearer ' + persistStore.token},
+                    } : noImage}
+                    //source={this.state.selectedImage?this.state.selectedImage:noImage}
+                    indicator={() => <Progress.Circle
+                        progress={this.state.imageProgress}
+                        indeterminate={this.state.imageIndeterminate}
+                    />}
+                    indicatorProps={{
+                        borderWidth: 3,
+                        color: fab,
+                        // unfilledColor: primaryDark,
+                    }}
+                    blurRadius={blurRadius}
+                    onError={e => {
+                        this.setState({imageIndeterminate: true});
+                        console.warn('!!!!!!!!!!!!!!!!!! onError Image e:', e);
+                        this.props.onErrorImage && this.props.onErrorImage();
+                    }}
+                    onLoadStart={() => console.warn('!!!!!!!!!!!!!!!!!! onLoadStart Image ')}
+                    onProgress={e => {
+                        console.warn('%%%%%%%%%%% onProgress loaded:', e.nativeEvent.loaded);
+                        console.warn('%%%%%%%%%%% onProgress total:', e.nativeEvent.total);
+                        const progress = e.nativeEvent.loaded / e.nativeEvent.total;
+                        this.setState({imageProgress: progress});
+                        console.warn('!!!!!!!!!!!!!!!!!!!! onProgress p:', progress);
+                    }}
+                    onLoad={e => console.warn('!!!!!!!!!!!!!!!!!!!! onLoad Success', e.nativeEvent.width, e.nativeEvent.height)}
+                    onLoadEnd={() => {
+                        this.setState({loadImageCompelete: true})
+                    }}
+                >
+                    {
+                        renderContent && renderContent(this.state.image, this.state.imageProgress)
+                    }
+                    {children}
+                </BgImageChacheProgress>
                 <piperecorder pipe-width={400} pipe-height={330}/>
-               
-
+                {canUpload &&(
                     <FileInput
-                        style={{}}
-                        canUpload={canUpload}
+                        ref={fileInput=>this.fileInput=fileInput}
+                        style={{zIndex:2 }}
                         accept={'image/jpeg, image/png'}
-                        onSelectFile={(files,formData,file0,url,filebase64)=>{
+                        onSelectFile={(formData,file0,url,filebase64)=>{
+                           
                             this.props.onSelectFile && this.props.onSelectFile(formData,file0,url,filebase64);
                             this.setState({selectedImage:url});
                             if(this.props.autoUpload){
-                               this.uploadFile(files)
-
+                                this.uploadFile(formData);
                             }
-
                         }}
                     >
-                        <BgImageChacheProgress
-                            style={[{width:100,height:100},imageStyle]}
-                            resizeMode="cover"
-                            source={this.state.selectedImage?this.state.selectedImage: image ? getFileUri('member',image) : noImage}
-                            indicator={() => <Progress.Circle
-                                progress={this.state.imageProgress}
-                                indeterminate={this.state.imageIndeterminate}
-                            />}
-                            indicatorProps={{
-                                borderWidth: 3,
-                                color: fab,
-                                // unfilledColor: primaryDark,
-                            }}
-
-                            onError={e => {
-                                this.setState({imageIndeterminate: true});
-                                console.warn('!!!!!!!!!!!!!!!!!! onError Image e:', e);
-                                this.props.onErrorImage && this.props.onErrorImage();
-                            }}
-                            onLoadStart={() => console.warn('!!!!!!!!!!!!!!!!!! onLoadStart Image ')}
-                            onProgress={e => {
-                                console.warn('%%%%%%%%%%% onProgress loaded:', e.nativeEvent.loaded);
-                                console.warn('%%%%%%%%%%% onProgress total:', e.nativeEvent.total);
-                                const progress = e.nativeEvent.loaded / e.nativeEvent.total;
-                                this.setState({imageProgress: progress});
-                                console.warn('!!!!!!!!!!!!!!!!!!!! onProgress p:', progress);
-                            }}
-                            onLoad={e => console.warn('!!!!!!!!!!!!!!!!!!!! onLoad Success', e.nativeEvent.width, e.nativeEvent.height)}
-                            onLoadEnd={() => {
-                                this.setState({loadImageCompelete: true})
-                            }}
-                        >
-                            {
-                                renderContent && renderContent(this.state.image, this.state.imageProgress)
-                            }
-
-                            {children}
-                        </BgImageChacheProgress>
+                       
+                        {( (!this.state.selectedImage && !this.state.image) || this.props.showSelectBtnAlways) ?(
+                            <TouchableOpacity
+                                //onPress={() => this.setState({showImageTypeSelector: true})}
+                                style={selectBtnStyle || {
+                                    elevation: 40,
+                                    marginStart: 24,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderRadius: 25,
+                                    backgroundColor: 'black',
+                                    width: 50,
+                                    height: 50,
+                                    position: 'absolute',
+                                    bottom: -20,
+                                }}>
+                                {
+                                    this.renderSelectBtn()
+                                }
+                            </TouchableOpacity>
+                        ):<div/>
+                        }
                     </FileInput>
-               
+                )
+                }
 
                 {canUpload && !hideDeleteBtn && (this.state.image || this.state.selectedImage) && (
                     <TouchableOpacity
                         onPress={() => this.setState({showRemoveImage: true})}
+                        stopPropagation
                         style={{
                             backgroundColor: 'rgba(38, 32, 32, 0.6)',
                             position: 'absolute',
-                            top: 34,
-                            end: 8,
+                            top: 10,
+                            end: 10,
                             borderWidth: 1,
                             borderRadius: 10,
                             borderColor: 'white',
+                            padding:3,
                         }}>
-                        <Image
-                            source={images.ic_delete}
+                        <IconApp
+                            class={'apic_delete'}
                             style={{
-                                elevation: 40,
+                                elevation: 3,
                                 margin: 4,
-                                height: 24,
-                                width: 24,
+                                height: 22,
+                                width: 22,
                                 tintColor: 'white',
                             }}
                         />
@@ -186,6 +215,7 @@ export default class ImageSelector extends PureComponent {
                     confirmTitle='حذف'
                     dismissTitle='انصراف'
                 />
+
             </View>
         );
     }

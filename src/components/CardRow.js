@@ -30,7 +30,7 @@ export default class CardRow extends PureComponent {
                                 Platform.OS === 'ios'
                                     ? 'IRANYekanFaNum-Bold'
                                     : 'IRANYekanBold(FaNum)',
-                            fontSize: 12,
+                            fontSize: 11,
                         },titleStyle]}>
                         {title}
                     </Text>

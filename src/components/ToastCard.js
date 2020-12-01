@@ -1,7 +1,8 @@
 import React, {PureComponent} from 'react';
-import {Animated, Image, StyleSheet, Text, TouchableWithoutFeedback, View} from '../react-native';
-import {orange1, bgWhite, grL5, primary, primaryDark} from "../constants/colors";
+import {Animated, IconApp, Image, Platform, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from '../react-native';
+import {bgWhite, primary, primaryDark} from "../constants/colors";
 import images from 'public/static/assets/images';
+import { Overlay } from '.';
 class Content extends PureComponent {
 
     constructor(props) {
@@ -21,32 +22,32 @@ class Content extends PureComponent {
                 this.title = 'تبریک!';
                 this.message = 'عملیات با موفقیت انجام شد';
                 this.titleColor = '#00A28C';
-                this.messageColor = '#4caf50';
+                this.messageColor = '#1CC4AD';
                 this.image = images.bg_ntf_Success;
                 this.timeOut = 4000;
                 break;
             case 'warning':
                 this.title = 'مشکلی پیش آمده!';
                 this.message = 'خطایی رخ داده، لطفا دوباره سعی کنید';
-                this.titleColor = '#ff9800';
-                this.messageColor = '#ff9800';
+                this.titleColor ='#B28600' ;
+                this.messageColor ='#B28600' ;
                 this.image = images.bg_ntf_Warning;
                 this.timeOut = 6000;
                 break;
             case 'error':
                 this.title = 'خطایی رخ داد';
                 this.message = 'متاسفانه اینکار انجام نشد';
-                this.titleColor = '#B28600';
-                this.messageColor = '#f44336';
+                this.titleColor = '#C73618';
+                this.messageColor = '#C73618';//'#FF9D88'
                 this.image = images.bg_ntf_Error;
                 this.timeOut = 10000;
                 break;
             case 'info':
                 this.title = '';
                 this.message = '';
-                this.titleColor = '#2196f3';
-                this.messageColor = '#2196f3';
-                this.image = images.bg_ntf_Error;
+                this.titleColor = '#B28600';
+                this.messageColor = primary;
+                this.image = images.bg_ntf_Warning;
                 this.timeOut = 5000;
                 break;
         }
@@ -99,7 +100,7 @@ class Content extends PureComponent {
     }
 
     render() {
-        const {onClose} = this.props;
+        const {onClose,title} = this.props;
 
         const animateTranslateY = this.animatedFromBottom.interpolate({
             inputRange: [0, 1],
@@ -107,80 +108,88 @@ class Content extends PureComponent {
         });
 
         return (
-            <View style={{
-                position: 'absolute',
-                bottom: 10,
-                width: '100%',
-
-
-
-            }}>
-                <Animated.View
+          
+                <View
                     style={{
-                        transform: [{translateY: animateTranslateY}],
-                        minHeight: 60,
                         position: 'fixed',
-                        //borderTopRightRadius: 20,
-                        //borderTopLeftRadius: 20,
-                        bottom:100,
+                        bottom:80,
                         left: 0,
                         right: 0,
-                        zIndex:1000,
-                        alignItems: 'center'
-
+                        alignItems: 'center',
+                        zIndex:10000
                     }}
                 >
-
                     <View
-                        style={ {
+                        style={{
                             flexDirection: 'row',
                             alignItems: 'center',
-                            borderWidth: 0,
-                            borderColor: this.messageColor,
-                            backgroundColor: this.messageColor,
-                            marginHorizontal: 24,
-                            borderRadius: 4,
+                            borderWidth: 1,
+                            //borderColor: 'white',
+                            height: 60,
+                            backgroundColor: 'white',
+                            marginHorizontal: 10,
+                            borderRadius: 10,
                             overflow: 'hidden',
                             elevation: 4,
-                            position:'relative',
-                            width:'99%',
-                            maxWidth:650,
-                            justifyContent:'space-between',
-                            padding:5,
+                            borderColor:this.messageColor,
+                           
+                            //justifyContent:'space-between',
+                            //marginHorizontal: 30,
+
+                            maxWidth:600,
+                            minWidth:280,
+                            
+                            zIndex:10000,
                         }}>
 
-                       {/* <Image
+                        <Image
                             source={this.image}
-                            style={{position: 'absolute', start: 0, top: 0, height: 59, width: 57}}
-                        />*/}
-                        <Text style={{
-                            color: bgWhite,
-                            fontSize:12,
-                            padding:10,
+                            style={{ height: 60, }}
+                        />
+                        
+                        <View style={{flex:1}}>
+                            {title &&(
+                                <Text style={{
+                                    color: this.titleColor,
+                                    fontSize: 15,
+                                    fontFamily: Platform.OS === 'ios' ? 'IRANYekan-ExtraBold' : 'IRANYekanExtraBold',
 
-                        }}>{this.message}</Text>
-                        <TouchableWithoutFeedback
+                                    start: 52,
+                                    top: 1,
+                                }}>{title}</Text>
+                            )}
+                           
 
-                            onPress={() => this.animateSnake(false, onClose)}
+                            <Text style={{
+                                color: this.messageColor,
+                                fontSize: 11,
+                            }}>{this.message}</Text>
+                        </View>
+
+                         <TouchableOpacity
+                            onPress={() => this.animateSnake(false, () => onClose())}
                         >
-                            <Image
-                                source={images.ic_close}
+                            <View
                                 style={{
-                                    tintColor: '#BFACAC',
-                                    height: 24,
-                                    width: 24,
+                                   
+                                    end: 2,
+                                    padding: 10,
                                 }}
-                            />
-                        </TouchableWithoutFeedback>
+                            >
+                                <IconApp
+                                    class={'apic_close'}
+                                    style={{
+                                        tintColor: this.titleColor,
+                                        height: 16,
+                                        width: 16,
+                                    }}
+                                />
+                            </View>
 
-
+                        </TouchableOpacity>
                     </View>
-
-
-                </Animated.View>
-
-            </View>
-
+                </View>
+           
         );
     }
 }
@@ -193,18 +202,26 @@ export default class ToastCard extends PureComponent {
 
     render() {
         const {onClose, type, title, message} = this.props;
-
         return (
-            <View>
+           
+             <View style={{zIndex:10000}}>
                 {this.props.visible && (
-                    <Content
-                        onClose={onClose}
-                        type={type}
-                        title={title}
-                        message={message}
-                    />
+                     <Overlay
+                     catchTouch={true}
+                    
+                    
+                 >
+                        <Content
+                            onClose={onClose}
+                            type={type}
+                            title={title}
+                            message={message}
+                        />
+                 </Overlay>
                 )}
             </View>
+     
+           
 
         );
     }

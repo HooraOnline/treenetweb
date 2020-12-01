@@ -209,9 +209,10 @@ export default class RegisterPassword extends Component {
                                 fontFamily: 'IRANYekanFaNum-Bold',
                                 textAlign:'justify',
                                 color:bg1,
+                                marginBottom:10
 
                             }}>
-                            {translate("یک رمز عبور برای شبکه خود وارد کنید.")}
+                            {translate("یک رمز عبور برای شبکه خود انتخاب و همیشه بخاطر بسپارید.")}
                         </Text>
 
                         {/*<View
@@ -322,8 +323,8 @@ export default class RegisterPassword extends Component {
                             }}
                         >
                             <FloatingLabelTextInput
-                                dir={'ltr'}
-                                reverse={persistStore.isRtl}
+                                //dir={'ltr'}
+                                //reverse={persistStore.isRtl}
                                 type={this.state.showPassword ? 'text' : 'password'}
                                 placeholder={translate('رمز عبور')}
                                 floatingLabelEnabled={true}
@@ -337,7 +338,7 @@ export default class RegisterPassword extends Component {
                                 keyboardType="default"
                                 returnKeyType="done"
                                 numberOfLines={1}
-                                labelStyle={{color: bgSuccess, marginTop: -17}}
+                                labelStyle={{ marginTop: -17}}
                                 textInputStyle={{
                                     fontWeight: 'normal',
                                     fontFamily: 'IRANYekanRegular',
@@ -348,7 +349,7 @@ export default class RegisterPassword extends Component {
                                     //textAlign: 'left',
                                     //paddingLeft:35,
                                 }}
-                                underlineSize={4}
+                                underlineSize={1}
                                 underlineColor={this.state.passwordValidation ? bgSuccess : primaryDark}
                                 isAccept={this.state.passwordValidation}
                                 style={{flex: 1,marginTop:0}}
@@ -376,12 +377,12 @@ export default class RegisterPassword extends Component {
                                 onPress={() => {
                                     this.setState({showPassword: !this.state.showPassword});
                                 }}
-                                style={{position: 'absolute', start: 30, bottom:4}}
+                                style={{position: 'absolute', end: 30, bottom:4}}
                             >
                                 {
                                     this.state.showPassword ?
-                                        <IoMdEye color={bgSuccess} size={24}/>
-                                        : <IoMdEyeOff color={bgSuccess} size={24}/>
+                                        <IoMdEye color={primaryDark} size={24}/>
+                                        : <IoMdEyeOff color={primaryDark} size={24}/>
                                 }
                             </TouchableOpacity>
                         </View>
@@ -393,8 +394,8 @@ export default class RegisterPassword extends Component {
                             }}
                         >
                             <FloatingLabelTextInput
-                                dir={'ltr'}
-                                reverse={persistStore.isRtl}
+                                //dir={'ltr'}
+                                //reverse={persistStore.isRtl}
                                 type={this.state.showPassword ? 'text' : 'password'}
                                 placeholder={translate('registerPassword_password_repeat')}
                                 floatingLabelEnabled={true}
@@ -405,7 +406,7 @@ export default class RegisterPassword extends Component {
                                 maxLength={100}
                                 floatingLabelEnable={true}
                                 labelAlign={'left'}
-                                labelStyle={{color: bgSuccess, marginTop: -17}}
+                                labelStyle={{marginTop: -17}}
                                 keyboardType="default"
                                 returnKeyType="done"
                                 numberOfLines={1}
@@ -440,12 +441,12 @@ export default class RegisterPassword extends Component {
                                 onPress={() => {
                                     this.setState({showPassword: !this.state.showPassword});
                                 }}
-                                style={{position: 'absolute', start: 30, bottom:4}}
+                                style={{position: 'absolute', end: 30, bottom:4}}
                             >
                                 {
                                     this.state.showPassword ?
-                                        <IoMdEye color={bgSuccess} size={24}/>
-                                        : <IoMdEyeOff color={bgSuccess} size={24}/>
+                                        <IoMdEye color={primaryDark} size={24}/>
+                                        : <IoMdEyeOff color={primaryDark} size={24}/>
                                 }
                             </TouchableOpacity>
                         </View>

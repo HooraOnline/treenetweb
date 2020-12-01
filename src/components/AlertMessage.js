@@ -19,7 +19,8 @@ export default class AlertMessage extends PureComponent {
             dismissTitle = 'انصراف',
             onModal = false,
             children,
-            style
+            style,
+            confirmTitleStyle
         } = this.props;
 
 
@@ -36,7 +37,8 @@ export default class AlertMessage extends PureComponent {
                         justifyContent: 'center',
                         alignItems: 'center',
                         backgroundColor: overlayColor,
-                        height:'100%'
+                        height:'100%',
+                       
                     }}>
                         <Content
                             title={title}
@@ -47,6 +49,7 @@ export default class AlertMessage extends PureComponent {
                             confirmTitle={confirmTitle}
                             children={children}
                             style={style}
+                            confirmTitleStyle={confirmTitleStyle}
                         />
                     </View>
                 </Modal>
@@ -62,6 +65,7 @@ export default class AlertMessage extends PureComponent {
                         onConfirm={onConfirm}
                         confirmTitle={confirmTitle}
                         children={children}
+                        confirmTitleStyle={confirmTitleStyle}
                     />
 
                 </Overlay>
@@ -72,11 +76,12 @@ export default class AlertMessage extends PureComponent {
     }
 }
 
-function Content({title, message, onDismiss, dismissTitle, onConfirm, confirmTitle,children,style}) {
+function Content({title, message, onDismiss, dismissTitle, onConfirm, confirmTitle,confirmTitleStyle,children,style,}) {
     return (
         <View
             style={[{
                 backgroundColor: 'white',
+
                 paddingHorizontal: 24,
                 // width: minWidth,
                 minHeight: 77,
@@ -84,6 +89,10 @@ function Content({title, message, onDismiss, dismissTitle, onConfirm, confirmTit
                 paddingTop: 21,
                 paddingBottom: 13,
                 marginHorizontal: 24,
+                alignSelf:'center',
+                minWidth:300,
+                maxWidth:500,
+           
             },style]}
         >
             {title? (
@@ -105,12 +114,12 @@ function Content({title, message, onDismiss, dismissTitle, onConfirm, confirmTit
             }
             <View style={{flexDirection: 'row', marginTop: 24, justifyContent: 'flex-end'}}>
 
-                <TouchableOpacity style={[styles.btn]} onPress={onDismiss}>
+                <TouchableOpacity stopPropagation style={[styles.btn]} onPress={onDismiss}>
                     <Text>{dismissTitle}</Text>
                 </TouchableOpacity>
                 {confirmTitle && (
-                    <TouchableOpacity style={[styles.btn]} onPress={onConfirm}>
-                        <Text style={{color: primaryDark}}>{confirmTitle}</Text>
+                    <TouchableOpacity stopPropagation style={[styles.btn]} onPress={onConfirm}>
+                        <Text style={confirmTitleStyle || {color: primaryDark}}>{confirmTitle}</Text>
                     </TouchableOpacity>
                 )}
             </View>
@@ -125,14 +134,14 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily: 'IRANYekanFaNum-Bold',
-        fontSize: 20,
+        fontSize: 15,
         marginVertical: 8,
         alignSelf: 'flex-start',
     },
     message: {
         alignSelf: 'flex-start',
         marginTop: 16,
-        fontSize:14,
+        fontSize: 14,
         color: drawerItem,
     }
 });

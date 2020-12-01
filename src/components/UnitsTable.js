@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Platform, Text, View,ScrollView,} from '../react-native';
+import {Text, View,ScrollView,} from '../react-native';
 import {black, gray, placeholderTextColor, primaryDark,} from '../constants/colors';
 import {FloatingLabelTextInput} from '../components';
 import accounting from 'accounting';
 import {userStore} from '../stores';
-import {mapNumbersToEnglish} from '../utils';
+import {mapNumbersToEnglish, Platform} from '../utils';
 import {CardUnitInfo} from './index';
 class UnitTableElement extends Component {
     render() {
@@ -34,7 +34,7 @@ class UnitTableElement extends Component {
                             marginLeft: 0,
                             color: black,
                             fontFamily: 'IRANYekanFaNum-Bold',
-                            fontSize: 18,
+                            fontSize: 16,
                         }}>
                             {TenantName ? TenantName : OwnerName}
                         </Text>
@@ -43,19 +43,21 @@ class UnitTableElement extends Component {
                             marginRight: 7,
                             marginLeft: 0,
                             color: gray,
-                            fontSize: 11,
+                            fontSize: 10,
                             textAlign: 'left',
                         }}>
                             {IsSame ? 'مالک‌و‌ساکن' : TenantName ? 'ساکن' : 'مالک'}
                         </Text>
                     </View>
 
-                    <View style={{
+                    <View  style={{
                         flexDirection: 'row',
                         flex: 1,
                         alignItems: 'center',
                         width:'100%',
                         justifyContent: 'center',
+
+
                     }}>
                         {this.props.writePermission &&
                         <FloatingLabelTextInput
@@ -65,15 +67,15 @@ class UnitTableElement extends Component {
                             numberOfLines={1}
                             keyboardType='number-pad'
                             returnKeyType="done"
-                            tintColor={gray}
+                            underlineColor={gray}
                             textInputStyle={{
-                                fontSize:12,
+                                fontSize: 12,
                                 fontFamily:'IRANYekanFaNum',
                                 color: black,
-                                textAlign: 'right',
+                                //textAlign:Platform()=='ios'? 'left':'right',
                             }}
                             underlineSize={1}
-                            placeholder={'مبلغ به ' + userStore.CurrencyID}
+                            placeholder={'مبلغ را وارد کنید.' }
                             style={{
                                 flex: 5,
                             }}
@@ -95,7 +97,7 @@ class UnitTableElement extends Component {
 
                         {/*{this.props.writePermission &&
                         <Text style={{
-                            fontSize: 10,
+                            fontSize: 9,
                             color: black,
                             textAlign: 'left',
                             position: 'absolute',
@@ -127,16 +129,20 @@ export default class UnitsTable extends Component {
 
     render() {
         let elements = this.props.items.map((item, index) => {
-            return <UnitTableElement
-                key={index}
-                id={index}
-                item={item}
-                price={this.props.prices[index]}
-                color={this.props.redOnEmpty && this.props.prices[index].Price === '' ? 'red' : placeholderTextColor}
-                writePermission={this.props.writePermission}
+            return (
+                <View style={{margin:16}}>
+                    <UnitTableElement
+                        key={index}
+                        id={index}
+                        item={item}
+                        price={this.props.prices[index]}
+                        color={this.props.redOnEmpty && this.props.prices[index].Price === '' ? 'red' : placeholderTextColor}
+                        writePermission={this.props.writePermission}
 
-                onValueChanged={o => this.props.onPriceEdit(o)}
-            />;
+                        onValueChanged={o => this.props.onPriceEdit(o)}
+                    />
+                </View>
+            )
         });
 
 

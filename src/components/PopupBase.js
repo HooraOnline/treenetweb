@@ -44,7 +44,7 @@ export default class PopupBase extends PureComponent {
         if(!style.zIndex)
           style.zIndex= 100
         if(!style.height)
-          style.height='100%';
+          style.height='93%';
         if(!style.backgroundColor)
          style.backgroundColor= bgScreen
         //style.opacity=1;

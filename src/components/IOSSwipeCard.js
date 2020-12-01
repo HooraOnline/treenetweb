@@ -1,38 +1,84 @@
 import React, {PureComponent} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View,SwipeOut} from '../react-native';
+import {IconApp, StyleSheet, SwipeOut, Text, TouchableOpacity, View} from '../react-native';
 //import Swipeout from 'react-native-swipeout';
-import {primaryDark} from '../constants/colors';
-import images from "../../public/static/assets/images";
-import Grow from "@material-ui/core/Grow";
+import {niceBlue, primaryDark} from '../constants/colors';
+import {isMobile} from "../utils";
 
-function BtnSwipe({icon, color, text, corner, noPadding = false,disabled}) {
+function BtnSwipe(props) {
+    const {icon, color, text, corner, noPadding = false, disabled} = props;
     return (
-        <View style={{ width:60, backgroundColor: '#f5f1f1', paddingTop: noPadding ? 0 : 10, paddingBottom: noPadding ? 0 : 6, flex: 1}}>
-            <View
-                style={[styles.btn, {backgroundColor: color}, {
-                    borderTopEndRadius: corner ? 10 : 0,
-                        borderBottomEndRadius: corner ? 10 : 0,
-                }]}
-            >
-                <Image
-                    source={icon}
-                    style={{
-                        height: 24,
-                            width: 24,
-                            tintColor: 'white',
-                    }}
+        <View>
+            {isMobile() ? (
+                <View
+                    style={{alignItems: 'center', justifyContent: 'center', marginHorizontal: 10}}
+                >
+                    <IconApp
+                        source={icon}
+                        class={icon}
+                        style={{
+                            height: 35,
+                            width: 35,
+                            tintColor: color,
+                        }}
                     />
                     <Text
-                    style={{
-                        fontSize:12,
-                            color: 'white',
-                    }}
+                        style={{
+                            fontSize: 9,
+                            color: color,
+                        }}
+                    >
+                        {text}
+                    </Text>
+                </View>
+            ) : (
+                <View
+                    style={{alignItems: 'center', justifyContent: 'center'}}
                 >
-                    {text}
-                </Text>
-             </View>
+                    <IconApp
+                        //source={icon}
+                        class={icon}
+                        style={{
+                            height: 20,
+                            width: 20,
+                            tintColor: color,
+                        }}
+                    />
+                </View>
+            )}
+
         </View>
-);
+
+    );
+
+
+    /* return (
+         <View style={{ width:60, backgroundColor: '#f5f1f1', paddingTop: noPadding ? 0 : 10, paddingBottom: noPadding ? 0 : 6, flex: 1}}>
+             <View
+                 style={[styles.btn, {backgroundColor: color}, {
+                     borderTopEndRadius: corner ? 10 : 0,
+                     borderBottomEndRadius: corner ? 10 : 0,
+                 }]}
+             >
+                 <Image
+                     source={icon}
+                     style={{
+                         height: 24,
+                         width: 24,
+                         tintColor: 'white',
+                     }}
+                 />
+                 <Text
+                     style={{
+                         fontSize: 11,
+                         color: 'white',
+                     }}
+                 >
+                     {text}
+                 </Text>
+             </View>
+         </View>
+     )*/
+
 }
 
 export default class IOSSwipeCard extends PureComponent {
@@ -40,35 +86,46 @@ export default class IOSSwipeCard extends PureComponent {
         super(props);
         console.warn('****** SwipeCard constructor props.onDelete: ', props.onDelete);
         this.addLeftBtns(props)
+        this.state = {
+            close:true,
+        }
 
     }
-    addLeftBtns(props){
-        let disabledBtn =props.permission && !props.permission.deleteAccess;
-        let deleteBtn = props.onDelete ? {
-            text: 'حذف',
-            component: (<BtnSwipe noPadding={props.noPadding} disabled={disabledBtn}   corner={props.deleteBtnCorner }  icon={images.ic_delete} color='#e95959' text='حذف'/>),
 
-        onPress: () => {
-            props.onDelete(this.props.data);
-        },
+    addLeftBtns(props) {
+        let disabledBtn = props.permission && !props.permission.deleteAccess;
+        let deleteBtn = props.onDelete ? {
+
+            component: (<BtnSwipe noPadding={props.noPadding} disabled={disabledBtn} corner={props.deleteBtnCorner}
+                                  icon={this.props.deleteIcon || 'apic_delete'}
+                                  color={this.props.deleteColor || '#e95959'} text={this.props.deleteLabel || 'حذف'}/>),
+
+            onPress: () => {
+                props.onDelete(this.props.data);
+            },
             disabled: disabledBtn,
-    } : false;
+        } : false;
         let moreBtn = props.onMore ? {
-            component: (<BtnSwipe noPadding={props.noPadding } corner={props.noPadding && !props.moreBtnCorner ? false: true} icon={ this.props.moreIcon || images.ic_more} color={this.props.moreColor || '#8a7e7e'} text={this.props.moreLabel || 'بیشتر'}/>),
-        onPress: () => {
-            props.onMore(this.props.data);
-        },
+            component: (
+                <BtnSwipe noPadding={props.noPadding} corner={props.noPadding && !props.moreBtnCorner ? false : true}
+                          icon={this.props.moreIcon || 'apic_more'} color={this.props.moreColor || '#8a7e7e'}
+                          text={this.props.moreLabel || 'بیشتر'}/>),
+            onPress: () => {
+                props.onMore(this.props.data);
+            },
             disabled: props.permission && !props.permission.writeAccess,
-    } : false;
+        } : false;
 
         let editBtn = props.onEdit ? {
-            component: (<BtnSwipe noPadding={props.noPadding} icon={this.props.editIcon || images.ic_edit} color='#1CC4AD' text={this.props.editLabel || 'ویرایش'} corner={this.props.editCorner} />),
-        onPress: () => {
-            props.onEdit(this.props.data);
-        },
+            component: (<BtnSwipe noPadding={props.noPadding} icon={this.props.editIcon || 'apic_edit'}
+                                  color={this.props.editColor || niceBlue}
+                                  text={this.props.editLabel || 'ویرایش'} corner={this.props.editCorner}/>),
+            onPress: () => {
+                props.onEdit(this.props.data);
+            },
             disabled: props.permission && !props.permission.writeAccess,
 
-    } : false;
+        } : false;
         this.swipeBtnsLeft = [];
 
         if (deleteBtn) {
@@ -80,12 +137,17 @@ export default class IOSSwipeCard extends PureComponent {
         if (moreBtn) {
             this.swipeBtnsLeft.push(moreBtn);
         }
-    }
-    render() {
 
+    }
+
+    componentDidMount() {
+        setTimeout(()=>this.setState({close:false}),100);
+    }
+
+    render() {
         this.addLeftBtns(this.props);
-        const {title, permission, onItemPress, bgTitleColor = primaryDark, index, idSwipeOpened,disabled} = this.props;
-        const props=this.props;
+        const {bottom, title, permission, onItemPress, bgTitleColor = primaryDark, index, idSwipeOpened, disabled, actionIconStyle,autoClose=false} = this.props;
+        const props = this.props;
         return (
             /*<Swipeout
                 sensitivity={10}
@@ -108,53 +170,62 @@ export default class IOSSwipeCard extends PureComponent {
             <SwipeOut
                 right={this.swipeBtnsLeft}
                 sensitivity={10}
-                autoClose={true}
-                style={[styles.container,{borderTopEndRadius: props.noPadding ? 10: 7, borderBottomEndRadius:props.noPadding ? 10: 7,},this.props.style]}
-                disabled={disabled ||( permission && !permission.deleteAccess && !permission.writeAccess)}
+
+                style={[{
+                    backgroundColor: '#f5f1f1',
+                    marginTop: 8,
+                    borderTopEndRadius: props.noPadding ? 10 : 7,
+                    borderBottomEndRadius: props.noPadding ? 10 : 7,
+                }, this.props.style]}
+                disabled={disabled || (permission && !permission.deleteAccess && !permission.writeAccess)}
                 onOpen={() => {
                     this.props.onOpen(index);
                 }}
                 onClose={() => {
                     this.props.onClose(index);
                 }}
-                close={index !== idSwipeOpened}
+                bottom={bottom}
+                close={
+                   // autoClose? index !== idSwipeOpened:false
+                   this.state.close
+                    //this.props.close
+                }
+                actionIconStyle={actionIconStyle}
             >
                 <TouchableOpacity
                     onPress={onItemPress}
                     disabled={!onItemPress}
                     style={{
-                        borderTopEndRadius: 10,
-                            borderBottomEndRadius: 10,
-                            overflow: 'hidden',
+                        //borderTopEndRadius: 10,
+                        //borderBottomEndRadius: 10,
+                        borderRadius: 10,
+                        overflow: 'hidden',
                     }}
                 >
                     {title && (
-                    <View
-                        style={[styles.title, {backgroundColor: 'black'}]}
-                    >
-                    <Text
-                        style={{
-                        color: 'white',
-                            fontSize:14,
-                    }}
-                    >
-                        {title}
-                    </Text>
-                    </View>
+                        <View
+                            style={[styles.title, {backgroundColor: 'black'}]}
+                        >
+                            <Text
+                                style={{
+                                    color: 'white',
+                                    fontSize: 14,
+                                }}
+                            >
+                                {title}
+                            </Text>
+                        </View>
                     )}
                     {this.props.children}
                 </TouchableOpacity>
             </SwipeOut>
 
-    );
+        );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        //overflow:  'hidden',
-        backgroundColor: '#f5f1f1',
-    },
+
     title: {
         // paddingVertical: 8,
         alignItems: 'center',

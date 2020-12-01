@@ -1,11 +1,11 @@
 import React, {PureComponent} from 'react';
 import {
     Animated,
-    FlatList,
+    FlatList, IconApp,
     Image,
-    Keyboard,
+    Keyboard, KeyboardAvoidingView,
     Modal,
-    Platform,
+    Platform, ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -20,7 +20,7 @@ import {
     overlayColor,
     primaryDark,
     subTextItem,
-    textItem,
+    textItem, transparent,
 } from '../constants/colors';
 
 import images from "../../public/static/assets/images";
@@ -92,9 +92,9 @@ export default class ListMultiSelect extends PureComponent {
         let selectedEntity=[];
         this.state.selectedItems.map((id)=>{
             this.props.items.map((item,index)=>{
-                if(id==item[this.props.idItem]){
+                if(id===item[this.props.idItem]){
                     selectedIndex.push(index);
-                    selectedEntity.push(item)
+                    selectedEntity.push(item);
                 }
             })
         });
@@ -109,7 +109,7 @@ export default class ListMultiSelect extends PureComponent {
         const {
             idItem,
             title,
-            items,
+            items=[],
             search = false,
             validation,
             disabled,
@@ -121,7 +121,9 @@ export default class ListMultiSelect extends PureComponent {
             primaryColor = primaryDark,
             fieldItem,
             numColumns,
+            listFormat
         } = this.props;
+
 
         const animateTranslateY = this.animatedFromBottom.interpolate({
             inputRange: [0, 1],
@@ -138,6 +140,7 @@ export default class ListMultiSelect extends PureComponent {
                 <TouchableOpacity
                     style={[styles.button,this.props.buttonStyle, {
                         flex: 1,
+                        flexDirection:'',
                         opacity: disabled ? .3 : 1,
                         borderColor: disabled ? '#777' : validation ? subTextItem : primaryColor,
                     }]}
@@ -152,78 +155,95 @@ export default class ListMultiSelect extends PureComponent {
                     {selectedItemCustom ? (
                         selectedItemCustom
                     ) : (
-                        <View style={{flexDirection: 'row', flex: 1}}>
-                            { selectedIcon &&
-                            <Image
-                                source={selectedIcon}
-                                style={{
-                                    marginHorizontal: 8,
-                                    marginVertical: 8,
-                                    height: 24,
-                                    width: 24,
-                                    tintColor: subTextItem,
-                                }}
-                            />
+                        <View style={{ flex: 1,width:'100%', flexDirection: 'row', alignItems:'center'}}>
+                            <View style={{ flex: 1,width:'100%', flexDirection: 'row', alignItems:'center'}}>
+                                { selectedIcon &&
+                                <IconApp
+                                    source={selectedIcon}
+                                    style={{
+                                        marginHorizontal: 8,
+                                        marginVertical: 8,
+                                        height: 24,
+                                        width: 24,
+                                        tintColor: subTextItem,
+                                    }}
+                                />
+                                }
+                                <Text
+                                    style={{
+                                        fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
+                                        paddingVertical: 8, marginStart: 8,
+                                    }}>
+                                    {selectedTitle}
+                                </Text>
+                            </View>
+                            {this.props.hideExpandImage!==true &&
+                                <IconApp
+                                    source={'apic_expand'}
+                                    style={{
+                                        height: 30,
+                                        width: 30,
+                                        tintColor: textItem,
+                                        transform: [{rotate: animateExpandRotate}],
+                                    }}
+                                />
                             }
-
-                            <Text
-                                style={{
-                                    fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-                                    paddingVertical: 8, marginStart: 8,
-                                }}>
-                                {selectedTitle}
-                            </Text>
-
                         </View>
                     )}
-
-                    {this.props.hideExpandImage!==true &&
-                    <Animated.Image
-                        source={images.ic_expand}
-                        style={{
-                            height: 24,
-                            width: 24,
-                            tintColor: textItem,
-                            transform: [{rotate: animateExpandRotate}],
-                        }}
-                    />
-                    }
 
                     <Modal
                         animationType="fade"
                         transparent={true}
+                        dialogWidth={global.width}
                         visible={this.state.dialogVisible}
                         presentationStyle="overFullScreen"
-                        onRequestClose={() => {
+                        style={{
+                            position: 'fixed',
+                            bottom:0,
+                            left: 0,
+                            right: 0,
+                        }}
+
+                        onClose={() => {
                             this.animateSnake(false, () => this.setState({dialogVisible: false}));
                         }}
                     >
-                        <View style={{
+                        <View  style={{
+
                             flex: 1,
-                            backgroundColor: overlayColor,
+                            alignItems:'center',
+                            width:global.width,
+
+                            //backgroundColor: 'green',
+                            //height:'100%',
+                            position:'relative'
                         }}>
-                            <TouchableWithoutFeedback
+                           {/* <TouchableWithoutFeedback
                                 onPress={() => this.animateSnake(false, () => this.setState({dialogVisible: false}))}>
                                 <View
                                     style={{
                                         flex: 1,
+                                        width:'100%',
                                         backgroundColor: overlayColor,
                                         opacity: 0.6,
                                         ...StyleSheet.absoluteFillObject,
                                     }}
                                     pointerEvents={'auto'}
                                 />
-                            </TouchableWithoutFeedback>
-                            <Animated.View
+                            </TouchableWithoutFeedback>*/}
+                            <View
                                 style={{
-                                    transform: [{translateY: animateTranslateY}],
+                                    //transform: [{translateY: animateTranslateY}],
                                     borderTopStartRadius: 20,
                                     borderTopEndRadius: 20,
                                     backgroundColor: 'white',
-                                    position: 'absolute',
-                                    bottom: 0,
+                                    width:'100%',
+                                  /*  position: 'absolute',
+                                    bottom: 100,
                                     left: 0,
-                                    right: 0,
+                                    right: 0,*/
+
+
                                 }}
                             >
                                 <View
@@ -231,7 +251,11 @@ export default class ListMultiSelect extends PureComponent {
                                         flexDirection: 'row',
                                         borderBottomWidth: 1,
                                         borderColor: borderSeparate,
+                                        alignItems:'center',
+                                        paddingVertical:10,
                                         flex: 1,
+
+
                                     }}>
 
                                     <TouchableOpacity
@@ -239,28 +263,31 @@ export default class ListMultiSelect extends PureComponent {
                                         style={{
                                             justifyContent: 'center',
                                             paddingHorizontal: 16,
-                                            paddingTop: 30,
-                                            paddingBottom: 21,
+                                           
                                         }}>
-                                        <Image
-                                            source={images.ic_close}
-                                            style={{height: 24, width: 24, tintColor: textItem}}
+                                        <IconApp
+                                            class={'apic_close'}
+                                            style={{
+                                                height: 24,
+                                                width: 24,
+                                               tintColor: textItem
+                                            }}
                                         />
                                     </TouchableOpacity>
 
                                     <Text
                                         style={{
-                                            fontFamily: Platform.OS === 'ios' ? 'IRANYekan-Medium' : 'IRANYekanMedium',
-                                            fontSize: 20,
-                                            marginTop: 24,
-                                            flex: 1,
+                                            fontFamily: 'IRANYekanMedium',
+                                            fontSize: 14,
+                                          
                                         }}
                                     >{title}</Text>
 
                                     <Text
                                         style={{
+                                            flex:1,
                                             fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-                                            fontSize: 12,
+                                            fontSize: 11,
                                             color: drawerItem,
                                             marginTop: 31,
                                             marginEnd: 16,
@@ -271,90 +298,98 @@ export default class ListMultiSelect extends PureComponent {
                                     <SearchBox placeHolder="جستجو"/>
                                 )}
 
-                                <TouchableOpacity
-                                    onPress={() => this.selectAll(items)}
-                                    style={{}}
-                                >
-                                    <View style={styles.row}>
-                                        <Image
-                                            source={this.state.selectedItems.length === items.length ? images.checked_icon : images.unchecked_icon}
-                                            style={{
-                                                height: 24,
-                                                width: 24,
-                                                tintColor: this.state.selectedItems.length === items.length ? primaryDark : checkIcon,
-                                            }}
-                                        />
+                                    <TouchableOpacity
+                                        onPress={() => this.selectAll(items)}
+                                        style={{}}
+                                    >
+                                        <View style={styles.row}>
+                                            <Image
+                                                source={this.state.selectedItems.length === items.length ? images.checked_icon : images.unchecked_icon}
+                                                style={{
+                                                    height: 24,
+                                                    width: 24,
+                                                    //tintColor: this.state.selectedItems.length === items.length ? primaryDark : checkIcon,
+                                                }}
+                                            />
 
-                                        <Text style={{
-                                            flex: 1,
-                                            alignSelf: 'flex-start',
-                                            fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-                                            fontSize: 12,
-                                            color: drawerItem,
-                                            marginStart: 16,
-                                            marginVertical: 10,
-                                        }}>انتخاب همه</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                            <Text style={{
+                                                alignSelf: 'flex-start',
+                                                fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
+                                                fontSize: 11,
+                                                color: drawerItem,
+                                                marginStart: 16,
+                                                marginVertical: 10,
+                                            }}>انتخاب همه</Text>
+                                        </View>
+                                    </TouchableOpacity>
 
-                                <FlatList
-                                    keyExtractor={(item, index) => index.toString()}
-                                    data={items}
-                                    numColumns={numColumns}
-                                    extraData={this.state.selectedItems.length}
-                                    renderItem={({item,index}) => (
-                                        <TouchableOpacity
-                                            onPress={() => this.onCheck(item[idItem],index)}
-                                            style={[{flex:1},this.props.listStyle]}
-                                        >
-                                            {itemComponent ? (
-                                                itemComponent(item,index,this.state.selectedItems.includes(item[idItem]))
-                                            ) : (
-                                                <View style={styles.row}>
-                                                    <Image
-                                                        source={this.state.selectedItems.includes(item[idItem]) ? images.checked_icon : images.unchecked_icon}
-                                                        style={{
-                                                            height: 24,
-                                                            width: 24,
-                                                            tintColor: this.state.selectedItems.includes(item[idItem]) ? primaryDark : checkIcon,
-                                                        }}
-                                                    />
+                                <ScrollView style={{maxHeight:global.height/1.8}}>
+                                    <View style={this.props.listStyle}>
+                                        <FlatList
+                                            keyExtractor={(item, index) => index.toString()}
+                                            data={items}
+                                            style={{}}
+                                            listFormat={listFormat}
+                                            numColumns={numColumns}
+                                            extraData={this.state.selectedItems.length}
+                                            style={[{maxHeight:global.height/2.5},]}
+                                            renderItem={({item,index}) => (
+                                                <TouchableOpacity
+                                                    onPress={() => this.onCheck(item[idItem],index)}
+                                                    style={[{flex:1,}]}
+                                                >
+                                                    {itemComponent ? (
+                                                        itemComponent(item,index,this.state.selectedItems.includes(item[idItem]))
+                                                    ) : (
+                                                        <View style={styles.row}>
+                                                            <Image
+                                                                source={this.state.selectedItems.includes(item[idItem]) ? images.checked_icon : images.unchecked_icon}
+                                                                style={{
+                                                                    height: 24,
+                                                                    width: 24,
+                                                                    tintColor: this.state.selectedItems.includes(item[idItem]) ? primaryDark : checkIcon,
+                                                                }}
+                                                            />
 
-                                                    <Text style={{
-                                                        flex: 1,
-                                                        alignSelf: 'flex-start',
-                                                        fontSize:12,
-                                                        color: drawerItem,
-                                                        marginStart: 16,
-                                                        marginVertical: 16,
-                                                    }}>{item[fieldItem]}</Text>
-                                                </View>
+                                                            <Text style={{
+                                                                alignSelf: 'flex-start',
+                                                                fontSize: 12,
+                                                                color: drawerItem,
+                                                                padding:20,
+
+                                                            }}>{item[fieldItem]}</Text>
+                                                        </View>
+                                                    )}
+                                                </TouchableOpacity>
                                             )}
-                                        </TouchableOpacity>
-                                    )}
-                                />
+                                        />
+                                    </View>
+                                </ScrollView>
 
-
+                                
                                 <TouchableOpacity
                                     style={{
                                         backgroundColor: primaryDark,
                                         alignItems: 'center',
                                         margin: 24,
                                         borderRadius: 10,
+                                        marginBottom:20,
                                     }}
                                     onPress={this.onAccept}
                                 >
                                     <Text style={{
                                         fontFamily: Platform.OS === 'ios' ? 'IRANYekanFaNum-Bold' : 'IRANYekanBold(FaNum)',
-                                        fontSize:14,
-                                        paddingVertical: 10,
+                                        fontSize: 14,
+                                        paddingVertical: 13,
                                         color: 'white',
                                     }}>ثبت</Text>
                                 </TouchableOpacity>
 
-                            </Animated.View>
+                            </View>
                         </View>
                     </Modal>
+
+
                 </TouchableOpacity>
             </View>
 
@@ -372,12 +407,13 @@ ListMultiSelect.defaultProps = {
     fieldItem: 'persianName',
 };
 
+
 const styles = StyleSheet.create({
     row: {
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        marginHorizontal: 24,
+        marginHorizontal: 10,
         borderBottomWidth: 1,
         borderColor: borderSeparate,
         paddingStart: 8,

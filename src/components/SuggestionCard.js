@@ -10,6 +10,7 @@ import ShowDateTime from './ShowDateTime';
 import ImageCacheProgress from "./ImageCacheProgress";
 import FastImage from "../react-native/FastImage";
 import Progress from "../react-native/Progress";
+import MoreText from '../react-native/MoreText';
 export default class SuggestionCard extends PureComponent {
     constructor() {
         super();
@@ -37,7 +38,7 @@ export default class SuggestionCard extends PureComponent {
                 permission={permission}
                 onDelete={() => this.props.onSwipeRemove(this.props.item)}
                 //onMore={() => alert('به زودی امکان پاسخ اضافه خواهد شد')}
-                moreIcon={images.ic_reply}
+                moreIcon={'apic_reply'}
                 moreColor={gray}
                 moreLabel={'پاسخ'}
                 index={index}
@@ -45,9 +46,10 @@ export default class SuggestionCard extends PureComponent {
                 }}
                 onOpen={id => this.props.onOpenSwipe(id)}
                 idSwipeOpened={idSwipeOpened}
+                actionIconStyle={{bottom:5,}}
             >
                 <View style={{padding: 16}}>
-                    <View style={{flex:1,height: 40,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+                    <View style={{flex:1,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
                         {!this.state.imageExists && (
                             <Image
                                 source={images.default_ProPic}
@@ -91,14 +93,14 @@ export default class SuggestionCard extends PureComponent {
                         />
                         <View style={{flex:1,marginHorizontal:10}} >
                             <Text style={{
-                                alignSelf: 'flex-start', fontSize:14, color: '#5D4A4A', fontFamily:
+                                alignSelf: 'flex-start', fontSize: 14, color: '#5D4A4A', fontFamily:
                                     Platform.OS === 'ios'
                                         ? 'IRANYekan-ExtraBold'
                                         : 'IRANYekanExtraBold',
                             }}>{Name}</Text>
                             <Text
                                 style={{
-                                    alignSelf: 'flex-start', fontSize: 10, color: '#BFACAC',
+                                    alignSelf: 'flex-start', fontSize: 9, color: '#BFACAC',
                                 }}
                             >
                                 {RoleName} واحد {UnitNumber}
@@ -114,15 +116,11 @@ export default class SuggestionCard extends PureComponent {
 
                     </View>
 
-
-
-                    <Text
-                        style={{
-                            alignSelf: 'flex-start',marginStart:15, fontSize:12, color: '#5D4A4A', marginTop: 8, marginBottom: 5,
-                        }}
-                    >
-                        {Description}
-                    </Text>
+                    <MoreText
+                        style={{ alignSelf: 'flex-start',marginStart:15, fontSize: 12, color: '#5D4A4A', marginTop: 8, marginBottom: 5}}
+                        shortLength={150}>
+                       {Description}
+                     </MoreText>
 
 
                 </View>

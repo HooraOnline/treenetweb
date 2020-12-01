@@ -18,12 +18,18 @@ import Alert  from './Alert';
 import Modal  from './Modal';
 import Easing  from './Easing';
 import KeyboardAwareScrollView  from './KeyboardAwareScrollView';
-import I18nManager  from './I18nManager';
+import SwipeItem  from './SwipeItem';
+import LinearGradient  from './LinearGradient';
+import ImageChacheProgress  from './ImageChacheProgress';
+import ActivityIndicator  from './ActivityIndicator';
+//import I18nManager  from './I18nManager';
 import ImageBackground  from './ImageBackground';
 import Progress  from './Progress';
 import BgImageChacheProgress  from './BgImageChacheProgress';
 import SectionList  from './SectionList';
-import DateTime  from './DateTime';
+import IconApp  from './IconApp';
+import MoreText  from './MoreText';
+
 export {
     View,
     ScrollView,
@@ -45,11 +51,16 @@ export {
     Modal,
     KeyboardAwareScrollView,
     Easing,
-    I18nManager,
+    //I18nManager,
     ImageBackground,
     Progress,
     BgImageChacheProgress,
     SectionList,
-    DateTime
+    IconApp,
+    SwipeItem,
+    LinearGradient,
+    ImageChacheProgress,
+    ActivityIndicator,
+    MoreText,
 
 }
