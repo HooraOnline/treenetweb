@@ -249,23 +249,23 @@ function t2j(date, f) {
     let milisecend = now - target;
     let m = milisecend / 60000;
     if (m < 1)
-      return 'جدیدا';
+    return Math.round(m) + 's';
     if (m < 60)
-      return Math.round(m) + ' دقیقه پیش';
+      return Math.round(m) + 'm';
     let h = m / 60;
     if (h < 24)
-      return Math.round(h) + ' ساعت پیش';
+      return Math.round(h) + 'h';
     let day = h / 24;
     if (day < 7)
-      return Math.round(day) + ' روز پیش';
+      return Math.round(day) + 'd';
     let w = day / 7;
     if (w < 4)
-      return Math.round(w) + ' هفته پیش';
+      return Math.round(w) + 'w';
     let month = day / 30;
     if (month < 12)
-      return Math.round(month) + ' ماه پیش';
+      return Math.round(month) + 'mo';
     let year = month / 12;
-    return Math.round(year) + ' سال پیش';
+    return Math.round(year) + 'y';
   };
   String.prototype.timeToNow = function () {
     let target;

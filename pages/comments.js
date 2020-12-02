@@ -8,11 +8,13 @@ import {
     bgScreen,
     bgWhite,
     border,
+    borderGray,
     borderLight,
     gray,
     itemListText,
     primaryDark,
     subTextItem,
+    textDisabled,
     textGray,
     textItem, textItemBlack, yellowmin
 } from "../src/constants/colors";
@@ -38,7 +40,7 @@ export default class comments extends Component {
         super();
         //globalState.changeStatusBarColor(primaryDark);
         //StatusBar.setTranslucent(false);
-
+        this.commentInput = React.createRef();
         this.state = {
             showAccountSelect: false,
             loadingBalance: false,
@@ -82,14 +84,18 @@ export default class comments extends Component {
             });
     };
 
-    addComment = (commentId) => {
+    addComment = () => {
         this.setState({ loading: true })
-        const comment = { postId: this.postId, text: this.state.text };
-        if(commentId) comment.parentId=commentId;
+        const text = this.state.replayId ? ('@' + this.state.replayId + this.state.text) : this.state.text
+        const comment = { postId: this.postId, text: text };
+        if (this.state.replayId) {
+
+            comment.commentId = this.state.replayId;
+        }
 
         Api.post('Comments/addComment', comment)
             .then(comment => {
-                this.setState({ text: '' })
+                this.setState({ text: '', replayId: null, replyTo: '' })
                 this.getComments({ comment: comment })
             }).catch((error) => {
                 showMassage('خطایی رخ داد، دوباره تلاش کنید.');
@@ -102,6 +108,12 @@ export default class comments extends Component {
         if (e.keyCode === 13) {
             this.addComment();
         }
+    }
+
+    onReplay = (item, fatherComment) => {
+
+        this.setState({ replyTo: '@' + item.member.userKey + ' ', replayId: fatherComment.id });
+        this.commentInput.current.textInput.current.childNodes[0].focus();
     }
 
     render() {
@@ -126,9 +138,11 @@ export default class comments extends Component {
                         />
                         <View style={{ flex: 1, backgroundColor: gray, padding: 5, justifyContent: 'center' }}>
                             <View style={{ flex: 1, flexDirection: 'row', backgroundColor: bgWhite, borderRadius: 16, alignItems: 'center' }}>
+                                <Text dir='ltr' style={{ color: bgWhite, fontSize: 12, color: border, fontWeight: 900, marginHorizontal: 10 }}>{this.state.replyTo}</Text>
                                 <FloatingLabelTextInput
                                     //dir={'ltr'}
                                     //reverse={persistStore.isRtl}
+                                    ref={this.commentInput}
                                     style={{ flex: 1, paddingHorizontal: 5, paddingVertical: 5, paddingTop: 7 }}
                                     placeholder={translate("متن کامنت")}
                                     value={this.state.text}
@@ -156,11 +170,13 @@ export default class comments extends Component {
 
                                 />
                                 <TouchableOpacity
-                                    style={{ width: 50, alignItems: 'center', justifyContent: 'center', padding: 7, margin: 0, borderRadius: 12 }}
+                                    disabled={!this.state.text}
+                                    style={{ alignItems: 'center', justifyContent: 'center', padding: 7, margin: 0, borderRadius: 12 }}
                                     onPress={this.addComment}
                                 >
-                                    <Text style={{ color: bgWhite, fontSize: 12, color: primaryDark, fontWeight: 900 }}>ارسال</Text>
+                                    <Text style={{ color: this.state.text ? primaryDark : textDisabled, fontSize: 11, fontWeight: 900 }}>ارسال</Text>
                                 </TouchableOpacity>
+
                             </View>
 
                         </View>
@@ -190,7 +206,7 @@ export default class comments extends Component {
                 }>
                 <View style={{ flex: 1, paddingBottom: 16, paddingTop: 60 }}>
                     {this.state.post && (
-                        <CommentList post={this.state.post} onReplay={this.addComment}/>
+                        <CommentList post={this.state.post} onReplay={this.onReplay} />
                     )}
 
                 </View>
@@ -201,14 +217,70 @@ export default class comments extends Component {
     }
 
 }
-
-export const CommentList = observer(props => {
-
+export const CommentCard = observer(props => {
+    debugger
     const [loading, setloading] = useState(false);
+    const { profileImage, userKey, avatar } = props.comment.member;
+    const {text,cdate}= props.comment;
+
+    const profileUrl = getFileUri('member', profileImage);
+  
 
     useEffect(() => {
 
     }, []);
+
+
+    return (
+        
+         <View>
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, marginTop: 10 }}>
+                    <TouchableOpacity
+                        onPress={() => location.pathname = userKey}
+                        style={{}}>
+                        <Image
+                            source={profileUrl}
+                            style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 20,
+                            }}
+                        />
+                    </TouchableOpacity>
+
+                    <View style={{ flexDirection: 'row', padding: 5, flex: 1, alignItems: 'center' }}>
+                        <TouchableOpacity
+                            onPress={() => location.pathname = userKey}
+                            style={{}}>
+                            <Text style={{ fontSize: 12, fontWeight: 800, }}>{userKey}</Text>
+                            {/* <Text style={{ fontSize: 9, color: textItem }}>{avatar}</Text> */}
+                        </TouchableOpacity>
+                        <Text style={{ fontSize: 10, color: textItem, marginHorizontal: 5 }}>{text}</Text>
+                    </View>
+
+                </View>
+                <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 24,marginVertical:10 }} >
+                    <Text style={{ fontSize: 10, color: subTextItem, }}>{cdate.timeToNow()}</Text>
+                    <TouchableOpacity style={{ marginHorizontal: 10 }}
+                        onPress={() => props.onReplay(props.comment, (props.mainComment || props.comment))}>
+                        <Text style={{ fontSize: 10, color: subTextItem, fontWeight: 800 }}>پاسخ</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+    )
+});
+
+export const CommentList = observer(props => {
+    debugger
+    const [loading, setloading] = useState(false);
+    const [flag, setFlag] = useState();
+
+    useEffect(() => {
+
+    }, []);
+
+    
 
     return (
         <FlatList
@@ -257,43 +329,29 @@ export const CommentList = observer(props => {
             renderItem={({ item, index }) => {
                 if (!item.member)
                     return null;
-                let { profileImage, userKey, avatar } = item.member;
-                const profileImg = getFileUri('member', profileImage);
+
 
                 return (
                     <View style={{ flex: 1 }}>
-                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, marginTop: 15 }}>
-                            <TouchableOpacity
-                                onPress={() => location.pathname = item.member.userKey}
-                                style={{}}>
-                                <Image
-                                    source={profileImg}
-                                    style={{
-                                        width: 40,
-                                        height: 40,
-                                        borderRadius: 20,
-                                    }}
-                                />
-                            </TouchableOpacity>
-
-                            <View style={{ flexDirection: 'row', padding: 5, flex: 1, alignItems: 'center' }}>
-                                <TouchableOpacity
-                                    onPress={() => location.pathname = item.member.userKey}
-                                    style={{}}>
-                                    <Text style={{ fontSize: 12, fontWeight: 800, }}>{userKey}</Text>
-                                    {/* <Text style={{ fontSize: 9, color: textItem }}>{avatar}</Text> */}
+                        <CommentCard comment={item}/>
+                       
+                        {item.comments.length && (
+                            <View>
+                                <TouchableOpacity onPress={() =>{
+                                     
+                                      setFlag(flag!==index?index:undefined);
+                                    }}>
+                                    <Text style={{ fontSize: 12, color: subTextItem, marginHorizontal: 24 }}>_______{flag==index ? 'پنهان کردن پاسخ ها' : 'مشاهده پاسخ ها'}({item.comments.length})_______</Text>
                                 </TouchableOpacity>
-                                <Text style={{ fontSize: 10, color: textItem, marginHorizontal: 5 }}>{item.text}</Text>
-                            </View>
 
-                        </View>
-                        <View style={{ flex: 1, flexDirection: 'row', margin: 24 }} >
-                            <Text style={{ fontSize: 9, color: subTextItem, }}>{item.cdate.timeToNow()}</Text>
-                            <TouchableOpacity style={{marginHorizontal:10}} 
-                            onPress={()=>props.onReplay(item.id)}>
-                                <Text style={{ fontSize: 9, color: subTextItem, }}>پاسخ</Text>
-                            </TouchableOpacity>
-                        </View>
+                                {flag==index && item.comments.map(reply => (
+                                    <View style={{ flex: 1, marginRight: 24 }} >
+                                        <CommentCard comment={reply} mainComment={item}/>
+                                       
+                                    </View>
+                                ))}
+                            </View>
+                        )}
                     </View>
                 )
             }}

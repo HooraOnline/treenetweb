@@ -24,9 +24,9 @@ export default class Index extends Component {
            
 
         }
-       /* else if(persistStore.userRegisterbefor){
+       else if(persistStore.userRegisterbefor){
             navigation.replace('login');
-        }*/
+        }
         else if (invitationCode) {
             //navigation.replace('autoRegister', {regentCode: invitationCode});
             navigation.replace('register', {regentCode: invitationCode});
