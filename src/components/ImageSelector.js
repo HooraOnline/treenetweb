@@ -14,6 +14,7 @@ import {getFileDownloadURL, uploadFileByFormData} from '../utils';
 import {fab, bgScreen, subTextItem, textItem} from "../constants/colors";
 import {AlertMessage, OverlayModal,} from "./index";
 import FileInput from "../react-native/FileInput";
+import { getFileUri, postQuery, upload } from '../../dataService/apiService';
 
 
 export default class ImageSelector extends PureComponent {
@@ -36,23 +37,31 @@ export default class ImageSelector extends PureComponent {
         this.props.onRemoveImage && this.props.onRemoveImage(this.state.selectedImage || this.state.image);
     }
 
-   uploadFile(fileData){
-   
-      globalState.showBgLoading();
-       uploadFileByFormData(fileData)
-          .then(result => {
-              const fileName = result.fileName;
-              console.log(fileName);
-              this.setState({
-                  image: fileName,
-              });
-              this.props.onUplodedFile && this.props.onUplodedFile(fileName);
-          })
-          .finally(() =>{ 
-             
-              globalState.hideBgLoading();
-            });
-  }
+
+
+  uploadFile(files){
+    globalState.showBgLoading();
+     upload(files, this.props.folderName, (r)=>{console.log(r)})
+         .then(result => {
+             console.log(result);
+             if(result.result && result.result.fields && result.result.fields.name && result.result.fields.name[0]){
+                 const fileName=result.result.fields.name[0];
+                 this.setState({image: fileName,});
+              
+               
+                 if(this.props.image!=='defaultProfileImage.png'){
+                    postQuery('containers/removeProfileImage',{folder:this.props.folderName,file:this.props.image});
+                 }
+               
+                 this.props.onUplodedFile && this.props.onUplodedFile(fileName);
+                 
+                
+             }
+         })
+         .finally(() => globalState.hideBgLoading());
+
+}
+
 
 
     renderSelectBtn() {
@@ -79,24 +88,30 @@ export default class ImageSelector extends PureComponent {
     }
 
     render() {
-        const {onRender,style,canUpload=true,hideDeleteBtn,image, noImage, imageStyle, children, renderContent, selectBtnStyle,blureColor,blurRadius} = this.props;
+        const {folderName,byClickSelect=true,onRender,style,canUpload=true,hideDeleteBtn,image, noImage, imageStyle, children, renderContent, selectBtnStyle,blureColor,blurRadius} = this.props;
         onRender && onRender(this);
         this.state.image=this.state.image || image;
 
         return (
-            <View style={{ position: 'relative'}}>
+            <View style={{ position: 'relative'}}  
+               onClick={() => {
+                  if(canUpload && byClickSelect){
+                       this.fileInput.openSelector();
+                  } 
+                }}>
                 <BgImageChacheProgress
                     style={{...style, 
                          backgroundColor:blureColor  //'rgba(166, 214, 208, .8)',
                         }}
                     imageStyle={imageStyle}
                     resizemode="cover"
-
-                    source={this.state.selectedImage?this.state.selectedImage: this.state.image ? {
+                  
+                    source22={this.state.selectedImage?this.state.selectedImage: this.state.image ? {
                         imageName:this.state.image,
-                        uri: getFileDownloadURL(this.state.image),
+                        uri:getFileUri(folderName,this.state.image) ,
                         headers: {Authorization: 'Bearer ' + persistStore.token},
                     } : noImage}
+                    source={this.state.selectedImage?this.state.selectedImage: image ? getFileUri(folderName,image) : noImage}
                     //source={this.state.selectedImage?this.state.selectedImage:noImage}
                     indicator={() => <Progress.Circle
                         progress={this.state.imageProgress}
@@ -137,17 +152,16 @@ export default class ImageSelector extends PureComponent {
                         ref={fileInput=>this.fileInput=fileInput}
                         style={{zIndex:2 }}
                         accept={'image/jpeg, image/png'}
-                        onSelectFile={(formData,file0,url,filebase64)=>{
-                           
+                        onSelectFile={(files,formData,file0,url,filebase64)=>{
+                            
                             this.props.onSelectFile && this.props.onSelectFile(formData,file0,url,filebase64);
                             this.setState({selectedImage:url});
                             if(this.props.autoUpload){
-                                this.uploadFile(formData);
+                                this.uploadFile(files);
                             }
                         }}
                     >
-                       
-                        {( (!this.state.selectedImage && !this.state.image) || this.props.showSelectBtnAlways) ?(
+                        {( (!this.state.selectedImage && !this.state.image && !byClickSelect) || this.props.showSelectBtnAlways) ?(
                             <TouchableOpacity
                                 //onPress={() => this.setState({showImageTypeSelector: true})}
                                 style={selectBtnStyle || {

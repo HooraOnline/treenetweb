@@ -19,7 +19,7 @@ import {
     textItem, yellowmin
 } from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
-import {BgImageChacheProgress, FlatList, Text, TouchableOpacity, View,} from "../src/react-native";
+import {BgImageChacheProgress, FlatList, IconApp, Text, TouchableOpacity, View,} from "../src/react-native";
 
 import {getFileUri, getUserSubsetApi, logoutApi, postQuery} from "../dataService/apiService";
 import {observer} from "mobx-react";
@@ -536,7 +536,7 @@ export const UserPosts = observer(props => {
                 style={{justifyContent:'center'}}
                 keyExtractor={(item, index) => index.toString()}
                 data={posts}
-                flexWrap
+                listFormat='wrap'
                 ListEmptyComponent={null}
 
                 renderItem={({item, index}) =>{
@@ -551,7 +551,9 @@ export const UserPosts = observer(props => {
                                     height:itemWidth,
                                     borderRadius:4,
                                     margin:2,
-                                    backgroundColor:textGray
+                                    backgroundColor:textGray,
+                                    borderColor:borderLight,
+                                    borderWidth:0.4,
                                 }}
                                 folderName={'post'}
                                 onUplodedFile={(fileName) => {
@@ -572,17 +574,17 @@ export const UserPosts = observer(props => {
                                 noImage={images.default_ProPic}
                                 hideDeleteBtn={true}
                             >
-                                <View style={{flex:1,width:'100%', height:'100%',justifyContent:'center',alignItems:'center'}}>
-                                <Image
-                                    source={images.ic_addCircle}
+                                <View style={{flex:1,width:'100%', height:'100%',justifyContent:'center',alignItems:'center',backgroundColor:'gray'}}>
+                                <IconApp
+                                    class={'apic_addcircle'}
                                     style={{
-                                        marginTop:'25%',
+                                        tintColor:bgWhite,
                                         width:50,
                                         height:50,
 
                                     }}
                                 />
-                                    <Text style={{fontSize:10,}} >پست جدید</Text>
+                                    <Text style={{fontSize:11,color:bgWhite}} >پست جدید</Text>
                                 </View>
                             </ImageSelector>
                         )

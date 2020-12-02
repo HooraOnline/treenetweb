@@ -171,7 +171,7 @@ export default class RegisterPassword extends Component {
     }
     onSuccessLogin=(user)=>{
        global.width=null;//reset new panel width
-       navigation.replace('/registerYourName');
+       navigation.replace('/invitationCard');
     }
 
 

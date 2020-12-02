@@ -125,7 +125,11 @@ export default class view_post extends Component {
                         <View style={{flex:1,flexDirection:'row'}}>
                             <IoMdHeartEmpty size={25} style={{margin:10}}/>
                             <IoMdShare size={25} style={{margin:10}}/>
-                            <FaRegCommentDots size={25} style={{margin:10}}/>
+                            <FaRegCommentDots size={25} style={{margin:10}} onClick={()=>{
+                                           
+                                           navigation.navigate('comments',{postId:post.id});
+                                           
+                                       }}/>
 
                         </View>
                     </View>

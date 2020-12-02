@@ -21,7 +21,7 @@ import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 import TextInput from "../src/react-native/TextInput";
 
 
-export default class registerYourName extends Component {
+export default class invitationCard extends Component {
     constructor() {
         super();
            
@@ -149,7 +149,8 @@ export default class registerYourName extends Component {
         const data={profileImage:fileName}
         postQuery('Members/me/setProfileImage',data)
             .then(res=>{
-                profileImage:res.profileImage;
+               
+                pStore.cUser.profileImage=res.profileImage
                 this.setState({loading:false});
             })
             .catch(err=>{
@@ -198,36 +199,40 @@ export default class registerYourName extends Component {
                         marginTop:24,
                         minWidth:300,
                     }}>
-                        <View style={{}}>
-                            <ImageSelector
-                                style={{
-                                    borderWidth: 1,
-                                    borderColor: orange1,
-                                    height: 100,
-                                    width: 100,
-                                    borderRadius: 50,
-                                    alignSelf: 'center'
-                                }}
-                                folderName={'member'}
-                                canUpload={true}
-                                autoUpload={true}
-                                imageStyle={{height:100,width:100,borderRadius:50}}
-                                image={pStore.cUser.profileImage}
-                                noImage={images.default_ProPic}
-                                hideDeleteBtn={true}
-                                //onrender={(imageSelector)=>imageSelector.setState({image:this.state.userImage})}
-                                onUplodedFile={(fileName)=>{
+                        <View style={{alignItems:'center'}}>
+                        
+                        <ImageSelector
+                            style={{
+                                borderWidth: 1,
+                                borderColor: orange1,
+                                height: 100,
+                                width: 100,
+                                borderRadius: 50,
+                                alignSelf: 'center'
+                            }}
+                            imageStyle={{height:100,width:100,borderRadius:50}}
+                            canUpload={true}
+                            autoUpload={true}
+                            hideDeleteBtn={true}
+                            //blurRadius={50}
+                            //blureColor='rgba(0, 0, 0, 1)'
+                            image= {pStore.cUser.profileImage}
+                            noImage={images.default_ProPic}
+                            //noImage={images.bg_addphoto}
+                            folderName='member'
+                            onUplodedFile={(fileName)=>{
 
-                                    this.setState({image: fileName});
-                                    this.setProfileImage(fileName);
-                                }}
-                                onRemoveImage={(fileName)=>{
-                                    this.setState({image: null});
-                                }}
-                                onSelectFile={()=>{
-                                    this.setState({profileImageValidation:true})
-                                }}
-                            />
+                                this.setState({image: fileName});
+                                this.setProfileImage(fileName);
+                            }}
+                            onRemoveImage={(fileName)=>{
+                                this.setState({image: null});
+                            }}
+                            onSelectFile={()=>{
+                                this.setState({profileImageValidation:true})
+                            }}>
+
+                            </ImageSelector>       
                              <Text
                                 style={{
                                     alignItems: 'center',
@@ -407,7 +412,7 @@ export default class registerYourName extends Component {
                                     //labelAlign={'left'}
                                     //reverse={persistStore.isRtl}
                                     placeholder={translate('age')}
-                                    style={{flex: 1, marginTop: 20}}
+                                    style={{flex: 1, marginTop: 5}}
                                     labelStyle={{fontSize: 12,color: textItem}}
                                     editable={true}
                                     multiline={false}
@@ -476,17 +481,10 @@ export default class registerYourName extends Component {
                                     />
                                 </View>
                                 <View id='form' style={{width:'100%',maxWidth:500,marginTop:10}}   >
-                                    <View dir={"ltr"} style={{
-                                        flexDirection: 'row',
-                                        marginTop: 10,
-                                        borderColor: this.state.emailValidation?bgSuccess :orange1,
-                                        borderWidth: 1,
-                                        borderRadius: 8,
-                                        backgroundColor: bgWhite,
-                                    }}>
+                                   
                                         <FloatingLabelTextInput
-                                            labelAlign={'left'}
-                                            dir={'ltr'}
+                                           // labelAlign={'left'}
+                                           // dir={'ltr'}
                                             reverse={persistStore.isRtl}
                                             style={{flex: 1, paddingHorizontal: 5, paddingVertical: 5, paddingTop: 7}}
                                             placeholder={translate("fastRegister_email_address")}
@@ -515,15 +513,18 @@ export default class registerYourName extends Component {
                                                 paddingBottom: 10,
                                                 //textAlign: 'left',
                                             }}
-                                            underlineSize={0}
+                                            underlineColor={
+                                                this.state.emailValidation ? bgSuccess : lightRed
+                                            }
                                             multiline={false}
                                             maxLength={100}
                                             //autoFocus={true}
                                             returnKeyType="done"
                                         />
 
-                                    </View>
+                                   
                                     <FloatingLabelTextInput
+                                       floatingLabelEnable={true}
                                         labelAlign={'left'}
                                         placeholder={translate('یک جمله کوتاه در مورد تخصص یا هدفتان در ترینتگرام')}
                                         style={{flex: 1, marginTop: 20}}
@@ -531,7 +532,7 @@ export default class registerYourName extends Component {
                                         editable={true}
                                         multiline={false}
                                         maxLength={50}
-                                        //floatingLabelEnable={true}
+                                      
                                         keyboardType="default"
                                         returnKeyType="done"
                                         numberOfLines={1}
@@ -559,7 +560,7 @@ export default class registerYourName extends Component {
                                         highlightColor={primaryDark}
                                         value={this.state.avatar}
                                     />
-                                    <Text style={{marginTop:10, fontSize:10,color:textItemBlack,textAlign:'justify',}} > در تکست باکس بالا  می توانید یک جمله کوتاه در مورد تخصص، کسب و کار یا هدفتان در ترینتگرام برای دیگران بنویسید. مثال:عضو فعال ترینتگرام یا فروشنده لوازم آرایشی یا مثلا خدمات بازاریابی ایران تبلیغ</Text>
+                                    <Text style={{marginTop:10, fontSize:10,color:textItemBlack,textAlign:'justify',}} > در تکست باکس بالا بجای 'عضو فعال ترینتگرام'  می توانید یک جمله کوتاه در مورد تخصص، کسب و کار یا هدفتان در ترینتگرام برای دیگران بنویسید. مثال: فروشنده لوازم آرایشی اصل یا مثلا متخصص تعمیرات لوازم برقی</Text>
                                    {/* <Text style={{fontSize:12}} >چند مثال </Text>
                                     <Text style={{fontSize:12}} >تبلیغ کالای شما در شبکه ۱۰۰ هزار نفری من </Text>
                                     <Text style={{fontSize:12}} >متخصص تعمیرات لوازم برقی</Text>

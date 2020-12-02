@@ -8,6 +8,8 @@ class MyDocument extends Document {
         <html lang="en">
         <Head>
           <meta charSet="UTF-8"/>
+          <link rel="stylesheet" href="../static/assets/iconfont.css"/>
+          
           <link rel="icon" href="../static/logo.png"/>
           <meta name="description" content={ 'Build Your big network rapidly.'}/>
           <meta name="viewport" content="width=device-width, initial-scale=1"/>

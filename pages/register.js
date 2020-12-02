@@ -17,7 +17,7 @@ import {
     textRed
 } from "../src/constants/colors";
 import { BgImageChacheProgress, Image, Text, TouchableOpacity, View, Progress } from "../src/react-native";
-import { ListDialogPopUp } from "../src/components";
+import { ImageSelector, ListDialogPopUp } from "../src/components";
 import { getFileUri, getUserSubsetApi, postQuery } from "../dataService/apiService";
 import { persistStore, pStore, userStore } from "../src/stores";
 import { observer } from "mobx-react";
@@ -30,6 +30,7 @@ export default class register extends Component {
         this.state = {
             loading: false,
             followersNumber:0,
+            image:'1606895580342.jpg'
         };
 
 
@@ -229,7 +230,7 @@ export default class register extends Component {
                                         </View>
                                         <View style={{ alignItems: 'center', paddingHorizontal: 15 }}>
                                         <Text style={{ fontSize: 12 }}>عضو</Text>
-                                            <Text style={{ fontSize: 12 }}>{pStore.branchesCount+this.state.followersNumber+pStore.leavesCount}</Text>
+                                            <Text style={{ fontSize: 12 }}>{pStore.branchesCount+this.state.followersNumber+pStore.leavesCount+1}</Text>
                                         </View>
                                         {/* <View style={{alignItems: 'center', paddingHorizontal: 15}}>
                                             <Text style={{fontSize: 12}}>عضو</Text>
@@ -349,6 +350,37 @@ export default class register extends Component {
                                 </Text>
                         </TouchableOpacity>
 
+                        {/* <ImageSelector
+                            style={{
+                                borderWidth: 1,
+                                borderColor: orange1,
+                                height: 100,
+                                width: 100,
+                                borderRadius: 50,
+                                alignSelf: 'center'
+                            }}
+                            imageStyle={{height:100,width:100,borderRadius:50}}
+                            canUpload={true}
+                            autoUpload={true}
+                            hideDeleteBtn={true}
+                            //blurRadius={50}
+                            //blureColor='rgba(0, 0, 0, 1)'
+                            image= {this.state.image}
+                            noImage={images.default_ProPic}
+                            //noImage={images.bg_addphoto}
+                            folderName='member'
+                            onUplodedFile={(fileName)=>{
+
+                                this.setState({image: fileName});
+                                
+                            }}
+                            onRemoveImage={(fileName)=>{
+                                this.setState({image: null});
+                            }}
+                            onSelectFile={()=>{
+                                this.setState({imageValidation:true})
+                            }}
+                        />  */}
 
                         <Text
                             style={{

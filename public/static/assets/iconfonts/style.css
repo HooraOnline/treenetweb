@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Apaman-Icon-Pack';
-  src:  url('public/assetson/fonts/Apaman-Icon-Pack.eot?xjmjx0');
-  src:  url('public/assetson/fonts/Apaman-Icon-Pack.eot?xjmjx0#iefix') format('embedded-opentype'),
-    url('public/assetson/fonts/Apaman-Icon-Pack.ttf?xjmjx0') format('truetype'),
-    url('public/assetson/fonts/Apaman-Icon-Pack.woff?xjmjx0') format('woff'),
-    url('public/assetson/fonts/Apaman-Icon-Pack.svg?xjmjx0#Apaman-Icon-Pack') format('svg');
+  src:  url('fonts/Apaman-Icon-Pack.eot?7ob6vl');
+  src:  url('fonts/Apaman-Icon-Pack.eot?7ob6vl#iefix') format('embedded-opentype'),
+    url('fonts/Apaman-Icon-Pack.ttf?7ob6vl') format('truetype'),
+    url('fonts/Apaman-Icon-Pack.woff?7ob6vl') format('woff'),
+    url('fonts/Apaman-Icon-Pack.svg?7ob6vl#Apaman-Icon-Pack') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -13,7 +13,7 @@
 [class^="ap"], [class*=" ap"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'Apaman-Icon-Pack' !important;
-  speak: none;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -25,6 +25,39 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.apic_filter1:before {
+  content: "\e970";
+}
+.apic_filter_filled:before {
+  content: "\e971";
+}
+.apexcel:before {
+  content: "\e917";
+}
+.apic_cnfrnce:before {
+  content: "\e918";
+}
+.apic_Formula:before {
+  content: "\e946";
+}
+.apic_gym:before {
+  content: "\e948";
+}
+.apic_Installments:before {
+  content: "\e96a";
+}
+.apic_lounge:before {
+  content: "\e96c";
+}
+.apic_makeup:before {
+  content: "\e96d";
+}
+.apic_spa:before {
+  content: "\e96e";
+}
+.apradioSelectedIcon:before {
+  content: "\e96f";
+}
 .apic_add:before {
   content: "\e900";
 }
@@ -93,12 +126,6 @@
 }
 .apic_Calendar:before {
   content: "\e916";
-}
-.apic_calendar-1:before {
-  content: "\e917";
-}
-.apic_Calendar-2:before {
-  content: "\e918";
 }
 .apic_call:before {
   content: "\e919";
@@ -236,14 +263,8 @@
 .apic_nd2_manual:before {
   content: "\e945";
 }
-.apic_nd3_apartment:before {
-  content: "\e946";
-}
 .apic_nd3_billsetting:before {
   content: "\e947";
-}
-.apic_nd3_building:before {
-  content: "\e948";
 }
 .apic_nd3_charge:before {
   content: "\e949";
@@ -343,9 +364,6 @@
 }
 .apic_timer:before {
   content: "\e969";
-}
-.apic_typeof:before {
-  content: "\e96a";
 }
 .apic-addrule:before {
   content: "\e96b";

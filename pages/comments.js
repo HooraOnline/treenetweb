@@ -7,10 +7,12 @@ import {
     bgEmpty,
     bgScreen,
     bgWhite,
+    border,
     borderLight,
     gray,
     itemListText,
     primaryDark,
+    subTextItem,
     textGray,
     textItem, textItemBlack, yellowmin
 } from "../src/constants/colors";
@@ -70,7 +72,7 @@ export default class comments extends Component {
             .then(post => {
 
                 if (post[0]) {
-                    this.setState({ post: post[0]})
+                    this.setState({ post: post[0] })
                 }
             }).catch((error) => {
                 showMassage('خطا در بارگذاری کامنتها');
@@ -80,13 +82,14 @@ export default class comments extends Component {
             });
     };
 
-    addComment = () => {
+    addComment = (commentId) => {
         this.setState({ loading: true })
-        const comment = { postId: this.postId, text: this.state.text }
+        const comment = { postId: this.postId, text: this.state.text };
+        if(commentId) comment.parentId=commentId;
 
         Api.post('Comments/addComment', comment)
             .then(comment => {
-
+                this.setState({ text: '' })
                 this.getComments({ comment: comment })
             }).catch((error) => {
                 showMassage('خطایی رخ داد، دوباره تلاش کنید.');
@@ -95,6 +98,11 @@ export default class comments extends Component {
                 this.setState({ loading: false });
             });
     };
+    keyPress = (e) => {
+        if (e.keyCode === 13) {
+            this.addComment();
+        }
+    }
 
     render() {
         const toolbarStyle = {
@@ -142,8 +150,8 @@ export default class comments extends Component {
                                     underlineSize={0}
                                     multiline={true}
                                     maxLength={2000}
-                                    //autoFocus={true}
-
+                                    autoFocus={true}
+                                    onKeyDown={(e) => this.keyPress(e)}
                                     returnKeyType="done"
 
                                 />
@@ -181,10 +189,13 @@ export default class comments extends Component {
                     </View>
                 }>
                 <View style={{ flex: 1, paddingBottom: 16, paddingTop: 60 }}>
-                    <CommentList post={this.state.post} />
+                    {this.state.post && (
+                        <CommentList post={this.state.post} onReplay={this.addComment}/>
+                    )}
+
                 </View>
             </PanelLayout>
-        
+
 
         )
     }
@@ -192,6 +203,7 @@ export default class comments extends Component {
 }
 
 export const CommentList = observer(props => {
+
     const [loading, setloading] = useState(false);
 
     useEffect(() => {
@@ -209,8 +221,37 @@ export const CommentList = observer(props => {
                     style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        backgroundColor: props.comments.length > 0 ? bgScreen : bgEmpty
+                        backgroundColor: props.post.comments.length > 0 ? bgScreen : bgEmpty
                     }}>
+                </View>
+            }
+            ListHeaderComponent={
+                <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, marginTop: 15 }}>
+                        <TouchableOpacity
+                            onPress={() => location.pathname = props.post.member.userKey}
+                            style={{}}>
+                            <Image
+                                source={getFileUri('member', props.post.member.profileImage)}
+                                style={{
+                                    width: 60,
+                                    height: 60,
+                                    borderRadius: 30,
+                                }}
+                            />
+                        </TouchableOpacity>
+
+                        <View style={{ flexDirection: 'row', padding: 5, flex: 1, alignItems: 'center' }}>
+                            <TouchableOpacity
+                                onPress={() => location.pathname = props.post.member.userKey}
+                                style={{}}>
+                                <Text style={{ fontSize: 12, fontWeight: 800, }}>{props.post.member.userKey}</Text>
+                                {/* <Text style={{ fontSize: 9, color: textItem }}>{props.post.member.avatar}</Text>  */}
+                            </TouchableOpacity>
+                            <Text style={{ fontSize: 10, color: textItem, marginHorizontal: 5 }}>{props.post.text}</Text>
+                        </View>
+                    </View>
+                    <View style={{ height: 1, width: '100%', backgroundColor: borderLight, marginVertical: 10, margin: 5, }}></View>
                 </View>
             }
             renderItem={({ item, index }) => {
@@ -221,7 +262,7 @@ export const CommentList = observer(props => {
 
                 return (
                     <View style={{ flex: 1 }}>
-                        <View style={{flex:1, flexDirection: 'row', alignItems:'center', paddingHorizontal: 10, marginTop: 15 }}>
+                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, marginTop: 15 }}>
                             <TouchableOpacity
                                 onPress={() => location.pathname = item.member.userKey}
                                 style={{}}>
@@ -235,15 +276,23 @@ export const CommentList = observer(props => {
                                 />
                             </TouchableOpacity>
 
-                            <View style={{flexDirection:'row', padding: 5, flex: 1,alignItems:'center'  }}>
+                            <View style={{ flexDirection: 'row', padding: 5, flex: 1, alignItems: 'center' }}>
                                 <TouchableOpacity
                                     onPress={() => location.pathname = item.member.userKey}
                                     style={{}}>
                                     <Text style={{ fontSize: 12, fontWeight: 800, }}>{userKey}</Text>
                                     {/* <Text style={{ fontSize: 9, color: textItem }}>{avatar}</Text> */}
                                 </TouchableOpacity>
-                                <Text style={{ fontSize: 10, color: textItem,marginHorizontal:5 }}>{item.text}</Text>
+                                <Text style={{ fontSize: 10, color: textItem, marginHorizontal: 5 }}>{item.text}</Text>
                             </View>
+
+                        </View>
+                        <View style={{ flex: 1, flexDirection: 'row', margin: 24 }} >
+                            <Text style={{ fontSize: 9, color: subTextItem, }}>{item.cdate.timeToNow()}</Text>
+                            <TouchableOpacity style={{marginHorizontal:10}} 
+                            onPress={()=>props.onReplay(item.id)}>
+                                <Text style={{ fontSize: 9, color: subTextItem, }}>پاسخ</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 )

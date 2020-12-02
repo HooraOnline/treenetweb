@@ -15,7 +15,7 @@ export default class FileInput extends PureComponent{
         let self = this;
         console.log(event.target.files);
         reader.onload = function (e) {
-            self.props.onSelectFile && self.props.onSelectFile(formData,files[0],URL.createObjectURL(files[0]),e.target.result);
+            self.props.onSelectFile && self.props.onSelectFile(files,formData,files[0],URL.createObjectURL(files[0]),e.target.result);
           
             event.value = ''
         }

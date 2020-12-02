@@ -151,6 +151,7 @@ export const softDelete = function (apiPath, id) {
 export const upload = function (files, folderName, uploadingFunc) {
   return Api.upload(files, folderName, uploadingFunc);
 };
+
 export const uploadSelectorFiles = function (selector) {
   return Api.upload(selector.files, selector.uploadFolder, function (persent, uploadedfiles) {
     selector.uplodedPersent = persent;

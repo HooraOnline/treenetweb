@@ -16,20 +16,17 @@ import {
     subTextItem,
     textItem
 } from "../src/constants/colors";
-import NavBar from "../src/components/layouts/NavBar";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
-import translate from "../src/language/translate";
-import copy from "copy-to-clipboard";
+
 import {globalState, persistStore,} from "../src/stores";
-import ShareLink from "./sections/ShareLink";
+
 import TextInput from "../src/react-native/TextInput";
-import {postQuery, upload} from "../dataService/apiService";
-import {wait} from "next/dist/build/output/log";
+import {postQuery} from "../dataService/apiService";
+
 import pStore from "../src/stores/PublicStore";
+import { observer } from 'mobx-react';
 
-
+@observer
 export default class addpost extends Component {
     constructor() {
         super();
@@ -151,7 +148,7 @@ export default class addpost extends Component {
                                      <div style={{width: globalState.width, zIndex: 4}}>
                                          <TouchableOpacity
                                              onPress={() => {
-                                                 navigation.navigate('change_username_password')
+                                                persistStore.postHelp=true;
                                              }}
                                              style={{
                                                  flex: 1,

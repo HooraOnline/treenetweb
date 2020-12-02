@@ -13,7 +13,8 @@ class PersistStore {
     @persist @observable userLanguageId = 3;
     @persist @observable isRtl = true;
     @persist @observable direction = 'dir';
-    @persist @observable showMenu=true
+    @persist @observable showMenu=true;
+    @persist @observable postHelp=false
 
     @persist @observable selected = 0;
 

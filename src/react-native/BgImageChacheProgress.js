@@ -97,6 +97,7 @@ export default class BgImageChacheProgress extends PureComponent{
     }
 
     componentDidMount() {
+      
 
     }
 
@@ -104,10 +105,12 @@ export default class BgImageChacheProgress extends PureComponent{
         if(this.state.loadingImage){
             return <Spiner/>
         }
-        this.setImag();
+        //this.setImag();
 
         return (
-            <ImageBackground   {...this.props} resizeMode={this.props.resizeMode} source={this.state.source}/>
+            <ImageBackground   {...this.props} resizeMode={this.props.resizeMode} 
+             //source={this.state.source}
+            />
         )
     }
 

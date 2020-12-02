@@ -82,7 +82,7 @@ export default class ImageSelector extends PureComponent {
     }
 
     render() {
-        const {style,canUpload=true,hideDeleteBtn,image, noImage, imageStyle, children, renderContent, selectBtnStyle} = this.props;
+        const {folderName,style,canUpload=true,hideDeleteBtn,image, noImage, imageStyle, children, renderContent, selectBtnStyle} = this.props;
 
         return (
             <View style={[{ position: 'relative',alignItems:'center',justifyContent:'center' },style]}>
@@ -108,7 +108,7 @@ export default class ImageSelector extends PureComponent {
                         <BgImageChacheProgress
                             style={[{width:100,height:100},imageStyle]}
                             resizeMode="cover"
-                            source={this.state.selectedImage?this.state.selectedImage: image ? getFileUri('member',image) : noImage}
+                            source={this.state.selectedImage?this.state.selectedImage: image ? getFileUri(folderName,image) : noImage}
                             indicator={() => <Progress.Circle
                                 progress={this.state.imageProgress}
                                 indeterminate={this.state.imageIndeterminate}

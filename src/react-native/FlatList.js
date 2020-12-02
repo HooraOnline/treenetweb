@@ -132,8 +132,13 @@ export default class FlatList extends PureComponent {
                 flexDirection:'row',
                 flexWrap: 'wrap',
                 alignItems:'center',
-                overflow:'scroll',maxHeight:this.props.maxHeight
-            }: { display: 'flex',flexDirection:this.props.horizontal ?'row':'column', overflow:'scroll',maxHeight:this.props.maxHeight}}>
+                overflow:'scroll',
+                maxHeight:this.props.maxHeight
+            }: { display: 'flex',
+                       flexDirection:this.props.horizontal ?'row':'column', 
+                        overflow:'scroll',
+                        maxHeight:this.props.maxHeight
+                    }}>
                 {
                     items.map((item,index)=> {
                         return (

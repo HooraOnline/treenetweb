@@ -277,7 +277,7 @@ export default class Toolbar extends PureComponent {
                     justifyContent: 'space-between',
                 }}>
 
-                    {this.state.showStart ? (
+                    {this.props.customStyle.start ? (
                         <TouchableOpacity
                             disabled={isExpand && persistStore.selected === 0}
                             onPress={isExpand ? () => this.animateExpand(false, true) : start.onPress}
@@ -287,7 +287,7 @@ export default class Toolbar extends PureComponent {
                                 style={styles.img} />
                         </TouchableOpacity>
                     ) : (
-                            <View style={{ marginStart: 72 }} />
+                            <View style={{ marginStart: 24 }} />
                         )}
                     {title && (
                         <View style={{ flexDirection: 'column', paddingTop: 3, flex: 1 }}>

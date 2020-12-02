@@ -418,7 +418,7 @@ export default class LoginPage extends PureComponent {
 
                                                 if(this.state.username.length === 10){
                                                     
-                                                    this.passInput.current.refs.txtInput.childNodes[0].focus();
+                                                    this.passInput.current.textInput.current.childNodes[0].focus();
                                                 }
                                             }
                                             );
@@ -490,6 +490,7 @@ export default class LoginPage extends PureComponent {
                                         }}
                                         highlightColor={primaryDark}
                                         value={this.state.password}
+                                       
                                     />
                                     <TouchableOpacity
                                         onPress={() => {
