@@ -8,6 +8,11 @@ class MyDocument extends Document {
         <html lang="en">
         <Head>
           <meta charSet="UTF-8"/>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+
+          
           <link rel="stylesheet" href="../static/assets/iconfont.css"/>
           
           <link rel="icon" href="../static/logo.png"/>

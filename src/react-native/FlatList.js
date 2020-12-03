@@ -61,6 +61,7 @@ export default class FlatList extends PureComponent {
     }
 
     handlePagingOnScroll= (event)=> {
+        this.props.onScroll &&  this.props.onScroll(this.divRef.current) 
         if(this.props.offset===undefined || !this.props.loadMore){
             return ;
         }

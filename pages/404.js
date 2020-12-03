@@ -130,7 +130,7 @@ export default class userpage extends Component {
         
         const toolbarAdminStyle = {
           
-            title:  this.user?this.user.fullName+'('+this.userKey+')':'صفحه من',
+            title:  this.user?this.user.fullName+' ('+this.userKey+'@)':'صفحه من',
             end: {
                 onPress: () => logoutApi(),
                 icon: images.ic_Period,
