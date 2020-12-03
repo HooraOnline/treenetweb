@@ -65,9 +65,10 @@ export default class userpage extends Component {
         this.setState({loading:true})
             const pathname = window.location.pathname;
             this.userKey=pathname.split('/').join('');
-         
+           
             Api.post('members/getUserPage',{userKey: this.userKey})
                 .then(users=>{
+                   
                     if(users && users[0]){
                         let user =users[0];
                         this.user=user;

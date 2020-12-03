@@ -217,11 +217,11 @@ export default class comments extends Component {
     }
 
 }
-export const CommentCard = observer(props => {
+export const ReplyCard = observer(props => {
     debugger
     const [loading, setloading] = useState(false);
-    const { profileImage, userKey, avatar } = props.comment.member;
-    const {text,cdate}= props.comment;
+    const { profileImage, userKey, avatar } = props.reply.member;
+    const {text,cdate}= props.reply;
 
     const profileUrl = getFileUri('member', profileImage);
   
@@ -262,10 +262,46 @@ export const CommentCard = observer(props => {
                 <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 24,marginVertical:10 }} >
                     <Text style={{ fontSize: 10, color: subTextItem, }}>{cdate.timeToNow()}</Text>
                     <TouchableOpacity style={{ marginHorizontal: 10 }}
-                        onPress={() => props.onReplay(props.comment, (props.mainComment || props.comment))}>
+                        onPress={() => props.onReplay(reply, (props.mainComment || reply))}>
                         <Text style={{ fontSize: 10, color: subTextItem, fontWeight: 800 }}>پاسخ</Text>
                     </TouchableOpacity>
                 </View>
+            </View>
+
+    )
+});
+
+export const CommentCard = observer(props => {
+    debugger
+    const [showReply, setShowReply] = useState(false);
+    const comment = props.comment;
+  
+    useEffect(() => {
+
+    }, []);
+
+
+    return (
+        
+            <View style={{ flex: 1 }}>
+                <ReplyCard reply={comment}/>
+                
+                {comment.comments.length && (
+                    <View>
+                        <TouchableOpacity onPress={() =>{
+                                
+                                setShowReply(!showReply);
+                            }}>
+                            <Text style={{ fontSize: 12, color: subTextItem, marginHorizontal: 24 }}>_______{showReply ? 'پنهان کردن پاسخ ها' : 'مشاهده پاسخ ها'}({comment.comments.length})_______</Text>
+                        </TouchableOpacity>
+
+                        {showReply && comment.comments.map(reply => (
+                            <View style={{ flex: 1, marginRight: 24 }} >
+                                <ReplyCard reply={reply} mainComment={comment}/>
+                            </View>
+                        ))}
+                    </View>
+                )}
             </View>
 
     )
@@ -332,27 +368,7 @@ export const CommentList = observer(props => {
 
 
                 return (
-                    <View style={{ flex: 1 }}>
-                        <CommentCard comment={item}/>
-                       
-                        {item.comments.length && (
-                            <View>
-                                <TouchableOpacity onPress={() =>{
-                                     
-                                      setFlag(flag!==index?index:undefined);
-                                    }}>
-                                    <Text style={{ fontSize: 12, color: subTextItem, marginHorizontal: 24 }}>_______{flag==index ? 'پنهان کردن پاسخ ها' : 'مشاهده پاسخ ها'}({item.comments.length})_______</Text>
-                                </TouchableOpacity>
-
-                                {flag==index && item.comments.map(reply => (
-                                    <View style={{ flex: 1, marginRight: 24 }} >
-                                        <CommentCard comment={reply} mainComment={item}/>
-                                       
-                                    </View>
-                                ))}
-                            </View>
-                        )}
-                    </View>
+                    <CommentCard comment={item}/>
                 )
             }}
         />

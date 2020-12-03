@@ -20,16 +20,17 @@ import {getFileUri, postQuery} from "../dataService/apiService";
 import FloatingLabelTextInput from "../src/components/FloatingLabelTextInput";
 import TextInput from "../src/react-native/TextInput";
 
-import { IoMdHeartEmpty ,IoMdShare} from "react-icons/io";
+import { IoMdHeart,IoMdHeartEmpty ,IoMdShare} from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
+import Api from '../dataService/apiCaller';
 
 export default class view_post extends Component {
     constructor() {
         super();
 
         this.state = {
-
+            
         };
 
 
@@ -37,11 +38,38 @@ export default class view_post extends Component {
     }
 
      componentDidMount() {
+         let post=navigation.getParam('post');
 
-         let post=navigation.getParam('post')
-         this.setState({post})
+         this.setState({post,like:post.likes.length});
     }
 
+    like=(postId)=>{
+        
+        this.setState({loading:true});
+        Api.post('likes/likePost',{postId: postId})
+        .then(like=>{
+            this.setState({loading:false,like:true});
+        }).catch((error)=>{
+            console.log(error);
+        })
+        .finally(()=>{
+            this.setState({loading:false});
+        });
+    }
+
+    unlike=(postId)=>{
+        debugger
+        this.setState({loading:true});
+        Api.post('likes/unlikePost',{postId: postId})
+        .then(res=>{
+            this.setState({loading:false,like:false});
+        }).catch((error)=>{
+            console.log(error);
+        })
+        .finally(()=>{
+            this.setState({loading:false});
+        });
+    }
 
 
     render() {
@@ -123,7 +151,12 @@ export default class view_post extends Component {
                     <View style={{flex:1,padding:10,paddingBottom:30}}>
                         <Text style={{ fontSize:12,}}>{post.text}</Text>
                         <View style={{flex:1,flexDirection:'row'}}>
-                            <IoMdHeartEmpty size={25} style={{margin:10}}/>
+                            
+                            {this.state.like?
+                                (<IoMdHeart size={25} color={'red'} style={{margin:10}} onClick={()=>{this.unlike(post.id)}}/>)
+                                :
+                                (<IoMdHeartEmpty  size={25} style={{margin:10}} onClick={()=>{this.like(post.id)}}/>)
+                            }
                             <IoMdShare size={25} style={{margin:10}}/>
                             <FaRegCommentDots size={25} style={{margin:10}} onClick={()=>{
                                            
