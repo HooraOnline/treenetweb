@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Platform, Text, TouchableOpacity, View, StyleSheet, Image, IconApp } from "../src/react-native";
 
 import PanelLayout from "../src/components/layouts/PanelLayout";
-import {  OverlayModal, Toolbar, } from "../src/components";
-import {navigation, showMassage } from "../src/utils";
+import { AlertMessage, OverlayModal, Toolbar, } from "../src/components";
+import { doDelay, navigation, showMassage, waitForData } from "../src/utils";
 import images from "../public/static/assets/images";
 import {
-    
+
     border,
-   textItem, yellowmin, primary, borderLight
+    textItem, yellowmin, primary, borderLight, subTextItem
 } from "../src/constants/colors";
 import translate from "../src/language/translate";
 import { getFileUri, postQuery } from "../dataService/apiService";
@@ -19,6 +19,7 @@ import { FaRegCommentDots } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import Api from '../dataService/apiCaller';
 import DialogPopUp from '../src/components/basic/DialogPopUp';
+import { pStore } from '../src/stores';
 
 export default class view_post extends Component {
     constructor() {
@@ -30,16 +31,40 @@ export default class view_post extends Component {
     }
 
     componentDidMount() {
-        let post = navigation.getParam('post');
-        if (!post) {
-            return
-        }
+        this.getPost();
+       
+    }
 
-        this.setState({ post, like: post.myLike.length });
+    getPost(){
+        let postId = navigation.getUrlParams().postId;
+
+        this.setState({ loading: true });
+        Api.post('posts/getById', { postId: postId })
+            .then(post => {
+              
+                this.setState({
+                    post,
+                    like: post.myLike.length,
+                    commentsCount: post.comments.length,
+                    likesCount: post.likes.length,
+                    userKey:post.member.userKey
+                });
+               
+             
+            }).catch((error) => {
+                console.log(error);
+            })
+            .finally(() => {
+                doDelay(pStore.cUser.userKey?1000:0)
+                    .then(()=>{
+                        this.isPageAdmin = pStore.cUser.userKey === this.state.userKey;
+                        this.setState({ loading: false });
+                    })
+                
+            });
     }
 
     like = (postId) => {
-
         this.setState({ loading: true });
         Api.post('likes/likePost', { postId: postId })
             .then(like => {
@@ -53,7 +78,6 @@ export default class view_post extends Component {
     }
 
     unlike = (postId) => {
-        debugger
         this.setState({ loading: true });
         Api.post('likes/unlikePost', { postId: postId })
             .then(res => {
@@ -65,12 +89,13 @@ export default class view_post extends Component {
                 this.setState({ loading: false });
             });
     }
-    removePost = (postId) => {
-        debugger
+
+    onConfirmDelete = (postId) => {
         this.setState({ loading: true });
-        Api.post('likes/unlikePost', { postId: postId })
+        Api.post('posts/removePost', { postId: postId })
             .then(res => {
                 this.setState({ loading: false, like: false });
+                navigation.goBack();
             }).catch((error) => {
                 console.log(error);
             })
@@ -78,6 +103,8 @@ export default class view_post extends Component {
                 this.setState({ loading: false });
             });
     }
+
+
 
 
     render() {
@@ -92,7 +119,9 @@ export default class view_post extends Component {
         let { post } = this.state
         if (!post)
             return null;
-        let { profileImage, username, avatar } = post.member;
+        let { profileImage, userKey, avatar } = post.member;
+        
+        debugger
         return (
             <PanelLayout
                 loading={this.state.loading}
@@ -107,31 +136,54 @@ export default class view_post extends Component {
                     />
                 }>
                 <View style={{ flex: 1, paddingTop: 16 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', paddingHorizontal: 10 }}>
-                        <View style={{ flex: 1, alignItems: 'space-between', justifyContent: 'center' }}>
-                            <Image
-                                source={getFileUri('member', profileImage)}
-                                style={{
-                                    width: 60,
-                                    height: 60,
-                                    borderRadius: 30,
-                                }}
-                            />
-                            <View style={{ padding: 5, flex: 1, justifyContent: 'center' }}>
-                                <Text style={{ fontSize: 12, fontWeight: 800, }}>{username}</Text>
-                                <Text style={{ fontSize: 10, color: textItem }}>{avatar}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
+                        <TouchableOpacity
+                            onPress={() => navigation.replaceTo(userKey)}
+                            style={{}}>
+                            <View style={{ maxWidth: 90, alignItems: 'center' }}>
+                                <Image
+                                    source={getFileUri('member', profileImage)}
+                                    style={{
+                                        width: 60,
+                                        height: 60,
+                                        borderRadius: 30,
+                                    }}
+                                />
+                                <Text style={{ fontSize: 12, fontWeight: 800, }}>{userKey}</Text>
                             </View>
-                        </View>
-                        <TouchableOpacity onPress={() => this.setState({ showActions: true })}>
-                            <IconApp
-                                class={'apic_more'}
-                                style={{
-                                    width: 24,
-                                    height: 24,
-                                    tintColor: border
-                                }}
-                            />
+                            <Text style={{ fontSize: 10, color: textItem, marginHorizontal: 10 }}>{avatar}</Text>
                         </TouchableOpacity>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', paddingHorizontal: 5 }}>
+                            {this.state.showActions && (
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingHorizontal: 5 }}>
+                                    <TouchableOpacity onPress={() => this.setState({ showDeletePopUp: true })}>
+                                        <IconApp
+                                            class={'apic_delete'}
+                                            style={{
+                                                width: 24,
+                                                height: 24,
+                                                tintColor: 'red'
+                                            }}
+                                        />
+                                    </TouchableOpacity>
+
+                                </View>
+                            )}
+                            {this.isPageAdmin && (
+                                <TouchableOpacity onPress={() => this.setState({ showActions: !this.state.showActions })}>
+                                    <IconApp
+                                        class={'apic_more'}
+                                        style={{
+                                            width: 24,
+                                            height: 24,
+                                            tintColor: border
+                                        }}
+                                    />
+                                </TouchableOpacity>
+                            )
+                            }
+                        </View>
 
                     </View>
                     <View
@@ -169,8 +221,7 @@ export default class view_post extends Component {
                         />
 
                     </View>
-                    <View style={{ flex: 1, padding: 10, paddingBottom: 30 }}>
-                        <Text style={{ fontSize: 12, }}>{post.text}</Text>
+                    <View style={{ paddingHorizontal: 10, }}>
                         <View style={{ flex: 1, flexDirection: 'row' }}>
 
                             {this.state.like ?
@@ -187,16 +238,75 @@ export default class view_post extends Component {
 
                         </View>
                     </View>
+                    {post.text ? (
+                        <View style={{ flexDirection: 'row', margin: 10 }}>
+                            <Text dir='ltr' style={{ fontSize: 12, fontWeight: 800, marginEnd: 4 }}>@{post.member.userKey}</Text>
+                            <Text style={{ fontSize: 12, }}>{post.text}</Text>
+                        </View>
+                    ) : null}
+
+                    <View style={{ marginHorizontal: 16, }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            {this.state.likesCount ? (
+                                <Text dir='ltr' style={{ fontSize: 11, color: subTextItem, marginTop: -5, }}>{this.state.likesCount} like</Text>
+                            ) : <Text dir='ltr' style={{ fontSize: 10, color: subTextItem, marginTop: -5, }}> لینک پنج لایک کننده اول در اینجا نمایش داده می شود اولین لایک کننده این پست باشید.</Text>}
+                            {this.state.seenCount ? (
+                                <Text dir='ltr' style={{ fontSize: 11, color: subTextItem, marginTop: -5, marginHorizontal: 20 }}> {this.state.seenCount} seen</Text>
+                            ) : null}
+                        </View>
+
+                        {post.firstComment.length ? (
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Text dir='ltr' style={{ fontSize: 12, fontWeight: 800, marginEnd: 10 }}>@{post.firstComment[0].member.userKey}</Text>
+                                <Text style={{ fontSize: 12, }}> {post.firstComment[0].text}</Text>
+                            </View>
+
+                        ) : (
+                                <TouchableOpacity onPress={() => {
+                                    navigation.navigate('comments', { postId: post.id });
+                                }} >
+                                    <Text style={{ fontSize: 10, color: subTextItem }}> اولین کامنت همیشه در اینجا نمایش داده می شود. اولین کامنت دهنده این پست باشید.</Text>
+                                </TouchableOpacity>
+                            )}
+
+
+                        {this.state.commentsCount > 2 ? (
+                            <TouchableOpacity onPress={() => {
+                                navigation.navigate('comments', { postId: post.id });
+                            }} >
+                                <Text style={{ fontSize: 10, color: subTextItem }}> مشاهده {this.state.commentsCount - 1} کامنت دیگر</Text>
+                            </TouchableOpacity>
+
+                        ) : null}
+                    </View>
                 </View>
-                {this.state.showActions && (
-                        <DialogPopUp
-                            items={[
-                                { name: 'حذف پست', callback: this.removePost.bind(this) },
-                                { name: 'اشتراک گذاری', callback: this.removePost.bind(this) },
-                            ]}
-                            onClose={() => this.setState({ showActions: false })}
-                        />)}
-               
+
+
+
+
+                {this.state.showActions22 && (
+                    <DialogPopUp
+                        items={[
+                            { name: 'حذف پست', callback: this.removePost.bind(this) },
+                            { name: 'اشتراک گذاری', callback: this.removePost.bind(this) },
+                        ]}
+                        onClose={() => this.setState({ showActions: false })}
+                    />)}
+
+                <AlertMessage
+                    visible={this.state.showDeletePopUp}
+                    title="حذف پست"
+                    message={
+                        'آیا از حذف پست مطمئن هستید؟'
+                    }
+                    onConfirm={() => {
+                        this.onConfirmDelete(post.id);
+                    }}
+                    onDismiss={() => this.setState({ showDeletePopUp: false })}
+                    confirmTitle="بله"
+                    dismissTitle="خیر"
+                />
+
             </PanelLayout>
 
         )

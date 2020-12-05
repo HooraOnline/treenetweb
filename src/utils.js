@@ -952,6 +952,48 @@ export const navigation={
 
         return paramsToJson[paramName] || defaultValue;
     },
+    navigateTo:(path,params)=> {
+        let parameterStr=''
+        if(params){
+           const propNameList= Object.getOwnPropertyNames(params);
+           propNameList.forEach((propName,index)=>{
+            parameterStr=parameterStr+index>0?'&':'?'+`${propName}=${params[propName]}`;
+           })
+        }
+        let url=window.location.origin+'/'+path;
+        if(parameterStr){
+            url+=parameterStr;
+        }
+        debugger;
+        window.location.href=url;
+    },
+    replaceTo:(path,params)=> {
+        let parameterStr=''
+        if(params){
+           const propNameList= Object.getOwnPropertyNames(params);
+           propNameList.forEach((propName,index)=>{
+            parameterStr=parameterStr+index>0?'&':'?'+`${propName}=${params[propName]}`;
+           })
+        }
+        let url=window.location.origin+'/'+path;
+        if(parameterStr){
+            url+=parameterStr;
+        }
+        debugger;
+        window.location.replace(url);
+    },
+    getUrlParams:(url=window.location.href)=> {
+        var params = {};
+        var parser = document.createElement('a');
+        parser.href = url;
+        var query = parser.search.substring(1);
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            params[pair[0]] = decodeURIComponent(pair[1]);
+        }
+        return params;
+    },
 
 
 }

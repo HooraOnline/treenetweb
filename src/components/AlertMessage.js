@@ -114,14 +114,16 @@ function Content({title, message, onDismiss, dismissTitle, onConfirm, confirmTit
             }
             <View style={{flexDirection: 'row', marginTop: 24, justifyContent: 'flex-end'}}>
 
-                <TouchableOpacity stopPropagation style={[styles.btn]} onPress={onDismiss}>
-                    <Text>{dismissTitle}</Text>
-                </TouchableOpacity>
+               
                 {confirmTitle && (
                     <TouchableOpacity stopPropagation style={[styles.btn]} onPress={onConfirm}>
                         <Text style={confirmTitleStyle || {color: primaryDark}}>{confirmTitle}</Text>
                     </TouchableOpacity>
                 )}
+
+             <TouchableOpacity stopPropagation style={[styles.btn]} onPress={onDismiss}>
+                    <Text>{dismissTitle}</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );

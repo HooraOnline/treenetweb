@@ -68,13 +68,12 @@ export default class userpage extends Component {
            
             Api.post('members/getUserPage',{userKey: this.userKey})
                 .then(users=>{
-                   
+                  
                     if(users && users[0]){
                         let user =users[0];
                         this.user=user;
                         this.cUserId=users.cUserId;
                         this.userPosts=user.posts;
-                       
                         this.userFollowed=user.followeds;
                         this.userFollowers=user.followers;
                         this.isFollowing=this.user.followers.find(item=>item.followerId==this.cUserId);
@@ -522,14 +521,14 @@ export const UserPosts = observer(props => {
     const pathname = window.location.pathname;
     const userKey=pathname.split('/').join('');
     const isPageAdmin=pStore.cUser.userKey===userKey;
-    let posts=[]
-   
+    let posts=[];
+    
     if(isPageAdmin){
         posts=[{file:images.ic_add}].concat(pStore.userPosts);
     }else{
         posts=pStore.userPosts;
     }
-
+    
     return (
         <View style={{flex:1,marginTop:2}}>
             <FlatList
@@ -539,9 +538,7 @@ export const UserPosts = observer(props => {
                 data={posts}
                 listFormat='wrap'
                 ListEmptyComponent={null}
-
                 renderItem={({item, index}) =>{
-                    
                     if(index==0 && isPageAdmin)
                         return(
                             <ImageSelector
@@ -576,29 +573,24 @@ export const UserPosts = observer(props => {
                                 hideDeleteBtn={true}
                             >
                                 <View style={{flex:1,width:'100%', height:'100%',justifyContent:'center',alignItems:'center',backgroundColor:'gray'}}>
-                                <IconApp
-                                    class={'apic_addcircle'}
-                                    style={{
-                                        tintColor:bgWhite,
-                                        width:50,
-                                        height:50,
+                                    <IconApp
+                                        class={'apic_addcircle'}
+                                        style={{
+                                            tintColor:bgWhite,
+                                            width:50,
+                                            height:50,
 
-                                    }}
-                                />
-                                    <Text style={{fontSize:11,color:bgWhite}} >پست جدید</Text>
-                                </View>
+                                        }}
+                                    />
+                                        <Text style={{fontSize:11,color:bgWhite}} >پست جدید</Text>
+                                    </View>
                             </ImageSelector>
                         )
                     
                     return (
                         <TouchableOpacity
                             onPress={()=>{
-                                item.member={
-                                    profileImage:pStore.cUser.profileImage,
-                                    username:pStore.cUser.username,
-                                    avatar:pStore.cUser.avatar,
-                                };
-                                navigation.navigate('view_post',{post:item});
+                                navigation.navigateTo('view_post',{postId:item.id});
                             }}
                             style={{
                                 alignItems:'center',
