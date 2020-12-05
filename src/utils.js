@@ -964,7 +964,6 @@ export const navigation={
         if(parameterStr){
             url+=parameterStr;
         }
-        debugger;
         window.location.href=url;
     },
     replaceTo:(path,params)=> {
@@ -979,10 +978,10 @@ export const navigation={
         if(parameterStr){
             url+=parameterStr;
         }
-        debugger;
+        
         window.location.replace(url);
     },
-    getUrlParams:(url=window.location.href)=> {
+    getUrlParams:(paramname,url=window.location.href)=> {
         var params = {};
         var parser = document.createElement('a');
         parser.href = url;
@@ -992,7 +991,8 @@ export const navigation={
             var pair = vars[i].split('=');
             params[pair[0]] = decodeURIComponent(pair[1]);
         }
-        return params;
+        
+        return params[paramname];
     },
 
 

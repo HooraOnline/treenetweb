@@ -257,6 +257,15 @@ export const PostCard = observer(props => {
                             ) : null}
                         </View>
 
+                        {commentsCount > 2 ? (
+                            <TouchableOpacity onPress={() => {
+                                navigation.navigateTo('comments', { postId: item.id });
+                            }} >
+                                <Text style={{ fontSize: 10, color: subTextItem }}> مشاهده {commentsCount - 1} کامنت دیگر</Text>
+                            </TouchableOpacity>
+
+                        ) :null}
+
                         {item.firstComment.length ? (
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Text dir='ltr' style={{ fontSize: 12, fontWeight: 800, marginEnd: 10 }}>@{item.firstComment[0].member.userKey}</Text>
@@ -265,21 +274,14 @@ export const PostCard = observer(props => {
 
                         ) : (
                             <TouchableOpacity onPress={() => {
-                                navigation.navigate('comments', { postId: item.id });
+                                navigation.navigateTo('comments', { postId: item.id });
                             }} >
                                 <Text style={{ fontSize: 10, color: subTextItem }}> اولین کامنت همیشه در اینجا نمایش داده می شود. اولین کامنت دهنده این پست باشید.</Text>
                             </TouchableOpacity>
                         )}
 
 
-                        {commentsCount > 2 ? (
-                            <TouchableOpacity onPress={() => {
-                                navigation.navigate('comments', { postId: item.id });
-                            }} >
-                                <Text style={{ fontSize: 10, color: subTextItem }}> مشاهده {commentsCount - 1} کامنت دیگر</Text>
-                            </TouchableOpacity>
-
-                        ) :null}
+                      
                     </View>
 
                 </View>
@@ -305,7 +307,7 @@ export const PostList = observer(props => {
         setloading(true)
         Api.post('posts/getFollowboardPosts', { regentId: pStore.cUser.regentId })
             .then(posts => {
-                debugger
+                
                 pStore.userPosts = posts;
                 setPosts(posts)
             }).catch((error) => {

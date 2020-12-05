@@ -177,14 +177,16 @@ export default class FlatList extends PureComponent {
     render() {
         const {flexWrap,horizontal,data=[],renderItem,offset,keyExtractor,ListEmptyComponent=null,ItemSeparatorComponent,LoadingComponent,ListFooterComponent,loading,onScroll,style,key,mHeight,ListHeaderComponent}=this.props;
 
-        if(data.length===0 && !loading && !offset){
+        if(data.length===0 && !loading){
             return (
                 <div style={{display:this.state.EmptyComponentDisplay}}>
+                    {ListHeaderComponent}
                     { ListEmptyComponent}
                 </div>
                 // || <View style={{flex:1,alignItems:'center',marginTop:30}}> <Text>هیچ آیتمی وجود ندارد</Text> </View>
             );
         }
+        
 
         return (
             <div ref={this.divRef} onScroll={this.handlePagingOnScroll} style={{overflowY:'auto',position:'relative',maxHeight:global.height, }} >

@@ -372,7 +372,7 @@ export const getUserProfileApi = function (fields, include) {
     params.filter.include = include;
     return  Api.get('members/me/getProfile', params)
         .then(user=>{
-          alert(user)
+         
             pStore.cUser=user;
             persistStore.notChangePassword=user.notChangePassword;
             getUserSubsetApi()

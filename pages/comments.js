@@ -19,7 +19,7 @@ import {
     textItem, textItemBlack, yellowmin
 } from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
-import { FlatList, Image, Text, TouchableOpacity, View, } from "../src/react-native";
+import { FlatList, IconApp, Image, Text, TouchableOpacity, View, } from "../src/react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCogs, faCompass, faUser } from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
@@ -57,14 +57,11 @@ export default class comments extends Component {
 
 
     async componentDidMount() {
-        doDelay(150)
-            .then(() => {
-                this.postId = navigation.getParam('postId');
-
-                if (this.postId) {
-                    this.getComments();
-                }
-            })
+        
+        this.postId = navigation.getUrlParams('postId');
+            if (this.postId) {
+                this.getComments();
+            }
     }
 
     getComments = () => {
@@ -138,7 +135,27 @@ export default class comments extends Component {
                         />
                         <View style={{ flex: 1, backgroundColor: gray, padding: 5, justifyContent: 'center' }}>
                             <View style={{ flex: 1, flexDirection: 'row', backgroundColor: bgWhite, borderRadius: 16, alignItems: 'center' }}>
-                                <Text dir='ltr' style={{ color: bgWhite, fontSize: 12, color: border, fontWeight: 900, marginHorizontal: 10 }}>{this.state.replyTo}</Text>
+                                {this.state.replayId &&(
+                                   <View style={{flexDirection:'row',alignItems:'center',}}>
+                                        <TouchableOpacity 
+                                                onPress={()=>this.setState({replyTo:'',replayId:null})}
+                                            style={{padding:10}}>
+                                            <IconApp
+                                                class={'apic_close'}
+                                                style={{
+                                                    width: 18,
+                                                    height: 18,
+                                                    tintColor:primaryDark
+                                                
+                                                }}
+                                            />
+                                            
+                                        </TouchableOpacity>
+                                            <Text dir='ltr' style={{flex:1, color: bgWhite, fontSize: 12, color: border, fontWeight: 900, }}>{this.state.replyTo}</Text>
+                                    </View>
+                                )
+                                }
+                               
                                 <FloatingLabelTextInput
                                     //dir={'ltr'}
                                     //reverse={persistStore.isRtl}
@@ -218,9 +235,10 @@ export default class comments extends Component {
 
 }
 export const ReplyCard = observer(props => {
-    debugger
+    
     const [loading, setloading] = useState(false);
     const { profileImage, userKey, avatar } = props.reply.member;
+    const reply=props.reply;
     const {text,cdate}= props.reply;
 
     const profileUrl = getFileUri('member', profileImage);
@@ -272,7 +290,7 @@ export const ReplyCard = observer(props => {
 });
 
 export const CommentCard = observer(props => {
-    debugger
+    
     const [showReply, setShowReply] = useState(false);
     const comment = props.comment;
   
@@ -284,10 +302,10 @@ export const CommentCard = observer(props => {
     return (
         
             <View style={{ flex: 1 }}>
-                <ReplyCard reply={comment}/>
+                <ReplyCard reply={comment} onReplay={props.onReplay}/>
                 
                 {comment.comments.length && (
-                    <View>
+                    <View style={{marginRight:24}}>
                         <TouchableOpacity onPress={() =>{
                                 
                                 setShowReply(!showReply);
@@ -297,7 +315,7 @@ export const CommentCard = observer(props => {
 
                         {showReply && comment.comments.map(reply => (
                             <View style={{ flex: 1, marginRight: 24 }} >
-                                <ReplyCard reply={reply} mainComment={comment}/>
+                                <ReplyCard reply={reply} mainComment={comment} onReplay={props.onReplay}/>
                             </View>
                         ))}
                     </View>
@@ -308,7 +326,7 @@ export const CommentCard = observer(props => {
 });
 
 export const CommentList = observer(props => {
-    debugger
+    
     const [loading, setloading] = useState(false);
     const [flag, setFlag] = useState();
 
@@ -337,7 +355,7 @@ export const CommentList = observer(props => {
                 <View style={{ flex: 1 }}>
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, marginTop: 15 }}>
                         <TouchableOpacity
-                            onPress={() => location.pathname = props.post.member.userKey}
+                            onPress={() => navigation.navigateTo(props.post.member.userKey) }
                             style={{}}>
                             <Image
                                 source={getFileUri('member', props.post.member.profileImage)}
@@ -351,7 +369,7 @@ export const CommentList = observer(props => {
 
                         <View style={{ flexDirection: 'row', padding: 5, flex: 1, alignItems: 'center' }}>
                             <TouchableOpacity
-                                onPress={() => location.pathname = props.post.member.userKey}
+                                onPress={() => navigation.navigateTo(props.post.member.userKey)}
                                 style={{}}>
                                 <Text style={{ fontSize: 12, fontWeight: 800, }}>{props.post.member.userKey}</Text>
                                 {/* <Text style={{ fontSize: 9, color: textItem }}>{props.post.member.avatar}</Text>  */}
@@ -368,7 +386,7 @@ export const CommentList = observer(props => {
 
 
                 return (
-                    <CommentCard comment={item}/>
+                    <CommentCard comment={item} onReplay={props.onReplay}/>
                 )
             }}
         />

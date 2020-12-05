@@ -32,16 +32,16 @@ export default class view_post extends Component {
 
     componentDidMount() {
         this.getPost();
-       
     }
 
     getPost(){
-        let postId = navigation.getUrlParams().postId;
+        
+        let postId = navigation.getUrlParams('postId');
 
         this.setState({ loading: true });
         Api.post('posts/getById', { postId: postId })
             .then(post => {
-              
+                this.isPageAdmin = pStore.cUser.userKey === this.state.userKey;
                 this.setState({
                     post,
                     like: post.myLike.length,
@@ -55,12 +55,7 @@ export default class view_post extends Component {
                 console.log(error);
             })
             .finally(() => {
-                doDelay(pStore.cUser.userKey?1000:0)
-                    .then(()=>{
-                        this.isPageAdmin = pStore.cUser.userKey === this.state.userKey;
-                        this.setState({ loading: false });
-                    })
-                
+                  this.setState({ loading: false });
             });
     }
 
@@ -68,7 +63,7 @@ export default class view_post extends Component {
         this.setState({ loading: true });
         Api.post('likes/likePost', { postId: postId })
             .then(like => {
-                this.setState({ loading: false, like: true });
+                this.setState({ loading: false, like: true,likesCount:this.state.likesCount+1 });
             }).catch((error) => {
                 console.log(error);
             })
@@ -81,7 +76,7 @@ export default class view_post extends Component {
         this.setState({ loading: true });
         Api.post('likes/unlikePost', { postId: postId })
             .then(res => {
-                this.setState({ loading: false, like: false });
+                this.setState({ loading: false, like: false,likesCount:this.state.likesCount-1 });
             }).catch((error) => {
                 console.log(error);
             })
@@ -120,8 +115,7 @@ export default class view_post extends Component {
         if (!post)
             return null;
         let { profileImage, userKey, avatar } = post.member;
-        
-        debugger
+    
         return (
             <PanelLayout
                 loading={this.state.loading}
@@ -232,7 +226,7 @@ export default class view_post extends Component {
                             <IoMdShare size={25} style={{ margin: 10 }} />
                             <FaRegCommentDots size={25} style={{ margin: 10 }} onClick={() => {
 
-                                navigation.navigate('comments', { postId: post.id });
+                                navigation.navigateTo('comments', { postId: post.id });
 
                             }} />
 
@@ -249,12 +243,19 @@ export default class view_post extends Component {
                         <View style={{ flexDirection: 'row' }}>
                             {this.state.likesCount ? (
                                 <Text dir='ltr' style={{ fontSize: 11, color: subTextItem, marginTop: -5, }}>{this.state.likesCount} like</Text>
-                            ) : <Text dir='ltr' style={{ fontSize: 10, color: subTextItem, marginTop: -5, }}> لینک پنج لایک کننده اول در اینجا نمایش داده می شود اولین لایک کننده این پست باشید.</Text>}
+                            ) : <Text dir='ltr' style={{ fontSize: 10, color: subTextItem, marginTop: -5, }}>اولین لایک کننده این پست باشید.</Text>}
                             {this.state.seenCount ? (
                                 <Text dir='ltr' style={{ fontSize: 11, color: subTextItem, marginTop: -5, marginHorizontal: 20 }}> {this.state.seenCount} seen</Text>
                             ) : null}
                         </View>
+                        {this.state.commentsCount > 2 ? (
+                            <TouchableOpacity onPress={() => {
+                                navigation.navigateTo('comments', { postId: post.id });
+                            }} >
+                                <Text style={{ fontSize: 10, color: subTextItem }}> مشاهده {this.state.commentsCount - 1} کامنت دیگر</Text>
+                            </TouchableOpacity>
 
+                        ) : null}
                         {post.firstComment.length ? (
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Text dir='ltr' style={{ fontSize: 12, fontWeight: 800, marginEnd: 10 }}>@{post.firstComment[0].member.userKey}</Text>
@@ -263,21 +264,14 @@ export default class view_post extends Component {
 
                         ) : (
                                 <TouchableOpacity onPress={() => {
-                                    navigation.navigate('comments', { postId: post.id });
+                                    navigation.navigateTo('comments', { postId: post.id });
                                 }} >
                                     <Text style={{ fontSize: 10, color: subTextItem }}> اولین کامنت همیشه در اینجا نمایش داده می شود. اولین کامنت دهنده این پست باشید.</Text>
                                 </TouchableOpacity>
                             )}
 
 
-                        {this.state.commentsCount > 2 ? (
-                            <TouchableOpacity onPress={() => {
-                                navigation.navigate('comments', { postId: post.id });
-                            }} >
-                                <Text style={{ fontSize: 10, color: subTextItem }}> مشاهده {this.state.commentsCount - 1} کامنت دیگر</Text>
-                            </TouchableOpacity>
-
-                        ) : null}
+                       
                     </View>
                 </View>
 
