@@ -300,19 +300,16 @@ export const CommentCard = observer(props => {
 
 
     return (
-        
             <View style={{ flex: 1 }}>
                 <ReplyCard reply={comment} onReplay={props.onReplay}/>
                 
                 {comment.comments.length && (
                     <View style={{marginRight:24}}>
                         <TouchableOpacity onPress={() =>{
-                                
                                 setShowReply(!showReply);
                             }}>
                             <Text style={{ fontSize: 12, color: subTextItem, marginHorizontal: 24 }}>_______{showReply ? 'پنهان کردن پاسخ ها' : 'مشاهده پاسخ ها'}({comment.comments.length})_______</Text>
                         </TouchableOpacity>
-
                         {showReply && comment.comments.map(reply => (
                             <View style={{ flex: 1, marginRight: 24 }} >
                                 <ReplyCard reply={reply} mainComment={comment} onReplay={props.onReplay}/>
@@ -321,21 +318,15 @@ export const CommentCard = observer(props => {
                     </View>
                 )}
             </View>
-
     )
 });
 
 export const CommentList = observer(props => {
-    
     const [loading, setloading] = useState(false);
     const [flag, setFlag] = useState();
-
     useEffect(() => {
 
     }, []);
-
-    
-
     return (
         <FlatList
             loading={loading}
@@ -390,8 +381,6 @@ export const CommentList = observer(props => {
                 )
             }}
         />
-
-
     )
 });
 

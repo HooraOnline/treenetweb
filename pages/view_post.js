@@ -219,15 +219,16 @@ export default class view_post extends Component {
                         <View style={{ flex: 1, flexDirection: 'row' }}>
 
                             {this.state.like ?
-                                (<IoMdHeart size={25} color={'red'} style={{ margin: 10 }} onClick={() => { this.unlike(post.id) }} />)
+                                (<IoMdHeart size={25} color={'red'} style={{ margin: 10,cursor: 'hand' }} onClick={() => { this.unlike(post.id) }} />)
                                 :
-                                (<IoMdHeartEmpty size={25} style={{ margin: 10 }} onClick={() => { this.like(post.id) }} />)
+                                (<IoMdHeartEmpty size={25} style={{ margin: 10,cursor: 'hand' }} onClick={() => { this.like(post.id) }} />)
                             }
-                            <IoMdShare size={25} style={{ margin: 10 }} />
-                            <FaRegCommentDots size={25} style={{ margin: 10 }} onClick={() => {
-
+                          
+                            <IoMdShare size={25} style={{ margin: 10,cursor: 'hand' }} onClick={() => {
+                                        navigation.navigateTo('sharePost', { postId: post.id });
+                                   }}/>
+                            <FaRegCommentDots size={25} style={{ margin: 10,cursor: 'hand' }} onClick={() => {
                                 navigation.navigateTo('comments', { postId: post.id });
-
                             }} />
 
                         </View>
