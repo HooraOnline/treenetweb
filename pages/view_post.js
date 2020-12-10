@@ -161,7 +161,6 @@ export default class view_post extends Component {
                                             }}
                                         />
                                     </TouchableOpacity>
-
                                 </View>
                             )}
                             {this.isPageAdmin && (

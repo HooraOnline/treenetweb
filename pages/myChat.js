@@ -26,7 +26,7 @@ import Api from "../dataService/apiCaller";
 
 
 @observer
-export default class userfollower extends Component {
+export default class myChat extends Component {
     constructor() {
         super();
         //globalState.changeStatusBarColor(primaryDark);
@@ -48,19 +48,12 @@ export default class userfollower extends Component {
 
 
     async componentDidMount  () {
-        doDelay(100)
-        .then(()=>{
-           const memberId= navigation.getParam('uidc');
-           this.userKey= navigation.getParam('userKey');
-           if(memberId) {
-               this.getFollowers(memberId);
-           }
-        })
+        this.getMessages();
     }
 
-    getFollowers =(memberId)=> {
+    getMessages =(memberId)=> {
         this.setState({loading:true})
-        Api.post('Followers/getUserFollowers',{memberId:memberId})
+        Api.post('actions/getMessages',{memberId:memberId})
                   .then(followers=>{
                      
                      this.setState({followers:followers})
@@ -114,7 +107,7 @@ export default class userfollower extends Component {
                                         label: translate('اعلانات'),
                                         path: "/activity",
                                         icon: <FontAwesomeIcon icon={faBell}/>
-                                     },
+                                    },
                                      {
                                          label: translate('فالوبورد'),
                                         path: "/followboard",

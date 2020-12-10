@@ -7,11 +7,12 @@
   justify-content: space-around;
   align-items: center;
   border-radius: 50px;
-  height: 60px;
+  height: 50px;
   width: 100%;
   background: $primary;
   font-family: $core-font;
-  font-size: 22px;
+  font-size: 12px;
+  
   color: $on-primary-light;
 
   a {
@@ -21,14 +22,15 @@
 
   .active {
     border: 1px solid white;
-    width:  32%;
+    width:20%;
+    
     background-color: #5F6A6A;
     color: white;
     border-radius:50px
   }
   .unactive {
     border: 0px solid white;
-    width:  33%;
+   
 
   }
   @media screen and (max-width:425px){

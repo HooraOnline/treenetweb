@@ -29,6 +29,7 @@ import BgImageChacheProgress  from './BgImageChacheProgress';
 import SectionList  from './SectionList';
 import IconApp  from './IconApp';
 import MoreText  from './MoreText';
+import DateTime  from './DateTime';
 
 export {
     View,
@@ -62,5 +63,6 @@ export {
     ImageChacheProgress,
     ActivityIndicator,
     MoreText,
+    DateTime,
 
 }

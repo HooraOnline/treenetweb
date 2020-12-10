@@ -33,7 +33,7 @@ import { IoMdHeartEmpty ,IoMdShare,} from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa";
 import translate from '../src/language/translate';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCogs, faCompass, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faCogs, faCompass, faUser,faComments,faBell} from "@fortawesome/free-solid-svg-icons";
 let leavesCount=0
 
 
@@ -164,14 +164,24 @@ export default class userpage extends Component {
                                 {this.isPageAdmin &&(
                                     <NavBar navButtons={[
                                     {
-                                        label: translate('پستها'),
+                                        label: translate('من'),
                                         path: "/"+pStore.cUser.userKey,
                                         icon: <FontAwesomeIcon icon={faUser}/>
                                     },
+                                    // {
+                                    //     label: translate('گفتگو'),
+                                    //     path: "/myChat",
+                                    //     icon: <FontAwesomeIcon icon={faComments}/>
+                                    // },
                                     {
                                         label: translate('سرویسها'),
                                         path: "/myServices",
                                         icon: <FontAwesomeIcon icon={faCogs}/>
+                                    },
+                                    {
+                                        label: translate('اعلانات'),
+                                        path: "/activity",
+                                        icon: <FontAwesomeIcon icon={faBell}/>
                                     },
                                     {
                                         label: translate('فالوبورد'),
@@ -180,7 +190,6 @@ export default class userpage extends Component {
                                     },
                                 ]}/>
                                 )}
-                                
                             </View>
                         }>
                          
