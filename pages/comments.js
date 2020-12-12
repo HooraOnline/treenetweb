@@ -69,7 +69,7 @@ export default class comments extends Component {
 
         Api.post('posts/geComments', { postId: this.postId })
             .then(post => {
-
+                
                 if (post[0]) {
                     this.setState({ post: post[0] })
                 }
@@ -83,11 +83,13 @@ export default class comments extends Component {
 
     addComment = () => {
         this.setState({ loading: true })
-        const text = this.state.replayId ? ('@' + this.state.replayId + this.state.text) : this.state.text
-        const comment = { postId: this.postId, text: text };
+       // const text = this.state.replyTo ? ('@' + this.state.replyTo + this.state.text) : this.state.text
+        
+        const comment = {postId: this.postId, text: this.state.text, };
         if (this.state.replayId) {
 
             comment.commentId = this.state.replayId;
+            comment.reciverId=this.state.post.memberId;//for activity
         }
 
         Api.post('Comments/addComment', comment)
@@ -198,8 +200,8 @@ export default class comments extends Component {
 
                         </View>
                     </View>
-
                 }
+
                 footer={
                     <View style={{ paddingHorizontal: 20 }}>
                         <NavBar navButtons={[
@@ -249,6 +251,13 @@ export const ReplyCard = observer(props => {
     const [loading, setloading] = useState(false);
     const { profileImage, userKey, avatar } = props.reply.member;
     const reply=props.reply;
+    
+    let parrentMember;
+    if(props.reply.parent){
+        
+        parrentMember=props.reply.parent.member.userKey;
+    }
+   
     const {text,cdate}= props.reply;
 
     const profileUrl = getFileUri('member', profileImage);
@@ -283,7 +292,14 @@ export const ReplyCard = observer(props => {
                             <Text style={{ fontSize: 12, fontWeight: 800, }}>{userKey}</Text>
                             {/* <Text style={{ fontSize: 9, color: textItem }}>{avatar}</Text> */}
                         </TouchableOpacity>
-                        <Text style={{ fontSize: 10, color: textItem, marginHorizontal: 5 }}>{text}</Text>
+                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                            {parrentMember&&(
+                               <Text dir='ltr' style={{ fontSize: 10, color: primaryDark, marginHorizontal: 5 }}>@{parrentMember}</Text>
+                            )
+                            }
+                            <Text style={{ fontSize: 10, color: textItem, marginHorizontal: 5 }}>{text}</Text>
+                        </View>
+                        
                     </View>
 
                 </View>

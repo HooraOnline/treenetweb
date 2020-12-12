@@ -9,6 +9,7 @@ import {
     bgSuccess,
     bgWhite,
     borderLight,
+    gray,
     itemListText,
     orange1,
     primaryDark,
@@ -245,16 +246,18 @@ export const AnnounceList = observer(props => {
                 let memberProfileImage ;
                 let memberUserKey;
                 let postId ;
+                
                 let activity= item[item.action];
                 let post=activity.post;
                 let isFollowing;
+
+                let commentText;
                 
                 if(post){
                      profileImage=post.member.profileImage;
                      userKey=post.member.userKey;
                      file=post.file;
                      text=post.text;
-
                      memberProfileImage = activity.member.profileImage;
                      memberUserKey = activity.member.userKey;
                      memberId= activity.member.id;
@@ -268,15 +271,16 @@ export const AnnounceList = observer(props => {
                     actionMessage = 'این پست را با شما به اشتراک گذاشت.';
                 } else if (item.type == 'share_your_post') {
                     actionMessage = 'پست شما را به اشتراک گذاشت.';
-                }else if (item.type == 'follow_you') {
                     
+                }else if (item.type == 'replay_comment') {
+                    actionMessage = 'به کامنت شما پاسخ داد.';
+                    commentText=activity.text;
+                }else if (item.type == 'follow_you') {
                     actionMessage = 'شما را دنبال کرد.';
                     memberId = activity.follower.id;
                     memberProfileImage = activity.follower.profileImage;
                     memberUserKey = activity.follower.userKey;
-                    
                     isFollowing= pStore.cUser.followeds.find(item=>item.followedId==memberId);
-                    
                 }else if (item.type == 'unfollow_you') {
                     actionMessage = 'شما را آنفالو کرد.';
                     memberId = activity.follower.id;
@@ -302,12 +306,14 @@ export const AnnounceList = observer(props => {
                                 <View style={{ padding: 5, flex: 1, justifyContent: 'center' }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Text dir='ltr' style={{ fontSize: 12, fontWeight: 800 }}>@{memberUserKey} </Text>
-                                        <Text style={{ fontSize: 10, color: subTextItem }}> {' ' + actionMessage}  </Text>
+                                        <Text style={{ fontSize: 10, color: itemListText ,paddingHorizontal:4}}> { actionMessage}  </Text>
                                     </View>
+                                    <Text style={{ color: textItem, fontSize: 12 }}>{commentText}</Text>
 
-                                    <DateTime format='jYYYY/jM/jD HH:mm' style={{ color: subTextItem, fontSize: 10 }} >
-                                        {item.cdate}
-                                    </DateTime>
+                                    {/* <DateTime format='jYYYY/jM/jD HH:mm' style={{ color: subTextItem, fontSize: 10 }} >
+                                        {item.cdate.timeToNow()}
+                                    </DateTime> */}
+                                    <Text style={{ color: subTextItem, fontSize: 10 }}>{item.cdate.timeToNow()}</Text>
                                 </View>
                                 
                             </TouchableOpacity>
@@ -351,10 +357,6 @@ export const AnnounceList = observer(props => {
                                     <Text style={{fontSize:11,color:bgWhite,paddingHorizontal:5}}>{isFollowing?'رها کردن':'دنبال کردن'}</Text>
                                  </TouchableOpacity>
                             )}
-
-
-                         
-
                         </View>
                         {/* {item.type=='share_post' &&(
                              <ShareItem item={{profileImage,userKey,postId,file,text}} />
