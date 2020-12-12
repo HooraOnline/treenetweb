@@ -111,14 +111,13 @@ export default class userpage extends Component {
 
     followUser=(followedId)=>{
         this.setState({loading:true});
-        Api.post('Followers/followUser',{followedId: followedId})
+        Api.post('Follows/followUser',{followedId: followedId})
         .then(users=>{
             this.getPageInfo();
             this.setState({loading:false,});
         }).catch((error)=>{
             this.setState({loading:false});
         });
-
     }
 
 

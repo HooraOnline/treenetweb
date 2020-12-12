@@ -121,16 +121,14 @@ export const PostCard = observer(props => {
     const item = props.item;
     const member = item.member;
     let { profileImage, userKey, avatar } = member;
+    const memberId=member.id;
     const [loading, setLoading] = useState(100);
     const [useLike, setUserLike] = useState(item.myLike.length);
-
     const [likesCount, setLikesCount] = useState(item.likes.length);
     const [mySeen, setMySeen] = useState(item.mySeen.length);
     const [commentsCount, setCommentsCount] = useState(item.comments.length);
-     const [seenCount, setSeenCount] = useState( item.seens.length);
+    const [seenCount, setSeenCount] = useState( item.seens.length);
     
-   
-  
     useEffect(() => {
       
     }, []);
@@ -150,9 +148,9 @@ export const PostCard = observer(props => {
    
 
 
-    const like = (postId) => {
+    const like = (postId,memberId) => {
         setLoading(true);
-        Api.post('likes/likePost', { postId: postId })
+        Api.post('likes/likePost', { postId: postId,reciverId:memberId })
             .then(like => {
                 setUserLike(true);
                 setLikesCount(likesCount + 1);
@@ -180,8 +178,7 @@ export const PostCard = observer(props => {
 
 
 
-    return (
-     
+    return (  
             <TouchableOpacity style={{ flex: 1 }} onTouchStart={()=>addSeen(item.id)} onMouseOver={()=>addSeen(item.id)}>
                 <TouchableOpacity
                     onPress={() => location.pathname = item.member.userKey}
@@ -234,13 +231,11 @@ export const PostCard = observer(props => {
                     />
                 </View>
                 <View style={{ flex: 1, padding: 10, paddingBottom: 30 }}>
-
-
                     <View style={{ flex: 1, flexDirection: 'row', marginTop: 5 }}>
                         {useLike ?
                             (<IoMdHeart size={25} color={'red'} style={{ marginRight: 10, marginLeft: 10 }} onClick={() => { unlike(item.id) }} />)
                             :
-                            (<IoMdHeartEmpty size={25} style={{ marginRight: 10, marginLeft: 10 }} onClick={() => { like(item.id) }} />)
+                            (<IoMdHeartEmpty size={25} style={{ marginRight: 10, marginLeft: 10 }} onClick={() => {like(item.id,memberId) }} />)
                         }
                         <IoMdShare size={25} style={{ marginRight: 10, marginLeft: 10 }} 
                           onClick={() => {
@@ -248,9 +243,7 @@ export const PostCard = observer(props => {
                            }}
                         />
                         <FaRegCommentDots size={25} style={{ marginRight: 10, marginLeft: 10 }} onClick={() => {
-
                             navigation.navigate('comments', { postId: item.id });
-
                         }} />
                     </View>
 
@@ -310,18 +303,15 @@ export const PostList = observer(props => {
     const [itemWidth, setItemWidth] = useState(100);
     const [posts, setPosts] = useState([{ image: images.ic_Social_Telegram }]);
     const [postList, setPostList] = useState([]);
+    
     useEffect(() => {
-
         getFollowboardPosts();
     }, []);
-
-
 
     const getFollowboardPosts = (fields, include) => {
         setloading(true)
         Api.post('posts/getFollowboardPosts', { regentId: pStore.cUser.regentId })
             .then(posts => {
-                
                 pStore.userPosts = posts;
                 setPosts(posts)
             }).catch((error) => {

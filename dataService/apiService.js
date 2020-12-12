@@ -364,17 +364,15 @@ export const logoutApi=function (username,password) {
 
 }
 
-export const getUserProfileApi = function (fields, include) {
+export const getUserProfileApi = function () {
     let params = {};
-    params.filter = {};
-    //params.userId22 = userId;
-    params.filter.fields = fields;
-    params.filter.include = include;
+   
     return  Api.get('members/me/getProfile', params)
         .then(user=>{
-         
+          
             pStore.cUser=user;
             persistStore.notChangePassword=user.notChangePassword;
+            
             getUserSubsetApi()
                 .then(subsetList=>{
                     leavesCount=0;

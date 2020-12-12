@@ -60,7 +60,7 @@ export default class userfollower extends Component {
 
     getFollowers =(memberId)=> {
         this.setState({loading:true})
-        Api.post('Followers/getUserFollowers',{memberId:memberId})
+        Api.post('Follows/getUserFollowers',{memberId:memberId})
                   .then(followers=>{
                      
                      this.setState({followers:followers})

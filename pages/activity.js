@@ -6,9 +6,11 @@ import images from "../public/static/assets/images";
 import {
     bgEmpty,
     bgScreen,
+    bgSuccess,
     bgWhite,
     borderLight,
     itemListText,
+    orange1,
     primaryDark,
     subTextItem,
     textGray,
@@ -21,10 +23,11 @@ import { faCogs, faCompass, faUser, faComments, faBell } from "@fortawesome/free
 import translate from "../src/language/translate";
 
 import { observer } from "mobx-react";
-import { getFileUri, postQuery } from "../dataService/apiService";
+import { getFileUri, getUserProfileApi, postQuery } from "../dataService/apiService";
 import pStore from "../src/stores/PublicStore";
 import Api from "../dataService/apiCaller";
 import { IoMdHeart, IoMdHeartEmpty, IoMdShare } from "react-icons/io";
+import { userStore } from '../src/stores';
 
 @observer
 export default class activity extends Component {
@@ -46,7 +49,7 @@ export default class activity extends Component {
 
     getUserAnnounce = () => {
         this.setState({ loading: true });
-        debugger
+        
         Api.post('activities/getUserAnnounce', {})
             .then(announceList => {
 
@@ -123,12 +126,99 @@ export default class activity extends Component {
 
 }
 
+const ShareItem = observer((props) => {
+
+    const { profileImage, userKey, postId, file, text } = props.item;
+
+
+    return (
+        <View style={{ marginHorizontal: 30, marginTop: 7 }}>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    width: '100%',
+                    maxWidth: global.width,
+                    //height: global.width / 2,
+                    maxHeight: global.width / 2,
+                    borderRadius: 0,
+                    borderWidth: 0.4,
+                    borderColor: borderLight,
+                    margin: 1,
+                    position: 'relative',
+                }}>
+
+                <View style={{ paddingHorizontal: 10, margin: 5, alignItems: 'center' }}>
+
+                    <TouchableOpacity
+                        onPress={() => location.pathname = userKey}
+                        style={{ alignItems: 'center' }}>
+                        <Image
+                            source={getFileUri('member', profileImage)}
+                            style={{
+                                width: 60,
+                                height: 60,
+                                borderRadius: 30,
+                            }}
+                        />
+                        <Text dir='ltr' style={{ fontSize: 12, fontWeight: 800, }}>{userKey}</Text>
+
+                    </TouchableOpacity>
+
+                    <IoMdShare size={25} style={{ marginTop: 16 }}
+                        onClick={() => {
+                            navigation.navigateTo('sharePost', { postId: postId });
+                        }}
+                    />
+
+
+                </View>
+
+                <View style={{ marginTop: 10 }}>
+                    <Image
+                        source={getFileUri('post', file)}
+                        style={{
+                            //width: global.width - 70,
+                            height: global.width / 2.3,
+ 
+
+                        }}
+                    />
+                    <Text style={{ fontSize: 12, margin: 10, }}>{userKey}@ {text}</Text>
+                </View>
+            </View>
+        </View>
+    )
+})
+
+
+
 export const AnnounceList = observer(props => {
-    const [loading, setloading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    
 
     useEffect(() => {
 
     }, []);
+
+    const followUser=async(followedId)=>{
+        setLoading(true);
+        Api.post('Follows/followUser',{followedId: followedId})
+        .then(users=>{
+           
+            getUserProfileApi()
+                .then(users=>{
+                    
+                    pStore.cUser=users;
+                    setLoading(false);
+                })
+                .catch(err=>{
+                    setLoading(false);
+                });
+            
+        }).catch((error)=>{
+            setLoading(false);
+        });
+    }
 
     return (
         <FlatList
@@ -147,93 +237,129 @@ export const AnnounceList = observer(props => {
                 </View>
             }
             renderItem={({ item, index }) => {
-                let { profileImage, userKey, avatar } = item.share.post.member;
-                let { file, isSpecial, text, } = item.share.post;
+                let profileImage ;
+                let userKey;
+                let file ;
+                let text ;
+                let memberId ;
+                let memberProfileImage ;
+                let memberUserKey;
+                let postId ;
+                let activity= item[item.action];
+                let post=activity.post;
+                let isFollowing;
+                
+                if(post){
+                     profileImage=post.member.profileImage;
+                     userKey=post.member.userKey;
+                     file=post.file;
+                     text=post.text;
 
-                const senderProfileImage = item.share.sender.profileImage;
-                const senderUserKey = item.share.sender.userKey;
-                const postId =item.share.post.id;
+                     memberProfileImage = activity.member.profileImage;
+                     memberUserKey = activity.member.userKey;
+                     memberId= activity.member.id;
+                     postId = activity.post.id;
+                }
 
+                let actionMessage = '';
+                if (item.type == 'like_post') {
+                    actionMessage = 'پست شما را لایک کرد.';
+                } else if (item.type == 'share_post') {
+                    actionMessage = 'این پست را با شما به اشتراک گذاشت.';
+                } else if (item.type == 'share_your_post') {
+                    actionMessage = 'پست شما را به اشتراک گذاشت.';
+                }else if (item.type == 'follow_you') {
+                    
+                    actionMessage = 'شما را دنبال کرد.';
+                    memberId = activity.follower.id;
+                    memberProfileImage = activity.follower.profileImage;
+                    memberUserKey = activity.follower.userKey;
+                    
+                    isFollowing= pStore.cUser.followeds.find(item=>item.followedId==memberId);
+                    
+                }else if (item.type == 'unfollow_you') {
+                    actionMessage = 'شما را آنفالو کرد.';
+                    memberId = activity.follower.id;
+                    memberProfileImage = activity.follower.profileImage;
+                    memberUserKey = activity.follower.userKey;
+                    isFollowing= pStore.cUser.followers.find(item=>item.followerId==memberId);
+                }
 
                 return (
-                    <View style={{ flex: 1,marginTop:16 }}>
+                    <View style={{ flex: 1, marginTop: 16 }}>
+                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', margin: 16, marginTop: 24, marginHorizontal: 16 }}>
+                            <TouchableOpacity
+                                onPress={() => location.pathname = memberUserKey}
+                                style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', paddingHorizontal: 10, }}>
+                                <Image
+                                    source={getFileUri('member', memberProfileImage)}
+                                    style={{
+                                        width: 40,
+                                        height: 40,
+                                        borderRadius: 30,
+                                    }}
+                                />
+                                <View style={{ padding: 5, flex: 1, justifyContent: 'center' }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Text dir='ltr' style={{ fontSize: 12, fontWeight: 800 }}>@{memberUserKey} </Text>
+                                        <Text style={{ fontSize: 10, color: subTextItem }}> {' ' + actionMessage}  </Text>
+                                    </View>
 
-                        <TouchableOpacity
-                            onPress={() => location.pathname = senderUserKey}
-                            style={{ flexDirection: 'row', justifyContent: 'center', paddingHorizontal: 10, marginTop: 16, marginHorizontal: 16 }}>
-                            <Image
-                                source={getFileUri('member', senderProfileImage)}
-                                style={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: 30,
-                                }}
-                            />
-                            <View style={{ padding: 5, flex: 1, justifyContent: 'center' }}>
-                                <Text dir='ltr' style={{ fontSize: 12, }}>پست زیر را با شما به اشتراک گذاشت @{senderUserKey} </Text>
-                                <DateTime format='jYYYY/jM/jD HH:mm' style={{ color: subTextItem, fontSize: 10 }} >
-                                    {item.cdate}
-                                </DateTime>
-                            </View>
-                        </TouchableOpacity>
-
-
-
-                        <View style={{ marginHorizontal: 30, marginTop: 7 }}>
-
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    width: '100%',
-                                    maxWidth: global.width,
-                                    //height: global.width / 2,
-                                    maxHeight: global.width / 2,
-                                    borderRadius: 0,
-                                    borderWidth: 0.4,
-                                    borderColor: borderLight,
-                                    margin: 1,
-                                    position: 'relative',
-                                }}>
-
-
-                                <View style={{ paddingHorizontal: 10, margin: 5, alignItems: 'center' }}>
-
-                                    <TouchableOpacity
-                                        onPress={() => location.pathname = userKey}
-                                        style={{  alignItems: 'center' }}>
-                                        <Image
-                                            source={getFileUri('member', profileImage)}
-                                            style={{
-                                                width: 60,
-                                                height: 60,
-                                                borderRadius: 30,
-                                            }}
-                                        />
-                                        <Text dir='ltr' style={{ fontSize: 12, fontWeight: 800, }}>{userKey}</Text>
-
-                                    </TouchableOpacity>
-                                    <IoMdShare size={25} style={{marginTop:16}}
-                                        onClick={() => {
-                                            navigation.navigateTo('sharePost', { postId: postId });
-                                        }}
-                                    />
-
-
+                                    <DateTime format='jYYYY/jM/jD HH:mm' style={{ color: subTextItem, fontSize: 10 }} >
+                                        {item.cdate}
+                                    </DateTime>
                                 </View>
-
-                                <View style={{ marginTop: 10 }}>
+                                
+                            </TouchableOpacity>
+                           
+                            {file && (
+                                <TouchableOpacity
+                                  
+                                    onPress={() => {
+                                        navigation.navigateTo('view_post', { postId: postId });
+                                    }}
+                                >
                                     <Image
                                         source={getFileUri('post', file)}
                                         style={{
-                                            //width: global.width - 70,
-                                            height: global.width / 2.3,
+                                            width: 100,
+                                            height: 100,
+                                            borderRadius: 8,
 
                                         }}
                                     />
-                                    <Text style={{ fontSize: 12, margin: 10, }}>{userKey}@ {text}</Text>
-                                </View>
-                            </View>
+                                </TouchableOpacity>
+                            )}
+
+                            {item.type == 'follow_you' &&(
+                                 <TouchableOpacity
+                                    onPress={()=>{followUser(memberId)}}
+                                    style={{
+                                       
+                                        borderRadius:8,
+                                        width: 100,
+                                        flexDirection:'row',
+                                        justifyContent:'center',
+                                        padding:5,
+                                        backgroundColor: isFollowing?bgSuccess:orange1
+                                    }}>
+                                    <Image source={loading?images.ic_more: images.ic_Information} style={{
+                                        width: 20,
+                                        height: 20,
+                                        tintColor:bgWhite
+                                    }}/>
+                                    <Text style={{fontSize:11,color:bgWhite,paddingHorizontal:5}}>{isFollowing?'رها کردن':'دنبال کردن'}</Text>
+                                 </TouchableOpacity>
+                            )}
+
+
+                         
+
                         </View>
+                        {/* {item.type=='share_post' &&(
+                             <ShareItem item={{profileImage,userKey,postId,file,text}} />
+                        )} */}
+
                     </View>
                 )
             }}
@@ -242,6 +368,8 @@ export const AnnounceList = observer(props => {
 
     )
 });
+
+
 
 
 

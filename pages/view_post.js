@@ -31,6 +31,7 @@ export default class view_post extends Component {
     }
 
     componentDidMount() {
+       
         this.getPost();
     }
 
@@ -59,9 +60,9 @@ export default class view_post extends Component {
             });
     }
 
-    like = (postId) => {
+    like = (postId,reciverId) => {
         this.setState({ loading: true });
-        Api.post('likes/likePost', { postId: postId })
+        Api.post('likes/likePost', { postId: postId,reciverId:reciverId})
             .then(like => {
                 this.setState({ loading: false, like: true,likesCount:this.state.likesCount+1 });
             }).catch((error) => {
@@ -115,6 +116,7 @@ export default class view_post extends Component {
         if (!post)
             return null;
         let { profileImage, userKey, avatar } = post.member;
+        const memberId=post.member.id;
     
         return (
             <PanelLayout
@@ -220,7 +222,7 @@ export default class view_post extends Component {
                             {this.state.like ?
                                 (<IoMdHeart size={25} color={'red'} style={{ margin: 10,cursor: 'hand' }} onClick={() => { this.unlike(post.id) }} />)
                                 :
-                                (<IoMdHeartEmpty size={25} style={{ margin: 10,cursor: 'hand' }} onClick={() => { this.like(post.id) }} />)
+                                (<IoMdHeartEmpty size={25} style={{ margin: 10,cursor: 'hand' }} onClick={() => { this.like(post.id,memberId) }} />)
                             }
                           
                             <IoMdShare size={25} style={{ margin: 10,cursor: 'hand' }} onClick={() => {
