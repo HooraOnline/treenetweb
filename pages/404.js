@@ -1,10 +1,10 @@
-import React, {Component, useEffect, useState} from 'react';
-import {globalState, persistStore, userStore} from "../src/stores";
+import React, { Component, useEffect, useState } from 'react';
+import { globalState, persistStore, userStore } from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
-import {ImageSelector, Toolbar} from "../src/components";
+import { ImageSelector, Toolbar } from "../src/components";
 
 import accountsStore from "../src/stores/Accounts";
-import {doDelay, navigation, setScreenSize, waitForData} from "../src/utils";
+import { doDelay, navigation, setScreenSize, waitForData } from "../src/utils";
 import images from "../public/static/assets/images";
 import {
     bg8,
@@ -16,25 +16,58 @@ import {
     orange1, primary, primaryDark,
     success,
     textGray,
-    textItem, yellowmin
+    textItem, transparent, yellowmin
 } from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
-import {BgImageChacheProgress, FlatList, IconApp, Text, TouchableOpacity, View,} from "../src/react-native";
+import {  TouchableWithoutFeedback, FlatList, IconApp, Text, TouchableOpacity, View, } from "../src/react-native";
 
-import {getFileUri, getUserSubsetApi, logoutApi, postQuery} from "../dataService/apiService";
-import {observer} from "mobx-react";
+import { getFileUri, getUserSubsetApi, logoutApi, postQuery } from "../dataService/apiService";
+import { observer } from "mobx-react";
 import Image from "../src/react-native/Image";
 import pStore from "../src/stores/PublicStore";
 import { IoIosLink } from "react-icons/io";
-import {set} from "mobx";
+import { set } from "mobx";
 import Api from "../dataService/apiCaller";
-import { FaStar,FaWindowClose } from "react-icons/fa";
-import { IoMdHeartEmpty ,IoMdShare,} from "react-icons/io";
+import { FaStar, FaWindowClose } from "react-icons/fa";
+import { IoMdHeartEmpty, IoMdShare, } from "react-icons/io";
 import { FaRegCommentDots } from "react-icons/fa";
 import translate from '../src/language/translate';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCogs, faCompass, faUser,faComments,faBell} from "@fortawesome/free-solid-svg-icons";
-let leavesCount=0
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCogs, faCompass, faUser, faUsers, faBell } from "@fortawesome/free-solid-svg-icons";
+
+
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import Switch from '@material-ui/core/Switch';
+const useStyles = makeStyles((theme) => ({
+    form: {
+      display: 'flex',
+      flexDirection: 'column',
+      margin: 'auto',
+      width: 'fit-content',
+    },
+    formControl: {
+      marginTop: theme.spacing(2),
+      minWidth: 120,
+    },
+    formControlLabel: {
+      marginTop: theme.spacing(1),
+    },
+  }));
+  
+
+
+let leavesCount = 0
 
 
 @observer
@@ -47,198 +80,203 @@ export default class userpage extends Component {
     componentDidMount() {
         this.getPageInfo();
     }
-    
-    calculateCount=(user)=>{
-        leavesCount=leavesCount+user.subsets.length;
-        for(let i=0;i<user.subsets.length;++i){
+
+    calculateCount = (user) => {
+        leavesCount = leavesCount + user.subsets.length;
+        for (let i = 0; i < user.subsets.length; ++i) {
             this.calculateCount(user.subsets[i]);
         }
     }
 
-    calculateTotalSubsetsCount=(subsets)=>{
-        for(let p=0;p<subsets.length;++p){
+    calculateTotalSubsetsCount = (subsets) => {
+        for (let p = 0; p < subsets.length; ++p) {
             this.calculateCount(subsets[p]);
         }
     }
 
-    getPageInfo=()=> {
-        this.setState({loading:true})
-            const pathname = window.location.pathname;
-            this.userKey=pathname.split('/').join('');
-           
-            Api.post('members/getUserPage',{userKey: this.userKey})
-                .then(users=>{
-                  
-                    if(users && users[0]){
-                        let user =users[0];
-                        this.user=user;
-                        this.cUserId=users.cUserId;
-                        this.userPosts=user.posts;
-                        this.userFollowed=user.followeds;
-                        this.userFollowers=user.followers;
-                        this.isFollowing=this.user.followers.find(item=>item.followerId==this.cUserId);
-                        this.isPageAdmin=pStore.cUser.userKey===user.userKey;
-                        pStore.userPosts=user.posts;
-                       
-                        this.setState({loading:false});
-                        getUserSubsetApi(user.id)
-                        .then(subsetList=>{
-                            
-                            leavesCount=0;
-                            pStore.subsetList=subsetList;
+    getPageInfo = () => {
+        this.setState({ loading: true })
+        const pathname = window.location.pathname;
+        this.userKey = pathname.split('/').join('');
+
+        Api.post('members/getUserPage', { userKey: this.userKey })
+            .then(users => {
+
+                if (users && users[0]) {
+                    let user = users[0];
+                    this.user = user;
+                    this.cUserId = users.cUserId;
+                    this.userPosts = user.posts;
+                    this.userFollowed = user.followeds;
+                    this.userFollowers = user.followers;
+                    this.isFollowing = this.user.followers.find(item => item.followerId == this.cUserId);
+                    this.isPageAdmin = pStore.cUser.userKey === user.userKey;
+                    pStore.userPosts = user.posts;
+
+                    this.setState({ loading: false });
+                    getUserSubsetApi(user.id)
+                        .then(subsetList => {
+
+                            leavesCount = 0;
+                            pStore.subsetList = subsetList;
                             this.calculateTotalSubsetsCount(subsetList);
-                            pStore.branchesCount=subsetList.length;
-                            pStore.leavesCount=leavesCount;
-                            this.isPageAdmin=pStore.cUser.userKey===user.userKey;
-                           
-                            this.setState({loading:false});
-        
+                            pStore.branchesCount = subsetList.length;
+                            pStore.leavesCount = leavesCount;
+                            this.isPageAdmin = pStore.cUser.userKey === user.userKey;
+
+                            this.setState({ loading: false });
+
                         })
-                        .catch(err=>{
-                           
-                            this.isPageAdmin=pStore.cUser.userKey===user.userKey;
-                            this.setState({loading:false});
+                        .catch(err => {
+
+                            this.isPageAdmin = pStore.cUser.userKey === user.userKey;
+                            this.setState({ loading: false });
                         });
-                    }else{
-                        this.setState({loading:false});
-                    }
-                   
-                }).catch((error)=>{
-                    this.setState({loading:false});
-                });
-        
+                } else {
+                    this.setState({ loading: false });
+                }
+
+            }).catch((error) => {
+                this.setState({ loading: false });
+            });
+
     }
 
-    followUser=(followedId)=>{
-        this.setState({loading:true});
-        Api.post('Follows/followUser',{followedId: followedId})
-        .then(users=>{
-            this.getPageInfo();
-            this.setState({loading:false,});
-        }).catch((error)=>{
-            this.setState({loading:false});
-        });
+    followUser = (followedId) => {
+        this.setState({ loading: true });
+        Api.post('Follows/followUser', { followedId: followedId })
+            .then(users => {
+                this.getPageInfo();
+                this.setState({ loading: false, });
+            }).catch((error) => {
+                this.setState({ loading: false });
+            });
     }
 
 
     render() {
-        
-       
-        let title=this.user?this.user.displayName || this.user.fullName:''
-        
+
+
+        let title = this.user ? this.user.displayName || this.user.fullName : ''
+
         const toolbarAdminStyle = {
-          
-            title:  this.user?this.user.fullName+' ('+this.userKey+'@)':'صفحه من',
+
+            title: this.user ? this.user.fullName + ' (' + this.userKey + '@)' : 'صفحه من',
             end: {
                 onPress: () => logoutApi(),
                 icon: images.ic_Period,
             },
         };
-        
-        const toolbarStyle={
+
+        const toolbarStyle = {
             start: {
                 content: images.ic_back,
-                onPress: ()=>navigation.goBack(),
+                onPress: () => navigation.goBack(),
             },
-            title:title,
+            title: title,
         };
 
-       
+
 
         return (
             <PanelLayout title={`user posts`} loading={this.state.loading} loadingMessage={this.state.loadingMessage}
-                         showMenu={this.state.showMenu}
-                         onRef={(initDrawer) => this.initDrawer = initDrawer}
-                         onCloseMenu={() => this.setState({showMenu: false})}
-                         style={{alignItems: 'center'}}
-                         header={
-                             <Toolbar
-                                 customStyle={this.isPageAdmin?toolbarAdminStyle:toolbarStyle}
-                                 isExpand={this.state.showAccountSelect }
-                             />
-                         }
+                showMenu={this.state.showMenu}
+                onRef={(initDrawer) => this.initDrawer = initDrawer}
+                onCloseMenu={() => this.setState({ showMenu: false })}
+                style={{ alignItems: 'center' }}
+                header={
+                    <View>
+                         <Toolbar
+                            customStyle={this.isPageAdmin ? toolbarAdminStyle : toolbarStyle}
+                            isExpand={this.state.showAccountSelect}
+                        />
+                         <Menu/>
+                    </View>
+                   
+                }
 
-                         footer={
-                            <View style={{paddingHorizontal: 20}}>
-                                {this.isPageAdmin &&(
-                                    <NavBar navButtons={[
-                                    {
-                                        label: translate('من'),
-                                        path: "/"+pStore.cUser.userKey,
-                                        icon: <FontAwesomeIcon icon={faUser}/>
-                                    },
-                                    // {
-                                    //     label: translate('گفتگو'),
-                                    //     path: "/myChat",
-                                    //     icon: <FontAwesomeIcon icon={faComments}/>
-                                    // },
-                                    {
-                                        label: translate('سرویسها'),
-                                        path: "/myServices",
-                                        icon: <FontAwesomeIcon icon={faCogs}/>
-                                    },
-                                    {
-                                        label: translate('اعلانات'),
-                                        path: "/activity",
-                                        icon: <FontAwesomeIcon icon={faBell}/>
-                                    },
-                                    {
-                                        label: translate('فالوبورد'),
-                                       path: "/followboard",
-                                        icon: <FontAwesomeIcon icon={faCompass}/>
-                                    },
-                                ]}/>
-                                )}
-                            </View>
-                        }>
-                         
-                             {this.user?(
-                                <View style={{flex:1, marginTop: 0, alignItems: 'center'}}>
-                                    <UserCard
-                                        style={{maxWidth: 500,paddingTop: 25,paddingHorizontal:16}} 
-                                        user={this.user}
-                                        isFollowing={this.isFollowing}
-                                        onPressFollowBotton={(followedId)=>this.followUser(followedId)}
-                                        isPageAdmin={this.isPageAdmin}
-                                     />
-                                    <View style={{flex:1,width:'100%',backgroundColor:bgWhite,minHeight:600}}>
-                                    {this.userPosts &&(
-                                        <UserPosts postList={this.userPosts}/>
-                                    )
-                                    }
-                                    </View>
-                                </View>
-                             ):(
-                             <View>
-                                  {this.state.loading?(
-                                      <Text
-                                            style={{
-                                                
-                                                marginTop: 20,
-                                                alignSelf:'center',
-                                                marginBottom: 10,
-                                                fontSize:12,
-                                                fontWeight: 800,
-                                                fontFamily: 'IRANYekanFaNum-Bold',
-                                                color: orange1
-                                            }}>
-                                        ......
-                                    </Text> 
-                                 )
-                                    
-                                 :(
-                                     
-                                    <View style={{flex: 1,  alignItems: 'center', padding: 10, paddingTop: '5%',}}>
+                footer={
+                    <View style={{ paddingHorizontal: 20 }}>
+                        {this.isPageAdmin && (
+                            <NavBar navButtons={[
+                                {
+                                    label: translate('پستها'),
+                                    path: "/" + pStore.cUser.userKey,
+                                    icon: <FontAwesomeIcon icon={faUser} />
+                                },
+                                {
+                                    label: translate('شبکه من'),
+                                    path: "/myNetwork",
+                                    icon: <FontAwesomeIcon icon={faUsers} />
+                                },
+                                {
+                                    label: translate('سرویسها'),
+                                    path: "/myServices",
+                                    icon: <FontAwesomeIcon icon={faCogs} />
+                                },
+                                {
+                                    notif: '10',
+                                    label: translate('اعلانات'),
+                                    path: "/activity",
+                                    icon: <FontAwesomeIcon icon={faBell} />
+                                },
+                                {
+                                    label: translate('فالوبورد'),
+                                    path: "/followboard",
+                                    icon: <FontAwesomeIcon icon={faCompass} />
+                                },
+                            ]} />
+                        )}
+                    </View>
+                }>
+
+                {this.user ? (
+                    <View style={{ flex: 1, marginTop: 0, alignItems: 'center' }}>
+                        <UserCard
+                            style={{ maxWidth: 500, paddingTop: 25, paddingHorizontal: 16 }}
+                            user={this.user}
+                            isFollowing={this.isFollowing}
+                            onPressFollowBotton={(followedId) => this.followUser(followedId)}
+                            isPageAdmin={this.isPageAdmin}
+                        />
+                        <View style={{ flex: 1, width: '100%', backgroundColor: bgWhite, minHeight: 600 }}>
+                            {this.userPosts && (
+                                <UserPosts postList={this.userPosts} />
+                            )
+                            }
+                        </View>
+                    </View>
+                ) : (
+                        <View>
+                            {this.state.loading ? (
+                                <Text
+                                    style={{
+
+                                        marginTop: 20,
+                                        alignSelf: 'center',
+                                        marginBottom: 10,
+                                        fontSize: 12,
+                                        fontWeight: 800,
+                                        fontFamily: 'IRANYekanFaNum-Bold',
+                                        color: orange1
+                                    }}>
+                                    ......
+                                </Text>
+                            )
+
+                                : (
+
+                                    <View style={{ flex: 1, alignItems: 'center', padding: 10, paddingTop: '5%', }}>
                                         <Image
                                             source={images.tree}
-                                            style={{maxWidth: '40%', maxHeight: '40%',}}
+                                            style={{ maxWidth: '40%', maxHeight: '40%', }}
                                         />
                                         <Text
                                             style={{
                                                 marginTop: 20,
-                                                alignSelf:'center',
+                                                alignSelf: 'center',
                                                 marginBottom: 10,
-                                                fontSize:12,
+                                                fontSize: 12,
                                                 fontWeight: 800,
                                                 fontFamily: 'IRANYekanFaNum-Bold',
                                                 color: orange1
@@ -252,30 +290,109 @@ export default class userpage extends Component {
                                                 fontSize: 25,
                                                 fontWeight: 499,
                                                 fontFamily: 'IRANYekanFaNum-Bold',
-                    
+
                                             }}>
                                             صفحه ای با این آدرس پیدا نشد.
                                         </Text>
-                                     </View>
-                                 )}
-                             </View>
-                             )
-                            }
-                             
-                                
-                
+                                    </View>
+                                )}
+                        </View>
+                    )
+                }
+
+
+             
             </PanelLayout>
         )
     }
 
 }
 
+
+
+
+export const Menu = (props => {
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    const [fullWidth, setFullWidth] = React.useState(true);
+    const [maxWidth, setMaxWidth] = React.useState('sm');
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+  
+    const handleMaxWidthChange = (event) => {
+      setMaxWidth(event.target.value);
+    };
+  
+    const handleFullWidthChange = (event) => {
+      setFullWidth(event.target.checked);
+    };
+  
+    return (
+      <React.Fragment>
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+          Open max-width dialog
+        </Button>
+        <Dialog
+          fullWidth={fullWidth}
+          maxWidth={maxWidth}
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="max-width-dialog-title"
+        >
+          <DialogTitle id="max-width-dialog-title">Optional sizes</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              You can set my maximum width and whether to adapt or not.
+            </DialogContentText>
+            <form className={classes.form} noValidate>
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="max-width">maxWidth</InputLabel>
+                <Select
+                  autoFocus
+                  value={maxWidth}
+                  onChange={handleMaxWidthChange}
+                  inputProps={{
+                    name: 'max-width',
+                    id: 'max-width',
+                  }}
+                >
+                  <MenuItem value={false}>false</MenuItem>
+                  <MenuItem value="xs">xs</MenuItem>
+                  <MenuItem value="sm">sm</MenuItem>
+                  <MenuItem value="md">md</MenuItem>
+                  <MenuItem value="lg">lg</MenuItem>
+                  <MenuItem value="xl">xl</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControlLabel
+                className={classes.formControlLabel}
+                control={<Switch checked={fullWidth} onChange={handleFullWidthChange} />}
+                label="Full width"
+              />
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
+    );
+  })
+
 export const UserCard = observer(props => {
     let leavesCount = 0;
-    let {user} = props;
-    if(!user) return null;
+    let { user } = props;
+    if (!user) return null;
     const setProfileImage = (fileName) => {
-        const data = {profileImage: fileName};
+        const data = { profileImage: fileName };
         postQuery('Members/me/setProfileImage', data)
             .then(res => {
                 pStore.cUser.profileImage = res.profileImage;
@@ -284,9 +401,9 @@ export const UserCard = observer(props => {
 
             })
     };
-    
 
-    
+
+
     return (
         <View style={props.style}>
             <View style={{
@@ -296,7 +413,7 @@ export const UserCard = observer(props => {
                 borderRadius: 10,
                 alignItems: 'center',
             }}>
-                      {/* <BgImageChacheProgress
+                {/* <BgImageChacheProgress
                                     style={[{width:100,height:100, borderRadius: 50,}]}
                                     //resizeMode="cover"
                                     source={user.profileImage?getFileUri('member',user.profileImage):"noImage"}
@@ -327,56 +444,56 @@ export const UserCard = observer(props => {
                                         this.setState({loadImageCompelete: true})
                                     }}
                                 ></BgImageChacheProgress> */}
-                                <View style={{alignItems:'center'}}>
-                                <ImageSelector
-                                    style={{
-                                        borderColor: bg8,
-                                        height: 90,
-                                        width: 90,
-                                        borderRadius: 45,
-                                        alignSelf: 'center'
-                                    }}
-                                    folderName={'member'}
-                                    onUplodedFile={(fileName) => {
-                                        setProfileImage(fileName);
-                                    }}
-                                    canUpload={props.isPageAdmin}
-                                    autoUpload={true}
-                                    imageStyle={{height: 100, width: 100, borderRadius: 50}}
-                                    image={user.profileImage}
-                                    noImage={images.default_ProPic}
-                                    hideDeleteBtn={true}
-                                />
-                                <Text style={{marginTop:5,fontWeight:800}}>{props.user.userKey}</Text>
-                                </View>
-                                 
+                <View style={{ alignItems: 'center' }}>
+                    <ImageSelector
+                        style={{
+                            borderColor: bg8,
+                            height: 90,
+                            width: 90,
+                            borderRadius: 45,
+                            alignSelf: 'center'
+                        }}
+                        folderName={'member'}
+                        onUplodedFile={(fileName) => {
+                            setProfileImage(fileName);
+                        }}
+                        canUpload={props.isPageAdmin}
+                        autoUpload={true}
+                        imageStyle={{ height: 100, width: 100, borderRadius: 50 }}
+                        image={user.profileImage}
+                        noImage={images.default_ProPic}
+                        hideDeleteBtn={true}
+                    />
+                    <Text style={{ marginTop: 5, fontWeight: 800 }}>{props.user.userKey}</Text>
+                </View>
 
 
-                <View style={{width: 20}}/>
-                <View style={{alignItems: 'center'}}>
-                    <View style={{flexDirection: 'row', height: 30, maxWidth: 500, justifyContent: 'space-around'}}>
-                        <View style={{alignItems: 'center', paddingHorizontal: 15}}>
-                            <Text style={{fontSize: 12}}>شاخه</Text>
-                            <Text style={{fontSize: 12}}>{pStore.branchesCount}</Text>
+
+                <View style={{ width: 20 }} />
+                <View style={{ alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', height: 30, maxWidth: 500, justifyContent: 'space-around' }}>
+                        <View style={{ alignItems: 'center', paddingHorizontal: 15 }}>
+                            <Text style={{ fontSize: 12 }}>شاخه</Text>
+                            <Text style={{ fontSize: 12 }}>{pStore.branchesCount}</Text>
                         </View>
-                        <View style={{alignItems: 'center', paddingHorizontal: 15}}>
-                            <Text style={{fontSize: 12}}>برگ</Text>
-                            <Text style={{fontSize: 12}}>{pStore.leavesCount}</Text>
+                        <View style={{ alignItems: 'center', paddingHorizontal: 15 }}>
+                            <Text style={{ fontSize: 12 }}>زیرشاخه</Text>
+                            <Text style={{ fontSize: 12 }}>{pStore.leavesCount}</Text>
                         </View>
                         {/* <View style={{alignItems: 'center', paddingHorizontal: 15}}>
                             <Text style={{fontSize: 12}}>عضو</Text>
                             <Text style={{fontSize: 12}}>{pStore.branchesCount + pStore.leavesCount +user.followers.length+ 1}</Text>
                         </View> */}
-                         <TouchableOpacity 
-                            style={{alignItems: 'center', paddingHorizontal: 15}}
-                            onPress={()=>{
-                                if(user.followers.length>0){
-                                    navigation.navigate('userfollowers',{uidc:user.id,userKey:user.userKey});
+                        <TouchableOpacity
+                            style={{ alignItems: 'center', paddingHorizontal: 15 }}
+                            onPress={() => {
+                                if (user.followers.length > 0) {
+                                    navigation.navigate('userfollowers', { uidc: user.id, userKey: user.userKey });
                                 }
                             }}
-                         >
-                            <Text style={{fontSize: 12}}>فالور</Text>
-                            <Text style={{fontSize: 12}}>{user.followers.length}</Text>
+                        >
+                            <Text style={{ fontSize: 12 }}>فالورر</Text>
+                            <Text style={{ fontSize: 12 }}>{user.followers.length}</Text>
                         </TouchableOpacity>
                     </View>
                     <Text
@@ -400,109 +517,120 @@ export const UserCard = observer(props => {
                 marginTop: 5,
                 justifyContent: 'space-between'
             }}>
-                <Text style={{fontSize: 12, textAlign: 'justify',color:textItem}}>{user.story}</Text>
+                <Text style={{ fontSize: 12, textAlign: 'justify', color: textItem }}>{user.story}</Text>
             </View>
-            {props.isPageAdmin?(
-                <View style={{flexDirection:'row'}}>
-                <TouchableOpacity
-                    onPress={()=>{navigation.navigate('edit_profile')}}
-                    style={{
-                        flex:1,
-                        margin:10,
-                        width:'100%',
-                        width:140,
-                        borderRadius:8,
-                        flexDirection:'row',
-                        justifyContent:'center',
-                        padding:10,
-                        backgroundColor: orange1
-                    }}>
-                    <Image source={images.ic_edit} style={{
-                        width: 24,
-                        height: 24,
-                        tintColor:bgWhite
-                    }}/>
-                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>ویرایش پروفایل</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={()=>{navigation.navigate('myNetwork')}}
-                    style={{
-                        flex:1,
-                        margin:10,
-                        width:'100%',
-                        maxWidth:300,
-                        width:140,
-                        borderRadius:8,
-                        flexDirection:'row',
-                        justifyContent:'center',
-                        padding:10,
-                        backgroundColor: bgSuccess
-                    }}>
-                    <IoIosLink
+            {props.isPageAdmin ? (
+                <View style={{ flexDirection: 'row', paddingBottom: 10, justifyContent: 'flex-end' }}>
+                    <TouchableOpacity
+                        onPress={() => { navigation.navigate('edit_profile') }}
+                        style={{
+                            margin: 5,
+                            width: '100%',
+                            width: 120,
+                            borderRadius: 8,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            padding: 5,
+                            backgroundColor: orange1
+                        }}>
+                        <Image source={images.ic_edit} style={{
+                            width: 24,
+                            height: 24,
+                            tintColor: bgWhite
+                        }} />
+                        <Text style={{ fontSize: 11, color: bgWhite, paddingHorizontal: 5 }}>ویرایش پروفایل</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => { navigation.navigate('myNetwork') }}
+                        style={{
+                            margin: 5,
+                            width: '100%',
+                            maxWidth: 300,
+                            width: 120,
+                            borderRadius: 8,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            padding: 5,
+
+                            backgroundColor: bgSuccess
+                        }}>
+                        {/* <IoIosLink
                         color={bgWhite}
                         style={{
                             width: 24,
                             height: 24,
                             tintColor:bgWhite
                         }}
-                    />
+                    /> */}
+                        <FontAwesomeIcon color={bgWhite}
+                            style={{
+                                width: 22,
+                                height: 22,
+                                tintColor: bgWhite
+                            }} icon={faUsers} />
 
-                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>شبکه من</Text>
-                </TouchableOpacity>
-            </View>
-            ):(
-                <View style={{flexDirection:'row'}}>
-                <TouchableOpacity
-                    onPress={()=>{props.onPressFollowBotton(user.id)}}
-                    style={{
-                        flex:1,
-                        margin:10,
-                        width:'100%',
-                        maxWidth:300,
-                        borderRadius:8,
-                        flexDirection:'row',
-                        justifyContent:'center',
-                        padding:10,
-                        backgroundColor: props.isFollowing?bgSuccess:orange1
-                    }}>
-                    <Image source={images.ic_Information} style={{
-                        width: 24,
-                        height: 24,
-                        tintColor:bgWhite
-                    }}/>
-                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>{props.isFollowing?'رها کردن':'دنبال کردن'}</Text>
-                </TouchableOpacity>
-             
-                <TouchableOpacity
-                    onPress={()=>{navigation.navigate('myLink')}}
-                    disabled={true}
-                    style={{
-                        flex:1,
-                        margin:10,
-                        width:'100%',
-                        maxWidth:300,
-                        borderRadius:8,
-                        flexDirection:'row',
-                        justifyContent:'center',
-                        padding:10,
-                        backgroundColor: bgSuccess
-                    }}>
-                    <IoIosLink
+                        <Text style={{ fontSize: 11, color: bgWhite, paddingHorizontal: 5 }}>شبکه من</Text>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                    <View style={{ flex: 1, flexDirection: 'row', paddingBottom: 10, justifyContent: 'flex-end' }}>
+                        <TouchableOpacity
+                            onPress={() => { props.onPressFollowBotton(user.id) }}
+                            style={{
+
+                                margin: 5,
+                                width: 100,
+                                maxWidth: 300,
+                                borderRadius: 8,
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                padding: 5,
+                                backgroundColor: props.isFollowing ? bgSuccess : orange1
+                            }}>
+                            <Image source={images.ic_Information} style={{
+                                width: 24,
+                                height: 24,
+                                tintColor: bgWhite
+                            }} />
+                            <Text style={{ fontSize: 12, color: bgWhite, paddingHorizontal: 5 }}>{props.isFollowing ? 'رها کردن' : 'دنبال کردن'}</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => { navigation.navigate('myLink') }}
+                            disabled={true}
+                            style={{
+
+                                margin: 5,
+                                width: 100,
+                                maxWidth: 300,
+                                borderRadius: 8,
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                padding: 5,
+                                backgroundColor: bgSuccess
+                            }}>
+                            {/* <IoIosLink
                         color={bgWhite}
                         style={{
                             width: 24,
                             height: 24,
                             tintColor:bgWhite
                         }}
-                    />
+                    /> */}
 
-                    <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}>شبکه</Text>
-                </TouchableOpacity>
-            </View>
-            )
+                            <FontAwesomeIcon style={{
+                                width: 22,
+                                height: 22,
+                                color: bgWhite
+                            }} icon={faUsers} />
+
+                            <Text style={{ fontSize: 12, color: bgWhite, paddingHorizontal: 5 }}>شبکه</Text>
+                        </TouchableOpacity>
+                    </View>
+                )
 
             }
-            
+
         </View>
 
     )
@@ -512,132 +640,136 @@ export const UserPosts = observer(props => {
     const [loading, setLoading] = useState(false);
     const [itemWidth, setItemWidth] = useState(100);
     //const [posts, setPosts] = useState([{image:images.ic_Social_Telegram}]);
-   
+
     const [selectedItem, setSelectedItem] = useState(null);
     useEffect(() => {
         onResizeScreen();
-       
-    },[]);
 
-    const onResizeScreen=()=> {
-        setItemWidth(global.width/3-4)
+    }, []);
+
+    const onResizeScreen = () => {
+        setItemWidth(global.width / 3 - 4)
         document.body.onresize = () => {
-            setItemWidth(global.width/3-4)
+            setItemWidth(global.width / 3 - 4)
         };
     }
 
     const pathname = window.location.pathname;
-    const userKey=pathname.split('/').join('');
-    const isPageAdmin=pStore.cUser.userKey===userKey;
-    let posts=[];
-    
-    if(isPageAdmin){
-        posts=[{file:images.ic_add}].concat(pStore.userPosts);
-    }else{
-        posts=pStore.userPosts;
+    const userKey = pathname.split('/').join('');
+    const isPageAdmin = pStore.cUser.userKey === userKey;
+    let posts = [];
+
+    if (isPageAdmin) {
+        posts = [{ file: images.ic_add }].concat(pStore.userPosts);
+    } else {
+        posts = pStore.userPosts;
     }
-    
+
     return (
-        <View style={{flex:1,marginTop:2}}>
+        <View style={{ flex: 1, marginTop: 2 }}>
             <FlatList
                 loading={loading}
-                style={{justifyContent:'center'}}
+                style={{ justifyContent: 'center' }}
                 keyExtractor={(item, index) => index.toString()}
                 data={posts}
                 listFormat='wrap'
                 ListEmptyComponent={null}
-                renderItem={({item, index}) =>{
-                    if(index==0 && isPageAdmin)
-                        return(
+                renderItem={({ item, index }) => {
+                    if (index == 0 && isPageAdmin)
+                        return (
                             <ImageSelector
                                 style={{
-                                    alignItems:'center',
-                                    justifyContent:'center',
-                                    width:itemWidth,
-                                    height:itemWidth,
-                                    borderRadius:4,
-                                    margin:2,
-                                    backgroundColor:textGray,
-                                    borderColor:borderLight,
-                                    borderWidth:0.4,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: itemWidth,
+                                    height: itemWidth,
+                                    borderRadius: 4,
+                                    margin: 2,
+                                    backgroundColor: textGray,
+                                    borderColor: borderLight,
+                                    borderWidth: 0.4,
                                 }}
                                 folderName={'post'}
                                 onUplodedFile={(fileName) => {
-                                    pStore.param1=fileName;
+                                    pStore.param1 = fileName;
                                     navigation.navigate('addpost');
 
                                 }}
-                                onSelectFile={(files,formData,file0,filebase64)=>{
-                                    pStore.param1=files;
-                                    pStore.param2=filebase64;
+                                onSelectFile={(files, formData, file0, filebase64) => {
+                                    pStore.param1 = files;
+                                    pStore.param2 = filebase64;
                                     //navigation.navigate('addpost')
                                 }}
 
                                 canUpload={true}
                                 autoUpload={true}
-                                imageStyle={{height: 100, width: 100, borderRadius: 50}}
+                                imageStyle={{ height: 100, width: 100, borderRadius: 50 }}
                                 image={item.file}
                                 noImage={images.default_ProPic}
                                 hideDeleteBtn={true}
                             >
-                                <View style={{flex:1,width:'100%', height:'100%',justifyContent:'center',alignItems:'center',backgroundColor:'gray'}}>
+                                <View style={{ flex: 1, width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'gray' }}>
                                     <IconApp
                                         class={'apic_addcircle'}
                                         style={{
-                                            tintColor:bgWhite,
-                                            width:50,
-                                            height:50,
+                                            tintColor: bgWhite,
+                                            width: 50,
+                                            height: 50,
 
                                         }}
                                     />
-                                        <Text style={{fontSize:11,color:bgWhite}} >پست جدید</Text>
-                                    </View>
+                                    <Text style={{ fontSize: 11, color: bgWhite }} >پست جدید</Text>
+                                </View>
                             </ImageSelector>
                         )
-                    
+
                     return (
                         <TouchableOpacity
-                            onPress={()=>{
-                                navigation.navigateTo('view_post',{postId:item.id});
+                            onPress={() => {
+                                navigation.navigateTo('view_post', { postId: item.id });
                             }}
                             style={{
-                                alignItems:'center',
-                                justifyContent:'center',
-                                width:itemWidth,
-                                height:itemWidth,
-                                borderRadius:4,
-                                borderWidth:0.4,
-                                borderColor:borderLight,
-                                margin:1,
-                                position:'relative'
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: itemWidth,
+                                height: itemWidth,
+                                borderRadius: 4,
+                                borderWidth: 0.4,
+                                borderColor: borderLight,
+                                margin: 1,
+                                position: 'relative'
                             }}>
-                            {item.isSpecial &&(
+                            {item.isSpecial && (
                                 <FaStar
                                     size={30}
                                     color={yellowmin}
                                     style={{
-                                        position:'absolute',
-                                        top:5,
-                                        left:5
+                                        position: 'absolute',
+                                        top: 5,
+                                        left: 5
                                     }}
                                 />
                             )}
                             <Image
-                                source={getFileUri('post',item.file)}
+                                source={getFileUri('post', item.file)}
                                 style={{
-                                    width:'100%',
-                                    height:'100%',
+                                    width: '100%',
+                                    height: '100%',
 
                                 }}
                             />
                         </TouchableOpacity>
 
                     )
-                } }
+                }}
             />
         </View>
 
     )
 });
+
+
+
+
 
 

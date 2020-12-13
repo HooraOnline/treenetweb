@@ -7,7 +7,7 @@ import {Input ,FormControl } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import Platform from "../react-native/Platform";
 import MaskedInput from 'react-text-mask';
-import { FaTree } from "react-icons/fa";
+import { faUsers } from "react-icons/fa";
 import {persistStore} from "../stores";
 class Underline extends PureComponent {
     static propTypes = {
@@ -278,7 +278,7 @@ export default class FloatingLabelTextInput extends PureComponent {
                                     alignSelf: 'center',
                                 },unitStyle]}>{this.props.unit}</Text>}
                                 {isAccept!==undefined &&(
-                                    <FaTree size={30}  color={isAccept?grL5:grayVD7}
+                                    <faUsers size={30}  color={isAccept?grL5:grayVD7}
                                             style={{
                                                 padding:2,
                                                 alignSelf: 'center',

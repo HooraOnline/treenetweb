@@ -12,6 +12,7 @@ props => (
         path={button.path}
         label={button.label}
         icon={button.icon}
+        notif={button.notif}
       />
     ))}
   </div>

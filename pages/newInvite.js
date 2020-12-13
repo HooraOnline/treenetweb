@@ -398,7 +398,7 @@ const RegentCard=observer(
                                 <Text style={{fontSize: 12}}>{userStore.branchesCount}</Text>
                             </View>
                             <View style={{alignItems: 'center', paddingHorizontal: 10}}>
-                                <Text style={{fontSize: 12}}>برگ</Text>
+                                <Text style={{fontSize: 12}}>زیرشاخه</Text>
                                 <Text style={{fontSize: 12}}>{userStore.leavesCount}</Text>
                             </View>
                             <View style={{alignItems: 'center', paddingHorizontal: 10}}>

@@ -225,7 +225,7 @@ export default class register extends Component {
                                             <Text style={{ fontSize: 12 }}>{pStore.branchesCount}</Text>
                                         </View>
                                         <View style={{ alignItems: 'center', paddingHorizontal: 15 }}>
-                                            <Text style={{ fontSize: 12 }}>برگ</Text>
+                                            <Text style={{ fontSize: 12 }}>زیرشاخه</Text>
                                             <Text style={{ fontSize: 12 }}>{pStore.leavesCount}</Text>
                                         </View>
                                         <View style={{ alignItems: 'center', paddingHorizontal: 15 }}>

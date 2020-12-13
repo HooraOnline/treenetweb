@@ -127,7 +127,7 @@ export default class ShareLink extends Component {
                     WorkplaceIcon,*/}
                         <TelegramShareButton style={{}}
                                              url={pStore.cUser.invitationLink}
-                                             quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و برگ بگیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
+                                             quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و زیرشاخه بگیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                         >
@@ -135,7 +135,7 @@ export default class ShareLink extends Component {
                         </TelegramShareButton>
                         <WhatsappShareButton style={{}}
                                              url={pStore.cUser.invitationLink}
-                                             quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و برگ بگیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
+                                             quote={"با ترینتگرام خیلی  راحت،  لینکتو به اشتراک بذار، شاخ و زیرشاخه بگیر و شبکه تبلیغاتی و پیامرسانی خودتو بساز. "}
                                              className="share"
                                              imageURL={'https://treenetgram.com/_next/static/images/tree-ca9fd9e975b7edbcc796a105125a15e7.png'}
                         >
@@ -271,7 +271,7 @@ export const InvitCard = observer(props => {
                             <Text style={{fontSize: 12}}>{pStore.branchesCount}</Text>
                         </View>
                         <View style={{alignItems: 'center', paddingHorizontal: 10}}>
-                            <Text style={{fontSize: 12}}>برگ</Text>
+                            <Text style={{fontSize: 12}}>زیرشاخه</Text>
                             <Text style={{fontSize: 12}}>{pStore.leavesCount}</Text>
                         </View>
                         <View style={{alignItems: 'center', paddingHorizontal: 10}}>

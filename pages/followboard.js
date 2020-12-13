@@ -17,7 +17,7 @@ import {
 import NavBar from "../src/components/layouts/NavBar";
 import { FlatList, Image, Text, TouchableOpacity, View, } from "../src/react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCogs, faCompass, faUser,faComments,faBell } from "@fortawesome/free-solid-svg-icons";
+import { faCogs, faCompass, faUser,faUsers,faBell } from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
 import copy from "copy-to-clipboard";
 import { persistStore, } from "../src/stores";
@@ -48,7 +48,6 @@ export default class followboard extends Component {
         };
     }
 
-
     async componentDidMount() {
 
     }
@@ -77,15 +76,15 @@ export default class followboard extends Component {
                     <View style={{ paddingHorizontal: 20 }}>
                         <NavBar navButtons={[
                             {
-                                label: translate('من'),
-                                path: "/" + pStore.cUser.userKey,
-                                icon: <FontAwesomeIcon icon={faUser} />
+                                label: translate('پستها'),
+                                path: "/"+pStore.cUser.userKey,
+                                icon: <FontAwesomeIcon icon={faUser}/>
                             },
-                            // {
-                            //     label: translate('گفتگو'),
-                            //     path: "/myChat",
-                            //     icon: <FontAwesomeIcon icon={faComments}/>
-                            // },
+                            {
+                                label: translate('شبکه من'),
+                                path: "/myNetwork",
+                                icon: <FontAwesomeIcon icon={faUsers}/>
+                            },
                             {
                                 label: translate('سرویسها'),
                                 path: "/myServices",
@@ -242,8 +241,8 @@ export const PostCard = observer(props => {
                             navigation.navigateTo('sharePost', { postId: item.id });
                            }}
                         />
-                        <FaRegCommentDots size={25} style={{ marginRight: 10, marginLeft: 10 }} onClick={() => {
-                            navigation.navigate('comments', { postId: item.id });
+                        <FaRegCommentDots size={25} style={{ marginRight: 10, marginLeft: 10 }} onClick={() => {   
+                            navigation.navigateTo('comments', { postId: item.id });
                         }} />
                     </View>
 

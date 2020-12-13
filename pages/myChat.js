@@ -16,7 +16,7 @@ import {
 import NavBar from "../src/components/layouts/NavBar";
 import {FlatList, Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCogs, faCompass, faUser,faComments,faBell} from "@fortawesome/free-solid-svg-icons";
+import {faCogs, faCompass, faUser,faUsers,faBell} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
 
 import {observer} from "mobx-react";
@@ -88,16 +88,16 @@ export default class myChat extends Component {
                          footer={
                              <View style={{paddingHorizontal: 20}}>
                                  <NavBar navButtons={[
-                                     {
-                                         label: translate('من'),
-                                         path: "/"+pStore.cUser.userKey,
-                                         icon: <FontAwesomeIcon icon={faUser}/>
-                                     },
-                                    //  {
-                                    //     label: translate('گفتگو'),
-                                    //     path: "/myChat",
-                                    //     icon: <FontAwesomeIcon icon={faComments}/>
-                                    // },
+                                      {
+                                        label: translate('پستها'),
+                                        path: "/"+pStore.cUser.userKey,
+                                        icon: <FontAwesomeIcon icon={faUser}/>
+                                    },
+                                    {
+                                        label: translate('شبکه من'),
+                                        path: "/myNetwork",
+                                        icon: <FontAwesomeIcon icon={faUsers}/>
+                                    },
                                      {
                                          label: translate('سرویسها'),
                                          path: "/myServices",

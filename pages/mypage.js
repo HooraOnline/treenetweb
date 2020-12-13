@@ -20,7 +20,7 @@ import {
 import NavBar from "../src/components/layouts/NavBar";
 import {FlatList, Text, TouchableOpacity, View,} from "../src/react-native";
 
-import {faCogs, faCompass, faUser,faComments,faBell} from "@fortawesome/free-solid-svg-icons";
+import {faCogs, faCompass, faUser,faUsers,faBell} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
 import {getFileUri, logoutApi, postQuery} from "../dataService/apiService";
 import {observer} from "mobx-react";
@@ -145,16 +145,16 @@ export default class mypage extends Component {
                          footer={
                              <View style={{paddingHorizontal: 20}}>
                                  <NavBar navButtons={[
-                                     {
-                                         label: translate('من'),
-                                         path: "/",
-                                         icon: <FontAwesomeIcon icon={faUser}/>
-                                     },
-                                    //  {
-                                    //     label: translate('گفتگو'),
-                                    //     path: "/myChat",
-                                    //     icon: <FontAwesomeIcon icon={faComments}/>
-                                    // },
+                                      {
+                                        label: translate('پستها'),
+                                        path: "/"+pStore.cUser.userKey,
+                                        icon: <FontAwesomeIcon icon={faUser}/>
+                                    },
+                                    {
+                                        label: translate('شبکه من'),
+                                        path: "/myNetwork",
+                                        icon: <FontAwesomeIcon icon={faUsers}/>
+                                    },
                                      {
                                          label: translate('سرویسها'),
                                          path: "/myServices",
@@ -237,7 +237,7 @@ export const UserCard = observer(props => {
                             <Text style={{fontSize: 12}}>{pStore.branchesCount}</Text>
                         </View>
                         <View style={{alignItems: 'center', paddingHorizontal: 15}}>
-                            <Text style={{fontSize: 12}}>برگ</Text>
+                            <Text style={{fontSize: 12}}>زیرشاخه</Text>
                             <Text style={{fontSize: 12}}>{pStore.leavesCount}</Text>
                         </View>
                         <View style={{alignItems: 'center', paddingHorizontal: 15}}>

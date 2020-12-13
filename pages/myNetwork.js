@@ -12,13 +12,16 @@ import {
     itemListText, orange1,
     primaryDark,
     primaryDarkOld,
+    subTextItem,
+    success,
+    successLight,
     textItem,
 } from "../src/constants/colors";
 
 import NavBar from "../src/components/layouts/NavBar";
 import {DateTime,Image,FlatList, Text, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCogs, faCompass, faUser,faComments,faBell} from "@fortawesome/free-solid-svg-icons";
+import {faCogs, faCompass, faUser,faUsers,faBell} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
 import {getFileUri, getUserSubsetApi} from "../dataService/apiService";
 
@@ -95,7 +98,7 @@ class TreeView extends PureComponent {
                 }
                 renderItem={({item}) =>{
 
-                    let {subsets,cdate,fullName='',birthDate='',profileImage='',gender=0,username=''}=item;
+                    let {subsets,cdate,displayName='',birthDate='',profileImage='',gender=0,userKey='',avatar}=item;
                     return(
                         <View style={{
                             borderBottomWidth: 1,
@@ -117,6 +120,7 @@ class TreeView extends PureComponent {
                                 }}>
                                 <TouchableOpacity
                                     onPress={()=>this.open(item)}
+                                    onPress={() => location.pathname = item.userKey}
                                     style={{flexDirection:'row',alignItems:'center'}} >
                                     <Image
                                         style={{width:60,height:60,borderRadius:30,}}
@@ -126,22 +130,24 @@ class TreeView extends PureComponent {
 
 
                                     <View style={{ padding:5,margin:5,}}>
-                                        <Text style={{}}>{fullName}</Text>
-                                        <Text style={{fontSize:12}}>{username}</Text>
-                                        <View style={{flexDirection:'row',fontSize:12}}>
-                                            <Text style={{}}>{'عضویت' }</Text>
-                                            <DateTime>{cdate}</DateTime>
-                                        </View>
+                                        <Text style={{fontSize:12,fontWeight:800}}>{displayName}({userKey}@)</Text>
+                                        <Text style={{fontSize:11,color:itemListText}}>{avatar}</Text>
+                                       
                                     </View>
                                 </TouchableOpacity>
+                                <View style={{flexDirection:'row',fontSize:12}}>
+                                            <Text style={{color:textItem,fontSize:10}}>{'عضویت' }</Text>
+                                            {/* <Text>{cdate.timeToNow()}</Text> */}
+                                            <DateTime style={{color:textItem,fontSize:10}}>{cdate}</DateTime>
+                                 </View>
 
-                                <Text style={{fontSize:12,fontWeight:800, color:textItem,paddingHorizontal:16,padding:10}} >{item.avatar}</Text>
+{/*                                
                                 <TouchableOpacity
                                     onPress={()=>location.pathname=item.userKey }
                                     style={{alignItems:'center',padding:5}} >
                                     <RiProfileLine size={24} style={{}}/>
                                     <Text style={{fontSize:11}}>{'پستها' }</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </View>
                             <View
                                 style={{flexDirection:'row', justifyContent:'space-between', padding:10,fontSize:12,color:textItem,}}>
@@ -152,7 +158,7 @@ class TreeView extends PureComponent {
                                     {subsets.length ?(
                                         this.state.open?
                                             <IoMdEye color={primaryDark}  size={30} />
-                                            :<IoMdEyeOff color={primaryDarkOld}  size={30}/>
+                                            :<IoMdEyeOff color={primaryDarkOld}  size={30} onPress={()=>this.open(item)}/>
                                     ):null
                                     }
                                 </TouchableOpacity>
@@ -267,15 +273,15 @@ export default class MyNetwork extends Component {
                             footer={
                                 <NavBar navButtons={[
                                     {
-                                        label: translate('من'),
+                                        label: translate('پستها'),
                                         path: "/"+pStore.cUser.userKey,
                                         icon: <FontAwesomeIcon icon={faUser}/>
                                     },
-                                    // {
-                                    //     label: translate('گفتگو'),
-                                    //     path: "/myChat",
-                                    //     icon: <FontAwesomeIcon icon={faComments}/>
-                                    // },
+                                    {
+                                        label: translate('شبکه من'),
+                                        path: "/myNetwork",
+                                        icon: <FontAwesomeIcon icon={faUsers}/>
+                                    },
                                     {
                                         label: translate('سرویسها'),
                                         path: "/myServices",
@@ -308,49 +314,47 @@ export default class MyNetwork extends Component {
                         backgroundColor:bgItemRed
                     }} >
                         <Text style={{fontSize:12}}> {pStore.subsetList.length } شاخه </Text>
-                        <Text  style={{fontSize:12}}> {pStore.leavesCount } برگ </Text>
+                        <Text  style={{fontSize:12}}> {pStore.leavesCount } زیرشاخه </Text>
                         <Text  style={{fontSize:12}}>{pStore.leavesCount+pStore.subsetList.length+1 } عضو </Text>
                     </View>
+                    <View style={{marginTop:10,alignItems:'center'}}>
+                           {pStore.subsetList.length==0?(
+                                <Text
+                                    style={{textAlign:'justify',paddingHorizontal:30,fontSize:11,color:itemListText}}
+                                > شما هنوز هیچ فردی را به تری نتگرام دعوت نکرده و شاخه ای نساخته اید. برای ایجاد شاخه های درخت خود، کافی است لینک اختصاصی خود را برای چند نفر ارسال کنید یا آنرا در شبکه های اجتماعی مانند فیسبوک یا تلگرام به اشتراک بگذارید. ساختن یک شبکه بزرگ خیلی ساده است . همین الان شروع کنید.. </Text>
+                            ):
+                                <Text style={{textAlign:'justify',paddingHorizontal:30,fontSize:11,color:itemListText}} > تمام شاخه ها و زیرشاخه های شما پستهای شما را خواهند دید. </Text>
+                            }
+                            <TouchableOpacity
+                                onPress={()=>{navigation.navigate('myLink')}}
+                                style={{
+                                    margin:5,
+                                    borderRadius:8,
+                                    flexDirection:'row',
+                                    justifyContent:'center',
+                                    padding:5,
+                                    paddingHorizontal:10,
+                                    backgroundColor: primaryDark,
+                                    
+                                }}>
+                               <Image
+                                    style={{width:24,height:24,
+                                        tintColor:successLight
+                                    }}
+                                    source={images.ic_addCircle}
+                                />
+                                <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:3}}>ایجاد شاخه جدید</Text>
+                            </TouchableOpacity>
+                        
+                        </View>
                     <TreeView
                         style={{paddingBottom:60}}
                         subsetList={pStore.subsetList}
                         level={1}
                     />
-                    {pStore.subsetList.length==0 &&(
-                        <View style={{marginTop:10,alignItems:'center'}}>
-                            <Text
-                                style={{textAlign:'justify',paddingHorizontal:30,fontSize:12,color:itemListText}}
-                            > شما هنوز هیچ فردی را به تری نتگرام دعوت نکرده و شاخه ای نساخته اید. برای ایجاد شاخه های درخت خود، کافی است لینک اختصاصی خود را برای چند نفر ارسال کنید یا آنرا در شبکه های اجتماعی مانند فیسبوک یا تلگرام به اشتراک بگذارید. </Text>
-
-                            <TouchableOpacity
-                                onPress={()=>{navigation.navigate('myLink')}}
-                                style={{
-                                    flex:1,
-                                    margin:10,
-                                    width:'100%',
-                                    maxWidth:300,
-                                    width:140,
-                                    borderRadius:8,
-                                    flexDirection:'row',
-                                    justifyContent:'center',
-                                    padding:10,
-                                    backgroundColor: bgSuccess,
-                                    
-                                }}>
-                                <IoIosLink
-                                    color={bgWhite}
-                                    style={{
-                                        width: 24,
-                                        height: 24,
-                                        tintColor:bgWhite
-                                    }}
-                                />
-
-                                <Text style={{fontSize:12,color:bgWhite,paddingHorizontal:5}}> شبکه سازی</Text>
-                            </TouchableOpacity>
+                    
                         
-                        </View>
-                    )}
+                   
                 </View>
             </PanelLayout>
 

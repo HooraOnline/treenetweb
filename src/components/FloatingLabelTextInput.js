@@ -6,7 +6,7 @@ import {Text, View, Animated, StyleSheet, IconApp,} from "../react-native";
 import {Input,FormControl,InputAdornment,InputLabel} from '@material-ui/core';
 import Platform from "../react-native/Platform";
 import {inputNumberValidation, mapNumbersToEnglish} from "../utils";
-import { FaTree } from "react-icons/fa";
+import { faUsers } from "react-icons/fa";
 
 
 
@@ -303,7 +303,7 @@ export default class FloatingLabelTextInput extends PureComponent {
                                 },unitStyle]}>{this.props.unit}</Text>
                             ):null}
                               {isAccept!==undefined &&(
-                                    <FaTree size={30}  color={isAccept?grL5:grayVD7}
+                                    <faUsers size={30}  color={isAccept?grL5:grayVD7}
                                             style={{
                                                 padding:2,
                                                 alignSelf: 'center',

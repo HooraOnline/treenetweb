@@ -12,7 +12,7 @@ import {
 import NavBar from "../src/components/layouts/NavBar";
 import {Text,View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCogs, faCompass, faUser,faComments,faBell} from "@fortawesome/free-solid-svg-icons";
+import {faCogs, faCompass, faUser,faUsers,faBell} from "@fortawesome/free-solid-svg-icons";
 import translate from "../src/language/translate";
 
 
@@ -63,15 +63,15 @@ export default class MyServices extends Component {
                             footer={
                                 <NavBar navButtons={[
                                     {
-                                        label: translate('من'),
+                                        label: translate('پستها'),
                                         path: "/"+pStore.cUser.userKey,
                                         icon: <FontAwesomeIcon icon={faUser}/>
                                     },
-                                    // {
-                                    //     label: translate('گفتگو'),
-                                    //     path: "/myChat",
-                                    //     icon: <FontAwesomeIcon icon={faComments}/>
-                                    // },
+                                    {
+                                        label: translate('شبکه من'),
+                                        path: "/myNetwork",
+                                        icon: <FontAwesomeIcon icon={faUsers}/>
+                                    },
                                     {
                                         label: translate('سرویسها'),
                                         path: "myServices",

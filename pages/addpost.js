@@ -161,7 +161,7 @@ export default class addpost extends Component {
                                                  fontSize: 11,
                                                  color: textItem,
                                                  padding: 5
-                                             }}>پستهای ویژه برای همه اعضای شبکه (شاخ و برگها و فالورها)و پستهای عادی فقط برای فالورها نمایش داده می شود </Text>
+                                             }}>پستهای ویژه برای همه اعضای شبکه (شاخ و زیرشاخهها و فالورها)و پستهای عادی فقط برای فالورها نمایش داده می شود </Text>
                                              <View style={{
                                                  flexDirection: 'row',
                                                  height: 35,
