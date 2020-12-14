@@ -54,6 +54,7 @@ import Accordion  from './basic/Accordion';
 import CheckableRow  from './basic/CheckableRow';
 import CardRentInfo  from './CardRentInfo';
 import CardView  from './CardView';
+import Line  from './Line';
 
 export {
     DrawerPanel,
@@ -112,6 +113,5 @@ export {
     CheckableRow,
     CardRentInfo,
     CardView,
-
-
+    Line,
 };

@@ -8,6 +8,7 @@ class PersistStore {
 
     @persist @observable userRegisterbefor = false;
     @persist @observable notChangePassword = false;
+    @persist @observable changedDefaultUserKey = true;
     @persist @observable apiToken = null;
     @persist @observable userLanguageKey = 'fa';
     @persist @observable userLanguageId = 3;

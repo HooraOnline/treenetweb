@@ -6,8 +6,9 @@ import {Text, View, Animated, StyleSheet, IconApp,} from "../react-native";
 import {Input,FormControl,InputAdornment,InputLabel} from '@material-ui/core';
 import Platform from "../react-native/Platform";
 import {inputNumberValidation, mapNumbersToEnglish} from "../utils";
-import { faUsers } from "react-icons/fa";
-
+//import { faUsers } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTree } from "@fortawesome/free-solid-svg-icons";
 
 
 class Underline extends PureComponent {
@@ -303,15 +304,15 @@ export default class FloatingLabelTextInput extends PureComponent {
                                 },unitStyle]}>{this.props.unit}</Text>
                             ):null}
                               {isAccept!==undefined &&(
-                                    <faUsers size={30}  color={isAccept?grL5:grayVD7}
-                                            style={{
-                                                padding:2,
-                                                alignSelf: 'center',
-                                            }}
-                                    />
-                                )
+                                  <FontAwesomeIcon icon={faTree} 
+                                    color={isAccept?grL5:grayVD7}
+                                    style={{
+                                       width:24,
+                                       height:24
 
-                                }
+                                    }}
+                                />
+                                )}
                         </View>
 
 

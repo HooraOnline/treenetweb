@@ -31,7 +31,7 @@ export default class Modal extends PureComponent {
         return (
             <TouchableWithoutFeedback  style={{flex:1,position:'absolute',}} onPress={this.onClose} >
                 <Dialog
-                    fullScreen
+                    //fullScreen
                     {...this.props}
                     open={this.props.visible}
                     onClose={this.onClose}

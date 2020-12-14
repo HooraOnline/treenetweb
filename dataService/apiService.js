@@ -372,6 +372,7 @@ export const getUserProfileApi = function () {
           
             pStore.cUser=user;
             persistStore.notChangePassword=user.notChangePassword;
+            persistStore.changedDefaultUserKey=user.changedDefaultUserKey;
             
             getUserSubsetApi()
                 .then(subsetList=>{
@@ -390,6 +391,7 @@ export const getUserProfileApi = function () {
             
             if(error.errorKey=='fa_server_member_user_notExist'){
                 persistStore.notChangePassword=true;
+                persistStore.changedDefaultUserKey=false;
                 persistStore.userRegisterbefor=false;
 
             }

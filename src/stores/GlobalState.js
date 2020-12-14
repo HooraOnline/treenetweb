@@ -13,7 +13,7 @@ class GlobalState {
     @observable statusBarColor = primaryDark;
     @observable width = null;
     @observable height = null;
-
+    
 
     @action
     setResponseCode(code) {

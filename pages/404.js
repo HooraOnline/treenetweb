@@ -2,8 +2,6 @@ import React, { Component, useEffect, useState } from 'react';
 import { globalState, persistStore, userStore } from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import { ImageSelector, Toolbar } from "../src/components";
-
-import accountsStore from "../src/stores/Accounts";
 import { doDelay, navigation, setScreenSize, waitForData } from "../src/utils";
 import images from "../public/static/assets/images";
 import {
@@ -16,56 +14,21 @@ import {
     orange1, primary, primaryDark,
     success,
     textGray,
-    textItem, transparent, yellowmin
+    textItem, textItemBlack, transparent, yellowmin
 } from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
-import {  TouchableWithoutFeedback, FlatList, IconApp, Text, TouchableOpacity, View, } from "../src/react-native";
+import {  FlatList, IconApp, Text, TouchableOpacity, View, } from "../src/react-native";
 
 import { getFileUri, getUserSubsetApi, logoutApi, postQuery } from "../dataService/apiService";
 import { observer } from "mobx-react";
 import Image from "../src/react-native/Image";
 import pStore from "../src/stores/PublicStore";
-import { IoIosLink } from "react-icons/io";
-import { set } from "mobx";
 import Api from "../dataService/apiCaller";
 import { FaStar, FaWindowClose } from "react-icons/fa";
-import { IoMdHeartEmpty, IoMdShare, } from "react-icons/io";
-import { FaRegCommentDots } from "react-icons/fa";
 import translate from '../src/language/translate';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCogs, faCompass, faUser, faUsers, faBell } from "@fortawesome/free-solid-svg-icons";
-
-
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Switch from '@material-ui/core/Switch';
-const useStyles = makeStyles((theme) => ({
-    form: {
-      display: 'flex',
-      flexDirection: 'column',
-      margin: 'auto',
-      width: 'fit-content',
-    },
-    formControl: {
-      marginTop: theme.spacing(2),
-      minWidth: 120,
-    },
-    formControlLabel: {
-      marginTop: theme.spacing(1),
-    },
-  }));
-  
-
+import AppMenu from './AppMenu';
 
 let leavesCount = 0
 
@@ -140,6 +103,21 @@ export default class userpage extends Component {
                 this.setState({ loading: false });
             });
 
+
+
+            getUserAnnounce = () => {
+                this.setState({ loading: true });
+                Api.post('activities/getNewAnnounceCount', {})
+                    .then(newewAnnounceCount => {
+                        globalState.newewAnnounceCount=newewAnnounceCount;
+                    }).catch((error) => {
+                        //showMassage('خطا در بارگذاری اعلانها')
+                    })
+                    .finally(() => {
+                        this.setState({ loading: false })
+                    });
+            };
+
     }
 
     followUser = (followedId) => {
@@ -160,11 +138,15 @@ export default class userpage extends Component {
         let title = this.user ? this.user.displayName || this.user.fullName : ''
 
         const toolbarAdminStyle = {
-
+            start22: {
+                onPress: () =>this.setState({showMenu:!this.state.showMenu}),
+                content: images.ic_menu,
+            },
             title: this.user ? this.user.fullName + ' (' + this.userKey + '@)' : 'صفحه من',
             end: {
-                onPress: () => logoutApi(),
-                icon: images.ic_Period,
+                //onPress: () =>this.setState({showMenu:!this.state.showMenu}),
+                onPress: () =>navigation.navigate('AppMenu'),
+                icon: images.ic_menu,
             },
         };
 
@@ -176,23 +158,21 @@ export default class userpage extends Component {
             title: title,
         };
 
-
-
         return (
             <PanelLayout title={`user posts`} loading={this.state.loading} loadingMessage={this.state.loadingMessage}
                 showMenu={this.state.showMenu}
                 onRef={(initDrawer) => this.initDrawer = initDrawer}
-                onCloseMenu={() => this.setState({ showMenu: false })}
+                //onCloseMenu={() => this.setState({ showMenu: false })}
                 style={{ alignItems: 'center' }}
                 header={
                     <View>
                          <Toolbar
                             customStyle={this.isPageAdmin ? toolbarAdminStyle : toolbarStyle}
-                            isExpand={this.state.showAccountSelect}
+                            //isExpand={this.state.showMenu}
                         />
-                         <Menu/>
+                         
+                        
                     </View>
-                   
                 }
 
                 footer={
@@ -229,6 +209,28 @@ export default class userpage extends Component {
                         )}
                     </View>
                 }>
+
+                   {/* <AppMenu visible={this.state.showMenu} onClose={()=>{this.setState({showMenu:false})}}/> */}
+                
+                   {!persistStore.changedDefaultUserKey &&(
+                            <div  style={{width:globalState.width,zIndex:40}}>
+                                <TouchableOpacity
+                                    onPress={()=>{navigation.navigate('change_userkey')}}
+                                    style={{flex:1,paddingBottom:20, flexDirection:'row',justifyContent:'space-between', padding:6,paddingHorizontal:24, backgroundColor:'#F1C40F'}}>
+                                    <Text style={{fontSize:12,color:textItemBlack,padding:5}}>{'نام کاربری موقت را تغییر دهید.'} </Text>
+                                    <View style={{flexDirection:'row', backgroundColor:'#27AE60',borderRadius:8,alignItems:'cener',justifyContent:'center', padding:5,paddingHorizontal:16}}>
+                                        <Image source={images.ic_edit} style={{
+                                            width: 22,
+                                            height: 22,
+                                            paddingHorizontal:3,
+                                            tintColor:bgWhite
+                                        }}/>
+                                        <Text style={{color:bgWhite,fontSize:12,paddingHorizontal:5}} >تغییر</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </div>
+                        )
+                    } 
 
                 {this.user ? (
                     <View style={{ flex: 1, marginTop: 0, alignItems: 'center' }}>
@@ -299,9 +301,11 @@ export default class userpage extends Component {
                         </View>
                     )
                 }
-
-
-             
+               
+                  
+              
+               
+                
             </PanelLayout>
         )
     }
@@ -311,81 +315,7 @@ export default class userpage extends Component {
 
 
 
-export const Menu = (props => {
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const [fullWidth, setFullWidth] = React.useState(true);
-    const [maxWidth, setMaxWidth] = React.useState('sm');
-  
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
-  
-    const handleMaxWidthChange = (event) => {
-      setMaxWidth(event.target.value);
-    };
-  
-    const handleFullWidthChange = (event) => {
-      setFullWidth(event.target.checked);
-    };
-  
-    return (
-      <React.Fragment>
-        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-          Open max-width dialog
-        </Button>
-        <Dialog
-          fullWidth={fullWidth}
-          maxWidth={maxWidth}
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="max-width-dialog-title"
-        >
-          <DialogTitle id="max-width-dialog-title">Optional sizes</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              You can set my maximum width and whether to adapt or not.
-            </DialogContentText>
-            <form className={classes.form} noValidate>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="max-width">maxWidth</InputLabel>
-                <Select
-                  autoFocus
-                  value={maxWidth}
-                  onChange={handleMaxWidthChange}
-                  inputProps={{
-                    name: 'max-width',
-                    id: 'max-width',
-                  }}
-                >
-                  <MenuItem value={false}>false</MenuItem>
-                  <MenuItem value="xs">xs</MenuItem>
-                  <MenuItem value="sm">sm</MenuItem>
-                  <MenuItem value="md">md</MenuItem>
-                  <MenuItem value="lg">lg</MenuItem>
-                  <MenuItem value="xl">xl</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControlLabel
-                className={classes.formControlLabel}
-                control={<Switch checked={fullWidth} onChange={handleFullWidthChange} />}
-                label="Full width"
-              />
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
-    );
-  })
+
 
 export const UserCard = observer(props => {
     let leavesCount = 0;
@@ -628,7 +558,6 @@ export const UserCard = observer(props => {
                         </TouchableOpacity>
                     </View>
                 )
-
             }
 
         </View>

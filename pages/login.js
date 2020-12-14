@@ -9,10 +9,10 @@ import {
     lightRed,
     primaryDark,
     subTextItem,
-    textItem, textGray, orange1, bgWhite, lightGrey,
+    textItem, textGray, orange1, bgWhite, lightGrey, success,
 } from '../src/constants/colors';
 import {globalState, persistStore, pStore,} from '../src/stores';
-import {getWidth, mapNumbersToEnglish, showMassage,} from '../src/utils';
+import {getWidth, mapNumbersToEnglish, navigation, showMassage,} from '../src/utils';
 import {FloatingLabelTextInput, LoadingPopUp} from '../src/components';
 import translate from "../src/language/translate";
 import {LNGList} from "../src/language/aaLngUtil";
@@ -64,6 +64,7 @@ export default class LoginPage extends PureComponent {
         });
         this.getUserGeo();
         this.showLogin();
+        this.setState({changedPassword:navigation.getUrlParams('chp')})
     }
 
     getUserGeo(){
@@ -102,7 +103,7 @@ export default class LoginPage extends PureComponent {
     }
 
     checkValidation() {
-        return this.state.username.length >2  && this.state.password.length >5;
+        return this.state.username.length >2  && this.state.password.length >3;
     }
 
     onSuccessLogin=(user)=>{
@@ -282,13 +283,22 @@ export default class LoginPage extends PureComponent {
                             }}>
                                 <Text style={{
                                     marginTop: 30,
-                                    fontSize: 20,
+                                    fontSize: 16,
                                     fontFamily: 'IRANYekanExtraBold',
                                     textAlign: 'center',
                                     color:textItemBlack,
                                 }}>
                                     {translate('login_top')}
                                 </Text>
+                                {this.state.changedPassword &&(
+                                    <Text style={{
+                                        textAlign: 'center',
+                                        fontSize:11,
+                                       color:primaryDark,
+                                       fontWeight:800,
+                                       marginTop:5,
+                                    }}>رمز عبور با موفقیت تغییر کرد.لطفا با رمز جدید وارد شوید.</Text>
+                                )}
                                 <Text style={{
                                     marginTop: 6,
                                     marginBottom: 20,
@@ -423,7 +433,7 @@ export default class LoginPage extends PureComponent {
                                             }
                                             );
                                         }else if(text){
-                                            showMassage(translate('fastRegister_onlyEnglish_number'),'info');
+                                            showMassage(translate('fastRegister_onlyEnglish_number'),'error');
                                         }
                                         if(!text){
                                             this.setState({ username:'', usernameValidation:false});
@@ -433,6 +443,8 @@ export default class LoginPage extends PureComponent {
                                     highlightColor={primaryDark}
                                     value={this.state.username}
                                 />
+
+                               
 
                            
 
@@ -507,6 +519,7 @@ export default class LoginPage extends PureComponent {
                                 </View>
                                 
                             </View>
+                           
 
                             {this.state.loading &&
                             <LinearProgress style={{marginTop: 25, width: this.state.progressWidth - 10, maxWidth: 400}}

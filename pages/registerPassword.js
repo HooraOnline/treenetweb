@@ -29,12 +29,6 @@ export default class RegisterPassword extends Component {
     constructor() {
         super();
         this.state = {
-            showMenu:false,
-            isWide:false,
-            mobileValidation:false,
-            countryCode:'+98',
-            invitationLink:'',
-
             showPassword:false,
             passwordValidation:false,
             passwor2dValidation:false,
@@ -102,7 +96,9 @@ export default class RegisterPassword extends Component {
        /* if( !passReg.test(this.state.password)){
             return "پسورد شما باید حداقل ۶ حرف بوده و شامل حروف کوچک و بزرگ و کاراکترهای خاص باشد.";
         }*/
-
+        if( this.state.password.length<6){
+            return "پسورد شما باید حداقل 6 کاراکتر باشد.";
+        }
         if (this.state.password.length<6) {
             this.setState({passwordValidation: false});
             return translate('registerPassword_password_can_not_be_les_than');

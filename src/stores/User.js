@@ -35,6 +35,7 @@ class UserStore {
     @observable subsetList=[];
     @observable story='';
     @action
+    @observable announceList = [];
     setUser(user) {
         this.user=user;
         this.userID= user.id ;

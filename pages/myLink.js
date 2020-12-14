@@ -3,7 +3,7 @@ import PanelLayout from "../src/components/layouts/PanelLayout";
 import {Toolbar} from "../src/components";
 import {navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
-import {bgWhite, itemListText, primaryDark} from "../src/constants/colors";
+import {bgWhite, itemListText, primaryDark, textItemBlack} from "../src/constants/colors";
 import NavBar from "../src/components/layouts/NavBar";
 import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -58,40 +58,25 @@ export default class MyLink extends Component {
                              />
                          }>
                 <View style={{flex:1,paddingBottom:40}}>
-                    {/* {persistStore.notChangePassword?(
-                        <View style={{padding: 24, marginTop: 10,alignItems:'center'}}>
-                            <Text
-                                style={{
-                                    marginTop: 0,
-                                    maxWidth:400,
-                                    fontSize:12,
-                                    fontFamily: 'IRANYekanFaNum',
-                                    textAlign:'justify'
-                                }}>
-                                {translate(' برای دریافت لینک اختصاصی خود و شروع شبکه سازی، ابتدا نام کاربری و رمز عبور موقت خود را تغییر دهید.')}
-                            </Text>
-                            <TouchableOpacity
-                            onPress={()=>{
-                                navigation.navigate('change_username_password')
-                            }}
-                            >
-                                <View style={{
-                                    flexDirection:'row',height:40,marginTop:30,maxWidth:300,
-                                    alignSelf:'center',
-                                    backgroundColor:'#27AE60',borderRadius:8,alignItems:'cener',
-                                    justifyContent:'center', padding:5,paddingHorizontal:15}}>
-                                    <Image source={images.ic_edit} style={{
-                                        width: 24,
-                                        height: 24,
-                                        paddingHorizontal:5,
-                                        tintColor:bgWhite
-                                    }}/>
-                                    <Text style={{color:bgWhite, fontSize:12,paddingHorizontal:5,padding:5}} >تغییر رمز موقت</Text>
-                                </View>
-                            </TouchableOpacity>
-
-                        </View>
-                    ):( */}
+                {!persistStore.changedDefaultUserKey &&(
+                            <div  style={{width:global.width,zIndex:40,marginBottom:16}}>
+                                <TouchableOpacity
+                                    onPress={()=>{navigation.navigate('change_userkey')}}
+                                    style={{flex:1,paddingBottom:20, flexDirection:'row',justifyContent:'space-between', padding:6,paddingHorizontal:24, backgroundColor:'#F1C40F'}}>
+                                    <Text style={{fontSize:12,color:textItemBlack,padding:5}}>{'قبل از ارسال لینک دعوت، نام کاربری موقت را تغییر دهید.'} </Text>
+                                    <View style={{flexDirection:'row', backgroundColor:'#27AE60',borderRadius:8,alignItems:'cener',justifyContent:'center', padding:5,paddingHorizontal:16}}>
+                                        <Image source={images.ic_edit} style={{
+                                            width: 22,
+                                            height: 22,
+                                            paddingHorizontal:3,
+                                            tintColor:bgWhite
+                                        }}/>
+                                        <Text style={{color:bgWhite,fontSize:12,paddingHorizontal:5}} >تغییر</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </div>
+                        )
+                    } 
                         <View style={{padding: 16,}}>
                             <Text
                                 style={{
