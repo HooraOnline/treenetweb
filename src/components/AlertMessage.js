@@ -117,7 +117,7 @@ function Content({title, message, onDismiss, dismissTitle, onConfirm, confirmTit
                
                 {confirmTitle && (
                     <TouchableOpacity stopPropagation style={[styles.btn]} onPress={onConfirm}>
-                        <Text style={confirmTitleStyle || {color: primaryDark}}>{confirmTitle}</Text>
+                        <Text style={confirmTitleStyle || {color: 'red'}}>{confirmTitle}</Text>
                     </TouchableOpacity>
                 )}
 

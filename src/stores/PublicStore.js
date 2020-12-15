@@ -1,5 +1,5 @@
 import {action, observable} from 'mobx';
-import {PersistStore} from "./PersistStore";
+
 
 class PublicStore {
     @observable param1=null;
@@ -9,7 +9,7 @@ class PublicStore {
     @observable leavesCount=0;
     @observable branchesCount=0;
     @observable userPosts=[];
-
+    @observable newewAnnounceCount = 0;
 
     @action
     setUser(user) {

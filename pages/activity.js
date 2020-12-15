@@ -58,8 +58,8 @@ export default class activity extends Component {
 
         Api.post('activities/getUserAnnounce', {})
             .then(announceList => {
-
-                this.setState({ announceList: announceList })
+                this.setState({ announceList: announceList });
+                pStore.newewAnnounceCount=0;
             }).catch((error) => {
                 showMassage('خطا در بارگذاری اعلانها')
             })
@@ -109,6 +109,7 @@ export default class activity extends Component {
                             {
                                 label: translate('اعلانات'),
                                 path: "/activity",
+                                notif:pStore.newewAnnounceCount,
                                 icon: <FontAwesomeIcon icon={faBell} />
                             },
                             {
@@ -125,18 +126,13 @@ export default class activity extends Component {
                     </View>
                 </View>
             </PanelLayout>
-
-
         )
     }
 
 }
 
 const ShareItem = observer((props) => {
-
     const { profileImage, userKey, postId, file, text } = props.item;
-
-
     return (
         <View style={{ marginHorizontal: 30, marginTop: 7 }}>
             <View
@@ -336,6 +332,7 @@ export const AnnounceList = observer(props => {
                                         {/* <Text dir='ltr' style={{ fontSize: 10, color: subTextItem }}>{'@' +memberUserKey} </Text> */}
                                         {/* <Text style={{ fontSize: 10, color: itemListText ,paddingHorizontal:4}}> { actionMessage}  </Text> */}
                                     </View>
+                                    <Text style={{ color: subTextItem, fontSize: 10,paddingStart:4 }}>{item.cdate.timeToNow()}</Text>
                                     <Text style={{ color: textItem, fontSize: 12 }}>{commentText}</Text>
 
                                     {/* <DateTime format='jYYYY/jM/jD HH:mm' style={{ color: subTextItem, fontSize: 10 }} >
@@ -346,7 +343,7 @@ export const AnnounceList = observer(props => {
 
                             </TouchableOpacity>
                             <View style={{flex:1,flexDirection:'row',justifyContent:'space-between', alignItems: 'center',paddingHorizontal:10 }}>
-                                <Text style={{ color: subTextItem, fontSize: 10,paddingStart:40 }}>{item.cdate.timeToNow()}</Text>
+                                
                                 {file && (
                                     <TouchableOpacity
                                        
@@ -357,8 +354,8 @@ export const AnnounceList = observer(props => {
                                         <Image
                                             source={getFileUri('post', file)}
                                             style={{
-                                                width: 100,
-                                                height: 100,
+                                                width: item.type == 'share_post'?300:100,
+                                                height: item.type == 'share_post'?null:100,
                                                 borderRadius: 8,
 
                                             }}

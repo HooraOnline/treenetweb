@@ -79,6 +79,7 @@ export default class MyServices extends Component {
                                     },
                                     {
                                         label: translate('اعلانات'),
+                                        notif: pStore.newewAnnounceCount,
                                         path: "/activity",
                                         icon: <FontAwesomeIcon icon={faBell}/>
                                     },
@@ -103,7 +104,7 @@ export default class MyServices extends Component {
                         borderColor:orange1,
                         backgroundColor:bgItemRed
                     }} >
-                        <Text style={{fontSize:12}}>به زودی سرویس تبلیغات و سایر سرویسهای درآمد زایی اضافه خواهد شد که با فعال کردن آنها در شبکه خود می توانید درآمد اتوماتیک داشته باشید. شبکه بزرگتر یعنی درآمد بیشتر.</Text>
+                        <Text style={{fontSize:12}}>به زودی سرویس کاربردی و درآمد زایی اضافه خواهد شد که با فعال کردن آنها در شبکه خود می توانید درآمد اتوماتیک داشته باشید. شبکه بزرگتر یعنی درآمد بیشتر.</Text>
                        
                        
                     </View>

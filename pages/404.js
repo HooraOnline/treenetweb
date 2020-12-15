@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState } from 'react';
 import { globalState, persistStore, userStore } from "../src/stores";
 import PanelLayout from "../src/components/layouts/PanelLayout";
 import { ImageSelector, Toolbar } from "../src/components";
-import { doDelay, navigation, setScreenSize, waitForData } from "../src/utils";
+import { doDelay, navigation, setScreenSize, showMassage, waitForData } from "../src/utils";
 import images from "../public/static/assets/images";
 import {
     bg8,
@@ -42,6 +42,7 @@ export default class userpage extends Component {
 
     componentDidMount() {
         this.getPageInfo();
+        this.getNewAnnounceCount();
     }
 
     calculateCount = (user) => {
@@ -57,6 +58,20 @@ export default class userpage extends Component {
         }
     }
 
+    getNewAnnounceCount = () => {
+        this.setState({ loading: true });
+        debugger
+        Api.post('activities/getNewAnnounceCount', {})
+            .then(newewAnnounceCount => {
+                pStore.newewAnnounceCount=newewAnnounceCount;
+            }).catch((error) => {
+                showMassage('خطا در بارگذاری تعداد اعلانها','err')
+            })
+            .finally(() => {
+                this.setState({ loading: false });
+            });
+    };
+
     getPageInfo = () => {
         this.setState({ loading: true })
         const pathname = window.location.pathname;
@@ -64,7 +79,6 @@ export default class userpage extends Component {
 
         Api.post('members/getUserPage', { userKey: this.userKey })
             .then(users => {
-
                 if (users && users[0]) {
                     let user = users[0];
                     this.user = user;
@@ -103,21 +117,7 @@ export default class userpage extends Component {
                 this.setState({ loading: false });
             });
 
-
-
-            getUserAnnounce = () => {
-                this.setState({ loading: true });
-                Api.post('activities/getNewAnnounceCount', {})
-                    .then(newewAnnounceCount => {
-                        globalState.newewAnnounceCount=newewAnnounceCount;
-                    }).catch((error) => {
-                        //showMassage('خطا در بارگذاری اعلانها')
-                    })
-                    .finally(() => {
-                        this.setState({ loading: false })
-                    });
-            };
-
+       
     }
 
     followUser = (followedId) => {
@@ -133,10 +133,7 @@ export default class userpage extends Component {
 
 
     render() {
-
-
         let title = this.user ? this.user.displayName || this.user.fullName : ''
-
         const toolbarAdminStyle = {
             start22: {
                 onPress: () =>this.setState({showMenu:!this.state.showMenu}),
@@ -159,7 +156,7 @@ export default class userpage extends Component {
         };
 
         return (
-            <PanelLayout title={`user posts`} loading={this.state.loading} loadingMessage={this.state.loadingMessage}
+            <PanelLayout title={title} loading={this.state.loading} loadingMessage={this.state.loadingMessage}
                 showMenu={this.state.showMenu}
                 onRef={(initDrawer) => this.initDrawer = initDrawer}
                 //onCloseMenu={() => this.setState({ showMenu: false })}
@@ -195,7 +192,7 @@ export default class userpage extends Component {
                                     icon: <FontAwesomeIcon icon={faCogs} />
                                 },
                                 {
-                                    notif: '10',
+                                    notif: pStore.newewAnnounceCount,
                                     label: translate('اعلانات'),
                                     path: "/activity",
                                     icon: <FontAwesomeIcon icon={faBell} />
@@ -301,11 +298,6 @@ export default class userpage extends Component {
                         </View>
                     )
                 }
-               
-                  
-              
-               
-                
             </PanelLayout>
         )
     }

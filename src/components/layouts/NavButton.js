@@ -12,9 +12,9 @@ const NavButton = props => (
     >
       <div className="Icon">{props.icon}</div>
       <span className="Label">{props.label}</span>
-      {props.notif &&(
+      {props.notif?(
          <span className="Notif">{props.notif}</span>
-      )}
+      ):''}
     </div>
   </Link>
 );

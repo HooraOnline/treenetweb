@@ -22,7 +22,7 @@ import {
     WhatsappIcon,
     WhatsappShareButton
 } from "react-share";
-import {bg10, bg8, bgSuccess, bgWhite, grL5,} from "../../src/constants/colors";
+import {bg10, bg8, bgSuccess, bgWhite, grL5, subTextItem,} from "../../src/constants/colors";
 import images from "../../public/static/assets/images";
 
 import {observer} from "mobx-react";
@@ -241,7 +241,7 @@ export const InvitCard = observer(props => {
                 padding: 10,
                 //maxWidth:300,
             }}>
-                <View style={{}}>
+                <View style={{alignItems:'center'}}>
                     <ImageSelector
                         style={{
                             borderWidth: 1,
@@ -262,7 +262,8 @@ export const InvitCard = observer(props => {
                         noImage={images.default_ProPic}
                         hideDeleteBtn={true}
                     />
-
+                    {/* <Text style={{fontSize: 12,fontWeight:800}}>{pStore.cUser.displayName}</Text> */}
+                    <Text style={{fontSize: 12,fontWeight:800}}>{pStore.cUser.userKey}</Text>
                 </View>
                 <View style={{alignItems: 'center'}}>
                     <View style={{flexDirection: 'row', height: 30, maxWidth: 400,}}>
@@ -283,11 +284,9 @@ export const InvitCard = observer(props => {
                         style={{
                             alignItems: 'center',
                             marginTop: 25,
-                            fontSize: 12,
-                            fontWeight: 800,
+                            fontSize: 11,
                             fontFamily: 'IRANYekanRegular',
-
-
+                            color:subTextItem
                         }}>
                         {pStore.cUser.avatar || 'عضو فعال  تری نتگرام'}
                     </Text>

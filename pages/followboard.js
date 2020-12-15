@@ -93,6 +93,7 @@ export default class followboard extends Component {
                             {
                                 label: translate('اعلانات'),
                                 path: "/activity",
+                                notif: pStore.newewAnnounceCount,
                                 icon: <FontAwesomeIcon icon={faBell}/>
                             },
                             {

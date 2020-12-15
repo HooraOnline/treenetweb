@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PanelLayout from "../src/components/layouts/PanelLayout";
-import {Toolbar} from "../src/components";
+import {AlertMessage, Toolbar} from "../src/components";
 import {navigation, showMassage} from "../src/utils";
 import images from "../public/static/assets/images";
 import {
@@ -8,15 +8,19 @@ import {
     bg8,
     bgSuccess,
     bgWhite,
+    border,
     gray,
     greenDark,
     itemListText,
     lightRed,
+    niceBlue,
     primaryDark,
     subTextItem,
+    success,
+    textDisabled,
     textItem
 } from "../src/constants/colors";
-import {Image, Text, TouchableOpacity, View,} from "../src/react-native";
+import {IconApp, Image, Text, TouchableOpacity, View,} from "../src/react-native";
 
 import {globalState, persistStore,} from "../src/stores";
 
@@ -25,6 +29,7 @@ import {postQuery} from "../dataService/apiService";
 
 import pStore from "../src/stores/PublicStore";
 import { observer } from 'mobx-react';
+import { IoIosRadioButtonOff, IoIosRadioButtonOn } from "react-icons/io";
 
 @observer
 export default class addpost extends Component {
@@ -41,7 +46,8 @@ export default class addpost extends Component {
             anchorEl: null,
             showMenu: false,
             isWide: false,
-            forms: []
+            forms: [],
+            postType:'normal'
         };
     }
 
@@ -78,42 +84,42 @@ export default class addpost extends Component {
             })
 
     }
+
     getTimeMessage(secend){
         let min=secend/60;
         if(min<1)
-            return `شما ${Math.floor(secend)} ثانیه پیش یک پست ویژه منتشر کردید. هر 6 ساعت فقط یک پست ویژه قابل انتشار در شبکه است.` ;
+            return `شما ${Math.floor(secend)} ثانیه پیش یک پست ویژه منتشر کردید. هر 6 ساعت فقط یک پست ویژه قابل انتشار است.` ;
        let h=min/60;
        if(h<1)
-          return `شما ${Math.floor(min)} دقیقه پیش یک پست ویژه منتشر کردید. هر 6 ساعت فقط یک پست ویژه قابل انتشار در شبکه است.` ;
+          return `شما ${Math.floor(min)} دقیقه پیش یک پست ویژه منتشر کردید. هر 6 ساعت فقط یک پست ویژه قابل انتشار است.` ;
         let dayhlf=h/6;
         if(dayhlf<1)
-            return `شما ${Math.floor(h)} ساعت پیش یک پست ویژه منتشر کردید. هر 6 ساعت فقط یک پست ویژه قابل انتشار در شبکه است.` ;
+            return `شما ${Math.floor(h)} ساعت پیش یک پست ویژه منتشر کردید. هر 6 ساعت فقط یک پست ویژه قابل انتشار است.` ;
         return null;
     }
 
-
-
-
-    checkSpecial(isSpecial){
+    checkSpecial(isSpecial,type){
         if(isSpecial){
+            this.setState({isSpecial:true,postType:type});
             postQuery('posts/me/getLastSpecialedPost',{},)
                 .then(post=>{
                     if(!post){
-                        this.setState({isSpecial:true});
+ 
                         return;
                     }
                     let msg=this.getTimeMessage(post.time);
                     if(msg){
-                        showMassage(msg);
+                        this.setState({isSpecial:false,postType:'normal'});
+                        showMassage(msg,'error');
                         return;
                     }
-                    this.setState({isSpecial:true});
+                 
                 })
                 .catch(err=>{
-                    this.setState({isSpecial:true});
+                   
                 })
         }else{
-            this.setState({isSpecial:false});
+            this.setState({isSpecial:false,postType:'normal'});
         }
 
     }
@@ -139,8 +145,6 @@ export default class addpost extends Component {
                                />
                                
                                </View>
-                               
-                            
                          }
                          footer={
                              <View>
@@ -161,7 +165,7 @@ export default class addpost extends Component {
                                                  fontSize: 11,
                                                  color: textItem,
                                                  padding: 5
-                                             }}>پستهای ویژه برای همه اعضای شبکه (شاخ و زیرشاخهها و فالورها)و پستهای عادی فقط برای فالورها نمایش داده می شود </Text>
+                                             }}>پستهای ویژه برای همه اعضای شبکه (شاخ و زیرشاخه ها و فالورها)و پستهای عادی فقط برای فالورها نمایش داده می شود </Text>
                                              <View style={{
                                                  flexDirection: 'row',
                                                  height: 35,
@@ -188,7 +192,6 @@ export default class addpost extends Component {
                                          </TouchableOpacity>
                                      </div>
                                  )
-
                                  }
                              </View>
                          }
@@ -214,7 +217,7 @@ export default class addpost extends Component {
                                 borderColor:this.state.storyValidation?bgSuccess: lightRed,
                                 borderWidth: 0,
                                 borderRadius: 10,
-                                fontSize: 13,
+                                fontSize: 12,
                                 textAlignVertical: 'top',
                                 textAlign: 'right',
                                 height: 110,
@@ -229,14 +232,67 @@ export default class addpost extends Component {
 
                         <View style={{flex:1,alignItems:'flex-start'}}>
                             <TouchableOpacity
-                                onPress={()=>this.checkSpecial(!this.state.isSpecial)}
-                                style={{padding:6,borderRadius:8,borderWidth:1, borderColor:this.state.isSpecial?primaryDark:bgWhite, alignSelf:'right', marginVertical:20, flexDirection:'row',justifyContent:'center'}}>
+                                onPress={()=>this.checkSpecial(this.state.isSpecial,'normal')}
+                                style={{padding:6,borderRadius:8,borderWidth:1, borderColor:this.state.postType=='normal'?primaryDark:bgWhite, alignSelf:'right', marginTop:20, flexDirection:'row',justifyContent:'center'}}>
                                 <img
-                                    src={ this.state.isSpecial?images.checked_icon:images.unchecked_icon}
+                                    src={this.state.postType=='normal'?images.checked_icon:images.unchecked_icon}
                                     style={{height:24,width:24,}}
                                 />
-                                <Text style={{fontSize:12, paddingHorizontal:5}}>پست ویژه(نمایش در فالوبرد تمام اعضای شبکه من)</Text>
+                                <Text style={{fontSize:12, paddingStart:5}}>پست عادی</Text>
+                                <Text style={{fontSize:10, paddingHorizontal:2,color:border}}> (نمایش فقط برای فالورها)</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={()=>this.checkSpecial(!this.state.isSpecial,'special')}
+                                style={{padding:6,borderRadius:8,borderWidth:1, borderColor:this.state.postType=='special'?primaryDark:bgWhite, alignSelf:'right', marginTop:20, flexDirection:'row',justifyContent:'center'}}>
+                                <img
+                                    src={this.state.postType=='special'?images.checked_icon:images.unchecked_icon}
+                                    style={{height:24,width:24,}}
+                                />
+                                <Text style={{fontSize:12, paddingStart:5}}>پست ویژه</Text>
+                                <Text style={{fontSize:10, paddingHorizontal:2,color:border}}> (نمایش برای تمام شاخه ها،زیرشاخه ها و فالورها )</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={()=>this.checkSpecial(!this.state.isSpecial,'adv')}
+                                style={{padding:6,borderRadius:8,borderWidth:1, borderColor:this.state.postType=='adv'?primaryDark:bgWhite, alignSelf:'right', marginTop:20, flexDirection:'row',justifyContent:'center'}}>
+                                <img
+                                    src={this.state.postType=='adv'?images.checked_icon:images.unchecked_icon}
+                                    style={{height:24,width:24,}}
+                                />
+                                <Text style={{fontSize:12, paddingStart:5}}>پست ویژه تبلیغی</Text>
+                                <Text style={{fontSize:10, paddingHorizontal:2,color:border}}> (کسب درآمد از ظرفیت پست ویژه)</Text>
+                                <TouchableOpacity stopPropagation={true}  onPress={()=>this.setState({showHelp:true})} style={{paddingHorizontal:5}}>
+                                        <Text  style={{fontSize:11,color:border,marginStart:1,color:niceBlue}}>راهنما</Text>
+                                </TouchableOpacity>
+                            </TouchableOpacity>
+                            
+                            
+                         
+                             
+
+                            <AlertMessage
+                                    visible={this.state.showHelp || this.state.makeMony}
+                                    title=""
+                                    //message={}
+                                     
+                                    
+                                    onConfirm={() => {
+                                       navigation.navigate('myLink')
+                                    }}
+                                    onDismiss={() => this.setState({ showHelp: false,makeMony:false })}
+                                    confirmTitle="افزایش شاخه ها"
+                                    dismissTitle="بستن"
+                                >
+                                    <View style={{margin:16,marginTop:5}}>
+                                    <Text style={{fontSize:10,fontWeight:800}}>برای ارسال پست ویژه تبلیغی ابتدا باید تعداد افراد شبکه خود را به بیش از هزار نفر برسانید.(مجموع شاخه، زیرشاخه و فالور)، سپس می توانید از شبکه خود درآمد کسب کنید، کافی است تبلیغات  برندها و کسب و کارها را در بعنوان پست ویژه ارسال کنید. تبلیغات آماده است و شما فقط تبلیغ دلخواه را انتخاب می کنید.</Text>
+                                   
+                                    <Text style={{fontSize:11,color:primaryDark,marginTop:10}}>* شبکه هزار نفری هر پست ویژه 10 هزار تومان درآمد.</Text>
+                                    <Text style={{fontSize:11,color:primaryDark}}>* شبکه ده هزار نفری هر پست ویژه 100 هزار تومان درآمد.</Text>
+                                    <Text style={{fontSize:11,color:primaryDark}}>* شبکه صد هزار نفری هر پست ویژه 1 میلیون تومان درآمد.</Text>
+                                    <Text style={{fontSize:11,color:primaryDark}}>* شبکه یک میلیون نفری هر پست ویژه 10 میلیون تومان درآمد.</Text>
+                                </View>
+                                </AlertMessage>
+                           
                         </View>
                          <TouchableOpacity
                             onPress={()=>{
@@ -245,13 +301,14 @@ export default class addpost extends Component {
                             style={{}}
                             >
                                 <View style={{
+                                    marginTop:30,
                                     flexDirection:'row',maxWidth:300,
                                     alignSelf:'center',
-                                    backgroundColor:greenDark,
+                                    backgroundColor:primaryDark,
                                     borderRadius:8,
                                     alignItems:'cener',
                                     justifyContent:'center',
-                                    padding:5,paddingHorizontal:15}}>
+                                    padding:2,paddingHorizontal:15}}>
                                     <Image source={images.ic_add} style={{
                                         width: 24,
                                         height: 24,

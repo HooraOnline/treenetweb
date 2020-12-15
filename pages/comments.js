@@ -138,11 +138,11 @@ export default class comments extends Component {
                         <View style={{ flex: 1, flexDirection: 'row', backgroundColor: gray, padding: 5, alignItems: 'center' }}>
                               <Image
                                   style={{width:40,height:40,borderRadius:20,margin:5}}
-                                  source={pStore.cUser.profileImage}
+                                  source={getFileUri('member', pStore.cUser.profileImage)}
                                 />
                             <View style={{ flex: 1, flexDirection: 'row', backgroundColor: bgWhite, borderRadius: 50, alignItems: 'center' }}>
                                 
-                                {this.state.replayId &&(
+                                {this.state.replayId?(
                                    <View style={{flexDirection:'row',alignItems:'center',}}>
                                         <TouchableOpacity 
                                                 onPress={()=>this.setState({replyTo:'',replayId:null})}
@@ -160,7 +160,7 @@ export default class comments extends Component {
                                         </TouchableOpacity>
                                             <Text dir='ltr' style={{flex:1, color: bgWhite, fontSize: 12, color: border, fontWeight: 900, }}>{this.state.replyTo}</Text>
                                     </View>
-                                )
+                                ):null
                                 }
                                
                                 <FloatingLabelTextInput
@@ -228,6 +228,7 @@ export default class comments extends Component {
                             {
                                 label: translate('اعلانات'),
                                 path: "/activity",
+                                notif: pStore.newewAnnounceCount,
                                 icon: <FontAwesomeIcon icon={faBell}/>
                             },
                             {
@@ -239,9 +240,9 @@ export default class comments extends Component {
                     </View>
                 }>
                 <View style={{ flex: 1, paddingBottom: 16, paddingTop: 60 }}>
-                    {this.state.post && (
+                    {this.state.post? (
                         <CommentList post={this.state.post} onReplay={this.onReplay} />
-                    )}
+                    ):null}
 
                 </View>
             </PanelLayout>
@@ -298,9 +299,9 @@ export const ReplyCard = observer(props => {
                             {/* <Text style={{ fontSize: 9, color: textItem }}>{avatar}</Text> */}
                         </TouchableOpacity>
                         <View style={{flexDirection:'row',alignItems:'center'}}>
-                            {parrentMember&&(
+                            {parrentMember?(
                                <Text dir='ltr' style={{ fontSize: 10, color: primaryDark, marginHorizontal: 5 }}>@{parrentMember}</Text>
-                            )
+                            ):null
                             }
                             <Text style={{ fontSize: 10, color: textItem, marginHorizontal: 5 }}>{text}</Text>
                         </View>
@@ -334,7 +335,7 @@ export const CommentCard = observer(props => {
             <View style={{ flex: 1 }}>
                 <ReplyCard reply={comment} onReplay={props.onReplay}/>
                 
-                {comment.comments.length && (
+                {comment.comments.length? (
                     <View style={{marginRight:24}}>
                         <TouchableOpacity onPress={() =>{
                                 setShowReply(!showReply);
@@ -347,7 +348,7 @@ export const CommentCard = observer(props => {
                             </View>
                         ))}
                     </View>
-                )}
+                ):null}
             </View>
     )
 });

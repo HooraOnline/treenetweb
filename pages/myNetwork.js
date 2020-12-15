@@ -290,6 +290,7 @@ export default class MyNetwork extends Component {
                                     {
                                         label: translate('اعلانات'),
                                         path: "/activity",
+                                        notif: pStore.newewAnnounceCount,
                                         icon: <FontAwesomeIcon icon={faBell}/>
                                     },
                                     {
@@ -323,7 +324,7 @@ export default class MyNetwork extends Component {
                                     style={{textAlign:'justify',paddingHorizontal:30,fontSize:11,color:itemListText}}
                                 > شما هنوز هیچ فردی را به تری نتگرام دعوت نکرده و شاخه ای نساخته اید. برای ایجاد شاخه های درخت خود، کافی است لینک اختصاصی خود را برای چند نفر ارسال کنید یا آنرا در شبکه های اجتماعی مانند فیسبوک یا تلگرام به اشتراک بگذارید. ساختن یک شبکه بزرگ خیلی ساده است . همین الان شروع کنید.. </Text>
                             ):
-                                <Text style={{textAlign:'justify',paddingHorizontal:30,fontSize:11,color:itemListText}} > تمام شاخه ها و زیرشاخه های شما پستهای شما را خواهند دید. </Text>
+                                <Text style={{textAlign:'justify',paddingHorizontal:30,fontSize:11,color:itemListText}} > تمام شاخه ها و زیرشاخه های شما پستهای ویژه شما را خواهند دید. </Text>
                             }
                             <TouchableOpacity
                                 onPress={()=>{navigation.navigate('myLink')}}
